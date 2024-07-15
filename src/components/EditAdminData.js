@@ -30,7 +30,9 @@ console.log(userData)
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/superAdmin/getOneAdminData/${id}`);
+        
+      //  const response = await axios.get(`http://localhost:5000/superAdmin/getOneAdminData/${id}`);
+      const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/getOneAdminData/${id}`);
         setAdminData(response.data);
       } catch (error) {
         console.error("Error fetching admin data:", error);
@@ -47,7 +49,9 @@ console.log(userData)
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/superAdmin/updateOneAdminData/${id}`, adminData);
+      
+     // await axios.put(`http://localhost:5000/superAdmin/updateOneAdminData/${id}`, adminData);
+     await axios.put(`https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/updateOneAdminData/${id}`, adminData);
       toast.success("Admin data updated successfully");
       navigate("/superadmin");
     } catch (error) {

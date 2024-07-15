@@ -12,7 +12,8 @@ const AdminTable = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/admin/getAdminData"
+          //"http://localhost:5000/admin/getAdminData"
+          "https://guest-posting-marketplace-web-backend.onrender.com/admin/getAdminData"
         );
         setUsers(response.data);
         setOriginalUsers(response.data); // Store original users data

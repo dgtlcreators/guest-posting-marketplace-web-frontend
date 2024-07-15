@@ -35,8 +35,9 @@ const Admin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        "http://localhost:5000/admin/createAdminData",
+     
+      //await axios.post("http://localhost:5000/admin/createAdminData",
+      await axios.post(" https://guest-posting-marketplace-web-backend.onrender.com/admin/createAdminData",
         formDatas
       );
       toast.success("Successfully Created");

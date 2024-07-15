@@ -12,8 +12,10 @@ const SuperAdminTable = () => {
 
   const fetchData = async () => {
     try {
+      
       const response = await axios.get(
-        "http://localhost:5000/superAdmin/getAllAdminData"
+        //"http://localhost:5000/superAdmin/getAllAdminData"
+       "https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/getAllAdminData"
       );
       setUsers(response.data);
     } catch (error) {
@@ -28,7 +30,9 @@ const SuperAdminTable = () => {
   const deleteUser = async (userId) => {
     try {
       await axios.delete(
-        `http://localhost:5000/superAdmin/deleteOneAdminData/${userId}`
+        
+        //`http://localhost:5000/superAdmin/deleteOneAdminData/${userId}`
+        `https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/deleteOneAdminData/${userId}`
       );
       toast.success("Client Deleted Successfully");
       setUsers(users.filter((user) => user._id !== userId));
