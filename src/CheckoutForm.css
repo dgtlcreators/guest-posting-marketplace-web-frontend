@@ -1,0 +1,191 @@
+.form-group {
+    margin-bottom: 20px;
+  }
+  
+  .card-element-wrapper {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: flex;
+    width: 50vw;
+    height: 50vh; /* Adjust the height as needed */
+    display: flex;
+    align-items: center;
+  }
+  
+  .card-element-input {
+    width: 100%;
+    font-size: 16px;
+    color: #32325d;
+  }
+  .card-element {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  .StripeElement--invalid {
+    border-color: #fa755a;
+  }
+  
+  .StripeElement--webkit-autofill {
+    background-color: #fefde5 !important;
+  }
+  .card-element-input {
+    width: 100vh;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  .card-element-focus {
+    border-color: #007bff;
+  }
+  
+  .card-element-invalid {
+    border-color: #fa755a;
+  }
+  
+  .card-element-complete {
+    border-color: #28a745;
+  }
+  
+  .card-element-autofill {
+    background-color: #fefde5 !important;
+  }
+  
+  
+  
+  .card-element-complete {
+    border-color: #4caf50;
+  }
+  
+  .card-element-empty {
+    border-color: #f6f6f6;
+  }
+  
+  .card-element-focus {
+    border-color: #4caf50;
+  }
+  
+  .card-element-invalid {
+    border-color: #fa755a;
+  }
+  
+  .card-element-autofill {
+    background-color: #f4f4f4;
+  }
+  
+  .error {
+    color: #fa755a;
+    margin-top: 10px;
+  }
+  
+  .success {
+    color: #4caf50;
+    margin-top: 10px;
+  }
+  
+  button {
+    background-color: #32325d;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .card-element-wrapper {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+  }
+  
+  .error {
+    color: red;
+    margin-top: 1rem;
+  }
+  
+  .success {
+    color: green;
+    margin-top: 1rem;
+  }
+  
+  button {
+    background-color: #6772e5;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  /* CheckoutForm.css */
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.error {
+  color: red;
+  margin-top: 1rem;
+}
+
+.success {
+  color: green;
+  margin-top: 1rem;
+}
+
+button {
+  background-color: #6772e5;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+  
