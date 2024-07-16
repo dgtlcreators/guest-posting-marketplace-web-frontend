@@ -242,7 +242,7 @@ const SuperAdminTable = () => {
                 <td className="py-3 px-4">{user.publisherName}</td>
                 <td className="py-3 px-4">{user.publisherEmail}</td>
                 <td className="py-3 px-4">{user.publisherPhoneNo}</td>
-                <td><a href={user.publisherURL} target="_blank"  className=" text-blue-500 hover:underline">
+                <td><a href={user.publisherURL} target="_blank" rel="noopener noreferrer"  className=" text-blue-500 hover:underline">
                     {user.publisherURL}
                   </a></td>
                 <td className="py-3 px-4">{user.categories}</td>
