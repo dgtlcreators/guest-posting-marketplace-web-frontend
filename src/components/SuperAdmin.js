@@ -38,7 +38,7 @@ const SuperAdmin = () => {
     try {
      
       await axios.post(
-       // "http://localhost:5000/admin/createAdminData",
+        //"http://localhost:5000/admin/createAdminData",
       "https://guest-posting-marketplace-web-backend.onrender.com/admin/createAdminData",
         formDatas
       );

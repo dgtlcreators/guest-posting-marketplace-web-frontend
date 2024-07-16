@@ -40,8 +40,8 @@ const SuperAdminTable = () => {
     try {
       await axios.delete(
         
-        `http://localhost:5000/superAdmin/deleteOneAdminData/${userId}`
-        //`https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/deleteOneAdminData/${userId}`
+        //`http://localhost:5000/superAdmin/deleteOneAdminData/${userId}`
+        `https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/deleteOneAdminData/${userId}`
       );
       toast.success("Client Deleted Successfully");
       setUsers(users.filter((user) => user._id !== userId));
@@ -98,7 +98,7 @@ const SuperAdminTable = () => {
   const handleShowContactDetails = async (userId) => {
     setShowContactDetails(true)
     try {
-     // const response = await axios.get(`http://localhost:5000/superAdmin/getContactsByPublisher/${userId}`);
+    //  const response = await axios.get(`http://localhost:5000/superAdmin/getContactsByPublisher/${userId}`);
       const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/getContactsByPublisher/${userId}`);
       console.log(response.data)
       setSelectedUserContacts(response.data);
