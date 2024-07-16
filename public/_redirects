@@ -1,0 +1,4 @@
+# Open the _redirects file in Notepad (replace with your preferred text editor)
+# notepad _redirects
+
+/*    /index.html   200

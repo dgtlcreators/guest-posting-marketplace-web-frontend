@@ -1,98 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useStripe, useElements, CardElement, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
-import './CheckoutForm.css'; // Import the CSS file
+import React, { useState } from "react";
+import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from "@stripe/react-stripe-js";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
-  const [clientSecret, setClientSecret] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [paymentError, setPaymentError] = useState(null);
-  const [paymentComplete, setPaymentComplete] = useState(false);
-
-  useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
-    axios.post('http://localhost:5000/create-payment-intent', { amount: 5000 }).then(response => {
-      setClientSecret(response.data.clientSecret);
-    });
-  }, []);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { userId, price } = location.state; // Assume price is in dollars
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [processing, setProcessing] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
+    setProcessing(true);
+    setError(null);
 
     if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
+      setError("Stripe has not loaded yet. Please try again.");
       return;
     }
 
-    const result = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: elements.getElement(CardNumberElement),
-        billing_details: {
-          name: 'John Doe', // Replace with actual user details
-        },
-      },
-    });
+    const cardNumberElement = elements.getElement(CardNumberElement);
+    const cardExpiryElement = elements.getElement(CardExpiryElement);
+    const cardCvcElement = elements.getElement(CardCvcElement);
 
-    if (result.error) {
-      console.log(result.error.message);
-      setPaymentError(result.error.message);
-      setLoading(false);
-    } else {
-      console.log('Payment successful:', result.paymentIntent);
-      setPaymentComplete(true);
-      setLoading(false);
+    try {
+      const {data }= await axios.post(
+        "http://localhost:5000/create-payment-intent",
+        { price: price * 100 } // Convert price to cents
+      );
+
+      const {clientSecret }=data
+      console.log(data,clientSecret,data.clientSecret )
+      const result = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardNumberElement),
+        },
+      });
+
+      if (result.error) {
+        setError(result.error.message);
+      } else {
+        if (result.paymentIntent.status === "succeeded") {
+          setSuccess(true);
+          console.log(userId)
+         // const res=await axios.post(`http://localhost:5000/user/${userId}/buyed`);
+         // console.log(res)
+          setTimeout(() => navigate("/form"), 2000);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setError("Payment failed. Please try again.");
+    } finally {
+      setProcessing(false);
     }
   };
 
-  const CARD_ELEMENT_OPTIONS = {
-    style: {
-      base: {
-        fontSize: '16px',
-        color: '#32325d',
-        '::placeholder': {
-          color: '#aab7c4',
-        },
-      },
-      invalid: {
-        color: '#fa755a',
-        iconColor: '#fa755a',
-      },
-    },
-    classes: {
-      base: 'card-element-input',
-      complete: 'card-element-complete',
-      empty: 'card-element-empty',
-      focus: 'card-element-focus',
-      invalid: 'card-element-invalid',
-      webkitAutofill: 'card-element-autofill',
-    },
-  };
-
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="form-group">
-        <label htmlFor="cardNumber">Card Number</label>
-        <CardNumberElement id="cardNumber" options={CARD_ELEMENT_OPTIONS} />
-      </div>
-      <div className="form-group">
-        <label htmlFor="cardExpiry">Expiry Date</label>
-        <CardExpiryElement id="cardExpiry" options={CARD_ELEMENT_OPTIONS} />
-      </div>
-      <div className="form-group">
-        <label htmlFor="cardCvc">CVC</label>
-        <CardCvcElement id="cardCvc" options={CARD_ELEMENT_OPTIONS} />
-      </div>
-
-      {paymentError && <div className="error">{paymentError}</div>}
-      {paymentComplete && <div className="success">Payment successful!</div>}
-
-      <button type="submit" disabled={!stripe || loading}>
-        {loading ? 'Processing...' : 'Pay $50.00'}
-      </button>
-    </form>
+    <div className="checkout-form">
+      <h2 className="text-center mb-4">Complete your purchase</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label htmlFor="card-number" className="block mb-2">Card Number</label>
+          <CardNumberElement id="card-number" className="p-2 border rounded" />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="card-expiry" className="block mb-2">Expiry Date</label>
+          <CardExpiryElement id="card-expiry" className="p-2 border rounded" />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="card-cvc" className="block mb-2">CVC</label>
+          <CardCvcElement id="card-cvc" className="p-2 border rounded" />
+        </div>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+          disabled={!stripe || processing}
+        >
+          {processing ? "Processing..." : `Pay $${price}`}
+        </button>
+      </form>
+      {error && <div className="error-message">{error}</div>}
+      {success && <div className="success-message">Payment Successful!</div>}
+    </div>
   );
 };
 

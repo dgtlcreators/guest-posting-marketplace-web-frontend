@@ -1,10 +1,120 @@
+
+
+/*import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+
+const FormTable = () => {
+  const users = ['user1', 'user2', 'user3']; 
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    fetchItems();
+    fetchAllTransactions();
+  }, []);
+
+  const fetchItems = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/form/getData');
+      setItems(response.data.data);
+    } catch (error) {
+      console.error('Error fetching items:', error);
+    }
+  };
+
+  const fetchAllTransactions = async () => {
+    try {
+      const transactions = await Promise.all(
+        users.map(async (userId) => {
+          const response = await axios.get(`http://localhost:5000/transactions/${userId}`);
+          return response.data;
+        })
+      );
+      setTransactions(transactions.flat());
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+    }
+  };
+
+  const handleBuy = async (item, userId) => {
+    const stripe = await stripePromise;
+
+    try {
+      setLoading(true);
+      const response = await axios.post('http://localhost:5000/create-payment-intent', { 
+        amount: item.price * 100, // assuming price is in dollars
+        itemId: item._id,
+        userId
+      });
+
+      const { sessionId } = response.data;
+      const result = await stripe.redirectToCheckout({ sessionId });
+
+      if (result.error) {
+        console.error(result.error.message);
+      } else {
+        await axios.post('http://localhost:5000/update-transaction', { sessionId, status: 'completed' });
+        fetchAllTransactions();
+      }
+    } catch (error) {
+      console.error('Error handling payment:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="form-table">
+      {items.map((item) => (
+        <div className="card" key={item._id}>
+          <h3>{item.categories}</h3>
+          <p>DA: {item.mozDA}</p>
+          <p>Price: ${item.price}</p>
+          {users.map((userId) => (
+            <button key={userId} onClick={() => handleBuy(item, userId)} disabled={loading}>
+              Buy as User {userId}
+            </button>
+          ))}
+        </div>
+      ))}
+      <h2>Invoices</h2>
+      {transactions.map((transaction) => (
+        <div className="invoice" key={transaction._id}>
+          <h3>{transaction.itemId.categories}</h3>
+          <p>Amount: ${transaction.amount / 100}</p>
+          <p>Status: {transaction.status}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default FormTable;
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 
-const FormTable = ({ users }) => {
+const FormTable = ({ users, setUsers }) => { // Accept setUsers as a prop
   const navigate = useNavigate();
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -22,7 +132,7 @@ const FormTable = ({ users }) => {
 
   // Initialize Stripe promise once
   if (!stripePromise) {
-    setStripePromise(loadStripe("YOUR_PUBLISHABLE_KEY"));
+    setStripePromise(loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY));
   }
 
   const handleSortChange = (key, direction) => {
@@ -64,45 +174,9 @@ const FormTable = ({ users }) => {
     user.categories.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleBuyNow = async (userId, price) =>{
-    navigate("/checkout");
-  }
-
-  /*const handleBuyNow = async (userId) => {
-    const stripe = await stripePromise;
-
-    // Create a PaymentIntent on your backend
-    const response = await fetch("http://localhost:5000/api/create-payment-intent", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId,
-        amount: 1000, // Replace with actual amount calculation
-      }),
-    });
-
-    const { clientSecret } = await response.json();
-
-    // Confirm the PaymentIntent using Stripe.js and Elements
-    const result = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: stripe.elements.getElement("card"),
-        billing_details: {
-          name: "Customer Name",
-        },
-      },
-    });
-
-    if (result.error) {
-      console.error("Payment failed:", result.error.message);
-      // Handle payment failure (e.g., show error message to user)
-    } else {
-      console.log("Payment succeeded:", result.paymentIntent);
-      // Handle successful payment (e.g., update UI, redirect user)
-    }
-  };*/
+  const handleBuyNow = (userId, price) => {
+    navigate("/checkout", { state: { userId, price } });
+  };
 
   return (
     <div className="p-4">
@@ -185,7 +259,6 @@ const FormTable = ({ users }) => {
                 </select>
               </th>
               <th className="py-2 px-4 border-b border-gray-200">Actions</th>
-              {/*<th className="py-2 px-4 border-b border-gray-200">Other Columns</th>*/}
             </tr>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-2 md:px-6 text-left">S.No.</th>
@@ -244,10 +317,11 @@ const FormTable = ({ users }) => {
                   </td>
                   <td className="py-3 px-2 md:px-6 text-center text-md font-semibold">
                     <button
+                      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
                       onClick={() => handleBuyNow(user._id, user.price)}
-                      className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded"
+                      disabled={user.isBuyed}
                     >
-                      Buy Now (${user.price})
+                      {user.isBuyed ? "Buyed" : "Buy Now"}
                     </button>
                   </td>
                 </tr>

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from "../context/userContext";
 
 const EditAdminForm = () => {
@@ -59,7 +60,7 @@ console.log(userData)
       console.error("Error updating admin data:", error);
     }
   };
-  if (!userData || userData.role !== "Admin") {
+  if (!userData || userData.role !== "Admin" ) {
     return <Navigate to="/login" />;
   }
 
