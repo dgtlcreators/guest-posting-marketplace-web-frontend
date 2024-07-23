@@ -1,0 +1,323 @@
+import { useContext, useState, useEffect } from "react";
+import axios from "axios";
+import AdminTable from "./AdminTable";
+import { toast } from "react-toastify";
+import { UserContext } from "../context/userContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus, faChartBar, faCog } from "@fortawesome/free-solid-svg-icons";
+
+const Admin = () => {
+  const { userData } = useContext(UserContext);
+  const userId = userData?._id;
+  const initialFormData = {
+    influencerName: "",
+    followerCount: "",
+    engagementRate: "",
+    niche: "",
+    demographic: "",
+    industry: "",
+    collaborationRates: "",
+    userId: userId,
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post("http://localhost:5000/admin/createInfluencerProfile", formData);
+      toast.success("Influencer Profile Created Successfully");
+      setFormData(initialFormData);
+      setRefreshKey((prevKey) => prevKey + 1);
+    } catch (error) {
+      toast.error(error.message);
+      console.error("Error submitting form:", error);
+    }
+  };
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4 text-white bg-blue-700 p-3">
+        Admin Dashboard
+      </h1>
+
+      {/* Dashboard Overview */}
+      <section className="mb-6">
+        <h2 className="text-xl font-bold mb-3 flex items-center">
+          <FontAwesomeIcon icon={faChartBar} className="mr-2" />
+          Overview
+        </h2>
+        <div className="bg-gray-200 p-4 shadow-xl">
+          <p>Summary statistics and analytics of platform usage.</p>
+          {/* Add relevant stats and charts here */}
+        </div>
+      </section>
+
+      {/* User Management */}
+      <section className="mb-6">
+        <h2 className="text-xl font-bold mb-3 flex items-center">
+          <FontAwesomeIcon icon={faUserPlus} className="mr-2" />
+          User Management
+        </h2>
+        <AdminTable key={refreshKey} />
+      </section>
+
+      {/* Influencer Management */}
+      <section className="mb-6">
+        <h2 className="text-xl font-bold mb-3 flex items-center">
+          <FontAwesomeIcon icon={faUserPlus} className="mr-2" />
+          Influencer Management
+        </h2>
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-6 md:space-y-8 bg-gray-200 shadow-xl p-4"
+        >
+          {/* Influencer Form */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col">
+              <label htmlFor="influencerName" className="font-medium">
+                Influencer Name
+              </label>
+              <input
+                type="text"
+                id="influencerName"
+                name="influencerName"
+                required
+                value={formData.influencerName}
+                onChange={handleChange}
+                className="form-input border rounded p-2"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="followerCount" className="font-medium">
+                Follower Count
+              </label>
+              <input
+                type="number"
+                id="followerCount"
+                name="followerCount"
+                required
+                value={formData.followerCount}
+                onChange={handleChange}
+                className="form-input border rounded p-2"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="engagementRate" className="font-medium">
+                Engagement Rate (%)
+              </label>
+              <input
+                type="number"
+                id="engagementRate"
+                name="engagementRate"
+                step="0.01"
+                required
+                value={formData.engagementRate}
+                onChange={handleChange}
+                className="form-input border rounded p-2"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="niche" className="font-medium">
+                Niche
+              </label>
+              <input
+                type="text"
+                id="niche"
+                name="niche"
+                required
+                value={formData.niche}
+                onChange={handleChange}
+                className="form-input border rounded p-2"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="demographic" className="font-medium">
+                Demographic
+              </label>
+              <input
+                type="text"
+                id="demographic"
+                name="demographic"
+                required
+                value={formData.demographic}
+                onChange={handleChange}
+                className="form-input border rounded p-2"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="industry" className="font-medium">
+                Industry
+              </label>
+              <input
+                type="text"
+                id="industry"
+                name="industry"
+                required
+                value={formData.industry}
+                onChange={handleChange}
+                className="form-input border rounded p-2"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="collaborationRates" className="font-medium">
+                Collaboration Rates
+              </label>
+              <input
+                type="text"
+                id="collaborationRates"
+                name="collaborationRates"
+                required
+                value={formData.collaborationRates}
+                onChange={handleChange}
+                className="form-input border rounded p-2"
+              />
+            </div>
+          </div>
+
+          {/* Form Buttons */}
+          <div className="flex justify-center md:justify-end space-x-4 mt-8">
+            <button
+              type="reset"
+              className="form-button bg-gray-500 hover:bg-gray-600 text-white p-2 rounded"
+              onClick={() => setFormData(initialFormData)}
+            >
+              Reset
+            </button>
+            <button
+              type="submit"
+              className="form-button bg-blue-500 hover:bg-blue-700 text-white p-2 rounded"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </section>
+
+      {/* Reports and Analytics */}
+      <section className="mb-6">
+        <h2 className="text-xl font-bold mb-3 flex items-center">
+          <FontAwesomeIcon icon={faChartBar} className="mr-2" />
+          Reports and Analytics
+        </h2>
+        <div className="bg-gray-200 p-4 shadow-xl">
+          <p>Generate and download reports on influencer performance and platform usage.</p>
+          {/* Add report generation and download functionality here */}
+        </div>
+      </section>
+
+      {/* Settings */}
+      <section>
+        <h2 className="text-xl font-bold mb-3 flex items-center">
+          <FontAwesomeIcon icon={faCog} className="mr-2" />
+          Settings
+        </h2>
+        <div className="bg-gray-200 p-4 shadow-xl">
+          <p>Configure platform-wide settings, manage payment gateways, and subscription plans.</p>
+          {/* Add settings management functionality here */}
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Admin;
+
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChartBar } from '@fortawesome/free-solid-svg-icons';
+import { CSVLink } from 'react-csv';
+import { toast } from 'react-toastify';
+
+const ReportsAndAnalytics = () => {
+  const [reportsData, setReportsData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Fetch data for reports
+    const fetchReportsData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get('http://localhost:5000/api/reports'); // Your API endpoint
+        setReportsData(response.data);
+      } catch (error) {
+        toast.error('Failed to fetch report data');
+        console.error('Error fetching report data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReportsData();
+  }, []);
+
+  const headers = [
+    { label: 'ID', key: 'id' },
+    { label: 'Name', key: 'name' },
+    { label: 'Performance Score', key: 'performanceScore' },
+    { label: 'Date', key: 'date' },
+  ];
+
+  return (
+    <section className="mb-6">
+      <h2 className="text-xl font-bold mb-3 flex items-center">
+        <FontAwesomeIcon icon={faChartBar} className="mr-2" />
+        Reports and Analytics
+      </h2>
+      <div className="bg-gray-200 p-4 shadow-xl">
+        <p>Generate and download reports on influencer performance and platform usage.</p>
+        {loading ? (
+          <p>Loading reports...</p>
+        ) : (
+          <>
+            <div className="mb-4">
+              <CSVLink
+                data={reportsData}
+                headers={headers}
+                filename={"reports.csv"}
+                className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
+              >
+                Download Reports
+              </CSVLink>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold mb-2">Report Data Preview</h3>
+              <table className="min-w-full bg-white border border-gray-300">
+                <thead>
+                  <tr>
+                    {headers.map((header) => (
+                      <th key={header.key} className="py-2 px-4 border-b">{header.label}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {reportsData.map((item) => (
+                    <tr key={item.id}>
+                      {headers.map((header) => (
+                        <td key={header.key} className="py-2 px-4 border-b">{item[header.key]}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+      </div>
+    </section>
+  );
+};
+
+export default ReportsAndAnalytics;
+

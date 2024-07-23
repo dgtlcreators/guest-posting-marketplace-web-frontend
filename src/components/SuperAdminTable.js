@@ -14,7 +14,7 @@ const SuperAdminTable = () => {
   const [selectedPublisher, setSelectedPublisher] = useState(null);
   const [selectedUserContacts, setSelectedUserContacts] = useState([]);
   const [showContactDetails,setShowContactDetails]=useState(false)
-
+  const [originalUsers, setOriginalUsers] = useState([]);
 
   
 
@@ -23,10 +23,11 @@ const SuperAdminTable = () => {
     try {
       
       const response = await axios.get(
-       // "http://localhost:5000/superAdmin/getAllAdminData"
+      //  "http://localhost:5000/superAdmin/getAllAdminData"
        "https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/getAllAdminData"
       );
       setUsers(response.data);
+      setOriginalUsers(response.data); 
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -40,7 +41,7 @@ const SuperAdminTable = () => {
     try {
       await axios.delete(
         
-        //`http://localhost:5000/superAdmin/deleteOneAdminData/${userId}`
+       // `http://localhost:5000/superAdmin/deleteOneAdminData/${userId}`
         `https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/deleteOneAdminData/${userId}`
       );
       toast.success("Client Deleted Successfully");
@@ -75,8 +76,11 @@ const SuperAdminTable = () => {
   };
 
   const handleClearFilter = () => {
-    setSearchTerm(""); // Clear search term
-    fetchData(); // Fetch original data again
+    setUsers(originalUsers)
+    setSortDirection("asc")
+    setSortedField(null)
+    setSearchTerm(""); 
+   
   };
 
   const filteredUsers = users.filter((user) =>
@@ -98,8 +102,8 @@ const SuperAdminTable = () => {
   const handleShowContactDetails = async (userId) => {
     setShowContactDetails(true)
     try {
-    //  const response = await axios.get(`http://localhost:5000/superAdmin/getContactsByPublisher/${userId}`);
-      const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/getContactsByPublisher/${userId}`);
+     //const response = await axios.get(`http://localhost:5000/superAdmin/getContactsByPublisher/${userId}`);
+     const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/getContactsByPublisher/${userId}`);
       console.log(response.data)
       setSelectedUserContacts(response.data);
     } catch (error) {

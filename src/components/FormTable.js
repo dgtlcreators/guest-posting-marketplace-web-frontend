@@ -108,14 +108,20 @@ export default FormTable;
 
 
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 
-const FormTable = ({ users, setUsers }) => { // Accept setUsers as a prop
+
+const FormTable = ({ users, setUsers }) => { 
   const navigate = useNavigate();
+  const [originalUsers, setOriginalUsers] = useState(users);
+  const [sortedField, setSortedField] = useState(null);
+  const [sortDirection, setSortDirection] = useState("asc");
+ 
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: null,
@@ -170,12 +176,67 @@ const FormTable = ({ users, setUsers }) => { // Accept setUsers as a prop
     return sortedData;
   }, [users, sortConfig, filters]);
 
-  const filteredUsers = sortedUsers.filter((user) =>
-    user.categories.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+
+  const handleSort = (field) => {
+    let direction = "asc";
+    if (sortedField === field && sortDirection === "asc") {
+      direction = "desc";
+    }
+    setSortedField(field);
+    setSortDirection(direction);
+  };
+
+  const renderSortIcon = (field) => {
+    if (sortedField === field) {
+      return sortDirection === "asc" ? <FaSortUp /> : <FaSortDown />;
+    }
+    return <FaSort />;
+  };
+
+  const filteredUsers = useMemo(() => {
+    let sortedData = [...users];
+
+    // Apply filters
+    Object.keys(filters).forEach((key) => {
+      if (filters[key]) {
+        sortedData = sortedData.filter(
+          (user) => user[key].toLowerCase() === filters[key].toLowerCase()
+        );
+      }
+    });
+
+    // Apply search term
+    if (searchTerm.trim() !== "") {
+      sortedData = sortedData.filter((user) =>
+        user.categories.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply sorting
+    if (sortedField) {
+      sortedData.sort((a, b) => {
+        if (a[sortedField] < b[sortedField]) {
+          return sortDirection === "asc" ? -1 : 1;
+        }
+        if (a[sortedField] > b[sortedField]) {
+          return sortDirection === "asc" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+
+    return sortedData;
+  }, [users, filters, searchTerm, sortedField, sortDirection]);
+
 
   const handleBuyNow = (userId, price) => {
     navigate("/checkout", { state: { userId, price } });
+  };
+
+  const handleClearFilter = () => {
+   setSearchTerm("")
+    setSortedField(null);
+    setSortDirection("asc");
   };
 
   return (
@@ -192,6 +253,12 @@ const FormTable = ({ users, setUsers }) => { // Accept setUsers as a prop
           <div className="absolute right-3 top-2">
             <FaSearch className="text-gray-400" />
           </div>
+          <button
+          onClick={handleClearFilter}
+          className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
+        >
+          Clear Filter
+        </button>
         </div>
       </div>
       <div className="table-container">
@@ -200,7 +267,7 @@ const FormTable = ({ users, setUsers }) => { // Accept setUsers as a prop
           <thead>
             <tr>
               <th className="py-2 px-4 border-b border-gray-200">
-                Moz DA
+                Moz DA 
                 <select
                   onChange={(e) => handleSortChange("mozDA", e.target.value)}
                   className="ml-2"
@@ -262,14 +329,15 @@ const FormTable = ({ users, setUsers }) => { // Accept setUsers as a prop
             </tr>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-2 md:px-6 text-left">S.No.</th>
-              <th className="py-3 px-2 md:px-6 text-left">Categories</th>
-              <th className="py-3 px-2 md:px-6 text-left">ahrefDR</th>
-              <th className="py-3 px-2 md:px-6 text-left">mozDA</th>
-              <th className="py-3 px-2 md:px-6 text-left">Website Language</th>
-              <th className="py-3 px-2 md:px-6 text-left">Link Type</th>
-              <th className="py-3 px-2 md:px-6 text-left">Price</th>
-              <th className="py-3 px-2 md:px-6 text-left">mozSpamScore</th>
-              <th className="py-3 px-2 md:px-6 text-left">Monthly Traffic</th>
+              <th className="py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("categories")}>Categories {renderSortIcon("categories")}</th>
+              <th className="py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("ahrefsDR")}>ahrefDR {renderSortIcon("ahrefsDR")}</th>
+              <th className="py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("mozDA")}>mozDA {renderSortIcon("mozDA")}</th>
+              <th className="py-3 px-2 md:px-6 text-left" onClick={() => handleSort("websiteLanguage")}>Website Language {renderSortIcon("websiteLanguage")}</th>
+              <th className="py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("linkType")}>Link Type {renderSortIcon("linkType")}</th>
+              <th className="py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("price")}>Price {renderSortIcon("price")}</th>
+              <th className="py-3 px-2 md:px-6 text-left" onClick={() => handleSort("mozSpamScore")}>mozSpamScore {renderSortIcon("mozSpamScore")}</th>
+              <th className="py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("monthlyTraffic")}>Monthly Traffic {renderSortIcon("monthlyTraffic")}</th>
+              <th className="py-3 px-2 md:px-6 text-left uppercase ">Actions</th>
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">

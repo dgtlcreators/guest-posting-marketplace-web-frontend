@@ -1,0 +1,24 @@
+<section className="mb-6">
+  <h2 className="text-xl font-bold mb-3 flex items-center">
+    <FontAwesomeIcon icon={faTachometerAlt} className="mr-2" />
+    Dashboard
+  </h2>
+  <div className="bg-gray-200 p-4 shadow-xl">
+    <p>Personalized dashboard with saved searches, bookmarked influencers, and recent activities.</p>
+    {/* Example Widgets */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-white p-4 rounded shadow">
+        <h3 className="font-bold text-lg">Saved Searches</h3>
+        {/* Saved searches list */}
+      </div>
+      <div className="bg-white p-4 rounded shadow">
+        <h3 className="font-bold text-lg">Bookmarked Influencers</h3>
+        {/* Bookmarked influencers list */}
+      </div>
+      <div className="bg-white p-4 rounded shadow">
+        <h3 className="font-bold text-lg">Recent Activities</h3>
+        {/* Recent activities list */}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,11 +1,15 @@
 /* eslint-disable react/prop-types */
 
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import FormTable from "./FormTable.js";
 import { toast } from "react-toastify";
+import { UserContext } from "../context/userContext.js";
 
 const Form = () => {
+  const { userData } = useContext(UserContext); 
+  const userId = userData?._id;
+ // console.log(userData,userId)
 
   const initialFormData = {
     mozDA: "1",
@@ -20,6 +24,7 @@ const Form = () => {
     monthlyTraffic: "",
     mozSpamScore: "",
     publisherURL: "",
+    userId:userId
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -44,8 +49,8 @@ const Form = () => {
     
     axios
     
-     // .post("http://localhost:5000/form/getFilteredData", formData)
-     .post("https://guest-posting-marketplace-web-backend.onrender.com/form/getFilteredData", formData)
+    //  .post("http://localhost:5000/form/getFilteredData", formData)
+    .post("https://guest-posting-marketplace-web-backend.onrender.com/form/getFilteredData", formData)
       .then((response) => {
         console.log(response.data);
         setUsers(response.data);

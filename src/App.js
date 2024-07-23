@@ -13,6 +13,13 @@ import EditAdminData from './components/EditAdminData';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from './CheckoutForm';
+import InstagramInfluencer from './components/InstgramInfluencer/InstagramInfluencer';
+import EditInstagramInfluencer from "./components/InstgramInfluencer/EditInstagramInfluencer"
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+import  BrandUser  from './components/InstgramInfluencer/BrandUser';
+import ApplicationForm from './components/InstgramInfluencer/ApplicationForm';
+import InfluencerProfile from './components/InstgramInfluencer/InfluencerProfile';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 const options = {
@@ -29,6 +36,7 @@ console.log(process.env.REACT_APP_STRIPE_PUBLIC_KEY,stripePromise)
 function App() {
   return (
     <>
+    <ToastContainer/>
      {/*<div className='flex container mt-8'>
       <Elements stripe={stripePromise} options={options}>
         <CheckoutForm />
@@ -77,8 +85,22 @@ function App() {
                 </Elements>
               }
             />
+              <Route
+              path="/instagramInfluencer"
+              element={
+                <ProtectedRoute>
+                  <InstagramInfluencer />
+                </ProtectedRoute>
+              }
+            />
+             <Route path="/editInstagramInfluencer/:id" element={<EditInstagramInfluencer />} />
+             <Route path="/branduser" element={<BrandUser />} />
+             <Route path="/application" element={<ApplicationForm />} />
+             <Route path="/influencerprofile/:id" element={<InfluencerProfile/>} />
           </Routes>
         </BrowserRouter>
+      
+        
       </UserProvider>
     </div>
     </>

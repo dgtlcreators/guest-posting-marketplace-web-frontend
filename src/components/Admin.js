@@ -1,9 +1,29 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import AdminTable from "./AdminTable.js";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { UserContext } from "../context/userContext.js";
+/*import { Bar, Line } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { FaChartBar } from "react-icons/fa";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+*/
 
 const Admin = () => {
+  const { userData } = useContext(UserContext); 
+  const userId = userData?._id;
+  console.log(userData,userId)
   const initialFormData = {
     publisherURL: "",
     publisherName: "",
@@ -17,6 +37,7 @@ const Admin = () => {
     price: "1",
     monthlyTraffic: "Monthly Traffic >= 1000",
     mozSpamScore: "Spam Score <= 01",
+    userId:userId
     // siteWorkedWith: "",
     // publisherRole: "",
   };
@@ -36,24 +57,88 @@ const Admin = () => {
     e.preventDefault();
     try {
      
-      //await axios.post("http://localhost:5000/admin/createAdminData",
+     // await axios.post("http://localhost:5000/admin/createAdminData",
       await axios.post(" https://guest-posting-marketplace-web-backend.onrender.com/admin/createAdminData",
         formDatas
       );
       toast.success("Successfully Created");
-      setFormData(initialFormData); // Reset form
-      setRefreshKey((prevKey) => prevKey + 1); // Trigger refresh
+      setFormData(initialFormData); 
+      setRefreshKey((prevKey) => prevKey + 1); 
     } catch (error) {
       toast.error(error.message);
       console.error("Error submitting form:", error);
     }
   };
 
+ /* const barData = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [
+      {
+        label: 'Monthly Users',
+        data: [65, 59, 80, 81, 56, 55, 40],
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+      },
+    ],
+  };
+
+  const lineData = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [
+      {
+        label: 'Monthly Revenue',
+        data: [300, 500, 400, 600, 700, 500, 600],
+        fill: false,
+        borderColor: 'rgba(75, 192, 192, 1)',
+      },
+    ],
+  };
+
+  const barOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Monthly Users',
+      },
+    },
+  };
+
+  const lineOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Monthly Revenue',
+      },
+    },
+  };*/
+
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-3 text-white bg-blue-700 p-3">
         Admin Page
       </h1>
+      {/*<section className="mb-6">
+        <h2 className="text-xl font-bold mb-3 flex items-center">
+          <FontAwesomeIcon icon={FaChartBar} className="mr-2" />
+          Overview
+        </h2>
+        <div className="bg-gray-200 p-4 shadow-xl">
+          <p>Summary statistics and analytics of platform usage.</p>
+          <div className="my-4">
+            <Bar data={barData} options={barOptions} />
+          </div>
+          <div className="my-4">
+            <Line data={lineData} options={lineOptions} />
+          </div>
+        </div>
+      </section>*/}
       <form
         onSubmit={handleSubmit}
         className="space-y-6 md:space-y-8 bg-gray-200 shadow-xl p-4"

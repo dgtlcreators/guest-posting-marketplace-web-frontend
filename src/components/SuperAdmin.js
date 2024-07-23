@@ -1,10 +1,14 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import SuperAdminTable from "./SuperAdminTable.js";
 import { toast } from "react-toastify";
+import { UserContext } from "../context/userContext.js";
 
 const SuperAdmin = () => {
+  const { userData } = useContext(UserContext); 
+  const userId = userData?._id;
+ 
   const initialFormData = {
     publisherURL: "",
     publisherName: "",
@@ -18,6 +22,7 @@ const SuperAdmin = () => {
     price: "1",
     monthlyTraffic: "Monthly Traffic >= 1000",
     mozSpamScore: "Spam Score <= 01",
+    userId:userId,
     // siteWorkedWith: "",
     // publisherRole: "",
   };
@@ -38,7 +43,7 @@ const SuperAdmin = () => {
     try {
      
       await axios.post(
-        //"http://localhost:5000/admin/createAdminData",
+      //  "http://localhost:5000/admin/createAdminData",
       "https://guest-posting-marketplace-web-backend.onrender.com/admin/createAdminData",
         formDatas
       );
