@@ -26,8 +26,8 @@ export default function Sidebar() {
             width: expanded ? 240 : 60,
             boxSizing: 'border-box',
             backgroundColor: isDarkTheme ? '#333' : '#fff',
-            position: 'relative', // Ensure the drawer doesn't overlay the navbar
-            height: '100%', // Ensure the drawer takes the full height
+            position: 'relative',
+            height: '100%', 
           },
         }}
       >
