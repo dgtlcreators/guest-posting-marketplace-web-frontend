@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import InstagramInfluencerTable from "./InstagramInfluencerTable";
+import { toast } from "react-toastify";
 
 const InstagramInfluencer = () => {
   const [formData, setFormData] = useState({
@@ -26,6 +27,9 @@ const InstagramInfluencer = () => {
 
   const [profileUrlOption, setProfileUrlOption] = useState("manual");
   const [mediaKitOption, setMediaKitOption] = useState("manual");
+  const [addInfluencer, setAddInfluencer] = useState([]);
+
+  
 
   
   const handleChange = (e) => {
@@ -101,16 +105,21 @@ const InstagramInfluencer = () => {
     }
  
     try {
-      const response = await axios.post("https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/addInstagraminfluencer", formDataToSend, {
-      //const response = await axios.post("http://localhost:5000/instagraminfluencers/addInstagraminfluencer", formDataToSend, {
+     
+        const response = await axios.post("https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/addInstagraminfluencer", formDataToSend, {
+        //const response = await axios.post("http://localhost:5000/instagraminfluencers/addInstagraminfluencer", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
      // setInfluencers((prev) => [...prev, response.data.instagramInfluencer]);
+    // ((prevInfluencers) => [...prevInfluencers, newInfluencer]);
+    setAddInfluencer((prev) => [...prev, response.data.instagramInfluencer]);
       console.log(formDataToSend)
+      toast.success("Influencer added Successfully");
       handleReset();
     } catch (error) {
+      toast.error(`Error adding influencer ${error}`);
       console.error("Error adding influencer", error);
     }
   };
@@ -495,7 +504,7 @@ const InstagramInfluencer = () => {
          
         </div>
       </form>
-      <InstagramInfluencerTable />
+      <InstagramInfluencerTable addInfluencer={addInfluencer}/>
     </div>
   );
 };

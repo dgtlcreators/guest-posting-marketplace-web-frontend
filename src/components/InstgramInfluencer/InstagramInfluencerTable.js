@@ -4,7 +4,7 @@ import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const InstagramInfluencerTable = () => {
+const InstagramInfluencerTable = ({addInfluencer}) => {
   const [influencers, setInfluencers] = useState([]);
   const [originalUsers, setOriginalUsers] = useState([]);
   useEffect(() => {
@@ -15,6 +15,7 @@ const InstagramInfluencerTable = () => {
         
         setInfluencers(response.data.instagramInfluencer);
         setOriginalUsers(response.data.instagramInfluencer);
+        //setInfluencers(addInfluencer)
       } catch (error) {
         console.error("Error fetching influencers", error);
       }

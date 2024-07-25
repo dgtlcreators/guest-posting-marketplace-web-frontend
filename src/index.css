@@ -54,4 +54,6 @@ code {
 .card-element-autofill {
   background-color: #fefde5 !important;
 }
-
+html, body, #root, .App, .h-screen {
+  height: 100%;
+}
