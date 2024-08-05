@@ -18,8 +18,8 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/user/login", { email, password })
-      //.post("https://guest-posting-marketplace-web-backend.onrender.com/user/login", { email, password })
+     // .post("http://localhost:5000/user/login", { email, password })
+      .post("https://guest-posting-marketplace-web-backend.onrender.com/user/login", { email, password })
       .then((response) => {
         toast.success("Logged in successfully");
         console.log(response.data.user);
