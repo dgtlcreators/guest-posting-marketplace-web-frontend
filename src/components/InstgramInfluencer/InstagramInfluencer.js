@@ -24,6 +24,9 @@ const InstagramInfluencer = () => {
     mediaKit: "",
   });
 
+  const [locationQuery, setLocationQuery] = useState("");
+  const [locationResults, setLocationResults] = useState([]);
+
 
   const [profileUrlOption, setProfileUrlOption] = useState("manual");
   const [mediaKitOption, setMediaKitOption] = useState("manual");
@@ -56,6 +59,37 @@ const InstagramInfluencer = () => {
     }
   };
   
+  const handleLocationChange = async (e) => {
+    const query = e.target.value;
+    setLocationQuery(query);
+
+    if (query.length > 2) {
+      try {
+        const response = await axios.get(`https://us1.locationiq.com/v1/search.php`, {
+          params: {
+            key: 'pk.9a061732949f134d1a74e2f7220fad7a',
+            q: query,
+            format: 'json'
+          }
+        });
+        setLocationResults(response.data);
+      } catch (error) {
+        console.error("Error fetching location data", error);
+      }
+    } else {
+      setLocationResults([]);
+    }
+  };
+  const handleLocationSelect = (location) => {
+    setFormData((prev) => ({
+      ...prev,
+      location: location.display_name,
+    }));
+    setLocationQuery(location.display_name);
+    setLocationResults([]);
+  };
+  
+
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
@@ -107,7 +141,7 @@ const InstagramInfluencer = () => {
     try {
      
         const response = await axios.post("https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/addInstagraminfluencer", formDataToSend, {
-        //const response = await axios.post("http://localhost:5000/instagraminfluencers/addInstagraminfluencer", formDataToSend, {
+       // const response = await axios.post("http://localhost:5000/instagraminfluencers/addInstagraminfluencer", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -171,6 +205,7 @@ const InstagramInfluencer = () => {
         pastCollaborations: [],
         mediaKit: "",
       });
+      setLocationQuery("")
   }
 
   return (
@@ -350,7 +385,7 @@ const InstagramInfluencer = () => {
               <option value="App Development">App Development</option>
             </select>
           </label>
-          <label className="block">
+         {/* <label className="block">
             <span className="text-gray-700">Location</span>
             <input
               type="text"
@@ -360,6 +395,30 @@ const InstagramInfluencer = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
+          </label>*/}
+          <label className="block">
+            <span className="text-gray-700">Location</span>
+            <input
+              type="text"
+              name="location"
+              placeholder="Search Location"
+              value={locationQuery}
+              onChange={handleLocationChange}
+              className="p-2 border border-gray-300 rounded w-full"
+            />
+            {locationResults.length > 0 && (
+              <ul className="mt-2 border border-gray-300 rounded w-full bg-white max-h-40 overflow-auto">
+                {locationResults.map((location) => (
+                  <li
+                    key={location.place_id}
+                    className="p-2 cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleLocationSelect(location)}
+                  >
+                    {location.display_name}
+                  </li>
+                ))}
+              </ul>
+            )}
           </label>
           <label className="block">
             <span className="text-gray-700">Language</span>

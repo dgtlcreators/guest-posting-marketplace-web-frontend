@@ -11,7 +11,7 @@ const InstagramInfluencerTable = ({addInfluencer}) => {
     const fetchInfluencers = async () => {
       try {
          const response = await axios.get("https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/getAllInstagraminfluencer")
-        //const response = await axios.get("http://localhost:5000/instagraminfluencers/getAllInstagraminfluencer");
+      // const response = await axios.get("http://localhost:5000/instagraminfluencers/getAllInstagraminfluencer");
         
         setInfluencers(response.data.instagramInfluencer);
         setOriginalUsers(response.data.instagramInfluencer);

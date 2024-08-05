@@ -13,6 +13,7 @@ import { UserProvider } from './context/userContext';
 import PathNotFound from './components/PathNotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 import SuperAdmin from './components/SuperAdmin';
+import Dashboard from './components/dashboardItems/Dashboard';
 import EditAdminData from './components/EditAdminData';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
@@ -24,6 +25,11 @@ import { ToastContainer } from 'react-toastify';
 import BrandUser from './components/InstgramInfluencer/BrandUser';
 import ApplicationForm from './components/InstgramInfluencer/ApplicationForm';
 import InfluencerProfile from './components/InstgramInfluencer/InfluencerProfile';
+
+import NewContentWriter from "./components/ContentWriter/NewContentWriter.js"
+import ContentWriter from "./components/ContentWriter/ContentWriter.js"
+import EditContentWriter from "./components/ContentWriter/EditContentWriter.js"
+import ContentWriterProfile from "./components/ContentWriter/ContentWriterProfile.js"
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -54,9 +60,12 @@ function AppContent() {
         {showNavbarAndSidebar && <Sidebar />}
         <main className="flex-1 overflow-y-auto p-4">
          <Routes>
-            <Route path="/" element={<Navigate to="/form" />} />
+         <Route path="/" element={<Navigate to="/guestpost" />} />
+            {/*<Route path="/" element={<Navigate to="/guestpost" //to="/form"
+             />} />*/}
             <Route
-              path="/form"
+              //path="/form"
+              path="/guestpost"
               element={
                 <ProtectedRoute>
                   <Elements stripe={stripePromise}>
@@ -67,10 +76,11 @@ function AppContent() {
             />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route
-              path="/admin"
+            <Route 
+            path="/addGuestpost"
+             // path="/admin"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute  requiredRole="Admin">
                   <Admin />
                 </ProtectedRoute>
               }
@@ -78,13 +88,14 @@ function AppContent() {
             <Route
               path="/superadmin"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute  requiredRole="Admin">
                   <SuperAdmin />
                 </ProtectedRoute>
               }
             />
-            <Route path="/editadmindata/:id" element={<EditAdminData />} />
-            <Route path="*" element={<PathNotFound />} />
+            <Route path="/editadmindata/:id" //path="/editadmindata/:id" 
+            element={ <ProtectedRoute><EditAdminData /> </ProtectedRoute>} />
+           
             <Route
               path="/checkout"
               element={
@@ -94,17 +105,35 @@ function AppContent() {
               }
             />
               <Route
-              path="/instagramInfluencer"
+              path="/addInstagramInfluencer"
+             // path="/instagramInfluencer"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute  requiredRole="Admin">
                   <InstagramInfluencer />
                 </ProtectedRoute>
               }
             />
-             <Route path="/editInstagramInfluencer/:id" element={<EditInstagramInfluencer />} />
-             <Route path="/branduser" element={<BrandUser />} />
+             <Route path="/influencerprofile/:id" element={ <ProtectedRoute requiredRole="Admin"><InfluencerProfile/> </ProtectedRoute>} />
+             <Route path="/editInstagramInfluencer/:id" element={ <ProtectedRoute requiredRole="Admin"><EditInstagramInfluencer /> </ProtectedRoute>} />
+             <Route path="/instagram-influencer" //path="/branduser"
+              element={<BrandUser />} />
+             <Route path='/addContentWriters'
+             // path="/newContentWriters"
+              element={
+                <ProtectedRoute  requiredRole="Admin">
+                  <NewContentWriter />
+                </ProtectedRoute>
+              }
+            />
+             <Route path="/contentWriterprofile/:id" element={ <ProtectedRoute requiredRole="Admin"><ContentWriterProfile/> </ProtectedRoute>} />
+             <Route path="/editContentWriter/:id" element={ <ProtectedRoute requiredRole="Admin"><EditContentWriter /> </ProtectedRoute>} />
+             <Route path="/content-writers" //path="/content-writers" 
+             element={<ContentWriter />} />
+
              <Route path="/application" element={<ApplicationForm />} />
-             <Route path="/influencerprofile/:id" element={<InfluencerProfile/>} />
+            
+             <Route path="/dashboard" element={<Dashboard />} />
+             <Route path="*" element={<PathNotFound />} />
           </Routes>
         </main>
       </div>

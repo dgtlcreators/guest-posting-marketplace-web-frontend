@@ -1,18 +1,293 @@
-
-
+// src/components/Sidebar.js
 // src/components/Sidebar.js
 import React, { useState, useContext, createContext } from 'react';
+import { NavLink } from 'react-router-dom';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Divider, Avatar, Typography, Collapse, Popover } from '@mui/material';
+import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from '@mui/icons-material';
+import { FaHome, FaPen, FaInstagram, FaYoutube, FaEdit, FaHistory, FaPlus, FaSignOutAlt } from 'react-icons/fa';
+import { useTheme } from '../context/ThemeProvider';
+import { UserContext } from "../context/userContext.js";
+
+const SidebarContext = createContext();
+
+export default function Sidebar() {
+  const [expanded, setExpanded] = useState(true);
+  const [newAddedOpen, setNewAddedOpen] = useState(false);
+  const { isDarkTheme } = useTheme();
+  const { userData } = useContext(UserContext); 
+  const userId = userData?._id;
+
+  const handleNewAddedClick = () => {
+    setNewAddedOpen(prev => !prev);
+  };
+
+  return (
+    <SidebarContext.Provider value={{ expanded }}>
+      <Drawer
+        variant="permanent"
+        open={expanded}
+        sx={{
+          width: expanded ? 240 : 60,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: expanded ? 240 : 60,
+            boxSizing: 'border-box',
+            backgroundColor: isDarkTheme ? '#333' : '#fff',
+            position: 'relative',
+            height: '100%', 
+          },
+        }}
+      >
+        <div className="p-2">
+          <IconButton onClick={() => setExpanded(curr => !curr)}>
+            {expanded ? <ChevronLeft /> : <ChevronRight />}
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          <SidebarItem icon={<FaHome />} text="Dashboard" to="/dashboard" />
+          <SidebarItem icon={<FaPen />} text="Guest Post" to="/guestpost" //to="/form" 
+          />
+          <SidebarItem icon={<FaInstagram />} text="Instagram Influencer" to="/instagram-influencer" //to="/branduser" 
+          />
+          <SidebarItem icon={<FaYoutube />} text="YouTube Influencer" to="/youtube-influencer" />
+          <SidebarItem icon={<FaEdit />} text="Content Writers" to="/content-writers" />
+          <SidebarItem icon={<FaHistory />} text="Past Activities" to="/past-activities" />
+          <ListItem button onClick={handleNewAddedClick} sx={{ pl: expanded ? 2 : 0 }}>
+            <ListItemIcon>{<FaPlus />}</ListItemIcon>
+            {expanded && <ListItemText primary="New Added" />}
+            {newAddedOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={newAddedOpen} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <SidebarItem icon={<FaInstagram />} text="Instagram Influencer Add" to="/addInstagramInfluencer" //to="/instagramInfluencer" 
+              nested />
+              <SidebarItem icon={<FaPen />} text="Guest Post Add" to="/addGuestpost" //to="/admin" 
+              nested />
+              <SidebarItem icon={<FaEdit />} text="Content Writers Add" to="/addContentWriters" //to="/newContentWriters" 
+              nested />
+            </List>
+          </Collapse>
+          <SidebarItem icon={<FaSignOutAlt />} text="Sign Out" to="/sign-out" />
+        </List>
+        <Divider />
+        <div className="flex items-center p-2">
+          <Avatar src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&name=${userData?.name || 'User'}`} />
+          {expanded && userData && (
+            <div className="ml-2">
+              <Typography variant="h6">{userData.name || 'User'}</Typography>
+              <Typography variant="body2">{userData.email || 'user@example.com'}</Typography>
+            </div>
+          )}
+        </div>
+      </Drawer>
+    </SidebarContext.Provider>
+  );
+}
+
+export function SidebarItem({ icon, text, to, nested }) {
+  const { expanded } = useContext(SidebarContext);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const handlePopoverOpen = (event) => {
+    if (!expanded) {
+      setAnchorEl(event.currentTarget);
+      setPopoverOpen(true);
+    }
+  };
+
+  const handlePopoverClose = () => {
+    setPopoverOpen(false);
+  };
+
+  return (
+    <>
+    <ListItem
+        button
+        component={NavLink}
+        to={to}
+        sx={{ pl: nested ? (expanded ? 4 : 2) : (expanded ? 2 : 0) }}
+        onMouseEnter={handlePopoverOpen}
+        onMouseLeave={handlePopoverClose}
+      >
+        <ListItemIcon>{icon}</ListItemIcon>
+        {expanded && <ListItemText primary={text} />}
+      </ListItem>
+      {/*<Popover
+        open={popoverOpen}
+        anchorEl={anchorEl}
+        onClose={handlePopoverClose}
+        anchorOrigin={{
+          vertical: 'center',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'center',
+          horizontal: 'left',
+        }}
+        disableRestoreFocus
+        onMouseEnter={() => setPopoverOpen(true)}
+        onMouseLeave={handlePopoverClose}
+      >
+        <Typography sx={{ p: 1 }}>{text}</Typography>
+      </Popover>*/}
+      </>
+  );
+}
+
+/*import React, { useState, useContext, createContext } from 'react';
+import { NavLink } from 'react-router-dom';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Divider, Avatar, Typography, Collapse, Popover } from '@mui/material';
+import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from '@mui/icons-material';
+import { FaHome, FaPen, FaInstagram, FaYoutube, FaEdit, FaHistory, FaPlus, FaSignOutAlt } from 'react-icons/fa';
+import { useTheme } from '../context/ThemeProvider';
+import { UserContext } from '../context/userContext.js';
+
+const SidebarContext = createContext();
+
+export default function Sidebar() {
+  const [expanded, setExpanded] = useState(true);
+  const [newAddedOpen, setNewAddedOpen] = useState(false);
+  const { isDarkTheme } = useTheme();
+  const { userData } = useContext(UserContext);
+
+  const handleNewAddedClick = () => {
+    setNewAddedOpen(prev => !prev);
+  };
+
+  return (
+    <SidebarContext.Provider value={{ expanded }}>
+      <Drawer
+        variant="permanent"
+        open={expanded}
+        sx={{
+          width: expanded ? 240 : 60,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: expanded ? 240 : 60,
+            boxSizing: 'border-box',
+            backgroundColor: isDarkTheme ? '#333' : '#fff',
+            position: 'relative',
+            height: '100%',
+          },
+        }}
+      >
+        <div className="p-2">
+          <IconButton onClick={() => setExpanded(curr => !curr)}>
+            {expanded ? <ChevronLeft /> : <ChevronRight />}
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          <SidebarItem icon={<FaHome />} text="Dashboard" to="/dashboard" />
+          <SidebarItem icon={<FaPen />} text="Guest Post" to="/form" />
+          <SidebarItem icon={<FaInstagram />} text="Instagram Influencer" to="/branduser" />
+          <SidebarItem icon={<FaYoutube />} text="YouTube Influencer" to="/youtube-influencer" />
+          <SidebarItem icon={<FaEdit />} text="Content Writers" to="/content-writers" />
+          <SidebarItem icon={<FaHistory />} text="Past Activities" to="/past-activities" />
+          <ListItem button onClick={handleNewAddedClick} sx={{ pl: expanded ? 2 : 0 }}>
+            <ListItemIcon>{<FaPlus />}</ListItemIcon>
+            {expanded && <ListItemText primary="New Added" />}
+            {newAddedOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={newAddedOpen} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <SidebarItem icon={<FaInstagram />} text="Instagram Influencer Add" to="/instagram-influencer-add" nested />
+              <SidebarItem icon={<FaPen />} text="Guest Post Add" to="/guest-post-add" nested />
+            </List>
+          </Collapse>
+          <SidebarItem icon={<FaSignOutAlt />} text="Sign Out" to="/sign-out" />
+        </List>
+        <Divider />
+        <div className="flex items-center p-2">
+          <Avatar src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&name=${userData?.name || 'User'}`} />
+          {expanded && userData && (
+            <div className="ml-2">
+              <Typography variant="h6">{userData.name || 'User'}</Typography>
+              <Typography variant="body2">{userData.email || 'user@example.com'}</Typography>
+            </div>
+          )}
+        </div>
+      </Drawer>
+    </SidebarContext.Provider>
+  );
+}
+
+export function SidebarItem({ icon, text, to, nested }) {
+  const { expanded } = useContext(SidebarContext);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [popoverOpen, setPopoverOpen] = useState(false);
+
+  const handlePopoverOpen = (event) => {
+    if (!expanded) {
+      setAnchorEl(event.currentTarget);
+      setPopoverOpen(true);
+    }
+  };
+
+  const handlePopoverClose = () => {
+    setPopoverOpen(false);
+  };
+
+  return (
+    <>
+      <ListItem
+        button
+        component={NavLink}
+        to={to}
+        sx={{ pl: nested ? (expanded ? 4 : 2) : (expanded ? 2 : 0) }}
+        onMouseEnter={handlePopoverOpen}
+        onMouseLeave={handlePopoverClose}
+      >
+        <ListItemIcon>{icon}</ListItemIcon>
+        {expanded && <ListItemText primary={text} />}
+      </ListItem>
+      <Popover
+        open={popoverOpen}
+        anchorEl={anchorEl}
+        onClose={handlePopoverClose}
+        anchorOrigin={{
+          vertical: 'center',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'center',
+          horizontal: 'left',
+        }}
+        disableRestoreFocus
+        onMouseEnter={() => setPopoverOpen(true)}
+        onMouseLeave={handlePopoverClose}
+      >
+        <Typography sx={{ p: 1 }}>{text}</Typography>
+      </Popover>
+    </>
+  );
+}
+
+*/
+
+
+
+
+
+
+/*import React, { useState, useContext, createContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Divider, Avatar, Typography } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { FaHome, FaPen, FaInstagram, FaYoutube, FaEdit, FaHistory, FaPlus, FaSignOutAlt } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeProvider';
+import { UserContext } from "../context/userContext.js";
 
 const SidebarContext = createContext();
 
 export default function Sidebar() {
   const [expanded, setExpanded] = useState(true);
   const { isDarkTheme } = useTheme();
+  const { userData } = useContext(UserContext); 
+  //console.log(userData)
+  const userId = userData?._id;
+
 
   return (
     <SidebarContext.Provider value={{ expanded }}>
@@ -40,7 +315,7 @@ export default function Sidebar() {
         <List>
           <SidebarItem icon={<FaHome />} text="Dashboard" to="/dashboard" />
           <SidebarItem icon={<FaPen />} text="Guest Post" to="/form" />
-          <SidebarItem icon={<FaInstagram />} text="Instagram Influencer" to="/instagramInfluencer" />
+          <SidebarItem icon={<FaInstagram />} text="Instagram Influencer" to="/branduser" />
           <SidebarItem icon={<FaYoutube />} text="YouTube Influencer" to="/youtube-influencer" />
           <SidebarItem icon={<FaEdit />} text="Content Writers" to="/content-writers" />
           <SidebarItem icon={<FaHistory />} text="Past Activities" to="/past-activities" />
@@ -49,11 +324,11 @@ export default function Sidebar() {
         </List>
         <Divider />
         <div className="flex items-center p-2">
-          <Avatar src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true" />
-          {expanded && (
+          <Avatar src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&name=${userData?.name || 'User'}`} />
+          {expanded && userData && (
             <div className="ml-2">
-              <Typography variant="h6">John Doe</Typography>
-              <Typography variant="body2">johndoe@gmail.com</Typography>
+              <Typography variant="h6">{userData.name || 'User'}</Typography>
+              <Typography variant="body2">{userData.email || 'user@example.com'}</Typography>
             </div>
           )}
         </div>
@@ -72,7 +347,7 @@ export function SidebarItem({ icon, text, to }) {
     </ListItem>
   );
 }
-
+*/
 
 
 

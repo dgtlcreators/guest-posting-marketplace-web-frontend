@@ -143,6 +143,8 @@ const FormTable = ({ users, setUsers }) => {
 
   const handleSortChange = (key, direction) => {
     setSortConfig({ key, direction });
+    setSortedField(key);
+    setSortDirection(direction);
   };
 
   const handleFilterChange = (key, value) => {
@@ -237,6 +239,18 @@ const FormTable = ({ users, setUsers }) => {
    setSearchTerm("")
     setSortedField(null);
     setSortDirection("asc");
+    setSortConfig({
+      key: null,
+      direction: null,
+    })
+
+    setFilters({
+      mozDA: "",
+      ahrefsDR: "",
+      mozSpamScore: "",
+      price: "",
+      monthlyTraffic: "",
+    });
   };
 
   return (
@@ -250,9 +264,9 @@ const FormTable = ({ users, setUsers }) => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="border border-gray-300 rounded-md py-2 px-4 w-64"
           />
-          <div className="absolute right-3 top-2">
+         {/* <div className="absolute right-3 top-2">
             <FaSearch className="text-gray-400" />
-          </div>
+          </div>*/}
           <button
           onClick={handleClearFilter}
           className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
@@ -265,11 +279,13 @@ const FormTable = ({ users, setUsers }) => {
         <p>Found: {filteredUsers.length}</p>
         <table className="min-w-full bg-white border border-gray-300">
           <thead>
+          
             <tr>
-              <th className="py-2 px-4 border-b border-gray-200">
-                Moz DA 
+            <th className="py-2 px-4 border-b border-gray-200">
+                Ahrefs DR
                 <select
-                  onChange={(e) => handleSortChange("mozDA", e.target.value)}
+                value={sortConfig.key === "ahrefsDR" ? sortConfig.direction : ""}
+                  onChange={(e) => handleSortChange("ahrefsDR", e.target.value)}
                   className="ml-2"
                 >
                   <option value="">Sort</option>
@@ -278,9 +294,24 @@ const FormTable = ({ users, setUsers }) => {
                 </select>
               </th>
               <th className="py-2 px-4 border-b border-gray-200">
-                Ahrefs DR
+                Moz DA 
                 <select
-                  onChange={(e) => handleSortChange("ahrefsDR", e.target.value)}
+                 value={sortConfig.key === "mozDA" ? sortConfig.direction : ""}
+                  onChange={(e) => handleSortChange("mozDA", e.target.value)}
+                  className="ml-2"
+                >
+                  <option value="">Sort</option>
+                  <option value="asc">Low to High</option>
+                  <option value="desc">High to Low</option>
+                </select>
+              </th>
+              
+              
+              <th className="py-2 px-4 border-b border-gray-200">
+                Price
+                <select
+                value={sortConfig.key === "price" ? sortConfig.direction : ""}
+                  onChange={(e) => handleSortChange("price", e.target.value)}
                   className="ml-2"
                 >
                   <option value="">Sort</option>
@@ -291,6 +322,7 @@ const FormTable = ({ users, setUsers }) => {
               <th className="py-2 px-4 border-b border-gray-200">
                 Moz Spam Score
                 <select
+                 value={sortConfig.key === "mozSpamScore" ? sortConfig.direction : ""}
                   onChange={(e) =>
                     handleSortChange("mozSpamScore", e.target.value)
                   }
@@ -302,19 +334,9 @@ const FormTable = ({ users, setUsers }) => {
                 </select>
               </th>
               <th className="py-2 px-4 border-b border-gray-200">
-                Price
-                <select
-                  onChange={(e) => handleSortChange("price", e.target.value)}
-                  className="ml-2"
-                >
-                  <option value="">Sort</option>
-                  <option value="asc">Low to High</option>
-                  <option value="desc">High to Low</option>
-                </select>
-              </th>
-              <th className="py-2 px-4 border-b border-gray-200">
                 Monthly Traffic
                 <select
+                value={sortConfig.key === "monthlyTraffic" ? sortConfig.direction : ""}
                   onChange={(e) =>
                     handleSortChange("monthlyTraffic", e.target.value)
                   }

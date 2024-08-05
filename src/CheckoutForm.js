@@ -23,13 +23,15 @@ const CheckoutForm = () => {
       return;
     }
 
-    const cardNumberElement = elements.getElement(CardNumberElement);
-    const cardExpiryElement = elements.getElement(CardExpiryElement);
-    const cardCvcElement = elements.getElement(CardCvcElement);
+   // const cardNumberElement = elements.getElement(CardNumberElement);
+   // const cardExpiryElement = elements.getElement(CardExpiryElement);
+   // const cardCvcElement = elements.getElement(CardCvcElement);
 
     try {
       const {data }= await axios.post(
-        "http://localhost:5000/create-payment-intent",
+        
+        "https://guest-posting-marketplace-web-backend.onrender.com/create-payment-intent",
+      //  "http://localhost:5000/create-payment-intent",
         { price: price * 100 } // Convert price to cents
       );
 

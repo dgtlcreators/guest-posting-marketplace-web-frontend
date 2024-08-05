@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import AdminTable from "./AdminTable.js";
 import { toast } from "react-toastify";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { UserContext } from "../context/userContext.js";
 /*import { Bar, Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
@@ -43,7 +43,7 @@ const Admin = () => {
   };
 
   const [formDatas, setFormData] = useState(initialFormData);
-  const [refreshKey, setRefreshKey] = useState(0); // Used to trigger refresh
+  const [refreshKey, setRefreshKey] = useState(0); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,7 +57,7 @@ const Admin = () => {
     e.preventDefault();
     try {
      
-     // await axios.post("http://localhost:5000/admin/createAdminData",
+      //await axios.post("http://localhost:5000/admin/createAdminData",
       await axios.post(" https://guest-posting-marketplace-web-backend.onrender.com/admin/createAdminData",
         formDatas
       );
