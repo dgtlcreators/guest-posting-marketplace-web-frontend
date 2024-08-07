@@ -378,6 +378,7 @@ const SuperAdminTable = () => {
         <ContactForm
           publisher={selectedPublisher}
           onClose={handleCloseContactForm}
+          url="superAdmin"
         />
       )}
       {/*showContactForm && (

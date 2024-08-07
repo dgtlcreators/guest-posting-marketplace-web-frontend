@@ -4,7 +4,7 @@ import React, { useState, useContext, createContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Divider, Avatar, Typography, Collapse, Popover } from '@mui/material';
 import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from '@mui/icons-material';
-import { FaHome, FaPen, FaInstagram, FaYoutube, FaEdit, FaHistory, FaPlus, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaPen, FaInstagram, FaYoutube, FaEdit, FaHistory, FaPlus, FaSignOutAlt, FaUserShield } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeProvider';
 import { UserContext } from "../context/userContext.js";
 
@@ -60,6 +60,7 @@ export default function Sidebar() {
           </ListItem>
           <Collapse in={newAddedOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
+               <SidebarItem icon={<FaUserShield />} text="Super Admin" to="/superadmin" nested/>
               <SidebarItem icon={<FaInstagram />} text="Instagram Influencer Add" to="/addInstagramInfluencer" //to="/instagramInfluencer" 
               nested />
               <SidebarItem icon={<FaPen />} text="Guest Post Add" to="/addGuestpost" //to="/admin" 

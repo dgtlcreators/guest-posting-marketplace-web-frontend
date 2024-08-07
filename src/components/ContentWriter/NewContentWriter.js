@@ -14,6 +14,7 @@ const NewContentWriter = () => {
     bio: "",
     experience: 0,
     expertise: [{ type: "", other: "" }],
+    location: "",
     languages: [{ name: "", other: "", proficiency: "" }],
     collaborationRates: { post: 0, story: 0, reel: 0 },
     email: "",
@@ -34,11 +35,21 @@ const NewContentWriter = () => {
       }));
     } else if (name.startsWith('languages')) {
       const [index, key] = name.split('.').slice(1);
-      console.log("name,index, key,type,value ",name,index, key,type,value)
+      console.log(`Updating ${key} for language at index ${index} to ${value}`);
       setFormData((prev) => {
         const updatedLanguages = [...prev.languages];
-        updatedLanguages[index][key] = value;
-        console.log(updatedLanguages)
+       
+        if (key === 'name') {
+          // Ensure unique language names
+          if (value === "Other" || !updatedLanguages.some((lang, idx) => idx !== index && lang.name === value)) {
+            updatedLanguages[index][key] = value;
+          
+          }
+        } else {
+          updatedLanguages[index][key] = value;
+        }
+       // updatedLanguages[index][key] = value;
+        console.log(updatedLanguages);  
         return { ...prev, languages: updatedLanguages };
       });
     } else if (name.startsWith('expertise')) {
@@ -46,7 +57,15 @@ const NewContentWriter = () => {
 
       setFormData((prev) => {
         const updatedExpertise = [...prev.expertise];
+       // updatedExpertise[index][key] = value;
+       if (key === 'type') {
+        // Ensure type is unique
+        if (value === "Other" || !updatedExpertise.some((exp, idx) => idx !== index && exp.type === value)) {
+          updatedExpertise[index][key] = value;
+        }
+      } else {
         updatedExpertise[index][key] = value;
+      }
    
         return { ...prev, expertise: updatedExpertise };
       });
@@ -58,11 +77,12 @@ const NewContentWriter = () => {
     }
   };
 
-  const handleAddLanguage = () => {
-    setFormData((prev) => ({
+  const handleAddLanguage = (newExpertise) => {
+   setFormData((prev) => ({
       ...prev,
       languages: [...prev.languages, { name: "", other: "", proficiency: "" }],
     }));
+   
   };
 
   const handleRemoveLanguage = (index) => {
@@ -92,11 +112,13 @@ const NewContentWriter = () => {
       if (!lang.name) errors.push(`Language ${index + 1} name is required.`);
       if (!lang.proficiency) errors.push(`Language ${index + 1} proficiency is required.`);
     });
+   // return
     return errors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting form data:", formData); 
 
     const validationErrors = validateFormData();
     if (validationErrors.length > 0) {
@@ -117,6 +139,7 @@ const NewContentWriter = () => {
       );
       toast.success("Content writer added successfully");
     } catch (error) {
+      console.log("Error:", error.response ? error.response.data : error.message);
       toast.error(`Error adding content writer: ${error.response ? error.response.data.message : error.message}`);
       console.error("Error:", error.response ? error.response.data : error.message);
     }
@@ -155,6 +178,17 @@ const NewContentWriter = () => {
               value={formData.bio}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
+            />
+          </label>
+          <label className="block">
+            <span className="text-gray-700">Location</span>
+            <input
+              type="text"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 rounded w-full"
+              
             />
           </label>
           <label className="block">
@@ -210,7 +244,7 @@ const NewContentWriter = () => {
   Add Expertise
 </button>
           </label>
-          <label className="block">
+          <label className="block col-span-2">
             <span className="text-gray-700">Languages</span>
             {formData.languages.map((lang, idx) => (
               <div key={idx} className="flex items-center mb-2">
@@ -299,6 +333,7 @@ const NewContentWriter = () => {
             />
           </label>
         </div>
+        
         <button type="submit" className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">
           Submit
         </button>

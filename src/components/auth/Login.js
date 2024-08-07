@@ -24,7 +24,8 @@ function Login() {
         toast.success("Logged in successfully");
         console.log(response.data.user);
         setUserData(response.data.user);
-        navigate("/form");
+        //navigate("/form");
+        navigate("/guestpost")
       })
       .catch((error) => {
         toast.error(error?.response?.data?.message);

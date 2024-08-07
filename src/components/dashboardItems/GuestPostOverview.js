@@ -20,12 +20,13 @@ const GuestPostOverview = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('https://guest-posting-marketplace-web-backend.onrender.com/form/getData');
-        //const response = await axios.get('http://localhost:5000/form/getData');
+       // const response = await axios.get('http://localhost:5000/form/getData');
         const fetchedData = response.data.data;
 
         setData(fetchedData);
 
         setPublisherCount(fetchedData.length);
+        
         const trafficTotal = fetchedData.reduce((acc, item) => {
           const match = item.monthlyTraffic.match(/\d+/);
           return acc + (match ? parseInt(match[0], 10) : 0);
@@ -37,6 +38,7 @@ const GuestPostOverview = () => {
 
         setLoading(false);
         initializeCharts(fetchedData, trafficTotal, categories.size, fetchedData.length);
+        console.log("GuestPostOverview fetchedData, totalMonthlyTraffic, categoriesCount, publisherCount ",fetchedData.length, totalMonthlyTraffic, categories.size, publisherCount)
       } catch (err) {
         setError(err);
         setLoading(false);
@@ -47,6 +49,7 @@ const GuestPostOverview = () => {
   }, []);
 
   const initializeCharts = (fetchedData, totalMonthlyTraffic, categoriesCount, publisherCount) => {
+    console.log("GuestPostOverview fetchedData, totalMonthlyTraffic, categoriesCount, publisherCount ",fetchedData.length, totalMonthlyTraffic, categoriesCount, publisherCount)
     const sparklineData = fetchedData.map(item => {
       const match = item.monthlyTraffic.match(/\d+/);
       return match ? parseInt(match[0], 10) : 0;

@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const ContactForm = ({ publisher, onClose }) => {
+const ContactForm = ({ publisher, onClose ,url}) => {
+  console.log(publisher)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,8 +20,10 @@ const ContactForm = ({ publisher, onClose }) => {
     try {
       // Send contact form data to backend
       const response = await axios.post(
+       // `http://localhost:5000/${url}/addContact`,
+       `https://guest-posting-marketplace-web-backend.onrender.com/${url}/addContact`,
        // "http://localhost:5000/superAdmin/addContact",
-         "https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/addContact",
+       //  "https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/addContact",
         {
           publisherId: publisher._id,
           name: formData.name,
@@ -28,9 +31,11 @@ const ContactForm = ({ publisher, onClose }) => {
           message: formData.message,
         }
       );
+      console.log(response)
       toast.success("Contact form submitted successfully");
       onClose(); 
     } catch (error) {
+      console.log("Error submitting contact form:", error)
       toast.error("Error submitting contact form");
       console.error("Error submitting contact form:", error);
     }

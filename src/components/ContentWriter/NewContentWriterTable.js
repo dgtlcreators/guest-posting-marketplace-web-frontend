@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const NewContentWriterTable = () => {
@@ -9,6 +9,8 @@ const NewContentWriterTable = () => {
   const [originalWriters, setOriginalWriters] = useState([]);
   const [sortedField, setSortedField] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchContentWriters = async () => {
@@ -61,7 +63,7 @@ const NewContentWriterTable = () => {
   const deleteContentWriter = async (id) => {
     try {
       await axios.delete(`https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/deletecontentwriter/${id}`);
-    //  await axios.delete(`http://localhost:5000/contentwriters/deletecontentwriter/${id}`);
+     // await axios.delete(`http://localhost:5000/contentwriters/deletecontentwriter/${id}`);
       toast.success("Content Writer Deleted Successfully");
       setContentWriters(contentWriters.filter((writer) => writer._id !== id));
     } catch (error) {
@@ -70,6 +72,9 @@ const NewContentWriterTable = () => {
     }
   };
 
+  const handleViewProfile = (influencer) => {
+    navigate(`/contentWriterprofile/${influencer._id}`);
+  };
   return (
     <div className="table-container">
       <div className="mb-4">
@@ -87,11 +92,14 @@ const NewContentWriterTable = () => {
               <th className="px-4 py-2">S.No</th>
               <th className="px-4 py-2" onClick={() => handleSort("name")}>Name {renderSortIcon("name")}</th>
               <th className="px-4 py-2" onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>
+             
               <th className="px-4 py-2" onClick={() => handleSort("experience")}>Experience {renderSortIcon("experience")}</th>
+              <th className="px-4 py-2" onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
               <th className="px-4 py-2" onClick={() => handleSort("expertise")}>Expertise {renderSortIcon("expertise")}</th>
               <th className="px-4 py-2" onClick={() => handleSort("languages")}>Languages {renderSortIcon("languages")}</th>
               <th className="px-4 py-2" onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
               <th className="py-3 px-4 uppercase font-semibold text-sm">Actions</th>
+              <th className="py-3 px-4 uppercase font-semibold text-sm">Profile</th>
             </tr>
           </thead>
           <tbody>
@@ -101,17 +109,27 @@ const NewContentWriterTable = () => {
                 <td className="border px-4 py-2">{writer.name}</td>
                 <td className="border px-4 py-2">{writer.bio}</td>
                 <td className="border px-4 py-2">{writer.experience}</td>
+                <td className="border px-4 py-2">{writer.location}</td>
                 <td className="border px-4 py-2">
+                <ul className="list-disc pl-5">
                   {writer.expertise.map((expert, idx) => (
+                     <li key={idx}>
                     <div key={idx}>{expert.type}</div>
+                    </li>
                   ))}
+                  </ul>
                 </td>
                 <td className="border px-4 py-2">
+                <ul className="list-disc pl-5">
+                  
                   {writer.languages.map((lang, idx) => (
-                    <span key={idx} className="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded-full m-1">
+                     <li key={idx} className="mb-2">
+                    <span key={idx} className="">
+                      {/*`${lang.name==="Other"?`Other: ${lang.other}`:lang.name} (${lang.proficiency})`*/}
                       {`${lang.name} (${lang.proficiency})`}
-                    </span>
+                    </span></li>
                   ))}
+                  </ul>
                 </td>
                 <td className="border px-4 py-2 text-center">
                   {writer.collaborationRates ? (
@@ -124,7 +142,7 @@ const NewContentWriterTable = () => {
                     'N/A'
                   )}
                 </td>
-                <td className="py-3 px-4">
+                <td className="border py-3 px-4">
                   <button
                     onClick={() => deleteContentWriter(writer._id)}
                     className="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded my-2"
@@ -138,6 +156,12 @@ const NewContentWriterTable = () => {
                     EDIT
                   </Link>
                 </td>
+                <td className="border py-3 px-4"> <button
+                    onClick={() => handleViewProfile(writer)}
+                    className="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-indigo-700 transition-colors"
+                  >
+                    View Profile
+                  </button></td>
               </tr>
             ))}
           </tbody>
