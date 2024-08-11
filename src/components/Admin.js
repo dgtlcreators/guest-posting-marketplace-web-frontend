@@ -4,6 +4,8 @@ import AdminTable from "./AdminTable.js";
 import { toast } from "react-toastify";
 //import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { UserContext } from "../context/userContext.js";
+import { useTheme } from "../context/ThemeProvider.js";
+
 /*import { Bar, Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { FaChartBar } from "react-icons/fa";
@@ -21,6 +23,7 @@ ChartJS.register(
 */
 
 const Admin = () => {
+  const { isDarkTheme } = useTheme();
   const { userData } = useContext(UserContext); 
   const userId = userData?._id;
   console.log(userData,userId)

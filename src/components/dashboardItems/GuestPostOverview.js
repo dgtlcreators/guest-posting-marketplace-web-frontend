@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import ApexCharts from 'apexcharts';
+import { useTheme } from '../../context/ThemeProvider';
+
 
 const GuestPostOverview = () => {
+  const { isDarkTheme } = useTheme();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -209,9 +212,19 @@ const GuestPostOverview = () => {
       </div>*/}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="p-4 rounded-lg flex flex-col items-center  shadow-md rounded-lg" ref={chartSpark3Ref}></div>
-        <div className="p-4 rounded-lg flex flex-col items-center  shadow-md rounded-lg" ref={chartSpark1Ref}></div>
-        <div className="p-4 rounded-lg flex flex-col items-center r shadow-md rounded-lg" ref={chartSpark2Ref}></div>
+      <div className="p-4 rounded-lg flex flex-col items-center  shadow-md rounded-lg" ref={chartSpark3Ref}>
+      <h3 className="text-lg font-semibold">Total Publishers</h3>
+      <p className="text-2xl">{publisherCount}</p>
+      </div>
+        <div className="p-4 rounded-lg flex flex-col items-center  shadow-md rounded-lg" ref={chartSpark1Ref}>
+        <h3 className="text-lg font-semibold">Total Monthly Traffic</h3>
+        <p className="text-2xl">{totalMonthlyTraffic}</p>
+        </div>
+        <div className="p-4 rounded-lg flex flex-col items-center r shadow-md rounded-lg" ref={chartSpark2Ref}>
+       
+        <h3 className="text-lg font-semibold">Distinct Categories</h3>
+        <p className="text-2xl">{distinctCategories.size}</p>
+        </div>
        
       </div>
     </div>

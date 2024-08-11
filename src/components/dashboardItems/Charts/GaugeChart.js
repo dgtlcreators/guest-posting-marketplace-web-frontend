@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
+import { useTheme } from '../../../context/ThemeProvider';
+
 
 const GaugeChart = ({ data }) => {
+  const { isDarkTheme } = useTheme();
   const chartRef = useRef(null);
 
  

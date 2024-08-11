@@ -5,8 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 import { toast } from "react-toastify";
 import Layout from "../../Layout/Layout.js";
+import { useTheme } from "../../context/ThemeProvider.js";
+
 
 function Signup() {
+  const { isDarkTheme } = useTheme();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

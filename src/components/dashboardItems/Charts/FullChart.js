@@ -1,7 +1,10 @@
+
 import React from 'react';
 import ApexCharts from 'react-apexcharts';
+import { useTheme } from '../../../context/ThemeProvider';
 
 const FullChart = ({ data }) => {
+  const { isDarkTheme} = useTheme();
   const categoryCounts = {};
 
 

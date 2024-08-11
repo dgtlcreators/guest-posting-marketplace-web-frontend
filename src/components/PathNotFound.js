@@ -1,5 +1,8 @@
+import { useTheme } from "../context/ThemeProvider";
+
 
 const PathNotFound = () => {
+  const { isDarkTheme } = useTheme();
     return (
       <div className="flex items-center justify-center flex-col">
         <h1 className='text-xl font-bold'>404 - Page Not Found</h1>

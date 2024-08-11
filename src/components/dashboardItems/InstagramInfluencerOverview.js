@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import ApexCharts from 'apexcharts';
+import { useTheme } from '../../context/ThemeProvider';
+
 
 const InstagramInfluencerOverview = () => {
+  const { isDarkTheme } = useTheme();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -192,9 +195,19 @@ const InstagramInfluencerOverview = () => {
       <h2 className="text-xl font-bold mb-4">Instagram Influencer Overview</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-4 rounded-lg flex flex-col items-center shadow-md rounded-lg" ref={chartSpark3Ref}></div>
-        <div className="p-4 rounded-lg flex flex-col items-center shadow-md rounded-lg" ref={chartSpark1Ref}></div>
-        <div className="p-4 rounded-lg flex flex-col items-center shadow-md rounded-lg" ref={chartSpark2Ref}></div>
+        <div className="p-4 rounded-lg flex flex-col items-center shadow-md rounded-lg" ref={chartSpark3Ref}>
+        <h3 className="text-lg font-semibold">Total Influencers</h3>
+        <p className="text-2xl">{influencerCount}</p>
+        </div>
+        <div className="p-4 rounded-lg flex flex-col items-center shadow-md rounded-lg" ref={chartSpark1Ref}>
+        <h3 className="text-lg font-semibold">Total Followers</h3>
+        <p className="text-2xl">{totalFollowers}</p>
+        
+        </div>
+        <div className="p-4 rounded-lg flex flex-col items-center shadow-md rounded-lg" ref={chartSpark2Ref}>
+        <h3 className="text-lg font-semibold">Avg Engagement Rate</h3>
+        <p className="text-2xl">{averageEngagementRate.toFixed(2)}%</p>
+        </div>
       </div>
     </div>
   );

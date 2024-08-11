@@ -1,6 +1,8 @@
+import { useTheme } from '@emotion/react';
 import React from 'react';
 
 const Layout = ({ children, isRegisterPage }) => {
+  const { isDarkTheme, toggleTheme } = useTheme();
   return (
     <div className="container mx-auto min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-4xl p-8">

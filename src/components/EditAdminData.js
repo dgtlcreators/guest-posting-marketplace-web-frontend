@@ -5,8 +5,11 @@ import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from "../context/userContext";
+import { useTheme } from "../context/ThemeProvider";
+
 
 const EditAdminForm = () => {
+  const { isDarkTheme } = useTheme();
   const { userData } = useContext(UserContext);
 
  

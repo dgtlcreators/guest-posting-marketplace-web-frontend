@@ -4,8 +4,11 @@ import axios from "axios";
 import SuperAdminTable from "./SuperAdminTable.js";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/userContext.js";
+import { useTheme } from "../context/ThemeProvider.js";
+
 
 const SuperAdmin = () => {
+  const { isDarkTheme, toggleTheme } = useTheme();
   const { userData } = useContext(UserContext); 
   const userId = userData?._id;
  

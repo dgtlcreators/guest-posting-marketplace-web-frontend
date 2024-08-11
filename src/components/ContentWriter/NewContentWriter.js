@@ -7,8 +7,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import NewContentWriterTable from "./NewContentWriterTable";
+import { useTheme } from "../../context/ThemeProvider";
+
 
 const NewContentWriter = () => {
+  const { isDarkTheme } = useTheme();
   const [formData, setFormData] = useState({
     name: "",
     bio: "",
@@ -18,11 +21,59 @@ const NewContentWriter = () => {
     languages: [{ name: "", other: "", proficiency: "" }],
     collaborationRates: { post: 0, story: 0, reel: 0 },
     email: "",
+    industry: [{ type: '', other: '', subCategories: [{ type: '', other: '' }] }],
+    // industry: [{ type: '', other: '',  }],
+    //subCategories: [{ type: '', other: '' }]
   });
+
   const [addContenwriter,setAddContenwriter]=useState([])
 
+  const industrySubCategories = {
+    Technology: ['Software', 'Hardware', 'AI', 'Networking', 'Other'],
+    Health: ['Wellness', 'Medical', 'Fitness', 'Nutrition', 'Other'],
+    Finance: ['Banking', 'Investments', 'Insurance', 'Accounting', 'Other'],
+    Education: ['Online Courses', 'Tutoring', 'Schooling', 'Certification', 'Other'],
+    Entertainment: ['Movies', 'Music', 'Games', 'Theatre', 'Other'],
+    Fashion: ['Clothing', 'Footwear', 'Accessories', 'Trends', 'Other'],
+    Food: ['Cuisine', 'Beverage', 'Diet', 'Restaurants', 'Other'],
+    Travel: ['Adventure', 'Luxury', 'Budget', 'Destinations', 'Other'],
+    Sports: ['Football', 'Basketball', 'Tennis', 'Cricket', 'Other']
+  };
+
+  const handleAddIndustry = () => {
+    setFormData((prev) => ({
+      ...prev,
+      industry: [...prev.industry, { type: "", other: "", subCategories: [] }]
+    }));
+  };
+
+  const handleRemoveIndustry = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      industry: prev.industry.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleAddSubCategory = (index) => {
+    setFormData((prev) => {
+      const updatedIndustry = [...prev.industry];
+      updatedIndustry[index].subCategories = [...updatedIndustry[index].subCategories, { type: "", other: "" }];
+      return { ...prev, industry: updatedIndustry };
+    });
+  };
+
+  const handleRemoveSubCategory = (outerIdx, innerIdx) => {
+    setFormData((prev) => {
+      const updatedIndustry = [...prev.industry];
+      updatedIndustry[outerIdx].subCategories = updatedIndustry[outerIdx].subCategories.filter((_, i) => i !== innerIdx);
+      return { ...prev, industry: updatedIndustry };
+    });
+  };
+
+
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
+    const { name, value, type, checked } = e.target;
+    console.log(" name, value, type, checked ", name, value, type, checked)
 
     if (name.startsWith('collaborationRates')) {
       const key = name.split('.')[1];
@@ -63,13 +114,67 @@ const NewContentWriter = () => {
         if (value === "Other" || !updatedExpertise.some((exp, idx) => idx !== index && exp.type === value)) {
           updatedExpertise[index][key] = value;
         }
-      } else {
+      } 
+      else {
         updatedExpertise[index][key] = value;
       }
    
         return { ...prev, expertise: updatedExpertise };
       });
+    }
+    else if (name.startsWith('industry')) {
+      const [outerIndex, key] = name.split('.').slice(1);
+      setFormData((prev) => {
+          const updatedIndustry = [...prev.industry];
+          //console.log("key: ",key)
+          if (key === 'type') {
+              updatedIndustry[outerIndex] = {
+                  ...updatedIndustry[outerIndex],
+                  [key]: value,
+                  subCategories: updatedIndustry[outerIndex].subCategories || [],
+              };
+          } else if (key === 'other') {
+              updatedIndustry[outerIndex] = {
+                  ...updatedIndustry[outerIndex],
+                  [key]: value,
+              };
+          } else if (key === 'subCategories') {
+            const parts = name.split('.').slice(1);
+    const index = parseInt(parts[0], 10);
+    const subIndex = parseInt(parts[2], 10);
+    const fieldKey = parts[3]; 
+    updatedIndustry[index].subCategories = updatedIndustry[index].subCategories || [];
+
+    // Update the subCategories based on checkbox state
+    const updatedSubCategories = [...updatedIndustry[index].subCategories];
+
+    if (checked) {
+        // Add new subcategory if it's checked
+        if (!updatedSubCategories[subIndex]) {
+            updatedSubCategories[subIndex] = { type: value };
+        } else {
+            updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: value };
+        }
     } else {
+        // Remove subcategory if it's unchecked
+        updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: '' };
+    }
+    const uniqueSubCategories = Array.from(
+      new Map(
+        updatedSubCategories
+          .filter(sub => sub && sub.type && sub.type.trim() !== '')  
+          .map(sub => [sub.type, sub])
+      ).values()
+    );
+  
+    updatedIndustry[index].subCategories = uniqueSubCategories;  
+
+    //updatedIndustry[index].subCategories = updatedSubCategories;
+          }
+          return { ...prev, industry: updatedIndustry };
+      });
+  }
+    else {
       setFormData((prev) => ({
         ...prev,
         [name]: type === 'number' ? parseFloat(value) : value,
@@ -128,7 +233,7 @@ const NewContentWriter = () => {
 
     try {
       const response = await axios.post(
-       // "http://localhost:5000/contentwriters/createcontentwriter",
+        //"http://localhost:5000/contentwriters/createcontentwriter",
         "https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/createcontentwriter",
         formData,
         {
@@ -201,6 +306,160 @@ const NewContentWriter = () => {
               className="p-2 border border-gray-300 rounded w-full"
             />
           </label>
+          <div className="block">
+          <h2 className="text-xl font-bold text-blue-600">Industry</h2>
+          {formData.industry.map((item, outerIndex) => (
+            <div key={outerIndex} className="border p-4 mb-4 rounded">
+              <div className="flex items-center space-x-2 mb-2">
+                <select
+                  name={`industry.${outerIndex}.type`}
+                  value={item.type}
+                  onChange={handleChange}
+                  className="p-2 border border-gray-300 rounded w-1/3"
+                >
+                  <option value="">Select Industry</option>
+                  {Object.keys(industrySubCategories).map((industry) => (
+                    <option key={industry} value={industry}>{industry}</option>
+                  ))}
+                  <option value="Other">Other</option>
+                </select>
+                {item.type === "Other" && (
+                  <input
+                    type="text"
+                    name={`industry.${outerIndex}.other`}
+                    value={item.other}
+                    onChange={handleChange}
+                    placeholder="Other Industry"
+                    className="p-2 border border-gray-300 rounded w-2/3"
+                  />
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleRemoveIndustry(outerIndex)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  Remove Industry
+                </button>
+              </div>
+              {item.type && industrySubCategories[item.type] && (
+                <div className="mb-4">
+                  <label className="block mb-2 text-gray-700">Sub Categories</label>
+                  {industrySubCategories[item.type].map((subCategory, innerIndex) => {
+            const isChecked = item?.subCategories.some(sub => sub?.type === subCategory?true:false);
+            return (
+                <div key={innerIndex} className="flex items-center space-x-2 mb-2">
+                    <input
+                        type="checkbox"
+                        name={`industry.${outerIndex}.subCategories.${innerIndex}.type`}
+                        value={subCategory}
+                        checked={isChecked}
+                        onChange={(e) => handleChange(e, outerIndex, innerIndex)}
+                        className="mr-2"
+                    />
+                    <span className="text-gray-700">{subCategory}</span>
+                </div>
+            );
+        })}
+                 {/* <button
+                    type="button"
+                    onClick={() => handleAddSubCategory(outerIndex)}
+                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                  >
+                    Add Sub Category
+                  </button>*/}
+                </div>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={handleAddIndustry}
+            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          >
+            Add Industry
+          </button>
+        </div>
+
+          {/*<label className="block">
+            <span className="text-gray-700">Industry</span>
+            {formData.industry.map((ind, outerIdx) => (
+              <div key={outerIdx} className="flex flex-col mb-2">
+                <select
+                  name={`industry.${outerIdx}.type`}
+                  value={ind.type}
+                  onChange={handleChange}
+                  className="p-2 border border-gray-300 rounded w-full mb-2"
+                >
+                  <option value="">Select Industry</option>
+                  {Object.keys(industrySubCategories).map((key) => (
+                    <option key={key} value={key}>{key}</option>
+                  ))}
+                </select>
+                <input
+                  type="text"
+                  name={`industry.${outerIdx}.other`}
+                  value={ind.other}
+                  onChange={handleChange}
+                  placeholder="Other Industry"
+                  className="p-2 border border-gray-300 rounded w-full mb-2"
+                />
+                <div>
+                  {ind.subCategories.map((sub, innerIdx) => (
+                    <div key={innerIdx} className="flex items-center mb-2">
+                      <select
+                        name={`industry.${outerIdx}.subCategories.${innerIdx}.type`}
+                        value={sub.type}
+                        onChange={handleChange}
+                        className="p-2 border border-gray-300 rounded w-full mr-2"
+                      >
+                        <option value="">Select Subcategory</option>
+                        {ind.type && industrySubCategories[ind.type]?.map((subCat) => (
+                          <option key={subCat} value={subCat}>{subCat}</option>
+                        ))}
+                      </select>
+                      <input
+                        type="text"
+                        name={`industry.${outerIdx}.subCategories.${innerIdx}.other`}
+                        value={sub.other}
+                        onChange={handleChange}
+                        placeholder="Other Subcategory"
+                        className="p-2 border border-gray-300 rounded w-full"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveSubCategory(outerIdx, innerIdx)}
+                        className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => handleAddSubCategory(outerIdx)}
+                    className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
+                  >
+                    Add Subcategory
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveIndustry(outerIdx)}
+                  className="mt-2 bg-red-500 text-white py-2 px-4 rounded"
+                >
+                  Remove Industry
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={handleAddIndustry}
+              className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
+            >
+              Add Industry
+            </button>
+          </label>*/}
+
           <label className="block">
             <span className="text-gray-700">Expertise</span>
             {formData.expertise.map((exp, idx) => (

@@ -1,6 +1,9 @@
+
 import React from "react";
+import { useTheme } from "../context/ThemeProvider";
 
 const TableComponent = ({ headers, data }) => {
+  const { isDarkTheme } = useTheme();
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white border border-gray-300">

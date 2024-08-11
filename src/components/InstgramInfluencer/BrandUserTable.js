@@ -5,8 +5,11 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
+import { useTheme } from "../../context/ThemeProvider";
+
 
 const BrandUserTable = ({ influencers,setInfluencers }) => {
+  const { isDarkTheme } = useTheme();
   const navigate = useNavigate();
 
   const [originalUsers, setOriginalUsers] = useState(influencers);

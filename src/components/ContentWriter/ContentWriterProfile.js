@@ -4,10 +4,13 @@ import { FaUser, FaLanguage, FaBook, FaDollarSign, FaEnvelope } from 'react-icon
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useTheme } from '../../context/ThemeProvider';
+
 
 
 
 const ContentWriterProfile = () => {
+  const { isDarkTheme } = useTheme();
   const { id } = useParams();
   const [contentWriter,setContentWriter]=useState("")
 

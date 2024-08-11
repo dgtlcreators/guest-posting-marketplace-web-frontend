@@ -1,8 +1,11 @@
 // src/components/RadarChart.js
+
 import React, { useState } from 'react';
 import ApexCharts from 'react-apexcharts';
+import { useTheme } from '../../../context/ThemeProvider';
 
 const RadarChart = ({ data }) => {
+  const { isDarkTheme } = useTheme();
     const [selectedSpamScore, setSelectedSpamScore] = useState('allMozSpamScore');
 
     const handleChange = (event) => {

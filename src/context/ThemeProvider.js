@@ -1,5 +1,45 @@
 // src/context/ThemeProvider.js
-import React, { createContext, useState, useContext } from 'react';
+
+
+
+
+
+
+
+/*import React, { createContext, useState, useContext, useEffect } from 'react';
+
+const ThemeContext = createContext();
+
+export const useTheme = () => useContext(ThemeContext);
+
+export const ThemeProvider = ({ children }) => {
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+
+  const toggleTheme = () => {
+    setIsDarkTheme(prevTheme => !prevTheme);
+  };
+
+  useEffect(() => {
+    document.body.classList.toggle('dark', isDarkTheme);
+  }, [isDarkTheme]);
+
+  return (
+    <ThemeContext.Provider value={{ isDarkTheme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};*/
+
+
+
+
+
+
+
+
+
+
+import React, { createContext, useState, useContext, useEffect } from 'react';
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 
 const ThemeContext = createContext();
@@ -16,6 +56,11 @@ export const ThemeProvider = ({ children }) => {
       mode: isDarkTheme ? 'dark' : 'light',
     },
   });
+ /* useEffect(() => {
+    document.body.classList.toggle('dark-mode', isDarkTheme);
+    document.body.classList.toggle('light-mode', !isDarkTheme);
+  }, [isDarkTheme]);*/
+
 
   return (
     <ThemeContext.Provider value={{ isDarkTheme, toggleTheme }}>

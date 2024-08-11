@@ -1,10 +1,14 @@
+
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeProvider';
 import { toast } from 'react-toastify';
 
+
 const NewContentWriterTable = () => {
+  const { isDarkTheme } = useTheme();
   const [contentWriters, setContentWriters] = useState([]);
   const [originalWriters, setOriginalWriters] = useState([]);
   const [sortedField, setSortedField] = useState(null);
@@ -17,7 +21,7 @@ const NewContentWriterTable = () => {
       try {
         
         const response = await axios.get("https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/getallcontentwriters");
-       // const response = await axios.get("http://localhost:5000/contentwriters/getallcontentwriters");
+      //  const response = await axios.get("http://localhost:5000/contentwriters/getallcontentwriters");
         setContentWriters(response.data.data);
         setOriginalWriters(response.data.data);
       } catch (error) {
@@ -97,6 +101,8 @@ const NewContentWriterTable = () => {
               <th className="px-4 py-2" onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
               <th className="px-4 py-2" onClick={() => handleSort("expertise")}>Expertise {renderSortIcon("expertise")}</th>
               <th className="px-4 py-2" onClick={() => handleSort("languages")}>Languages {renderSortIcon("languages")}</th>
+              <th className="px-4 py-2" onClick={() => handleSort("industry")}>Industries {renderSortIcon("industry")}</th>
+               <th className="px-4 py-2" onClick={() => handleSort("subCategories")}>Subcategories {renderSortIcon("subCategories")}</th>
               <th className="px-4 py-2" onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
               <th className="py-3 px-4 uppercase font-semibold text-sm">Actions</th>
               <th className="py-3 px-4 uppercase font-semibold text-sm">Profile</th>
@@ -131,6 +137,27 @@ const NewContentWriterTable = () => {
                   ))}
                   </ul>
                 </td>
+                <td className="border px-4 py-2">
+          <ul className="list-disc pl-5">
+            {writer.industry.map((industries, idx) => (
+              <li key={idx}>{industries.type}</li>
+            ))}
+          </ul>
+        </td>
+        <td className="border px-4 py-2">
+          <ul className="list-disc pl-5">
+            {writer.industry.map((industries, idx) => (
+              <li key={idx}>
+                <strong>{industries.type}:</strong>
+                <ul className="list-disc pl-5">
+                  {industries.subCategories.map((subCategory, subIdx) => (
+                    <li key={subIdx}>{subCategory?.type}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </td>
                 <td className="border px-4 py-2 text-center">
                   {writer.collaborationRates ? (
                     <div>

@@ -3,8 +3,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { UserContext } from '../../context/userContext';
+import { useTheme } from '../../context/ThemeProvider';
+
 
 const EditInstagramInfluencer = () => {
+  const { isDarkTheme} = useTheme();
     const { userData } = useContext(UserContext);
     const { id } = useParams();
     const navigate = useNavigate()

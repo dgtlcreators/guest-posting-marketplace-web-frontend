@@ -1,6 +1,9 @@
+
 import React, { useState } from 'react';
+import { useTheme } from '../../context/ThemeProvider';
 
 const FilterModal = ({ isOpen, onClose, onApply }) => {
+  const { isDarkTheme } = useTheme();
   const [filters, setFilters] = useState({
     minFollowers: '',
     maxFollowers: '',

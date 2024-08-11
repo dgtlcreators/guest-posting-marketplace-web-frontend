@@ -5,8 +5,11 @@ import { FaUser, FaUsers, FaHeart, FaLocationArrow, FaLanguage, FaCheckCircle, F
 import Fade from 'react-reveal/Fade';
 import Zoom from 'react-reveal/Zoom';
 import { toast } from 'react-toastify';
+import { useTheme } from '../../context/ThemeProvider';
+
 
 const InfluencerProfile = () => {
+  const { isDarkTheme } = useTheme();
   const { id } = useParams();
   const [influencer, setInfluencer] = useState(null);
   const [form, setForm] = useState({

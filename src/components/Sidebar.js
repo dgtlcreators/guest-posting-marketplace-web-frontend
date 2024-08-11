@@ -13,7 +13,7 @@ const SidebarContext = createContext();
 export default function Sidebar() {
   const [expanded, setExpanded] = useState(true);
   const [newAddedOpen, setNewAddedOpen] = useState(false);
-  const { isDarkTheme } = useTheme();
+  const { isDarkTheme, toggleTheme } = useTheme();
   const { userData } = useContext(UserContext); 
   const userId = userData?._id;
 

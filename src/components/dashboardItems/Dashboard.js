@@ -4,8 +4,11 @@ import GuestPostOverview from './GuestPostOverview';
 import GuestPostAnalytics from './GuestPostAnalytics';
 import InstagramInfluencerOverview from './InstagramInfluencerOverview';
 import InstagramInfluencerAnalytics from './InstagramInfluencerAnalytics';
+import { useTheme } from '../../context/ThemeProvider';
+
 
 const Dashboard = () => {
+  const { isDarkTheme } = useTheme();
   const [section, setSection] = useState('all');
 
   const renderSection = () => {

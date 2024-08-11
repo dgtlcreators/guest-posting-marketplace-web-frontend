@@ -1,9 +1,12 @@
 
 
+
 import React, { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
+import { useTheme } from '../../../context/ThemeProvider';
 
 const FunnelCharts = ({ data }) => {
+  const { isDarkTheme } = useTheme();
   const [selectedLanguage, setSelectedLanguage] = useState('allLanguage');
 
   const handleChange = (event) => {

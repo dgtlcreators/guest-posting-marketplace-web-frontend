@@ -1,7 +1,10 @@
+
 import React from 'react'
 import ApexCharts from 'react-apexcharts';
+import { useTheme } from '../../../context/ThemeProvider';
 
 const BarCharts = ({data}) => {
+  const { isDarkTheme } = useTheme();
     const followersCount = data.map(item => item.followersCount);
     const followingCount = data.map(item => item.followingCount);
     

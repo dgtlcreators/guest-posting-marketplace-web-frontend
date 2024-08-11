@@ -88,10 +88,13 @@ export default Linecharts3D;*/
 
 
 
+
 import React from 'react'
 import ApexCharts from 'react-apexcharts';
+import { useTheme } from '../../../context/ThemeProvider';
 
 const Linecharts = ({data}) => {
+  const { isDarkTheme } = useTheme();
 
     const post = data.map(item => item.collaborationRates.post);
     const story = data.map(item => item.collaborationRates.story);

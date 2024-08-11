@@ -8,8 +8,11 @@ import FunnelCharts from './Charts/FunnelCharts';
 import DistributedColumns from './Charts/DistributedColumns';
 import RadarChart from './Charts/RadarChart';
 import MixedChart from './Charts/MixedChart';
+import { useTheme } from '../../context/ThemeProvider';
+
 
 const GuestPostAnalytics = () => {
+  const { isDarkTheme } = useTheme();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

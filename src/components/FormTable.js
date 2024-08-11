@@ -114,9 +114,12 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
+import { useTheme } from "../context/ThemeProvider";
+
 
 
 const FormTable = ({ users, setUsers }) => { 
+  const { isDarkTheme } = useTheme();
   const navigate = useNavigate();
   const [originalUsers, setOriginalUsers] = useState(users);
   const [sortedField, setSortedField] = useState(null);

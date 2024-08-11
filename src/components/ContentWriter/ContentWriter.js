@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import ContentWriterTable from './ContentWriterTable';
 import { toast } from 'react-toastify';
+import { useTheme } from '../../context/ThemeProvider';
+
 
 const ContentWriter = () => {
+  const { isDarkTheme } = useTheme();
   const [formData, setFormData] = useState({
     name: '',
     bio: '',
@@ -21,13 +24,18 @@ const ContentWriter = () => {
       reelFrom: '',
       reelTo: ''
     },
-    languageProficiency: ''
+    languageProficiency: '',
+    industry: [{ type: '', other: '', subCategories: [{ type: '', other: '' }] }],
+    //industry: [{ type: '', other: '' }],
+    //subCategories: [{ type: '', other: '' }]
   });
+  
+
 
   const [writers, setWriters] = useState([]);
 
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
+    const { name, value, type,checked } = e.target;
 
     if (name.startsWith('collaborationRates')) {
       const key = name.split('.')[1];
@@ -64,7 +72,59 @@ const ContentWriter = () => {
         }
         return { ...prev, expertise: updatedExpertise };
       });
+    }
+    else if (name.startsWith('industry')) {
+      const [outerIndex, key] = name.split('.').slice(1);
+      setFormData((prev) => {
+          const updatedIndustry = [...prev.industry];
+          //console.log("key: ",key)
+          if (key === 'type') {
+              updatedIndustry[outerIndex] = {
+                  ...updatedIndustry[outerIndex],
+                  [key]: value,
+                  subCategories: updatedIndustry[outerIndex].subCategories || [],
+              };
+          } else if (key === 'other') {
+              updatedIndustry[outerIndex] = {
+                  ...updatedIndustry[outerIndex],
+                  [key]: value,
+              };
+          } else if (key === 'subCategories') {
+            const parts = name.split('.').slice(1);
+    const index = parseInt(parts[0], 10);
+    const subIndex = parseInt(parts[2], 10);
+    const fieldKey = parts[3]; 
+    updatedIndustry[index].subCategories = updatedIndustry[index].subCategories || [];
+
+    const updatedSubCategories = [...updatedIndustry[index].subCategories];
+
+    if (checked) {
+       
+        if (!updatedSubCategories[subIndex]) {
+            updatedSubCategories[subIndex] = { type: value };
+        } else {
+            updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: value };
+        }
     } else {
+
+        updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: '' };
+    }
+    const uniqueSubCategories = Array.from(
+      new Map(
+        updatedSubCategories
+          .filter(sub => sub && sub.type && sub.type.trim() !== '')  
+          .map(sub => [sub.type, sub])
+      ).values()
+    );
+  
+    updatedIndustry[index].subCategories = uniqueSubCategories;  
+
+    //updatedIndustry[index].subCategories = updatedSubCategories;
+          }
+          return { ...prev, industry: updatedIndustry };
+      });
+  }
+    else {
       setFormData((prev) => ({
         ...prev,
         [name]: type === 'number' ? parseFloat(value) : value,
@@ -113,20 +173,22 @@ const ContentWriter = () => {
         .map(exp => exp.type === 'Other' ? exp.other : exp.type)
         .filter(Boolean),
       languages: formData.languages
-        .filter(lang => lang.name) // Filter out any languages without a name
+        .filter(lang => lang.name) 
         .map(lang => ({
           name: lang.name === 'Other' ? lang.other : lang.name,
           proficiency: lang.proficiency
         })),
       languageProficiency: formData.languages
         .map(lang => lang.proficiency)
-        .find(proficiency => proficiency) || '' 
+        .find(proficiency => proficiency) || '' ,
+        
     };
+
     
     e.preventDefault();
     try {
       const response = await axios.post('https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/contentWritersFilter', transformedData);
-     // const response = await axios.post('http://localhost:5000/contentwriters/contentWritersFilter', transformedData);
+      //const response = await axios.post('http://localhost:5000/contentwriters/contentWritersFilter', transformedData);
       setWriters(response.data.data);
       toast.success("Writer fetching successfully");
     } catch (error) {
@@ -135,9 +197,61 @@ const ContentWriter = () => {
     }
   };
 
+
+  
+
+  const [subCategoryOptions, setSubCategoryOptions] = useState([]);
+
+  const industrySubCategories = {
+    Technology: ['Software', 'Hardware', 'AI', 'Networking', 'Other'],
+    Health: ['Wellness', 'Medical', 'Fitness', 'Nutrition', 'Other'],
+    Finance: ['Banking', 'Investments', 'Insurance', 'Accounting', 'Other'],
+    Education: ['Online Courses', 'Tutoring', 'Schooling', 'Certification', 'Other'],
+    Entertainment: ['Movies', 'Music', 'Games', 'Theatre', 'Other'],
+    Fashion: ['Clothing', 'Footwear', 'Accessories', 'Trends', 'Other'],
+    Food: ['Cuisine', 'Beverage', 'Diet', 'Restaurants', 'Other'],
+    Travel: ['Adventure', 'Luxury', 'Budget', 'Destinations', 'Other'],
+    Sports: ['Football', 'Basketball', 'Tennis', 'Cricket', 'Other']
+  };
+
+
+
+ 
+  const handleAddIndustry = () => {
+    setFormData((prev) => ({
+      ...prev,
+      industry: [...prev.industry, { type: "", other: "", subCategories: [] }]
+    }));
+  };
+
+  const handleRemoveIndustry = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      industry: prev.industry.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleAddSubCategory = (index) => {
+    setFormData((prev) => {
+      const updatedIndustry = [...prev.industry];
+      updatedIndustry[index].subCategories = [...updatedIndustry[index].subCategories, { type: "", other: "" }];
+      return { ...prev, industry: updatedIndustry };
+    });
+  };
+
+  const handleRemoveSubCategory = (outerIdx, innerIdx) => {
+    setFormData((prev) => {
+      const updatedIndustry = [...prev.industry];
+      updatedIndustry[outerIdx].subCategories = updatedIndustry[outerIdx].subCategories.filter((_, i) => i !== innerIdx);
+      return { ...prev, industry: updatedIndustry };
+    });
+  };
+
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6 text-blue-600">Filter Content Writers</h1>
+     
       <form onSubmit={handleSubmit} className="bg-gray-100 p-6 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           <label className="block">
@@ -200,6 +314,131 @@ const ContentWriter = () => {
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </label>
+         
+          <div className="block">
+          <h2 className="text-xl font-bold text-blue-600">Industry</h2>
+          {formData.industry.map((item, outerIndex) => (
+            <div key={outerIndex} className="border p-4 mb-4 rounded">
+              <div className="flex items-center space-x-2 mb-2">
+                <select
+                  name={`industry.${outerIndex}.type`}
+                  value={item.type}
+                  onChange={handleChange}
+                  className="p-2 border border-gray-300 rounded w-1/3"
+                >
+                  <option value="">Select Industry</option>
+                  {Object.keys(industrySubCategories).map((industry) => (
+                    <option key={industry} value={industry}>{industry}</option>
+                  ))}
+                  <option value="Other">Other</option>
+                </select>
+                {item.type === "Other" && (
+                  <input
+                    type="text"
+                    name={`industry.${outerIndex}.other`}
+                    value={item.other}
+                    onChange={handleChange}
+                    placeholder="Other Industry"
+                    className="p-2 border border-gray-300 rounded w-2/3"
+                  />
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleRemoveIndustry(outerIndex)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  Remove Industry
+                </button>
+              </div>
+              {item.type && industrySubCategories[item.type] && (
+                <div className="mb-4">
+                  <label className="block mb-2 text-gray-700">Sub Categories</label>
+                  {industrySubCategories[item.type].map((subCategory, innerIndex) => {
+            const isChecked = item?.subCategories.some(sub => sub?.type === subCategory?true:false);
+            return (
+                <div key={innerIndex} className="flex items-center space-x-2 mb-2">
+                    <input
+                        type="checkbox"
+                        name={`industry.${outerIndex}.subCategories.${innerIndex}.type`}
+                        value={subCategory}
+                        checked={isChecked}
+                        onChange={(e) => handleChange(e, outerIndex, innerIndex)}
+                        className="mr-2"
+                    />
+                    <span className="text-gray-700">{subCategory}</span>
+                </div>
+            );
+        })}
+                 {/* <button
+                    type="button"
+                    onClick={() => handleAddSubCategory(outerIndex)}
+                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                  >
+                    Add Sub Category
+                  </button>*/}
+                </div>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={handleAddIndustry}
+            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          >
+            Add Industry
+          </button>
+        </div>
+         { /*<label className='block'>
+          <span className="text-gray-700">Industry</span>
+          {formData.industry.map((ids,idx)=>(
+            <div key={idx} className='flex items-center mb-2'>
+              <select
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          value={selectedIndustry}
+          onChange={handleIndustryChange}
+        >
+          <option value="">Select Industry</option>
+          {Object.keys(industrySubCategories).map((industry) => (
+            <option key={industry} value={industry}>
+              {industry}
+            </option>
+          ))}
+        </select>
+              {ids.type==="Other" && (
+                  <input
+                    type="text"
+                    name={`industry.${idx}.other`}
+                    value={ids.other}
+                    onChange={handleChange}
+                    placeholder="Enter Industry manually"
+                    className="p-2 border border-gray-300 rounded w-full"
+                  />
+                )}
+            </div>
+          ))}
+                {subCategories.length > 0 && (
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Sub-categories</label>
+          <div className="mt-1">
+            {formData.subCategories.map((subCategory) => (
+              <div key={subCategory} className="flex items-center">
+                <input
+                  type="checkbox"
+                  id={subCategory}
+                  value={subCategory}
+                  onChange={handleSubCategoryChange}
+                  className="mr-2"
+                />
+                <label htmlFor={subCategory} className="text-sm text-gray-700">
+                  {subCategory}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+          </label>*/}
           <label className="block">
             <span className="text-gray-700">Expertise</span>
             {formData.expertise.map((exp, idx) => (
@@ -233,6 +472,7 @@ const ContentWriter = () => {
                 >
                   Remove
                 </button>
+                
               </div>
             ))}
             <button

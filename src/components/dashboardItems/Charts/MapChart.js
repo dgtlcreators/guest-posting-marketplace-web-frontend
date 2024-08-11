@@ -2,8 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import ApexCharts from 'react-apexcharts';
+import { useTheme } from '../../../context/ThemeProvider';
+
 
 const MapChart = ({ data }) => {
+  const { isDarkTheme} = useTheme();
   const chartRef = useRef(null);
   const [chartOptions, setChartOptions] = useState({
     series: [{

@@ -4,8 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faEnvelope, faPhone, faDollarSign, faClipboard, faStickyNote, faHandshake, faUser } from '@fortawesome/free-solid-svg-icons';
 import 'tailwindcss/tailwind.css';
 import ApplicationsList from "./ApplicationsList"
+import { useTheme } from '../../context/ThemeProvider';
+
 
 const ApplicationForm = () => {
+  const { isDarkTheme} = useTheme();
   const [formData, setFormData] = useState({
     brandName: '',
     emailId: '',

@@ -2,8 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useTheme } from '../../context/ThemeProvider';
+
 
 const BrandUserDashboard = () => {
+  const { isDarkTheme } = useTheme();
   const [savedSearches, setSavedSearches] = useState([]);
   const [bookmarkedInfluencers, setBookmarkedInfluencers] = useState([]);
   const [recentActivities, setRecentActivities] = useState([]);

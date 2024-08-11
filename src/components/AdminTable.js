@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
+import { useTheme } from "../context/ThemeProvider";
+
 
 const AdminTable = () => {
+  const { isDarkTheme } = useTheme();
   const [users, setUsers] = useState([]);
   const [originalUsers, setOriginalUsers] = useState([]);
   const [sortedField, setSortedField] = useState(null);

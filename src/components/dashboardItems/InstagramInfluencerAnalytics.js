@@ -7,10 +7,13 @@ import FullChart from './Charts/FullChart.js';
 import BarLineChart from './Charts/BarLineChart.js';
 import GaugeChart from './Charts/GaugeChart.js';
 import MapChart from './Charts/MapChart.js';
+import { useTheme } from '../../context/ThemeProvider.js';
+
 
 
 
 const InstagramInfluencerAnalytics = () => {
+  const { isDarkTheme } = useTheme();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

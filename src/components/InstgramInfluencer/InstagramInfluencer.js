@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import InstagramInfluencerTable from "./InstagramInfluencerTable";
 import { toast } from "react-toastify";
+import { useTheme } from "../../context/ThemeProvider";
+
 
 const InstagramInfluencer = () => {
+  const { isDarkTheme } = useTheme();
   const [formData, setFormData] = useState({
     username: "",
     fullName: "",

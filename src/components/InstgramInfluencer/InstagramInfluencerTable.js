@@ -1,10 +1,13 @@
+
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useTheme } from '../../context/ThemeProvider';
 
 const InstagramInfluencerTable = ({addInfluencer}) => {
+  const { isDarkTheme } = useTheme();
   const [influencers, setInfluencers] = useState([]);
   const [originalUsers, setOriginalUsers] = useState([]);
   useEffect(() => {

@@ -1,7 +1,10 @@
+
 import React from 'react';
 import ApexCharts from 'react-apexcharts';
+import { useTheme } from '../../../context/ThemeProvider';
 
 const BarLineChart = ({ data }) => {
+  const { isDarkTheme, toggleTheme } = useTheme();
   const languageCounts = {};
 
   data.forEach(item => {

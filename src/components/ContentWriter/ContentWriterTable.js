@@ -6,8 +6,11 @@ import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ContactForm from '../ContactForm';
+import { useTheme } from '../../context/ThemeProvider';
+
 
 const ContentWriterTable = ({contentWriters,setContentWriters}) => {
+  const { isDarkTheme } = useTheme();
  // const [contentWriters, setContentWriters] = useState([]);
   const [originalWriters, setOriginalWriters] = useState(contentWriters);
   const [sortedField, setSortedField] = useState(null);
@@ -60,14 +63,15 @@ const ContentWriterTable = ({contentWriters,setContentWriters}) => {
   const handleShowContactDetails = async (userId) => {
     setShowContactDetails(true)
     try {
-   //  const response = await axios.get(`http://localhost:5000/contentwriters/getContactsByPublisher/${userId}`);
-     const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/scontentwriters/getContactsByPublisher/${userId}`);
+     //const response = await axios.get(`http://localhost:5000/contentwriters/getContactsByPublisher/${userId}`);
+     const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/getContactsByPublisher/${userId}`);
       console.log(response.data)
       //toast.success("Fetching ")
       setSelectedUserContacts(response.data);
       
     } catch (error) {
       if (error.response) {
+        console.log("error",error)
         console.log(error.response.data, error.response.status, error.response.headers);
         if (error.response.status === 404) {
           setSelectedUserContacts(error.response.data.msg);
@@ -116,6 +120,8 @@ const ContentWriterTable = ({contentWriters,setContentWriters}) => {
               <th className="px-4 py-2" onClick={() => handleSort("experience")}>Experience {renderSortIcon("experience")}</th>
               <th className="px-4 py-2" onClick={() => handleSort("expertise")}>Expertise {renderSortIcon("expertise")}</th>
               <th className="px-4 py-2" onClick={() => handleSort("languages")}>Languages {renderSortIcon("languages")}</th>
+              <th className="px-4 py-2" onClick={() => handleSort("industry")}>Industries {renderSortIcon("industry")}</th>
+               <th className="px-4 py-2" onClick={() => handleSort("subCategories")}>Subcategories {renderSortIcon("subCategories")}</th>
               <th className="px-4 py-2" onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
               <th className="py-3 px-4 uppercase font-semibold text-sm">Actions</th>
             </tr>
@@ -149,6 +155,27 @@ const ContentWriterTable = ({contentWriters,setContentWriters}) => {
                   ))}
                   </ul>
                 </td>
+                <td className="border px-4 py-2">
+          <ul className="list-disc pl-5">
+            {writer.industry.map((industries, idx) => (
+              <li key={idx}>{industries.type}</li>
+            ))}
+          </ul>
+        </td>
+        <td className="border px-4 py-2">
+          <ul className="list-disc pl-5">
+            {writer.industry.map((industries, idx) => (
+              <li key={idx}>
+                <strong>{industries.type}:</strong>
+                <ul className="list-disc pl-5">
+                  {industries.subCategories.map((subCategory, subIdx) => (
+                    <li key={subIdx}>{subCategory?.type}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </td>
                 <td className="border px-4 py-2 text-center">
                   {writer.collaborationRates ? (
                     <div>

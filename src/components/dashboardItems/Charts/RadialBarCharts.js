@@ -1,7 +1,10 @@
+
 import React from 'react';
 import ApexCharts from 'react-apexcharts';
+import { useTheme } from '../../../context/ThemeProvider';
 
 const RadialBarCharts = ({ data }) => {
+  const { isDarkTheme} = useTheme();
   const totalLikes = data.reduce((sum, item) => sum + item.averageLikes, 0);
   const totalComments = data.reduce((sum, item) => sum + item.averageComments, 0);
   const averageLikes = totalLikes / data.length;

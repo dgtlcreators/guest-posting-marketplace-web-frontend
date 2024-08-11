@@ -1,59 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global theme styles */
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  @apply bg-light-bg text-light-text;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-.card-element {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-.StripeElement--invalid {
-  border-color: #fa755a;
-}
-
-.StripeElement--webkit-autofill {
-  background-color: #fefde5 !important;
-}
-.card-element-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-.card-element-focus {
-  border-color: #007bff;
-}
-
-.card-element-invalid {
-  border-color: #fa755a;
-}
-
-.card-element-complete {
-  border-color: #28a745;
-}
-
-.card-element-autofill {
-  background-color: #fefde5 !important;
-}
-html, body, #root, .App, .h-screen {
-  height: 100%;
+body.dark {
+  @apply bg-dark-bg text-dark-text;
 }

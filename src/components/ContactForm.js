@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useTheme } from "../context/ThemeProvider";
+
 
 const ContactForm = ({ publisher, onClose ,url}) => {
+  const { isDarkTheme } = useTheme();
   console.log(publisher)
   const [formData, setFormData] = useState({
     name: "",

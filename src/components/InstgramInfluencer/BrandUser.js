@@ -4,10 +4,13 @@ import BrandUserTable from "./BrandUserTable.js"; // Component to display influe
 import { toast } from "react-toastify";
 import { UserContext } from "../../context/userContext.js";
 import { Link } from "react-router-dom";
+import { useTheme } from "../../context/ThemeProvider.js";
+
 
 
 
 const BrandUser = () => {
+  const { isDarkTheme } = useTheme();
   const { userData } = useContext(UserContext); 
   const userId = userData?._id;
 

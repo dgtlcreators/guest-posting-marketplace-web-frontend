@@ -4,8 +4,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa"; 
 import ContactForm from "./ContactForm.js";
+import { useTheme } from "../context/ThemeProvider.js";
+
 
 const SuperAdminTable = () => {
+  const { isDarkTheme } = useTheme();
   const [users, setUsers] = useState([]);
   const [sortedField, setSortedField] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");

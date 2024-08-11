@@ -3,10 +3,13 @@
 
 
 
+
 import React from 'react';
 import ApexCharts from 'react-apexcharts';
+import { useTheme } from '../../../context/ThemeProvider';
 
 const PieChart = ({ data }) => {
+  const { isDarkTheme } = useTheme();
 
   const categoryCounts = {};
 

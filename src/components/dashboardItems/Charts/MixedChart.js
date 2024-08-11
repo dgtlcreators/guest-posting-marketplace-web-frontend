@@ -1,8 +1,11 @@
 // src/components/MixedChart.js
+
 import React from 'react';
 import ApexCharts from 'react-apexcharts';
+import { useTheme } from '../../../context/ThemeProvider';
 
 const MixedChart = ({ data }) => {
+  const { isDarkTheme } = useTheme();
    
     const mozDA = data.map(item => item.mozDA);
     const ahrefsDR = data.map(item => item.ahrefsDR);
