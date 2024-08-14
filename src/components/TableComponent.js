@@ -30,7 +30,7 @@ const TableComponent = ({ headers, data }) => {
               <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
                 {headers.map((header, index) => (
                   <td key={index} className="py-3 px-2 md:px-6 text-center text-md font-semibold">
-                    {item[header.toLowerCase()]} {/* Assuming keys in item match header names */}
+                    {item[header.toLowerCase()]} 
                   </td>
                 ))}
               </tr>

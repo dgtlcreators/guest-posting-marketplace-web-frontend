@@ -30,6 +30,10 @@ import NewContentWriter from "./components/ContentWriter/NewContentWriter.js"
 import ContentWriter from "./components/ContentWriter/ContentWriter.js"
 import EditContentWriter from "./components/ContentWriter/EditContentWriter.js"
 import ContentWriterProfile from "./components/ContentWriter/ContentWriterProfile.js"
+import NewYoutubeInfluencer from './components/YoutubeInfluencer/NewYoutubeInfluencer.js';
+import YoutubeInfluencerProfile from './components/YoutubeInfluencer/YoutubeInfluencerProfile.js';
+import EditYoutubeInfluencer from './components/YoutubeInfluencer/EditYoutubeInfluencer.js';
+import YoutubeInfluencer from './components/YoutubeInfluencer/YoutubeInfluencer.js';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -129,6 +133,11 @@ function AppContent() {
              <Route path="/editContentWriter/:id" element={ <ProtectedRoute requiredRole="Admin"><EditContentWriter /> </ProtectedRoute>} />
              <Route path="/content-writers" //path="/content-writers" 
              element={<ContentWriter />} />
+
+             <Route path='/addYoutubeInfluencer' element={<ProtectedRoute requiredRole="Admin"><NewYoutubeInfluencer/></ProtectedRoute>}/>
+             <Route path='/youtubeInfluencerProfile/:id' element={<ProtectedRoute requiredRole="Admin"><YoutubeInfluencerProfile/></ProtectedRoute>}/>
+             <Route path='/edityoutubeInfluencer/:id' element={<ProtectedRoute requiredRole="Admin"><EditYoutubeInfluencer/></ProtectedRoute>}/>
+             <Route path='/youtube-influencer' element={<YoutubeInfluencer/>}/>
 
              <Route path="/application" element={<ApplicationForm />} />
             

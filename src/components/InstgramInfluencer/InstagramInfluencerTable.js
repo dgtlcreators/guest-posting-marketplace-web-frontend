@@ -174,18 +174,19 @@ const InstagramInfluencerTable = ({addInfluencer}) => {
 
                 </td>
                 <td className="py-3 px-4">
+                <Link
+                    to={`/editInstagramInfluencer/${influencer._id}`}
+                    className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded"
+                  >
+                    EDIT
+                  </Link>
                   <button
                     onClick={() => deleteInstagramInfluencer(influencer._id)}
                     className="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded my-2"
                   >
                     <i className="fa-solid fa-trash"></i> DELETE
                   </button>
-                  <Link
-                    to={`/editInstagramInfluencer/${influencer._id}`}
-                    className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded"
-                  >
-                    EDIT
-                  </Link>
+                  
                 
                 </td>
               </tr>

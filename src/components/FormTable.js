@@ -109,10 +109,10 @@ export default FormTable;
 
 
 import React, { useMemo, useState } from "react";
-import { FaSearch } from "react-icons/fa";
+
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+
+import {  useNavigate } from "react-router-dom";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import { useTheme } from "../context/ThemeProvider";
 

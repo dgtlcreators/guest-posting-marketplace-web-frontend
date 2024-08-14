@@ -128,7 +128,7 @@ const InstagramInfluencer = () => {
  
     formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
   
-    // Append files only if they are selected
+
     if (profileUrlOption === "system" && formData.profilePicture) {
       formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
     } else {
@@ -213,7 +213,8 @@ const InstagramInfluencer = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-blue-600">Instagram Influencers</h1>
+      <h1 className="text-xl font-bold mb-3 text-white bg-blue-700 p-3"//"text-2xl font-bold mb-4 text-blue-600"
+      >Instagram Influencers</h1>
       <form onSubmit={handleSubmit} className="mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <label className="block">
@@ -442,6 +443,7 @@ const InstagramInfluencer = () => {
               <option value="Telugu">Telugu</option>
               <option value="Bengali">Bengali</option>
               <option value="Kannada">Kannada</option>
+              <option value="Other">Other</option>
             </select>
           </label>
          

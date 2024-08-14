@@ -61,9 +61,11 @@ export default function Sidebar() {
           <Collapse in={newAddedOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
                <SidebarItem icon={<FaUserShield />} text="Super Admin" to="/superadmin" nested/>
+               <SidebarItem icon={<FaPen />} text="Guest Post Add" to="/addGuestpost" //to="/admin" 
+              nested />
               <SidebarItem icon={<FaInstagram />} text="Instagram Influencer Add" to="/addInstagramInfluencer" //to="/instagramInfluencer" 
               nested />
-              <SidebarItem icon={<FaPen />} text="Guest Post Add" to="/addGuestpost" //to="/admin" 
+              <SidebarItem icon={<FaYoutube />} text="Youtube Influencer Add" to="/addYoutubeInfluencer" 
               nested />
               <SidebarItem icon={<FaEdit />} text="Content Writers Add" to="/addContentWriters" //to="/newContentWriters" 
               nested />

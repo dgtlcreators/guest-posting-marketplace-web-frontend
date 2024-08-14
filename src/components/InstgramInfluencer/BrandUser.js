@@ -66,6 +66,7 @@ const BrandUser = () => {
       });
     }
   };
+  
 
   const handleLocationChange = async (e) => {
     const query = e.target.value;
@@ -195,6 +196,7 @@ const BrandUser = () => {
   };
 
   axios.defaults.withCredentials = true;
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     //console.log(formData)
@@ -482,12 +484,14 @@ const BrandUser = () => {
             />
           </div>
         </div>
+        <div className="">
         <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4 rounded">
           Search
         </button>
         <button type="button" onClick={handleReset} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 mt-4 ml-4 rounded">
           Reset
         </button>
+        </div>
       </form>
 
       {/*<form
