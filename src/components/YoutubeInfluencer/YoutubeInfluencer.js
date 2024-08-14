@@ -53,7 +53,7 @@ const YoutubeInfluencer = () => {
      // const response = await axios.get("http://localhost:5000/youtubeinfluencers/getAllYoutubeInfluencer");
       const response = await axios.get("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/getAllYoutubeInfluencer");
   
-      setInfluencers(response.data.data);
+    //  setInfluencers(response.data.data);
     } catch (error) {
       console.error("Error fetching influencers", error);
     }
@@ -130,7 +130,7 @@ const YoutubeInfluencer = () => {
    // console.log(formData)
     axios
       .post("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/youtubeInfluencesFilter", formData)
-      // .post("http://localhost:5000/youtubeinfluencers/youtubeInfluencesFilter", formData)
+    //   .post("http://localhost:5000/youtubeinfluencers/youtubeInfluencesFilter", formData)
       .then((response) => {
        // console.log(response.data.data);
         setInfluencers(response.data.data);

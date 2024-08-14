@@ -80,10 +80,10 @@ const YoutubeInfluencerTable = ({influencers, setInfluencers}) => {
     const fetchInfluencer=async()=>{
       try {
         const response = await axios.get("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/getAllYoutubeInfluencer")
-       //  const response = await axios.get("http://localhost:5000/youtubeinfluencers/getAllYoutubeInfluencer");
+         //const response = await axios.get("http://localhost:5000/youtubeinfluencers/getAllYoutubeInfluencer");
           
-        //setInfluencers(response.data.data)
-        //setOriginalUsers(response.data.data)
+       // setInfluencers(response.data.data)
+        setOriginalUsers(response.data.data)
       } catch (error) {
         console.error("Error fetching influencers", error);
       }
@@ -109,7 +109,7 @@ const handleBuyClick = (publisher) => {
 const handleShowContactDetails = async (userId) => {
   setShowContactDetails(true)
   try {
-  // const response = await axios.get(`http://localhost:5000/youtubeinfluencers/getContactsByPublisher/${userId}`);
+   //const response = await axios.get(`http://localhost:5000/youtubeinfluencers/getContactsByPublisher/${userId}`);
    const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/getContactsByPublisher/${userId}`);
     console.log(response.data)
     //toast.success("Fetching ")
