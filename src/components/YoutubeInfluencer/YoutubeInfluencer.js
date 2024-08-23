@@ -50,7 +50,7 @@ const YoutubeInfluencer = () => {
   const fetchInfluencers = async () => {
     try {
       
-     // const response = await axios.get("http://localhost:5000/youtubeinfluencers/getAllYoutubeInfluencer");
+    //  const response = await axios.get("http://localhost:5000/youtubeinfluencers/getAllYoutubeInfluencer");
       const response = await axios.get("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/getAllYoutubeInfluencer");
   
     //  setInfluencers(response.data.data);
@@ -123,14 +123,79 @@ const YoutubeInfluencer = () => {
   };
   
 
+  const pastactivitiesAdd=async(users)=>{
+    const description = [
+      formData.username ? `Username: ${formData.username}` : '',
+      formData.followersCountFrom || formData.followersCountTo ? `Followers Count from ${formData.followersCountFrom || 'N/A'} to ${formData.followersCountTo || 'N/A'}` : '',
+      formData.videosCountFrom || formData.videosCountTo ? `Videos Count from ${formData.videosCountFrom || 'N/A'} to ${formData.videosCountTo || 'N/A'}` : '',
+      formData.engagementRateFrom || formData.engagementRateTo ? `Engagement Rate from ${formData.engagementRateFrom || 'N/A'} to ${formData.engagementRateTo || 'N/A'}` : '',
+      formData.averageViewsFrom || formData.averageViewsTo ? `Average Views from ${formData.averageViewsFrom || 'N/A'} to ${formData.averageViewsTo || 'N/A'}` : '',
+      formData.category ? `Category: ${formData.category}` : '',
+      formData.location ? `Location: ${formData.location}` : '',
+      formData.language ? `Language: ${formData.language}` : '',
+      formData.collaborationRates.sponsoredVideosFrom || formData.collaborationRates.sponsoredVideosTo ? `Sponsored Videos from ${formData.collaborationRates.sponsoredVideosFrom || 'N/A'} to ${formData.collaborationRates.sponsoredVideosTo || 'N/A'}` : '',
+      formData.collaborationRates.productReviewsFrom || formData.collaborationRates.productReviewsTo ? `Product Reviews from ${formData.collaborationRates.productReviewsFrom || 'N/A'} to ${formData.collaborationRates.productReviewsTo || 'N/A'}` : '',
+      formData.collaborationRates.shoutoutsFrom || formData.collaborationRates.shoutoutsTo ? `Shoutouts from ${formData.collaborationRates.shoutoutsFrom || 'N/A'} to ${formData.collaborationRates.shoutoutsTo || 'N/A'}` : '',
+      formData.pastCollaborations ? `Past Collaborations: ${formData.pastCollaborations}` : '',
+      formData.audienceDemographics.age ? `Audience Age: ${formData.audienceDemographics.age}` : '',
+      formData.audienceDemographics.gender ? `Audience Gender: ${formData.audienceDemographics.gender}` : '',
+      formData.audienceDemographics.geographicDistribution ? `Geographic Distribution: ${formData.audienceDemographics.geographicDistribution}` : '',
+      `Total results: ${users.length}`
+    ]
+    .filter(Boolean)
+    .join(', ');
+  
+   // const shortDescription = `You searched Followers Count from ${formData.followersCountFrom || 'N/A'} to ${formData.followersCountTo || 'N/A'}, Engagement Rate from ${formData.engagementRateFrom || 'N/A'} to ${formData.engagementRateTo || 'N/A'}, Average Views from ${formData.averageViewsFrom || 'N/A'} to ${formData.averageViewsTo || 'N/A'}, and got ${users.length} results`;
+   const shortDescription=`You searched ${formData.followersCountFrom ? 'Followers Count' : 'Engagement Rate'} from ${formData.followersCountFrom || formData.engagementRateFrom} to ${formData.followersCountTo || formData.engagementRateTo} and got ${users.length} results`;
+   try {
+    const activityData={
+      userId:userData?._id,
+      action:"Performed a search for YouTube Influencer",//"Searched for Instagram Influencers",
+      section:"YouTube Influencer",
+      role:userData?.role,
+      timestamp:new Date(),
+      details:{
+        type:"filter",
+        filter:{formData,total:users.length},
+        description,
+        shortDescription
+        
+
+      }
+    }
+    
+    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   } catch (error) {
+    console.log(error);
+    
+   }
+  }
+
   axios.defaults.withCredentials = true;
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
+    e.preventDefault();
+    try {
+      const response = await  axios
+       .post("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/youtubeInfluencesFilter", formData)
+      //  .post("http://localhost:5000/youtubeinfluencers/youtubeInfluencesFilter", formData)
+        // console.log(response.data.data);
+        setInfluencers(response.data.data);
+        pastactivitiesAdd(response.data.data);
+        toast.success("Data Fetch Successfully");
+    } catch (error) {
+      console.log(error);
+        toast.error(error.message);
+    }
+  }
+
+  /*const handleSubmit = (e) => {
     e.preventDefault()
    // console.log(formData)
     axios
-      .post("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/youtubeInfluencesFilter", formData)
-    //   .post("http://localhost:5000/youtubeinfluencers/youtubeInfluencesFilter", formData)
+     // .post("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/youtubeInfluencesFilter", formData)
+       .post("http://localhost:5000/youtubeinfluencers/youtubeInfluencesFilter", formData)
       .then((response) => {
        // console.log(response.data.data);
         setInfluencers(response.data.data);
@@ -141,10 +206,12 @@ const YoutubeInfluencer = () => {
         toast.error(error.message);
       });
   }
+  */
 
   return (
     <div className='p-4 max-w-6xl mx-auto overflow-x-auto'>
-      <h1 className='text-2xl text-white bg-blue-700 p-2'>FAQ</h1>
+      <h1 className='text-2xl  p-2'// text-white bg-blue-700
+      >FAQ</h1>
       <form onSubmit={handleSubmit} className="bg-gray-200 shadow-xl p-4 relative">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div className="flex flex-col">
@@ -450,7 +517,8 @@ const YoutubeInfluencer = () => {
       </form>
       {influencers.length > 0 &&
         <div className="mt-4">
-          <h2 className="text-xl text-white bg-blue-700 p-2 my-2">
+          <h2 className="text-xl p-2 my-2"// text-white bg-blue-700 
+          >
           Influencer List
           </h2>
           

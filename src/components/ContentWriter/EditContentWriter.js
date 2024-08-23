@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeProvider';
+import { UserContext } from '../../context/userContext';
 
 
 const EditContentWriter = () => {
   const { isDarkTheme } = useTheme();
+  const { userData } = useContext(UserContext);
   const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -181,6 +183,67 @@ const EditContentWriter = () => {
     );
   };
 
+  const createDescriptionElements = (formData, users) => {
+    const elements = [
+      { key: 'Name', value: users?.name },
+      { key: 'Bio', value: users?.bio },
+      { key: 'Experience', value: users?.experience },
+      { key: 'Expertise', value: users?.expertise.map(exp => `${exp.type} ${exp.other ? ' (Other: ' + exp.other + ')' : ''}`).join(', ') },
+      { key: 'Location', value: users?.location },
+      { key: 'Languages', value: users?.languages.map(lang => `${lang.name} ${lang.other ? ' (Other: ' + lang.other + ')' : ''} - Proficiency: ${lang.proficiency}`).join(', ') },
+      { key: 'Collaboration Rates (Post)', value: users?.collaborationRates.post },
+      { key: 'Collaboration Rates (Story)', value: users?.collaborationRates.story },
+      { key: 'Collaboration Rates (Reel)', value: users?.collaborationRates.reel },
+      { key: 'Email', value: users?.email },
+      { key: 'Industry', value: users?.industry.map(ind => `${ind.type} ${ind.other ? ' (Other: ' + ind.other + ')' : ''}${ind.subCategories.length ? ' - Subcategories: ' + ind.subCategories.map(sub => `${sub.type}${sub.other ? ' (Other: ' + sub.other + ')' : ''}`).join(', ') : ''}`).join(', ') }
+  ];
+  
+  
+
+  const formattedElements = elements
+        .filter(element => element.value)
+        .map(element => `${element.key}: ${element.value}`)
+        .join(', ');
+  return `${formattedElements}`;
+};
+const generateShortDescription = (formData, users) => {
+  const elements = createDescriptionElements(formData, users).split(', ');
+  
+ 
+  const shortElements = elements.slice(0, 2);
+
+  return `You updated a Content Writer with ${shortElements.join(' and ')} successfully.`;
+};
+
+  const pastactivitiesAdd=async(users)=>{
+    const formData={}
+    const description = createDescriptionElements(formData, users);
+    const shortDescription = generateShortDescription(formData, users);
+  
+   try {
+    const activityData={
+      userId:userData?._id,
+      action:"Updated a Content Writer",
+      section:"Content Writer",
+      role:userData?.role,
+      timestamp:new Date(),
+      details:{
+        type:"update",
+        filter:{formData,total:users.length},
+        description,
+        shortDescription
+        
+
+      }
+    }
+    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   } catch (error) {
+    console.log(error);
+    
+   }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -202,13 +265,14 @@ const EditContentWriter = () => {
 
     try {
       const response = await axios.put(`https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/updatecontentwriter/${id}`, {
-     // const response = await axios.put(`http://localhost:5000/contentwriters/updatecontentwriter/${id}`, {
+   //  const response = await axios.put(`http://localhost:5000/contentwriters/updatecontentwriter/${id}`, {
         ...formData,
         expertise: cleanedExpertise,
         languages: cleanedLanguages,
         industry:formData.industry.filter(item => item.type),
       });
       toast.success("Writer updated successfully");
+      await pastactivitiesAdd(formData);
       navigate("/addContentWriters");
       console.log('Writer updated successfully:', response.data);
     } catch (error) {

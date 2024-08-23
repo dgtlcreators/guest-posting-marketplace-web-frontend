@@ -22,7 +22,7 @@ function Signup() {
 
     axios
     
-      //.post("http://localhost:5000/user/signup", { name, email, password })
+     // .post("http://localhost:5000/user/signup", { name, email, password })
       .post("https://guest-posting-marketplace-web-backend.onrender.com/user/signup", { name, email, password })
       .then((response) => {
         toast.success("Signed up successfully")

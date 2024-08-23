@@ -115,6 +115,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import {  useNavigate } from "react-router-dom";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import { useTheme } from "../context/ThemeProvider";
+import ApplyForm from "./ApplyForm";
 
 
 
@@ -280,12 +281,11 @@ const FormTable = ({ users, setUsers }) => {
       </div>
       <div className="table-container">
         <p>Found: {filteredUsers.length}</p>
+        <div className='overflow-x-auto  p-4 rounded-lg shadow-md'>
         <table className="min-w-full bg-white border border-gray-300">
           <thead>
-          
             <tr>
-            <th className="py-2 px-4 border-b border-gray-200">
-                Ahrefs DR
+            <th className="py-2 px-4 border-b border-gray-200">Ahrefs DR
                 <select
                 value={sortConfig.key === "ahrefsDR" ? sortConfig.direction : ""}
                   onChange={(e) => handleSortChange("ahrefsDR", e.target.value)}
@@ -350,19 +350,21 @@ const FormTable = ({ users, setUsers }) => {
                   <option value="desc">High to Low</option>
                 </select>
               </th>
+              
               <th className="py-2 px-4 border-b border-gray-200">Actions</th>
             </tr>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-              <th className="py-3 px-2 md:px-6 text-left">S.No.</th>
-              <th className="py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("categories")}>Categories {renderSortIcon("categories")}</th>
-              <th className="py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("ahrefsDR")}>ahrefDR {renderSortIcon("ahrefsDR")}</th>
-              <th className="py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("mozDA")}>mozDA {renderSortIcon("mozDA")}</th>
-              <th className="py-3 px-2 md:px-6 text-left" onClick={() => handleSort("websiteLanguage")}>Website Language {renderSortIcon("websiteLanguage")}</th>
-              <th className="py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("linkType")}>Link Type {renderSortIcon("linkType")}</th>
-              <th className="py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("price")}>Price {renderSortIcon("price")}</th>
-              <th className="py-3 px-2 md:px-6 text-left" onClick={() => handleSort("mozSpamScore")}>mozSpamScore {renderSortIcon("mozSpamScore")}</th>
-              <th className="py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("monthlyTraffic")}>Monthly Traffic {renderSortIcon("monthlyTraffic")}</th>
-              <th className="py-3 px-2 md:px-6 text-left uppercase ">Actions</th>
+              <th className="border py-3 px-2 md:px-6 text-left">S.No.</th>
+              <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("categories")}>Categories {renderSortIcon("categories")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("ahrefsDR")}>ahrefDR {renderSortIcon("ahrefsDR")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("mozDA")}>mozDA {renderSortIcon("mozDA")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left" onClick={() => handleSort("websiteLanguage")}>Website Language {renderSortIcon("websiteLanguage")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("linkType")}>Link Type {renderSortIcon("linkType")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("price")}>Price {renderSortIcon("price")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left" onClick={() => handleSort("mozSpamScore")}>mozSpamScore {renderSortIcon("mozSpamScore")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("monthlyTraffic")}>Monthly Traffic {renderSortIcon("monthlyTraffic")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>
+              {/*<th className="border py-3 px-2 md:px-6 text-left uppercase ">Actions</th>*/}
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
@@ -381,47 +383,53 @@ const FormTable = ({ users, setUsers }) => {
                   key={user._id}
                   className="border-b border-gray-200 hover:bg-gray-100"
                 >
-                  <td className="py-3 px-2 md:px-6 text-center text-md font-semibold">
+                  <td className=" border  py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {index + 1}
                   </td>
-                  <td className="py-3 px-2 md:px-6 text-center text-md font-semibold">
+                  <td className="border  py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {user.categories}
                   </td>
-                  <td className="py-3 px-2 md:px-6 text-center text-md font-semibold">
+                  <td className="border  py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {user.ahrefsDR}
                   </td>
-                  <td className="py-3 px-2 md:px-6 text-center text-md font-semibold">
+                  <td className="border  py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {user.mozDA}
                   </td>
-                  <td className="py-3 px-2 md:px-6 text-center text-md font-semibold">
+                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {user.websiteLanguage}
                   </td>
-                  <td className="py-3 px-2 md:px-6 text-center text-md font-semibold">
+                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {user.linkType}
                   </td>
-                  <td className="py-3 px-2 md:px-6 text-center text-md font-semibold">
+                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {user.price}
                   </td>
-                  <td className="py-3 px-2 md:px-6 text-center text-md font-semibold">
+                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {user.mozSpamScore}
                   </td>
-                  <td className="py-3 px-2 md:px-6 text-center text-md font-semibold">
+                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {user.monthlyTraffic}
                   </td>
-                  <td className="py-3 px-2 md:px-6 text-center text-md font-semibold">
-                    <button
+                  <td  className="border py-3 px-2 md:px-6 text-center text-md font-semibold"> 
+                    <ApplyForm section="Guestpost" publisher={user}/>
+                  </td>
+
+                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
+                  
+                    {/*<button
                       className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
                       onClick={() => handleBuyNow(user._id, user.price)}
                       disabled={user.isBuyed}
                     >
                       {user.isBuyed ? "Buyed" : "Buy Now"}
-                    </button>
+                    </button>*/}
                   </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
 // src/components/Sidebar.js
 // src/components/Sidebar.js
 import React, { useState, useContext, createContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Divider, Avatar, Typography, Collapse, Popover } from '@mui/material';
 import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from '@mui/icons-material';
-import { FaHome, FaPen, FaInstagram, FaYoutube, FaEdit, FaHistory, FaPlus, FaSignOutAlt, FaUserShield } from 'react-icons/fa';
+import { FaHome, FaPen, FaInstagram, FaYoutube, FaEdit, FaHistory, FaPlus, FaSignOutAlt, FaUserShield, FaRegFileAlt } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeProvider';
 import { UserContext } from "../context/userContext.js";
 
@@ -14,8 +14,15 @@ export default function Sidebar() {
   const [expanded, setExpanded] = useState(true);
   const [newAddedOpen, setNewAddedOpen] = useState(false);
   const { isDarkTheme, toggleTheme } = useTheme();
-  const { userData } = useContext(UserContext); 
+  const { userData, signOut } = useContext(UserContext); 
   const userId = userData?._id;
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    console.log("logpot clicked")
+    signOut();
+    navigate("/login"); 
+  };
 
   const handleNewAddedClick = () => {
     setNewAddedOpen(prev => !prev);
@@ -60,6 +67,7 @@ export default function Sidebar() {
           </ListItem>
           <Collapse in={newAddedOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
+            <SidebarItem icon={<FaRegFileAlt />} text="Reports" to="/reports" nested/>
                <SidebarItem icon={<FaUserShield />} text="Super Admin" to="/superadmin" nested/>
                <SidebarItem icon={<FaPen />} text="Guest Post Add" to="/addGuestpost" //to="/admin" 
               nested />
@@ -71,7 +79,12 @@ export default function Sidebar() {
               nested />
             </List>
           </Collapse>
-          <SidebarItem icon={<FaSignOutAlt />} text="Sign Out" to="/sign-out" />
+          <ListItem button onClick={handleSignOut} sx={{ pl: expanded ? 2 : 0 }}>
+          <ListItemIcon><FaSignOutAlt /></ListItemIcon>
+          {expanded && <ListItemText primary="Sign Out" />}
+        </ListItem>
+          {/*<SidebarItem icon={<FaSignOutAlt />} to="#" text="Sign Out"  onClick={handleSignOut} />*/}
+        
         </List>
         <Divider />
         <div className="flex items-center p-2">

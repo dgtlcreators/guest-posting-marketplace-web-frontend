@@ -75,7 +75,7 @@ const EditInstagramInfluencer = () => {
       const fetchInfluencers = async () => {
         try {
            const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/getInstagraminfluencerById/${id}`)
-        //  const response = await axios.get(`http://localhost:5000/instagraminfluencers/getInstagraminfluencerById/${id}`);
+         // const response = await axios.get(`http://localhost:5000/instagraminfluencers/getInstagraminfluencerById/${id}`);
         
           setFormData(response.data.instagramInfluencer);
          // setOriginalUsers(response.data.instagramInfluencer);
@@ -83,16 +83,86 @@ const EditInstagramInfluencer = () => {
           console.error("Error fetching influencers", error);
         }
       };
+
+      const createDescriptionElements = (formData, users) => {
+        const elements = [
+          { key: 'Username', value: formData.username },
+          { key: 'Full Name', value: formData.fullName },
+          { key: 'Profile Picture', value: formData.profilePicture },
+          { key: 'Bio', value: formData.bio },
+          { key: 'Followers Count', value: formData.followersCount },
+          { key: 'Following Count', value: formData.followingCount },
+          { key: 'Posts Count', value: formData.postsCount },
+          { key: 'Engagement Rate', value: `${formData.engagementRate}%` },
+          { key: 'Average Likes', value: formData.averageLikes },
+          { key: 'Average Comments', value: formData.averageComments },
+          { key: 'Category', value: formData.category },
+          { key: 'Location', value: formData.location },
+          { key: 'Language', value: formData.language },
+          { key: 'Verified Status', value: formData.verifiedStatus ? 'Verified' : 'Not Verified' },
+          { key: 'Collaboration Rates (Post)', value: formData.collaborationRates.post },
+          { key: 'Collaboration Rates (Story)', value: formData.collaborationRates.story },
+          { key: 'Collaboration Rates (Reel)', value: formData.collaborationRates.reel },
+          { key: 'Past Collaborations', value: formData.pastCollaborations.join(', ') },
+          { key: 'Media Kit', value: formData.mediaKit },
+          { key: 'Total results', value: users?.length }
+      ];
+      
+    
+      const formattedElements = elements
+            .filter(element => element.value)
+            .map(element => `${element.key}: ${element.value}`)
+            .join(', ');
+      return `${formattedElements}`;
+    };
+    const generateShortDescription = (formData, users) => {
+      const elements = createDescriptionElements(formData, users).split(', ');
+      
+     
+      const shortElements = elements.slice(0, 2);
+    
+      return `You updated a Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
+    };
+    
+      const pastactivitiesAdd=async(users)=>{
+        const description = createDescriptionElements(formData, users);
+        const shortDescription = generateShortDescription(formData, users);
+      
+       try {
+        const activityData={
+          userId:userData?._id,
+          action:"Updated a new Instagram Influencer",
+          section:"Instagram Influencer",
+          role:userData?.role,
+          timestamp:new Date(),
+          details:{
+            type:"updated",
+            filter:{formData,total:users.length},
+            description,
+            shortDescription
+            
+    
+          }
+        }
+        
+        axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+        //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+       } catch (error) {
+        console.log(error);
+        
+       }
+      }
       const handleSubmit=async(e)=>{
         e.preventDefault()
         try {
            // console.log(formData)
             
-             //await axios.put(`http://localhost:5000/instagraminfluencers/updateInstagraminfluencer/${id}`, formData);
+          //   await axios.put(`http://localhost:5000/instagraminfluencers/updateInstagraminfluencer/${id}`, formData);
      await axios.put(`https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/updateInstagraminfluencer/${id}`, formData);
      
           toast.success("Instagram Influencer updated Successfully");
-          navigate("/instagramInfluencer");
+          pastactivitiesAdd(formData);
+          navigate("/addInstagramInfluencer");
         } catch (error) {
           toast.error(`Error updating Instagram Influencer ${error.response.data.error}`);
           console.error("Error updating Instagram Influencer:", error);

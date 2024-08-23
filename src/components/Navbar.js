@@ -1,13 +1,136 @@
-// src/components/Navbar.js
 
 
-// Navbar.js
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { AppBar, Toolbar,  Typography, Badge, Avatar, Button, Popover, InputBase } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { useTheme } from '../context/ThemeProvider';
+import NotificationDropdown from './NotificationDropdown.js';
+import ProfileDropdown from './ProfileDropdown.js';
+import IconButton from '@mui/material/IconButton';
+import { Brightness4, Brightness7 } from '@mui/icons-material';
+
+const Navbar = () => {
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [anchorElNotification, setAnchorElNotification] = useState(null);
+  const [anchorElProfile, setAnchorElProfile] = useState(null);
+  const { isDarkTheme, toggleTheme } = useTheme();
+
+  const toggleSearch = () => {
+    setIsSearchVisible(!isSearchVisible);
+  };
+
+  const handleNotificationClick = (event) => {
+    setAnchorElNotification(event.currentTarget);
+  };
+
+  const handleNotificationClose = () => {
+    setAnchorElNotification(null);
+  };
+
+  const handleProfileClick = (event) => {
+    setAnchorElProfile(event.currentTarget);
+  };
+
+  const handleProfileClose = () => {
+    setAnchorElProfile(null);
+  };
+
+  const openNotification = Boolean(anchorElNotification);
+  const openProfile = Boolean(anchorElProfile);
+
+  return (
+    <AppBar position="static" className='nav'>
+      <Toolbar>
+        <Typography id="heading" variant="h6" noWrap  style={{ color: 'inherit' }}>
+          <div className="flex items-center space-x-2 nav bg-transparent"  style={{ backgroundColor: 'transparent' }}>
+            <img src="https://res.cloudinary.com/domay7jbi/image/upload/v1724391266/tzu7lr5lgedv32ol48lu.png"
+            //src="./creatorexchangepng.png" //src="https://api.asm.skype.com/v1/objects/0-jhb-d4-c3e3520ecdd3d82daeda53ea29f90fcf/views/imgpsh_fullsize_anim" 
+            alt="CreatorsXchange Logo" className="h-10" />
+            <span className="text-xl font-bold  bg-transparent"  style={{ backgroundColor: 'transparent' }}>CreatorsXchange</span>
+          </div>
+        </Typography>
+        <div style={{ flexGrow: 1 }} />
+        {isSearchVisible && (
+          <div style={{ position: 'relative', marginLeft: 'auto' }}>
+            <InputBase
+              placeholder="Search..."
+              startAdornment={<SearchIcon />}
+              style={{ color: 'inherit' }}
+            />
+          </div>
+        )}
+        <IconButton color="inherit" onClick={toggleSearch}>
+          <SearchIcon />
+        </IconButton>
+
+        {/* Notification Dropdown */}
+        <IconButton color="inherit" onClick={handleNotificationClick}>
+          <Badge badgeContent={3} color="error">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+        <Popover
+          open={openNotification}
+          anchorEl={anchorElNotification}
+          onClose={handleNotificationClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <NotificationDropdown />
+        </Popover>
+
+        {/* Profile Dropdown */}
+        <IconButton color="inherit" onClick={handleProfileClick}>
+          <Avatar src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" />
+        </IconButton>
+        <Popover
+          open={openProfile}
+          anchorEl={anchorElProfile}
+          onClose={handleProfileClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <ProfileDropdown />
+        </Popover>
+        <IconButton onClick={toggleTheme} color="inherit">
+      {isDarkTheme ? <Brightness7 /> : <Brightness4 />}
+    </IconButton>
+
+        {/*<Button color="inherit" onClick={toggleTheme}>
+          {isDarkTheme ? 'Light Mode' : 'Dark Mode'}
+        </Button>*/}
+      </Toolbar>
+    </AppBar>
+  );
+};
+
+export default Navbar;
+
+
+
+
+
+/*import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeProvider';
 import { AppBar, Toolbar, IconButton, Typography, InputBase, Badge, Avatar, Button } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import AccountCircle from '@mui/icons-material/AccountCircle';//
+//import creatorexchangepng from "../../public/creatorexchangepng"
 
 const Navbar = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -22,7 +145,8 @@ const Navbar = () => {
       <Toolbar>
         <Typography variant="h6" noWrap>
         <div className="flex items-center space-x-2">
-          <img src="https://api.asm.skype.com/v1/objects/0-jhb-d4-c3e3520ecdd3d82daeda53ea29f90fcf/views/imgpsh_fullsize_anim" alt="CreatorsXchange Logo" className="h-10" />
+          <img src={"/creatorexchangepng.png"}//"https://api.asm.skype.com/v1/objects/0-jhb-d4-c3e3520ecdd3d82daeda53ea29f90fcf/views/imgpsh_fullsize_anim" alt="CreatorsXchange Logo" 
+          className="h-10" />
           <span className="text-xl font-bold">CreatorsXchange</span>
         </div>
         </Typography>
@@ -56,6 +180,7 @@ const Navbar = () => {
 };
 
 export default Navbar;
+*/
 
 
 

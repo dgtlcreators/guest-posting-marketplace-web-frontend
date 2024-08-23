@@ -4,9 +4,11 @@ import React from 'react';
 const Layout = ({ children, isRegisterPage }) => {
   const { isDarkTheme, toggleTheme } = useTheme();
   return (
-    <div className="container mx-auto min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="container mx-auto min-h-screen flex items-center justify-center "//bg-gray-50
+    >
       <div className="w-full max-w-4xl p-8">
-        <div className="flex flex-col md:flex-row bg-white shadow-md rounded-lg overflow-hidden">
+        <div className="flex flex-col md:flex-row  shadow-md rounded-lg overflow-hidden"//bg-white
+        >
           <div className="md:w-1/2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-8 flex flex-col items-center justify-center">
             <div>
               <a

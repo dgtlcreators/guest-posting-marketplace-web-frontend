@@ -13,7 +13,7 @@ const EditAdminForm = () => {
   const { userData } = useContext(UserContext);
 
  
-console.log(userData)
+//console.log(userData)
   const { id } = useParams();
   const navigate = useNavigate();
   const [adminData, setAdminData] = useState({
@@ -35,7 +35,7 @@ console.log(userData)
     const fetchAdminData = async () => {
       try {
         
-      //  const response = await axios.get(`http://localhost:5000/superAdmin/getOneAdminData/${id}`);
+       // const response = await axios.get(`http://localhost:5000/superAdmin/getOneAdminData/${id}`);
       const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/getOneAdminData/${id}`);
         setAdminData(response.data);
       } catch (error) {
@@ -50,13 +50,73 @@ console.log(userData)
     setAdminData({ ...adminData, [name]: value });
   };
 
+  const createDescriptionElements = (formData, users) => {
+    const elements = [
+          { key: 'Publisher URL', value: users.publisherURL },
+          { key: 'Publisher Name', value: users.publisherName },
+          { key: 'Publisher Email', value: users.publisherEmail },
+          { key: 'Publisher Phone No', value: users.publisherPhoneNo },
+          { key: 'Moz DA', value: users.mozDA },
+          { key: 'Categories', value: users.categories },
+          { key: 'Website Language', value: users.websiteLanguage },
+          { key: 'Ahrefs DR', value: users.ahrefsDR },
+          { key: 'Link Type', value: users.linkType },
+          { key: 'Price', value: users.price },
+          { key: 'Monthly Traffic', value: users.monthlyTraffic },
+          { key: 'Moz Spam Score', value: users.mozSpamScore },
+          { key: 'Total results', value: users?.length }
+      ];
+      return elements
+          .filter(element => element.value)
+          .map(element => `${element.key}: ${element.value}`)
+          .join(', ');
+  };
+  
+  const generateShortDescription = (formData, users) => {
+   
+    const elements = createDescriptionElements(formData, users).split(', ');
+  
+    const shortElements = elements.slice(0, 2);
+  
+    return `You deleted a guest post ${shortElements.length>0?"":"with"} ${shortElements.join(' and ')} successfully.`;
+  };
+  
+    const pastactivitiesAdd=async(users)=>{
+      const formData={}
+      const description = createDescriptionElements(formData, users);
+      const shortDescription = generateShortDescription(formData, users);
+     try {
+      const activityData={
+        userId:userData?._id,
+        action:"Updated a guest post",
+        section:"Guest Post",
+        role:userData?.role,
+        timestamp:new Date(),
+        details:{
+          type:"update",
+          filter:{formData,total:users.length},
+          description,
+          shortDescription
+  
+        }
+      }
+      
+      axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+     // axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+     } catch (error) {
+      console.log(error);
+      
+     }
+    }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      
-     // await axios.put(`http://localhost:5000/superAdmin/updateOneAdminData/${id}`, adminData);
+      const response=
+    //  await axios.put(`http://localhost:5000/superAdmin/updateOneAdminData/${id}`, adminData);
      await axios.put(`https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/updateOneAdminData/${id}`, adminData);
       toast.success("Admin data updated successfully");
+      await pastactivitiesAdd(adminData);
       navigate("/superadmin");
     } catch (error) {
       toast.error("Error updating admin data");

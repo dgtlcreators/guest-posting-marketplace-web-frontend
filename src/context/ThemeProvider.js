@@ -45,7 +45,7 @@ import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/st
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [isDarkTheme, setIsDarkTheme] = useState(true);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   const toggleTheme = () => {
     setIsDarkTheme(prevTheme => !prevTheme);
@@ -56,10 +56,10 @@ export const ThemeProvider = ({ children }) => {
       mode: isDarkTheme ? 'dark' : 'light',
     },
   });
- /* useEffect(() => {
-    document.body.classList.toggle('dark-mode', isDarkTheme);
-    document.body.classList.toggle('light-mode', !isDarkTheme);
-  }, [isDarkTheme]);*/
+ useEffect(() => {
+    document.body.classList.toggle('dark', isDarkTheme);
+    document.body.classList.toggle('light', !isDarkTheme);
+  }, [isDarkTheme]);
 
 
   return (

@@ -23,7 +23,7 @@ const GuestPostOverview = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('https://guest-posting-marketplace-web-backend.onrender.com/form/getData');
-       // const response = await axios.get('http://localhost:5000/form/getData');
+      //  const response = await axios.get('http://localhost:5000/form/getData');
         const fetchedData = response.data.data;
 
         setData(fetchedData);

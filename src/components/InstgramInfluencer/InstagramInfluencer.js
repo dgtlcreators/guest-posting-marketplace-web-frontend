@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import InstagramInfluencerTable from "./InstagramInfluencerTable";
 import { toast } from "react-toastify";
 import { useTheme } from "../../context/ThemeProvider";
+import { UserContext } from "../../context/userContext";
 
 
 const InstagramInfluencer = () => {
   const { isDarkTheme } = useTheme();
+  const { userData } = useContext(UserContext); 
+  const userId = userData?._id;
   const [formData, setFormData] = useState({
     username: "",
     fullName: "",
@@ -91,6 +94,75 @@ const InstagramInfluencer = () => {
     setLocationQuery(location.display_name);
     setLocationResults([]);
   };
+
+  const createDescriptionElements = (formData, users) => {
+    const elements = [
+      { key: 'Username', value: formData.username },
+      { key: 'Full Name', value: formData.fullName },
+      { key: 'Profile Picture', value: formData.profilePicture },
+      { key: 'Bio', value: formData.bio },
+      { key: 'Followers Count', value: formData.followersCount },
+      { key: 'Following Count', value: formData.followingCount },
+      { key: 'Posts Count', value: formData.postsCount },
+      { key: 'Engagement Rate', value: `${formData.engagementRate}%` },
+      { key: 'Average Likes', value: formData.averageLikes },
+      { key: 'Average Comments', value: formData.averageComments },
+      { key: 'Category', value: formData.category },
+      { key: 'Location', value: formData.location },
+      { key: 'Language', value: formData.language },
+      { key: 'Verified Status', value: formData.verifiedStatus ? 'Verified' : 'Not Verified' },
+      { key: 'Collaboration Rates (Post)', value: formData.collaborationRates.post },
+      { key: 'Collaboration Rates (Story)', value: formData.collaborationRates.story },
+      { key: 'Collaboration Rates (Reel)', value: formData.collaborationRates.reel },
+      { key: 'Past Collaborations', value: formData.pastCollaborations.join(', ') },
+      { key: 'Media Kit', value: formData.mediaKit },
+      { key: 'Total results', value: users?.length }
+  ];
+  
+
+  const formattedElements = elements
+        .filter(element => element.value)
+        .map(element => `${element.key}: ${element.value}`)
+        .join(', ');
+  return `${formattedElements}`;
+};
+const generateShortDescription = (formData, users) => {
+  const elements = createDescriptionElements(formData, users).split(', ');
+  
+ 
+  const shortElements = elements.slice(0, 2);
+
+  return `You created a new Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
+};
+
+  const pastactivitiesAdd=async(users)=>{
+    const description = createDescriptionElements(formData, users);
+    const shortDescription = generateShortDescription(formData, users);
+  
+   try {
+    const activityData={
+      userId:userData?._id,
+      action:"Created a new Instagram Influencer",
+      section:"Instagram Influencer",
+      role:userData?.role,
+      timestamp:new Date(),
+      details:{
+        type:"create",
+        filter:{formData,total:users.length},
+        description,
+        shortDescription
+        
+
+      }
+    }
+    
+    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   } catch (error) {
+    console.log(error);
+    
+   }
+  }
   
 
 
@@ -154,6 +226,7 @@ const InstagramInfluencer = () => {
     setAddInfluencer((prev) => [...prev, response.data.instagramInfluencer]);
       console.log(formDataToSend)
       toast.success("Influencer added Successfully");
+      pastactivitiesAdd(formDataToSend);
       handleReset();
     } catch (error) {
       toast.error(`Error adding influencer ${error}`);
@@ -213,12 +286,12 @@ const InstagramInfluencer = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-xl font-bold mb-3 text-white bg-blue-700 p-3"//"text-2xl font-bold mb-4 text-blue-600"
+      <h1 className="text-xl font-bold mb-3 p-3"//"text-2xl font-bold mb-4 text-blue-600 text-white bg-blue-700 "
       >Instagram Influencers</h1>
       <form onSubmit={handleSubmit} className="mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <label className="block">
-            <span className="text-gray-700">Username</span>
+          <div className="block">
+            <label className="text-gray-700">Username</label>
             <input
               type="text"
               name="username"
@@ -228,9 +301,9 @@ const InstagramInfluencer = () => {
               className="p-2 border border-gray-300 rounded w-full"
               required
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Full Name</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Full Name</label>
             <input
               type="text"
               name="fullName"
@@ -239,9 +312,9 @@ const InstagramInfluencer = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Profile Picture URL</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Profile Picture URL</label>
             <div className="flex items-center space-x-2">
               <label className="flex items-center">
                 <input
@@ -283,9 +356,9 @@ const InstagramInfluencer = () => {
                 className="p-2 border border-gray-300 rounded w-full"
               />
             )}
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Bio</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Bio</label>
             <textarea
               name="bio"
               placeholder="Bio"
@@ -293,9 +366,9 @@ const InstagramInfluencer = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Followers Count</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Followers Count</label>
             <input
               type="number"
               name="followersCount"
@@ -304,9 +377,9 @@ const InstagramInfluencer = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Following Count</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Following Count</label>
             <input
               type="number"
               name="followingCount"
@@ -315,9 +388,9 @@ const InstagramInfluencer = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Posts Count</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Posts Count</label>
             <input
               type="number"
               name="postsCount"
@@ -326,9 +399,9 @@ const InstagramInfluencer = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Engagement Rate</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Engagement Rate</label>
             <input
               type="number"
               name="engagementRate"
@@ -337,9 +410,9 @@ const InstagramInfluencer = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Average Likes</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Average Likes</label>
             <input
               type="number"
               name="averageLikes"
@@ -348,9 +421,9 @@ const InstagramInfluencer = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Average Comments</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Average Comments</label>
             <input
               type="number"
               name="averageComments"
@@ -359,9 +432,9 @@ const InstagramInfluencer = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Category</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Category</label>
             <select
               name="category"
               value={formData.category}
@@ -388,7 +461,7 @@ const InstagramInfluencer = () => {
               <option value="Web Development">Web Development</option>
               <option value="App Development">App Development</option>
             </select>
-          </label>
+          </div>
          {/* <label className="block">
             <span className="text-gray-700">Location</span>
             <input
@@ -400,8 +473,8 @@ const InstagramInfluencer = () => {
               className="p-2 border border-gray-300 rounded w-full"
             />
           </label>*/}
-          <label className="block">
-            <span className="text-gray-700">Location</span>
+          <div className="block">
+            <label className="text-gray-700">Location</label>
             <input
               type="text"
               name="location"
@@ -423,9 +496,9 @@ const InstagramInfluencer = () => {
                 ))}
               </ul>
             )}
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Language</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Language</label>
             <select
               name="language"
               value={formData.language}
@@ -445,7 +518,7 @@ const InstagramInfluencer = () => {
               <option value="Kannada">Kannada</option>
               <option value="Other">Other</option>
             </select>
-          </label>
+          </div>
          
           <label className="flex items-center">
             <input
@@ -457,11 +530,11 @@ const InstagramInfluencer = () => {
             />
             Verified Status
           </label>
-          <label className="block">
-            <span className="text-gray-700">Collaboration Rates</span>
+          <div className="block">
+            <label className="text-gray-700">Collaboration Rates</label>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <label className="block">
-                <span className="text-gray-700">Post Rate</span>
+              <div className="block">
+                <label className="text-gray-700">Post Rate</label>
                 <input
                   type="number"
                   name="collaborationRates.post"
@@ -470,9 +543,9 @@ const InstagramInfluencer = () => {
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded w-full"
                 />
-              </label>
-              <label className="block">
-                <span className="text-gray-700">Story Rate</span>
+              </div>
+              <div className="block">
+                <label className="text-gray-700">Story Rate</label>
                 <input
                   type="number"
                   name="collaborationRates.story"
@@ -481,9 +554,9 @@ const InstagramInfluencer = () => {
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded w-full"
                 />
-              </label>
-              <label className="block">
-                <span className="text-gray-700">Reel Rate</span>
+              </div>
+              <div className="block">
+                <label className="text-gray-700">Reel Rate</label>
                 <input
                   type="number"
                   name="collaborationRates.reel"
@@ -492,11 +565,11 @@ const InstagramInfluencer = () => {
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded w-full"
                 />
-              </label>
+              </div>
             </div>
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Past Collaborations</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Past Collaborations</label>
             <textarea
               name="pastCollaborations"
               placeholder="Past Collaborations"
@@ -504,10 +577,10 @@ const InstagramInfluencer = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
+          </div>
          
-          <label className="block">
-            <span className="text-gray-700">Media Kit</span>
+          <div className="block">
+            <label className="text-gray-700">Media Kit</label>
             <div className="flex items-center space-x-2">
               <label className="flex items-center">
                 <input
@@ -550,7 +623,7 @@ const InstagramInfluencer = () => {
               className="p-2 border border-gray-300 rounded w-full"
             />
             )}
-          </label>
+          </div>
         </div>
         <div className="mt-4 flex justify-center md:justify-end space-x-4 mt-8">
         <button onClick={handleReset}

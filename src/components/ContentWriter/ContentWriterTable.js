@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ContactForm from '../ContactForm';
 import { useTheme } from '../../context/ThemeProvider';
+import ApplyForm from '../ApplyForm';
 
 
 const ContentWriterTable = ({contentWriters,setContentWriters}) => {
@@ -63,7 +64,7 @@ const ContentWriterTable = ({contentWriters,setContentWriters}) => {
   const handleShowContactDetails = async (userId) => {
     setShowContactDetails(true)
     try {
-     //const response = await axios.get(`http://localhost:5000/contentwriters/getContactsByPublisher/${userId}`);
+   //  const response = await axios.get(`http://localhost:5000/contentwriters/getContactsByPublisher/${userId}`);
      const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/getContactsByPublisher/${userId}`);
       console.log(response.data)
       //toast.success("Fetching ")
@@ -101,15 +102,15 @@ const ContentWriterTable = ({contentWriters,setContentWriters}) => {
 
   return (
     <div className="table-container">
-      <div className="mb-4">
+      <div className="m-4">
         <button
           onClick={handleClearFilter}
-          className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded p-2"
         >
           Clear Filter
         </button>
       </div>
-      <div className="overflow-x-auto bg-white p-4 rounded-lg shadow-md">
+      <div className="overflow-x-auto  p-4 rounded-lg shadow-md">
         <table className="min-w-full bg-white text-sm">
           <thead>
             <tr className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base">
@@ -123,7 +124,8 @@ const ContentWriterTable = ({contentWriters,setContentWriters}) => {
               <th className="px-4 py-2" onClick={() => handleSort("industry")}>Industries {renderSortIcon("industry")}</th>
                <th className="px-4 py-2" onClick={() => handleSort("subCategories")}>Subcategories {renderSortIcon("subCategories")}</th>
               <th className="px-4 py-2" onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
-              <th className="py-3 px-4 uppercase font-semibold text-sm">Actions</th>
+              <th className="py-3 px-4 uppercase  ">Apply</th>
+              {/*<th className="py-3 px-4 uppercase font-semibold text-sm uppercase">Actions</th>*/}
             </tr>
           </thead>
           <tbody>
@@ -187,7 +189,8 @@ const ContentWriterTable = ({contentWriters,setContentWriters}) => {
                     'N/A'
                   )}
                 </td>
-                <td className="border py-3 px-4">
+                <td className="border px-4 py-2 text-center"><ApplyForm section="ContenWriters" publisher={writer}/></td>
+               {/* <td className="border py-3 px-4">
                 <button
                     onClick={() => handleBuyClick(writer)}
                     className="bg-green-500 hover:bg-green-700 text-white py-1 px-3 rounded"
@@ -201,7 +204,7 @@ const ContentWriterTable = ({contentWriters,setContentWriters}) => {
                   Show Contact
                 </button>
                  
-                </td>
+                </td>*/}
               </tr>
             ))}
           </tbody>

@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import ContentWriterTable from './ContentWriterTable';
 import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeProvider';
+import { UserContext } from '../../context/userContext';
 
 
 const ContentWriter = () => {
   const { isDarkTheme } = useTheme();
+  const { userData } = useContext(UserContext);
+  const userId = userData?._id;
   const [formData, setFormData] = useState({
     name: '',
     bio: '',
@@ -160,6 +163,51 @@ const ContentWriter = () => {
     });
   };
 
+  const pastactivitiesAdd=async(users)=>{
+    const description = [
+      formData.name ? `Name: ${formData.name}` : '',
+    formData.bio ? `Bio: ${formData.bio}` : '',
+    formData.experienceFrom || formData.experienceTo ? `Experience: ${formData.experienceFrom || 'N/A'} to ${formData.experienceTo || 'N/A'}` : '',
+    formData.email ? `Email: ${formData.email}` : '',
+    formData.expertise && formData.expertise.length ? `Expertise: ${formData.expertise.map(exp => `${exp.type}${exp.other ? ` (${exp.other})` : ''}`).join(', ')}` : '',
+    formData.languages && formData.languages.length ? `Languages: ${formData.languages.map(lang => `${lang.name}${lang.other ? ` (${lang.other})` : ''} (${lang.proficiency})`).join(', ')}` : '',
+    formData.location ? `Location: ${formData.location}` : '',
+    formData.collaborationRates.postFrom || formData.collaborationRates.postTo ? `Post Collaboration Rates: ${formData.collaborationRates.postFrom || 'N/A'} to ${formData.collaborationRates.postTo || 'N/A'}` : '',
+    formData.collaborationRates.storyFrom || formData.collaborationRates.storyTo ? `Story Collaboration Rates: ${formData.collaborationRates.storyFrom || 'N/A'} to ${formData.collaborationRates.storyTo || 'N/A'}` : '',
+    formData.collaborationRates.reelFrom || formData.collaborationRates.reelTo ? `Reel Collaboration Rates: ${formData.collaborationRates.reelFrom || 'N/A'} to ${formData.collaborationRates.reelTo || 'N/A'}` : '',
+    formData.languageProficiency ? `Language Proficiency: ${formData.languageProficiency}` : '',
+    formData.industry && formData.industry.length ? `Industry: ${formData.industry.map(ind => `${ind.type}${ind.other ? ` (${ind.other})` : ''}${ind.subCategories && ind.subCategories.length ? ` - Subcategories: ${ind.subCategories.map(sub => `${sub.type}${sub.other ? ` (${sub.other})` : ''}`).join(', ')}` : ''}`).join(', ')}` : '',
+    `Total results: ${users.length}`
+    ]
+    .filter(Boolean)
+    .join(', ');
+  
+    // Short description focusing on key fields
+    const shortDescription = `You searched Experience from ${formData.experienceFrom || 'N/A'} to ${formData.experienceTo || 'N/A'}, Location: ${formData.location || 'N/A'}, and got ${users.length} results`;
+    try {
+    const activityData={
+      userId:userData?._id,
+      action:"Performed a search for Content Writer",//"Searched for Instagram Influencers",
+      section:"Content Writer",
+      role:userData?.role,
+      timestamp:new Date(),
+      details:{
+        type:"filter",
+        filter:{formData,total:users.length},
+        description,
+        shortDescription
+        
+
+      }
+    }
+  //  axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+   } catch (error) {
+    console.log(error);
+    
+   }
+  }
+
   const handleSubmit = async (e) => {
    // console.log(formData)
     /*const transformedData = {
@@ -190,6 +238,8 @@ const ContentWriter = () => {
       const response = await axios.post('https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/contentWritersFilter', transformedData);
       //const response = await axios.post('http://localhost:5000/contentwriters/contentWritersFilter', transformedData);
       setWriters(response.data.data);
+      console.log(response.data,response.data.data)
+      pastactivitiesAdd(response.data.data);
       toast.success("Writer fetching successfully");
     } catch (error) {
       toast.error(`Error fetching filtered writers ${error}`)
@@ -250,12 +300,12 @@ const ContentWriter = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6 text-blue-600">Filter Content Writers</h1>
-     
+      {/*<h1 className="text-2xl font-bold mb-6 text-blue-600">Filter Content Writers</h1>*/}
+      <h1 className="text-2xl   p-2 my-2">FAQ</h1>
       <form onSubmit={handleSubmit} className="bg-gray-100 p-6 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <label className="block">
-            <span className="text-gray-700">Name</span>
+          <div className="block">
+            <label className="text-gray-700">Name</label>
             <input
               type="text"
               name="name"
@@ -263,9 +313,9 @@ const ContentWriter = () => {
               onChange={handleChange}
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Bio</span>
+          </div>
+          {/*<div className="block">
+            <label className="text-gray-700">Bio</label>
             <input
               type="text"
               name="bio"
@@ -273,9 +323,9 @@ const ContentWriter = () => {
               onChange={handleChange}
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Location</span>
+          </div>*/}
+          <div className="block">
+            <label className="text-gray-700">Location</label>
             <input
               type="text"
               name="location"
@@ -283,9 +333,9 @@ const ContentWriter = () => {
               onChange={handleChange}
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Experience From (years)</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Experience From (years)</label>
             <input
               type="number"
               name="experienceFrom"
@@ -293,9 +343,9 @@ const ContentWriter = () => {
               onChange={handleChange}
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Experience To (years)</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Experience To (years)</label>
             <input
               type="number"
               name="experienceTo"
@@ -303,9 +353,9 @@ const ContentWriter = () => {
               onChange={handleChange}
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Email</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Email</label>
             <input
               type="email"
               name="email"
@@ -313,10 +363,11 @@ const ContentWriter = () => {
               onChange={handleChange}
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
-          </label>
+          </div>
          
           <div className="block">
-          <h2 className="text-xl font-bold text-blue-600">Industry</h2>
+          <label //className="text-xl font-bold text-blue-600"
+          >Industry</label>
           {formData.industry.map((item, outerIndex) => (
             <div key={outerIndex} className="border p-4 mb-4 rounded">
               <div className="flex items-center space-x-2 mb-2">
@@ -342,13 +393,13 @@ const ContentWriter = () => {
                     className="p-2 border border-gray-300 rounded w-2/3"
                   />
                 )}
-                <button
+                {/*<button
                   type="button"
                   onClick={() => handleRemoveIndustry(outerIndex)}
                   className="text-red-500 hover:text-red-700"
                 >
                   Remove Industry
-                </button>
+                </button>*/}
               </div>
               {item.type && industrySubCategories[item.type] && (
                 <div className="mb-4">
@@ -365,7 +416,7 @@ const ContentWriter = () => {
                         onChange={(e) => handleChange(e, outerIndex, innerIndex)}
                         className="mr-2"
                     />
-                    <span className="text-gray-700">{subCategory}</span>
+                    <label className="text-gray-700">{subCategory}</label>
                 </div>
             );
         })}
@@ -380,13 +431,13 @@ const ContentWriter = () => {
               )}
             </div>
           ))}
-          <button
+          {/*<button
             type="button"
             onClick={handleAddIndustry}
             className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
           >
             Add Industry
-          </button>
+          </button>*/}
         </div>
          { /*<label className='block'>
           <span className="text-gray-700">Industry</span>
@@ -439,8 +490,8 @@ const ContentWriter = () => {
       )}
 
           </label>*/}
-          <label className="block">
-            <span className="text-gray-700">Expertise</span>
+          <div className="block">
+            <label className="text-gray-700">Expertise</label>
             {formData.expertise.map((exp, idx) => (
               <div key={idx} className="flex items-center mb-2">
                 <select
@@ -465,26 +516,26 @@ const ContentWriter = () => {
                     className="p-2 border border-gray-300 rounded w-full"
                   />
                 )}
-                <button
+               {/* <button
                   type="button"
                   onClick={() => handleRemoveExpertise(idx)}
                   className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
                 >
                   Remove
-                </button>
+                </button>*/}
                 
               </div>
             ))}
-            <button
+           {/* <button
               type="button"
               onClick={handleAddExpertise}
               className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
             >
               Add Expertise
-            </button>
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Languages</span>
+            </button>*/}
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Languages</label>
             {formData.languages.map((lang, idx) => (
               <div key={idx} className="flex items-center mb-2">
                 <select
@@ -525,30 +576,30 @@ const ContentWriter = () => {
                   <option value="Fluent">Fluent</option>
                   <option value="Native">Native</option>
                 </select>
-                <button
+               { /*<button
                   type="button"
                   onClick={() => handleRemoveLanguage(idx)}
                   className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
                 >
                   Remove
-                </button>
+                </button>*/}
               </div>
             ))}
-            <button
+           { /*<button
               type="button"
               onClick={handleAddLanguage}
               className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
             >
               Add Language
-            </button>
-          </label>
+            </button>*/}
+          </div>
         </div>
 
-        <div className="mt-4">
-          <h2 className="text-lg font-semibold mb-2">Collaboration Rates</h2>
+        {/*<div className="mt-4">
+          <h2 className="text-lg font-semibold mb-2">Collaboration Rates</h2>*/}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <label className="block">
-              <span className="text-gray-700">Post From ($)</span>
+            <div className="block">
+              <label className="text-gray-700">Collaboration Rates Post (From)</label>
               <input
                 type="number"
                 name="collaborationRates.postFrom"
@@ -556,9 +607,9 @@ const ContentWriter = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
-            </label>
-            <label className="block">
-              <span className="text-gray-700">Post To ($)</span>
+            </div>
+            <div className="block">
+              <label className="text-gray-700">Collaboration Rates Post (To)</label>
               <input
                 type="number"
                 name="collaborationRates.postTo"
@@ -566,9 +617,9 @@ const ContentWriter = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
-            </label>
-            <label className="block">
-              <span className="text-gray-700">Story From ($)</span>
+            </div>
+            <div className="block">
+              <label className="text-gray-700">Collaboration Rates Story (From)</label>
               <input
                 type="number"
                 name="collaborationRates.storyFrom"
@@ -576,9 +627,9 @@ const ContentWriter = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
-            </label>
-            <label className="block">
-              <span className="text-gray-700">Story To ($)</span>
+            </div>
+            <div className="block">
+              <label className="text-gray-700">Collaboration Rates Story (To)</label>
               <input
                 type="number"
                 name="collaborationRates.storyTo"
@@ -586,9 +637,9 @@ const ContentWriter = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
-            </label>
-            <label className="block">
-              <span className="text-gray-700">Reel From ($)</span>
+            </div>
+            <div className="block">
+              <label className="text-gray-700">Collaboration Rates Reel (From)</label>
               <input
                 type="number"
                 name="collaborationRates.reelFrom"
@@ -596,9 +647,9 @@ const ContentWriter = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
-            </label>
-            <label className="block">
-              <span className="text-gray-700">Reel To ($)</span>
+            </div>
+            <div className="block">
+              <label className="text-gray-700">Collaboration Rates Reel (To)</label>
               <input
                 type="number"
                 name="collaborationRates.reelTo"
@@ -606,9 +657,9 @@ const ContentWriter = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
-            </label>
-          </div>
-        </div>
+            </div>
+            </div>
+      {/*</div>*/}
 
         <button
           type="submit"

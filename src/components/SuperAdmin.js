@@ -30,7 +30,7 @@ const SuperAdmin = () => {
     // publisherRole: "",
   };
 
-  const [formDatas, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState(initialFormData);
   const [refreshKey, setRefreshKey] = useState(0);
 
   const handleChange = (e) => {
@@ -40,19 +40,161 @@ const SuperAdmin = () => {
       [name]: value === "0" ? "" : value,
     }));
   };
+  const pastactivitiesAdd1=async(users)=>{
+    
+    const description = [
+      "You created a new guest post with ",
+      formData.publisherURL?`Publisher URL: ${formData.publisherURL}`:"",
+      formData.publisherName?`Publisher Name: ${formData.publisherName}`:"",
+      formData.publisherEmail?`Publisher Email: ${formData.publisherEmail}`:"",
+      formData.publisherPhoneNo?`Publisher Phone No: ${formData.publisherPhoneNo}`:"",
+      formData.mozDA?`MozDA: ${formData.mozDA}`:"",
+      formData.categories?`Categories: ${formData.categories}`:"",
+      formData.websiteLanguage?`Website Language: ${formData.websiteLanguage}`:"",
+      formData.ahrefsDR?`Ahrefs DR: ${formData.ahrefsDR}`:"",
+      formData.linkType?`Link Type: ${formData.linkType}`:"",
+      formData.price?`Price: ${formData.price}`:"",
+      formData.monthlyTraffic?`Monthly Traffic: ${formData.monthlyTraffic}`:"",
+      formData.mozSpamScore?`MozSpam Score: ${formData.mozSpamScore}`:"",
+      
+      `Total results: ${users.length}`
+    ]
+    .filter(Boolean)
+    .join(', ');
+   // const shortDescription = `You searched ${formData.mozDA ? 'Moz DA' : 'Ahrefs DR'} from ${formData.mozDA || formData.ahrefsDR} to ${formData.DAto || formData.DRto} and got ${users.length} results`;
+
+   const getShortDescription = () => {
+    const elements = [];
+
+    // List of possible fields in priority order
+    const fields = [
+        formData.mozDA ? `Moz DA ${formData.mozDA}` : "",
+        formData.ahrefsDR ? `Ahrefs DR ${formData.ahrefsDR}` : "",
+        formData.linkType ? `Link Type ${formData.linkType}` : "",
+        formData.price ? `Price ${formData.price}` : "",
+        formData.categories ? `Categories ${formData.categories}` : "",
+        formData.websiteLanguage?`Website Language: ${formData.websiteLanguage}`:"",
+        formData.monthlyTraffic?`Monthly Traffic: ${formData.monthlyTraffic}`:"",
+      formData.mozSpamScore?`MozSpam Score: ${formData.mozSpamScore}`:"",
+
+        formData.publisherURL?`Publisher URL: ${formData.publisherURL}`:"",
+      formData.publisherName?`Publisher Name: ${formData.publisherName}`:"",
+      formData.publisherEmail?`Publisher Email: ${formData.publisherEmail}`:"",
+      formData.publisherPhoneNo?`Publisher Phone No: ${formData.publisherPhoneNo}`:"",
+    ];
+
+    for (const field of fields) {
+        if (field) {
+            elements.push(field);
+        }
+        if (elements.length === 2) break;  
+    }
+
+    // Construct the short description
+    return `You created a new guest post with ${elements.join(' and ')} successfully.`;//and got ${users.length} results.
+};
+
+
+const shortDescription = getShortDescription();
+   try {
+    const activityData={
+      userId:userData?._id,
+      action:"Created a new guest post",
+      section:"Guest Post",
+      role:userData?.role,
+      timestamp:new Date(),
+      details:{
+        type:"create",
+        filter:{formData,total:users.length},
+        description,
+        shortDescription
+        
+
+      }
+    }
+    
+    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+   // axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   } catch (error) {
+    console.log(error);
+    
+   }
+  }
+
+  const createDescriptionElements = (formData, users) => {
+    const elements = [
+        { key: 'Publisher URL', value: formData.publisherURL },
+        { key: 'Publisher Name', value: formData.publisherName },
+        { key: 'Publisher Email', value: formData.publisherEmail },
+        { key: 'Publisher Phone No', value: formData.publisherPhoneNo },
+        { key: 'Moz DA', value: formData.mozDA },
+        { key: 'Categories', value: formData.categories },
+        { key: 'Website Language', value: formData.websiteLanguage },
+        { key: 'Ahrefs DR', value: formData.ahrefsDR },
+        { key: 'Link Type', value: formData.linkType },
+        { key: 'Price', value: formData.price },
+        { key: 'Monthly Traffic', value: formData.monthlyTraffic },
+        { key: 'Moz Spam Score', value: formData.mozSpamScore },
+        { key: 'Total results', value: users?.length }
+    ];
+
+    const formattedElements = elements
+        .filter(element => element.value)
+        .map(element => `${element.key}: ${element.value}`)
+        .join(', ');
+        return `You created ${formattedElements}`;
+};
+const generateShortDescription = (formData, users) => {
+  const elements = createDescriptionElements(formData, users).split(', ');
+  
+ 
+  const shortElements = elements.slice(0, 2);
+
+  return `You created a new guest post with ${shortElements.join(' and ')} successfully.`;
+};
+
+  const pastactivitiesAdd=async(users)=>{
+    const description = createDescriptionElements(formData, users);
+    const shortDescription = generateShortDescription(formData, users);
+  
+   try {
+    const activityData={
+      userId:userData?._id,
+      action:"Created a new guest post",
+      section:"Guest Post",
+      role:userData?.role,
+      timestamp:new Date(),
+      details:{
+        type:"create",
+        filter:{formData,total:users.length},
+        description,
+        shortDescription
+        
+
+      }
+    }
+    
+    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   } catch (error) {
+    console.log(error);
+    
+   }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
      
       await axios.post(
-      //  "http://localhost:5000/admin/createAdminData",
+       //"http://localhost:5000/admin/createAdminData",
       "https://guest-posting-marketplace-web-backend.onrender.com/admin/createAdminData",
-        formDatas
+        formData
       );
       // console.log(initialFormData)
       toast.success("Client Created Successfully");
       setFormData(initialFormData);
+      pastactivitiesAdd(formData);
       setRefreshKey((prevKey) => prevKey + 1);
     } catch (error) {
       toast.error(error.message);
@@ -62,7 +204,8 @@ const SuperAdmin = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold mb-3 text-white bg-blue-700 p-3">
+      <h1 className="text-xl font-bold mb-3  p-3"//text-white bg-blue-700
+      >
         Super Admin Page
       </h1>
       <form
@@ -83,7 +226,7 @@ const SuperAdmin = () => {
               max="100"
               required
               placeholder="1"
-              value={formDatas.mozDA}
+              value={formData.mozDA}
               onChange={handleChange}
               className="form-input border rounded p-2"
             />
@@ -95,7 +238,7 @@ const SuperAdmin = () => {
             <select
               id="categories"
               name="categories"
-              value={formDatas.categories}
+              value={formData.categories}
               onChange={handleChange}
               className="form-input border rounded p-2"
             >
@@ -132,7 +275,7 @@ const SuperAdmin = () => {
             <select
               id="websiteLanguage"
               name="websiteLanguage"
-              value={formDatas.websiteLanguage}
+              value={formData.websiteLanguage}
               onChange={handleChange}
               className="form-input border rounded p-2"
             >
@@ -162,7 +305,7 @@ const SuperAdmin = () => {
               required
               pattern="https?://.*"
               placeholder="https://www.google.com"
-              value={formDatas.publisherURL}
+              value={formData.publisherURL}
               onChange={handleChange}
               className="form-input border rounded p-2"
             />
@@ -183,7 +326,7 @@ const SuperAdmin = () => {
               max="100"
               required
               placeholder="1"
-              value={formDatas.ahrefsDR}
+              value={formData.ahrefsDR}
               onChange={handleChange}
               className="form-input border rounded p-2"
             />
@@ -195,7 +338,7 @@ const SuperAdmin = () => {
             <select
               id="linkType"
               name="linkType"
-              value={formDatas.linkType}
+              value={formData.linkType}
               onChange={handleChange}
               className="form-input border rounded p-2"
             >
@@ -219,7 +362,7 @@ const SuperAdmin = () => {
               max="100000"
               required
               placeholder="1"
-              value={formDatas.price}
+              value={formData.price}
               onChange={handleChange}
               className="form-input border rounded p-2"
             />
@@ -231,7 +374,7 @@ const SuperAdmin = () => {
             <select
               id="monthlyTraffic"
               name="monthlyTraffic"
-              value={formDatas.monthlyTraffic}
+              value={formData.monthlyTraffic}
               onChange={handleChange}
               className="form-input border rounded p-2"
             >
@@ -287,7 +430,7 @@ const SuperAdmin = () => {
             <select
               id="mozSpamScore"
               name="mozSpamScore"
-              value={formDatas.mozSpamScore}
+              value={formData.mozSpamScore}
               onChange={handleChange}
               className="form-input border rounded p-2"
             >
@@ -311,7 +454,7 @@ const SuperAdmin = () => {
             <select
               id="siteWorkedWith"
               name="siteWorkedWith"
-              value={formDatas.siteWorkedWith}
+              value={formData.siteWorkedWith}
               onChange={handleChange}
               className="form-input border rounded p-2"
             >
@@ -331,7 +474,7 @@ const SuperAdmin = () => {
             <select
               id="publisherRole"
               name="publisherRole"
-              value={formDatas.publisherRole}
+              value={formData.publisherRole}
               onChange={handleChange}
               className="form-input border rounded p-2"
             >
@@ -355,7 +498,7 @@ const SuperAdmin = () => {
               id="publisherName"
               name="publisherName"
               required
-              value={formDatas.publisherName}
+              value={formData.publisherName}
               onChange={handleChange}
               className="form-input border rounded p-2"
             />
@@ -369,7 +512,7 @@ const SuperAdmin = () => {
               id="publisherEmail"
               name="publisherEmail"
               required
-              value={formDatas.publisherEmail}
+              value={formData.publisherEmail}
               onChange={handleChange}
               className="form-input border rounded p-2"
             />
@@ -385,7 +528,7 @@ const SuperAdmin = () => {
               pattern="[0-9]{10}"
               title="Please enter a 10-digit phone number"
               required
-              value={formDatas.publisherPhoneNo}
+              value={formData.publisherPhoneNo}
               onChange={handleChange}
               className="form-input border rounded p-2"
             />

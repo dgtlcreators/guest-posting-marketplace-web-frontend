@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTheme } from '../../context/ThemeProvider';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
+import { UserContext } from '../../context/userContext';
 
 
 const NewYoutubeInfluencerTable = ({addYotubeInfluencer,setAddYotubeInfluencer}) => {
   const { isDarkTheme } = useTheme();
+  const { userData } = useContext(UserContext);
   const [influencers, setInfluencers] = useState([]);
   const [originalUsers, setOriginalUsers] = useState([]);
 
@@ -154,13 +156,86 @@ const NewYoutubeInfluencerTable = ({addYotubeInfluencer,setAddYotubeInfluencer})
     fetchInfluencer()
   },[])
 
+  const createDescriptionElements = (formData, users) => {
+    const elements = [
+      { key: 'Username', value: users.username },
+      { key: 'Full Name', value: users.fullName },
+      { key: 'Profile Picture', value: users.profilePicture },
+      { key: 'Bio', value: users.bio },
+      { key: 'Followers Count', value: users.followersCount },
+      { key: 'Following Count', value: users.followingCount },
+      { key: 'Posts Count', value: users.postsCount },
+      { key: 'Engagement Rate', value: `${users.engagementRate}%` },
+      { key: 'Average Likes', value: users.averageLikes },
+      { key: 'Average Comments', value: users.averageComments },
+      { key: 'Category', value: users.category },
+      { key: 'Location', value: users.location },
+      { key: 'Language', value: users.language },
+      { key: 'Verified Status', value: users.verifiedStatus ? 'Verified' : 'Not Verified' },
+      { key: 'Collaboration Rates (Post)', value: users.collaborationRates.post },
+      { key: 'Collaboration Rates (Story)', value: users.collaborationRates.story },
+      { key: 'Collaboration Rates (Reel)', value: users.collaborationRates.reel },
+      { key: 'Past Collaborations', value: users.pastCollaborations.join(', ') },
+      { key: 'Media Kit', value: users.mediaKit },
+      { key: 'Total results', value: users?.length }
+  ];
+  
+
+  const formattedElements = elements
+        .filter(element => element.value)
+        .map(element => `${element.key}: ${element.value}`)
+        .join(', ');
+  return `You deleted ${formattedElements}`;
+};
+const generateShortDescription = (formData, users) => {
+  const elements = createDescriptionElements(formData, users).split(', ');
+  
+ 
+  const shortElements = elements.slice(0, 2);
+
+  return `You deleted a YouTube Influencer with ${shortElements.join(' and ')} successfully.`;
+};
+
+  const pastactivitiesAdd=async(users)=>{
+    const formData={}
+    const description = createDescriptionElements(formData, users);
+    const shortDescription = generateShortDescription(formData, users);
+  
+   try {
+    const activityData={
+      userId:userData?._id,
+      action:"Deleted a new YouTube Influencer",
+      section:"YouTube Influencer",
+      role:userData?.role,
+      timestamp:new Date(),
+      details:{
+        type:"delete",
+        filter:{formData,total:users.length},
+        description,
+        shortDescription
+        
+
+      }
+    }
+    
+    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   } catch (error) {
+    console.log(error);
+    
+   }
+  }
+
   const deleteInstagramInfluencer=async(id)=>{
     try {
       await axios.delete(
         
-       // `http://localhost:5000/youtubeinfluencers/deleteYoutubeInfluencer/${id}`
+        //`http://localhost:5000/youtubeinfluencers/deleteYoutubeInfluencer/${id}`
         `https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/deleteYoutubeInfluencer/${id}`
       );
+      const user = influencers.find((user) => user._id === id);
+     
+      await pastactivitiesAdd(user);
       toast.success("Instagram Influencer Deleted Successfully");
       setInfluencers(influencers.filter((influencer) => influencer._id !== id));
     } catch (error) {
@@ -180,7 +255,7 @@ const handleClearFilter=()=>{
       <div className='mb-4'>
         <button onClick={handleClearFilter} className='bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded'>Clear Filter</button>
       </div>
-      <div className='overflow-x-auto bg-white p-4 rounded-lg shadow-md'>
+      <div className='overflow-x-auto  p-4 rounded-lg shadow-md'>
         <table className='min-w-full bg-white text-sm'>
           <thead>
             <tr className='bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base'>

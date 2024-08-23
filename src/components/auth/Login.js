@@ -38,9 +38,11 @@ function Login() {
 
   return (
     <Layout isRegisterPage={false}>
-      <div className="w-full max-w-md mx-auto bg-gray-100 p-8 rounded-lg shadow-2xl space-y-8">
+      <div className="w-full max-w-md mx-auto p-8 rounded-lg shadow-2xl space-y-8"// bg-gray-100 
+      >
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl "//font-extrabold text-gray-900
+          >
             Log in to your account
           </h2>
         </div>

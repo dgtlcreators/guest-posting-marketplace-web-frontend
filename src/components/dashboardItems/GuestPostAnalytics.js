@@ -20,7 +20,7 @@ const GuestPostAnalytics = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        //const response = await axios.get('http://localhost:5000/form/getData');
+       // const response = await axios.get('http://localhost:5000/form/getData');
         const response = await axios.get('https://guest-posting-marketplace-web-backend.onrender.com/form/getData');
         setData(response.data.data);
         setLoading(false);

@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import { useTheme } from "../../context/ThemeProvider";
+import ApplyForm from "../ApplyForm";
 
 
 const BrandUserTable = ({ influencers,setInfluencers }) => {
@@ -97,7 +98,7 @@ const BrandUserTable = ({ influencers,setInfluencers }) => {
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
+      <div className="overflow-x-auto  shadow-lg rounded-lg">
       <div className="mb-4">
         <button
           onClick={handleClearFilter}
@@ -108,40 +109,42 @@ const BrandUserTable = ({ influencers,setInfluencers }) => {
         <table className="min-w-full bg-white">
           <thead className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base">
             <tr>
-            <th className="px-4 py-2" >S.No </th>
-              <th className="px-4 py-2" onClick={() => handleSort("username")}>Username {renderSortIcon("username")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("fullName")}>Full Name {renderSortIcon("fullName")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("profilePicture")}>Profile Picture {renderSortIcon("profilePicture")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("followersCount")}>Followers {renderSortIcon("followersCount")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("followingCount")}>Following {renderSortIcon("followingCount")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("postsCount")}>Posts {renderSortIcon("postsCount")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("engagementRate")}>Engagement Rate {renderSortIcon("engagementRate")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("averageLikes")}>Likes {renderSortIcon("averageLikes")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("averageComments")}>Comments {renderSortIcon("averageComments")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("category")}>Category {renderSortIcon("category")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("language")}>Language {renderSortIcon("language")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("verifiedStatus")}>Verified Status {renderSortIcon("verifiedStatus")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("pastCollaborations")}>Past Collaborations {renderSortIcon("pastCollaborations")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("mediaKit")}>Media Kit {renderSortIcon("mediaKit")}</th>
-              <th className="w-1/4 py-2 px-4 text-left">Actions</th>
+            <th className="border px-4 py-2" >S.No </th>
+              {/*<th className="border px-4 py-2" onClick={() => handleSort("username")}>Username {renderSortIcon("username")}</th>*/}
+              <th className="border px-4 py-2" onClick={() => handleSort("fullName")}>Full Name {renderSortIcon("fullName")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("profilePicture")}>Profile Picture {renderSortIcon("profilePicture")}</th>
+              {/*<th className="border px-4 py-2" onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>*/}
+              <th className="border px-4 py-2" onClick={() => handleSort("followersCount")}>Followers {renderSortIcon("followersCount")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("followingCount")}>Following {renderSortIcon("followingCount")}</th>
+              {/*<th className="border px-4 py-2" onClick={() => handleSort("postsCount")}>Posts {renderSortIcon("postsCount")}</th>*/}
+              <th className="border px-4 py-2" onClick={() => handleSort("engagementRate")}>Engagement Rate {renderSortIcon("engagementRate")}</th>
+             {/* <th className="border px-4 py-2" onClick={() => handleSort("averageLikes")}>Likes {renderSortIcon("averageLikes")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("averageComments")}>Comments {renderSortIcon("averageComments")}</th>*/}
+              <th className="border px-4 py-2" onClick={() => handleSort("category")}>Category {renderSortIcon("category")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("language")}>Language {renderSortIcon("language")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("verifiedStatus")}>Verified Status {renderSortIcon("verifiedStatus")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
+              {/*<th className="border px-4 py-2" onClick={() => handleSort("pastCollaborations")}>Past Collaborations {renderSortIcon("pastCollaborations")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("mediaKit")}>Media Kit {renderSortIcon("mediaKit")}</th>*/}
+              <th className="border w-1/4 py-2 px-4 text-left  uppercase">Apply</th>
+              <th className="border w-1/4 py-2 px-4 text-left uppercase">Actions</th>
+              
             </tr>
           </thead>
           <tbody>
             {currentItems.map((influencer,index) => (
               <tr key={influencer._id} className="hover:bg-gray-100">
                 <td className="border px-4 py-2">{index + 1}</td>
-                <td className="border px-4 py-2">{influencer.username}</td>
+                {/*<td className="border px-4 py-2">{influencer.username}</td>*/}
                 <td className="border px-4 py-2">{influencer.fullName}</td>
                 <td className="border py-2 px-4">
-                  {console.log(influencer.profilePicture)}
-                  {console.log(influencer?.username,influencer?.profilePicture?.startsWith("https")
+                  {/*console.log(influencer.profilePicture)
+                  console.log(influencer?.username,influencer?.profilePicture?.startsWith("https")
                         ? influencer.profilePicture
                         
                        // : `http://localhost:5000${influencer.profilePicture}`)}
-                       : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.profilePicture}`)}
+                       : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.profilePicture}`)*/}
                   <img
                     src={
                       influencer?.profilePicture?.startsWith("https")
@@ -153,13 +156,13 @@ const BrandUserTable = ({ influencers,setInfluencers }) => {
                     className="w-16 h-16 object-cover rounded-full"
                   />
                 </td>
-                <td className="border px-4 py-2">{influencer.bio}</td>
+                {/*<td className="border px-4 py-2">{influencer.bio}</td>*/}
                 <td className="border px-4 py-2">{influencer.followersCount}</td>
                 <td className="border px-4 py-2">{influencer.followingCount}</td>
-                <td className="border px-4 py-2">{influencer.postsCount}</td>
+                {/*<td className="border px-4 py-2">{influencer.postsCount}</td>*/}
                 <td className="border px-4 py-2">{influencer.engagementRate}</td>
-                <td className="border px-4 py-2">{influencer.averageLikes}</td>
-                <td className="border px-4 py-2">{influencer.averageComments}</td>
+                {/*<td className="border px-4 py-2">{influencer.averageLikes}</td>
+                <td className="border px-4 py-2">{influencer.averageComments}</td>*/}
                 <td className="border px-4 py-2">{influencer.category}</td>
                 <td className="border px-4 py-2">{influencer.location}</td>
                 <td className="border px-4 py-2">{influencer.language}</td>
@@ -176,7 +179,7 @@ const BrandUserTable = ({ influencers,setInfluencers }) => {
                     'N/A'
                   )}
                 </td>
-                <td className="border px-4 py-2">{influencer.pastCollaborations}</td>
+              { /* <td className="border px-4 py-2">{influencer.pastCollaborations}</td>
                
                 
                 <td className="border px-4 py-2">
@@ -191,7 +194,8 @@ const BrandUserTable = ({ influencers,setInfluencers }) => {
                     className="w-12 h-12 object-cover rounded-full"
                   />
 
-                </td>
+                </td>*/}
+                 <td className="border py-2 px-4"><ApplyForm section="InstagramInfluencer" publisher={influencer}/></td>
                 <td className="border py-2 px-4">
                   <button
                     onClick={() => handleViewProfile(influencer)}

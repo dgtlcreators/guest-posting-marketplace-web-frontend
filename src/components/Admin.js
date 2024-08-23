@@ -124,7 +124,8 @@ const Admin = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold mb-3 text-white bg-blue-700 p-3">
+      <h1 className="text-xl  mb-3  p-3"//text-white bg-blue-700 font-bold
+      >
         Admin Page
       </h1>
       {/*<section className="mb-6">
@@ -491,7 +492,8 @@ const Admin = () => {
           </button>
         </div>
       </form>
-      <h2 className="text-xl font-bold mt-8">User Management</h2>
+      <h1 className="text-xl  mb-3 mt-3 p-3"//text-white bg-blue-700 font-bold
+      >User Management</h1>
       <AdminTable key={refreshKey} />
     </div>
   );

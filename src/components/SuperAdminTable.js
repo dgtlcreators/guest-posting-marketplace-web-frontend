@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa"; 
 import ContactForm from "./ContactForm.js";
 import { useTheme } from "../context/ThemeProvider.js";
+import { UserContext } from "../context/userContext.js";
 
 
 const SuperAdminTable = () => {
   const { isDarkTheme } = useTheme();
+  const { userData } = useContext(UserContext); 
+  const userId = userData?._id;
   const [users, setUsers] = useState([]);
   const [sortedField, setSortedField] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
@@ -26,7 +29,7 @@ const SuperAdminTable = () => {
     try {
       
       const response = await axios.get(
-      //  "http://localhost:5000/superAdmin/getAllAdminData"
+       // "http://localhost:5000/superAdmin/getAllAdminData"
        "https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/getAllAdminData"
       );
       setUsers(response.data);
@@ -40,13 +43,76 @@ const SuperAdminTable = () => {
     fetchData();
   }, []);
 
+  const createDescriptionElements = (formData, users) => {
+  const elements = [
+        { key: 'Publisher URL', value: users.publisherURL },
+        { key: 'Publisher Name', value: users.publisherName },
+        { key: 'Publisher Email', value: users.publisherEmail },
+        { key: 'Publisher Phone No', value: users.publisherPhoneNo },
+        { key: 'Moz DA', value: users.mozDA },
+        { key: 'Categories', value: users.categories },
+        { key: 'Website Language', value: users.websiteLanguage },
+        { key: 'Ahrefs DR', value: users.ahrefsDR },
+        { key: 'Link Type', value: users.linkType },
+        { key: 'Price', value: users.price },
+        { key: 'Monthly Traffic', value: users.monthlyTraffic },
+        { key: 'Moz Spam Score', value: users.mozSpamScore },
+        { key: 'Total results', value: users?.length }
+    ];
+    return elements
+        .filter(element => element.value)
+        .map(element => `${element.key}: ${element.value}`)
+        .join(', ');
+};
+
+const generateShortDescription = (formData, users) => {
+ 
+  const elements = createDescriptionElements(formData, users).split(', ');
+
+  const shortElements = elements.slice(0, 2);
+
+  return `You deleted a guest post ${shortElements.length>0?"":"with"} ${shortElements.join(' and ')} successfully.`;
+};
+
+  const pastactivitiesAdd=async(users)=>{
+    const formData={}
+    const description = createDescriptionElements(formData, users);
+    const shortDescription = generateShortDescription(formData, users);
+   try {
+    const activityData={
+      userId:userData?._id,
+      action:"Deleted a guest post",
+      section:"Guest Post",
+      role:userData?.role,
+      timestamp:new Date(),
+      details:{
+        type:"delete",
+        filter:{formData,total:users.length},
+        description,
+        shortDescription
+
+      }
+    }
+    
+    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   } catch (error) {
+    console.log(error);
+    
+   }
+  }
+
   const deleteUser = async (userId) => {
     try {
-      await axios.delete(
+      const response=await axios.delete(
         
        // `http://localhost:5000/superAdmin/deleteOneAdminData/${userId}`
         `https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/deleteOneAdminData/${userId}`
       );
+      
+      const user = users.find((user) => user._id === userId);
+     
+      await pastactivitiesAdd(user);
       toast.success("Client Deleted Successfully");
       setUsers(users.filter((user) => user._id !== userId));
     } catch (error) {
@@ -105,7 +171,7 @@ const SuperAdminTable = () => {
   const handleShowContactDetails = async (userId) => {
     setShowContactDetails(true)
     try {
-     //const response = await axios.get(`http://localhost:5000/superAdmin/getContactsByPublisher/${userId}`);
+    // const response = await axios.get(`http://localhost:5000/superAdmin/getContactsByPublisher/${userId}`);
      const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/getContactsByPublisher/${userId}`);
       console.log(response.data)
       setSelectedUserContacts(response.data);
@@ -159,7 +225,8 @@ const SuperAdminTable = () => {
           Clear Filter
         </button>
       </div>
-      <div className="overflow-x-auto">
+      <div className='overflow-x-auto  p-4 rounded-lg shadow-md'>
+      
         <table className="min-w-full bg-white">
           <thead className="bg-blue-700 text-white">
             <tr>

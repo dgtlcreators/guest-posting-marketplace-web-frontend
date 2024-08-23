@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
 import ContactForm from '../ContactForm';
+import ApplyForm from '../ApplyForm';
 
 const YoutubeInfluencerTable = ({influencers, setInfluencers}) => {
   const { isDarkTheme } = useTheme();
@@ -80,7 +81,7 @@ const YoutubeInfluencerTable = ({influencers, setInfluencers}) => {
     const fetchInfluencer=async()=>{
       try {
         const response = await axios.get("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/getAllYoutubeInfluencer")
-         //const response = await axios.get("http://localhost:5000/youtubeinfluencers/getAllYoutubeInfluencer");
+       //  const response = await axios.get("http://localhost:5000/youtubeinfluencers/getAllYoutubeInfluencer");
           
        // setInfluencers(response.data.data)
         setOriginalUsers(response.data.data)
@@ -109,7 +110,7 @@ const handleBuyClick = (publisher) => {
 const handleShowContactDetails = async (userId) => {
   setShowContactDetails(true)
   try {
-   //const response = await axios.get(`http://localhost:5000/youtubeinfluencers/getContactsByPublisher/${userId}`);
+  // const response = await axios.get(`http://localhost:5000/youtubeinfluencers/getContactsByPublisher/${userId}`);
    const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/getContactsByPublisher/${userId}`);
     console.log(response.data)
     //toast.success("Fetching ")
@@ -146,25 +147,25 @@ const handleCloseContactForm = () => {
       <div className='mb-4'>
         <button onClick={handleClearFilter} className='bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded'>Clear Filter</button>
       </div>
-      <div className='overflow-x-auto bg-white p-4 rounded-lg shadow-md'>
+      <div className='overflow-x-auto  p-4 rounded-lg shadow-md'>
         <table className='min-w-full bg-white text-sm'>
           <thead>
             <tr className='bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base'>
               <th className='px-4 py-2'>S.No </th>
-              <th className='px-4 py-2'  onClick={() => handleSort("username")}>Username {renderSortIcon("username")}</th>
+              {/*<th className='px-4 py-2'  onClick={() => handleSort("username")}>Username {renderSortIcon("username")}</th>*/}
               <th className='px-4 py-2'  onClick={() => handleSort("followersCount")}>Followers {renderSortIcon("followersCount")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("videosCount")}>videos Count {renderSortIcon("videosCount")}</th>
+              {/*<th className='px-4 py-2'  onClick={() => handleSort("videosCount")}>videos Count {renderSortIcon("videosCount")}</th>*/}
               <th className='px-4 py-2'  onClick={() => handleSort("engagementRate")}>Engagement Rate {renderSortIcon("engagementRate")}</th>
               <th className='px-4 py-2'  onClick={() => handleSort("averageViews")}>Average Views {renderSortIcon("averageViews")}</th>
               <th className='px-4 py-2'   onClick={() => handleSort("category")}>Category {renderSortIcon("category")}</th>
               <th className='px-4 py-2'  onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
               <th className='px-4 py-2'  onClick={() => handleSort("language")}>Language {renderSortIcon("language")}</th>
               <th className='px-4 py-2'  onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("pastCollaborations")}>Past Collaborations {renderSortIcon("pastCollaborations")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("audienceDemographics")}>Audience Demographics {renderSortIcon("audienceDemographics")}</th>
-             
-              <th className="py-3 px-4 uppercase font-semibold text-sm">Actions</th>
-              <th className="py-3 px-4 uppercase font-semibold text-sm">Contact</th>
+             {/* <th className='px-4 py-2'  onClick={() => handleSort("pastCollaborations")}>Past Collaborations {renderSortIcon("pastCollaborations")}</th>
+              <th className='px-4 py-2'  onClick={() => handleSort("audienceDemographics")}>Audience Demographics {renderSortIcon("audienceDemographics")}</th>*/}
+             <th className="py-3 px-4 uppercase font-semibold text-sm uppercase">Apply</th>
+              <th className="py-3 px-4 uppercase font-semibold text-sm uppercase">Actions</th>
+              {/*<th className="py-3 px-4 uppercase font-semibold text-sm">Contact</th>*/}
              
             </tr>
           </thead>
@@ -172,11 +173,11 @@ const handleCloseContactForm = () => {
             {influencers.map((influencer,index)=>(
               <tr key={influencer._id} className='hover:bg-gray-100 transition-colors'>
                 <td className='border px-4 py-2'>{index+1}</td>
-                <td className='border px-4 py-2'>{influencer.username}</td>
+                {/*<td className='border px-4 py-2'>{influencer.username}</td>*/}
                
                
                 <td className='border px-4 py-2'>{influencer.followersCount}</td>
-                <td className='border px-4 py-2'>{influencer.videosCount}</td>
+                {/*<td className='border px-4 py-2'>{influencer.videosCount}</td>*/}
                 <td className='border px-4 py-2'>{influencer.engagementRate}</td>
                 <td className='border px-4 py-2'>{influencer.averageViews}</td>
                 <td className='border px-4 py-2'>{influencer.category}</td>
@@ -189,15 +190,15 @@ const handleCloseContactForm = () => {
                     <div>Shoutouts: {influencer.collaborationRates.shoutouts}</div>
                   </div>
                 ):"N/A"}</td>
-                <td className='border px-4 py-2'>{influencer.pastCollaborations.join(",")}</td>
+                {/*<td className='border px-4 py-2'>{influencer.pastCollaborations.join(",")}</td>
                 <td className='border px-4 py-2'>{influencer.audienceDemographics?
                 <div>
                   <div>Age: {influencer.audienceDemographics.age.join(",")}</div>
                   <div>Gender: {influencer.audienceDemographics.gender.join(",")}</div>
                   <div>Geographic Distribution: {influencer.audienceDemographics.geographicDistribution.join(",")}</div>
-                </div>:"N/A"}</td>
-               
-                <td className='py-3 px-4'>
+                </div>:"N/A"}</td>*/}
+               <td className='border py-3 px-4'><ApplyForm section="YoutubeInfluencer" publisher={influencer}/></td>
+                <td className='border py-3 px-4'>
                 <Link
                     to={`/youtubeInfluencerProfile/${influencer._id}`}
                     className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
@@ -206,7 +207,7 @@ const handleCloseContactForm = () => {
                   </Link>
                
                 </td>
-                <td className="border py-3 px-4">
+                {/*<td className="border py-3 px-4">
                 <button
                     onClick={() => handleBuyClick(influencer)}
                     className="bg-green-500 hover:bg-green-700 text-white py-1 px-3 rounded"
@@ -220,7 +221,7 @@ const handleCloseContactForm = () => {
                   Show Contact
                 </button>
                  
-                </td>
+                </td>*/}
                 
                 
               </tr>

@@ -23,7 +23,7 @@ const ApplicationsList = () => {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`https://guest-posting-marketplace-web-backend.onrender.com/userbrand/deleteapplications/${id}`);
-      //const response = await axios.delete(`http://localhost:5000/userbrand/deleteapplications/${id}`);
+     // const response = await axios.delete(`http://localhost:5000/userbrand/deleteapplications/${id}`);
       alert(response.data.message);
       fetchApplications();
     } catch (error) {

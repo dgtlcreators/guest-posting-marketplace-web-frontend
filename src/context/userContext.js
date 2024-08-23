@@ -34,6 +34,7 @@
 
 /* eslint-disable react/prop-types */
 import { createContext, useState, useEffect, useCallback } from "react";
+import { toast } from "react-toastify";
 
 const UserContext = createContext();
 
@@ -56,6 +57,13 @@ const UserProvider = ({ children }) => {
     [setUserData]
   );
 
+  const signOut = useCallback(() => {
+    setUserData(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    toast.success("Logout successfully")
+  }, []);
+
   useEffect(() => {
     // Synchronize localStorage whenever userData changes
     if (userData !== null) {
@@ -66,7 +74,7 @@ const UserProvider = ({ children }) => {
   }, [userData]);
 
   return (
-    <UserContext.Provider value={{ userData, setUserData: updateUserData }}>
+    <UserContext.Provider value={{ userData, setUserData: updateUserData ,signOut}}>
       {children}
     </UserContext.Provider>
   );

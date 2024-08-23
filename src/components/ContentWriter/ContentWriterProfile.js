@@ -19,7 +19,7 @@ const ContentWriterProfile = () => {
     const fetchContentWriter = async () => {
       try {
         const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/getcontentwriter/${id}`);
-        //const response = await axios.get(`http://localhost:5000/contentwriters/getcontentwriter/${id}`);
+       // const response = await axios.get(`http://localhost:5000/contentwriters/getcontentwriter/${id}`);
       
        // console.log(response.data.data,id)
        toast.success("Fetching Content Writer Profile Successfully")

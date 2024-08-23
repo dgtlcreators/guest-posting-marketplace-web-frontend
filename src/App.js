@@ -8,9 +8,11 @@ import Sidebar from "./components/Sidebar";
 import Form from './components/Form';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
+//import SignOut from './components/auth/SignOut';
 import Admin from './components/Admin';
 import { UserProvider } from './context/userContext';
 import PathNotFound from './components/PathNotFound';
+import PastActivities from './components/PastActivities';
 import ProtectedRoute from './components/ProtectedRoute';
 import SuperAdmin from './components/SuperAdmin';
 import Dashboard from './components/dashboardItems/Dashboard';
@@ -35,6 +37,8 @@ import YoutubeInfluencerProfile from './components/YoutubeInfluencer/YoutubeInfl
 import EditYoutubeInfluencer from './components/YoutubeInfluencer/EditYoutubeInfluencer.js';
 import YoutubeInfluencer from './components/YoutubeInfluencer/YoutubeInfluencer.js';
 
+import Reports from './components/Reports.js';
+
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const useShowNavbarAndSidebar = () => {
@@ -57,6 +61,7 @@ function App() {
 
 function AppContent() {
   const showNavbarAndSidebar = useShowNavbarAndSidebar();
+ // console.log(process.env.Local_Url)
   return (
     <div className="flex flex-col h-screen">
       {showNavbarAndSidebar && <Navbar />}
@@ -80,6 +85,7 @@ function AppContent() {
             />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/past-activities" element={<PastActivities />} />
             <Route 
             path="/addGuestpost"
              // path="/admin"
@@ -140,6 +146,8 @@ function AppContent() {
              <Route path='/youtube-influencer' element={<YoutubeInfluencer/>}/>
 
              <Route path="/application" element={<ApplicationForm />} />
+
+             <Route path='/reports' element={<Reports />}/>
             
              <Route path="/dashboard" element={<Dashboard />} />
              <Route path="*" element={<PathNotFound />} />

@@ -2,16 +2,18 @@
 
 
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import NewContentWriterTable from "./NewContentWriterTable";
 import { useTheme } from "../../context/ThemeProvider";
+import { UserContext } from "../../context/userContext";
 
 
 const NewContentWriter = () => {
   const { isDarkTheme } = useTheme();
+  const { userData } = useContext(UserContext);
   const [formData, setFormData] = useState({
     name: "",
     bio: "",
@@ -221,6 +223,67 @@ const NewContentWriter = () => {
     return errors;
   };
 
+  const createDescriptionElements = (formData, users) => {
+    const elements = [
+      { key: 'Name', value: formData.name },
+      { key: 'Bio', value: formData.bio },
+      { key: 'Experience', value: formData.experience },
+      { key: 'Expertise', value: formData.expertise.map(exp => `${exp.type} ${exp.other ? ' (Other: ' + exp.other + ')' : ''}`).join(', ') },
+      { key: 'Location', value: formData.location },
+      { key: 'Languages', value: formData.languages.map(lang => `${lang.name} ${lang.other ? ' (Other: ' + lang.other + ')' : ''} - Proficiency: ${lang.proficiency}`).join(', ') },
+      { key: 'Collaboration Rates (Post)', value: formData.collaborationRates.post },
+      { key: 'Collaboration Rates (Story)', value: formData.collaborationRates.story },
+      { key: 'Collaboration Rates (Reel)', value: formData.collaborationRates.reel },
+      { key: 'Email', value: formData.email },
+      { key: 'Industry', value: formData.industry.map(ind => `${ind.type} ${ind.other ? ' (Other: ' + ind.other + ')' : ''}${ind.subCategories.length ? ' - Subcategories: ' + ind.subCategories.map(sub => `${sub.type}${sub.other ? ' (Other: ' + sub.other + ')' : ''}`).join(', ') : ''}`).join(', ') }
+  ];
+  
+  
+
+  const formattedElements = elements
+        .filter(element => element.value)
+        .map(element => `${element.key}: ${element.value}`)
+        .join(', ');
+  return `${formattedElements}`;
+};
+const generateShortDescription = (formData, users) => {
+  const elements = createDescriptionElements(formData, users).split(', ');
+  
+ 
+  const shortElements = elements.slice(0, 2);
+
+  return `You created a new Content Writer with ${shortElements.join(' and ')} successfully.`;
+};
+
+  const pastactivitiesAdd=async(users)=>{
+    const description = createDescriptionElements(formData, users);
+    const shortDescription = generateShortDescription(formData, users);
+  
+   try {
+    const activityData={
+      userId:userData?._id,
+      action:"Created a new Content Writer",
+      section:"Content Writer",
+      role:userData?.role,
+      timestamp:new Date(),
+      details:{
+        type:"create",
+        filter:{formData,total:users.length},
+        description,
+        shortDescription
+        
+
+      }
+    }
+    
+    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   } catch (error) {
+    console.log(error);
+    
+   }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submitting form data:", formData); 
@@ -242,6 +305,7 @@ const NewContentWriter = () => {
           },
         }
       );
+      pastactivitiesAdd(formData);
       toast.success("Content writer added successfully");
     } catch (error) {
       console.log("Error:", error.response ? error.response.data : error.message);
@@ -252,11 +316,12 @@ const NewContentWriter = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-blue-600">Add New Content Writer</h1>
+      <h1 className="text-2xl p-2 "//font-bold mb-4 text-blue-600
+      >Add New Content Writer</h1>
       <form onSubmit={handleSubmit} className="mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <label className="block">
-            <span className="text-gray-700">Name</span>
+          <div className="block">
+            <label className="text-gray-700">Name</label>
             <input
               type="text"
               name="name"
@@ -265,9 +330,9 @@ const NewContentWriter = () => {
               className="p-2 border border-gray-300 rounded w-full"
               required
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Email</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Email</label>
             <input
               type="email"
               name="email"
@@ -275,18 +340,18 @@ const NewContentWriter = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Bio</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Bio</label>
             <textarea
               name="bio"
               value={formData.bio}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Location</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Location</label>
             <input
               type="text"
               name="location"
@@ -295,9 +360,9 @@ const NewContentWriter = () => {
               className="p-2 border border-gray-300 rounded w-full"
               
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Experience</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Experience</label>
             <input
               type="number"
               name="experience"
@@ -305,9 +370,9 @@ const NewContentWriter = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
-          <div className="block">
-          <h2 className="text-xl font-bold text-blue-600">Industry</h2>
+          </div>
+          <div className="block col-span-2">
+          <label className="text-xl font-bold text-blue-600">Industry</label>
           {formData.industry.map((item, outerIndex) => (
             <div key={outerIndex} className="border p-4 mb-4 rounded">
               <div className="flex items-center space-x-2 mb-2">
@@ -356,7 +421,7 @@ const NewContentWriter = () => {
                         onChange={(e) => handleChange(e, outerIndex, innerIndex)}
                         className="mr-2"
                     />
-                    <span className="text-gray-700">{subCategory}</span>
+                    <label className="text-gray-700">{subCategory}</label>
                 </div>
             );
         })}
@@ -460,8 +525,8 @@ const NewContentWriter = () => {
             </button>
           </label>*/}
 
-          <label className="block">
-            <span className="text-gray-700">Expertise</span>
+          <div className="block">
+            <label className="text-gray-700">Expertise</label>
             {formData.expertise.map((exp, idx) => (
   <div key={idx} className="flex items-center mb-2">
     <select
@@ -502,9 +567,9 @@ const NewContentWriter = () => {
 >
   Add Expertise
 </button>
-          </label>
-          <label className="block col-span-2">
-            <span className="text-gray-700">Languages</span>
+          </div>
+          <div className="block col-span-2">
+            <label className="text-gray-700">Languages</label>
             {formData.languages.map((lang, idx) => (
               <div key={idx} className="flex items-center mb-2">
                 <select
@@ -560,9 +625,9 @@ const NewContentWriter = () => {
             >
               Add Language
             </button>
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Collaboration Rates (Post)</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Collaboration Rates (Post)</label>
             <input
               type="number"
               name="collaborationRates.post"
@@ -570,9 +635,9 @@ const NewContentWriter = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Collaboration Rates (Story)</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Collaboration Rates (Story)</label>
             <input
               type="number"
               name="collaborationRates.story"
@@ -580,9 +645,9 @@ const NewContentWriter = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Collaboration Rates (Reel)</span>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Collaboration Rates (Reel)</label>
             <input
               type="number"
               name="collaborationRates.reel"
@@ -590,7 +655,7 @@ const NewContentWriter = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
-          </label>
+          </div>
         </div>
         
         <button type="submit" className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">

@@ -24,7 +24,7 @@ const InstagramInfluencerOverview = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/getAllInstagraminfluencer');
-       // const response = await axios.get('http://localhost:5000/instagraminfluencers/getAllInstagraminfluencer');
+        //const response = await axios.get('http://localhost:5000/instagraminfluencers/getAllInstagraminfluencer');
         const fetchedData = response.data.instagramInfluencer;
 
         // Process data to compute counts

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { FaUser, FaUsers, FaHeart, FaLocationArrow, FaLanguage, FaCheckCircle, FaDollarSign, FaTag, FaComment, FaFilePdf } from 'react-icons/fa';
@@ -6,10 +6,12 @@ import Fade from 'react-reveal/Fade';
 import Zoom from 'react-reveal/Zoom';
 import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeProvider';
+import { UserContext } from '../../context/userContext';
 
 
 const InfluencerProfile = () => {
   const { isDarkTheme } = useTheme();
+  const { userData } = useContext(UserContext);
   const { id } = useParams();
   const [influencer, setInfluencer] = useState(null);
   const [form, setForm] = useState({
@@ -28,8 +30,9 @@ const InfluencerProfile = () => {
     const fetchInfluencer = async () => {
       try {
         const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/getInstagraminfluencerById/${id}`);
-        //const response = await axios.get(`http://localhost:5000/instagraminfluencers/getInstagraminfluencerById/${id}`);
+       // const response = await axios.get(`http://localhost:5000/instagraminfluencers/getInstagraminfluencerById/${id}`);
         setInfluencer(response.data);
+        pastactivitiesAdd(response.data.instagramInfluencer);
       } catch (error) {
         console.error('Error fetching influencer data:', error);
       }
@@ -43,6 +46,80 @@ const InfluencerProfile = () => {
     setForm({ ...form, [name]: value });
   };
 
+
+  const createDescriptionElements = (formData, users) => {
+    
+    const elements = [
+      { key: 'Username', value: users?.username },
+      { key: 'Full Name', value: users?.fullName },
+      { key: 'Profile Picture', value: users?.profilePicture },
+      { key: 'Bio', value: users?.bio },
+      { key: 'Followers Count', value: users?.followersCount },
+      { key: 'Following Count', value: users?.followingCount },
+      { key: 'Posts Count', value: users?.postsCount },
+      { key: 'Engagement Rate', value: `${users?.engagementRate}%` },
+      { key: 'Average Likes', value: users?.averageLikes },
+      { key: 'Average Comments', value: users?.averageComments },
+      { key: 'Category', value: users?.category },
+      { key: 'Location', value: users?.location },
+      { key: 'Language', value: users?.language },
+      { key: 'Verified Status', value: users?.verifiedStatus ? 'Verified' : 'Not Verified' },
+      { key: 'Collaboration Rates (Post)', value: users?.collaborationRates?.post },
+      { key: 'Collaboration Rates (Story)', value: users?.collaborationRates?.story },
+      { key: 'Collaboration Rates (Reel)', value: users?.collaborationRates?.reel },
+      { key: 'Past Collaborations', value: users?.pastCollaborations?.join(', ') },
+      { key: 'Media Kit', value: users?.mediaKit },
+      { key: 'Total results', value: users?.length }
+  ];
+  
+
+  const formattedElements = elements
+        .filter(element => element.value)
+        .map(element => `${element.key}: ${element.value}`)
+        .join(', ');
+  return `${formattedElements}`;
+};
+const generateShortDescription = (formData, users) => {
+ 
+  const elements = createDescriptionElements(formData, users).split(', ');
+  
+ 
+  const shortElements = elements.slice(0, 2);
+
+  return `You viewed a Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
+};
+
+  const pastactivitiesAdd=async(users)=>{
+    const formData={}
+    
+    const description = createDescriptionElements(formData, users);
+    const shortDescription = generateShortDescription(formData, users);
+  
+   try {
+    const activityData={
+      userId:userData?._id,
+      action:"Viewed a Instagram Influencer",
+      section:"Instagram Influencer",
+      role:userData?.role,
+      timestamp:new Date(),
+      details:{
+        type:"view",
+        filter:{formData,total:users.length},
+        description,
+        shortDescription
+        
+
+      }
+    }
+   
+    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+   // axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   } catch (error) {
+    console.log(error);
+    
+   }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const applicationData = {
@@ -52,7 +129,7 @@ const InfluencerProfile = () => {
 
     try {
       await axios.post('https://guest-posting-marketplace-web-backend.onrender.com/userbrand/addapplications', applicationData);
-     // await axios.post('http://localhost:5000/userbrand/addapplications', applicationData);
+    //  await axios.post('http://localhost:5000/userbrand/addapplications', applicationData);
       setFormSubmitted(true);
       setForm({
         brandName: '',
@@ -64,6 +141,7 @@ const InfluencerProfile = () => {
         budget: '',
         notes: ''
       });
+      
       toast.success("Sent Application successfully")
     } catch (error) {
         toast.error(`Error submitting application:', ${error}`)

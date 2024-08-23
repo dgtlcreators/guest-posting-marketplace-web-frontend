@@ -42,32 +42,102 @@ const Form = () => {
     });
   };
 
+  
+
   const handleReset = () => {
     setFormData(initialFormData)
   }
+  const pastactivitiesAdd=async(users)=>{
+    const description = [
+      formData.mozDA ? `Moz DA from ${formData.mozDA}` : '',
+    formData.DAto ? `to ${formData.DAto}` : '',
+    formData.ahrefsDR ? `Ahrefs DR from ${formData.ahrefsDR}` : '',
+    formData.DRto ? `to ${formData.DRto}` : '',
+    formData.price ? `Price from ${formData.price}` : '',
+    formData.priceTo ? `to ${formData.priceTo}` : '',
+    formData.categories ? `Categories: ${formData.categories}` : '',
+    formData.websiteLanguage ? `Website Language: ${formData.websiteLanguage}` : '',
+    formData.linkType ? `Link Type: ${formData.linkType}` : '',
+    formData.monthlyTraffic ? `Monthly Traffic: ${formData.monthlyTraffic}` : '',
+    formData.mozSpamScore ? `Moz Spam Score: ${formData.mozSpamScore}` : '',
+    formData.publisherURL ? `Publisher URL: ${formData.publisherURL}` : '',
+      
+      `Total results: ${users.length}`
+    ]
+    .filter(Boolean)
+    .join(', ');
+    const shortDescription = `You searched ${formData.mozDA ? 'Moz DA' : 'Ahrefs DR'} from ${formData.mozDA || formData.ahrefsDR} to ${formData.DAto || formData.DRto} and got ${users.length} results`;
+
+   try {
+    const activityData={
+      userId:userData?._id,
+      action:"Performed a search for guest posts",//"Searched for guest posts",
+      section:"Guest Post",
+      role:userData?.role,
+      timestamp:new Date(),
+      details:{
+        type:"filter",
+        filter:{formData,total:users.length},
+        description,
+        shortDescription
+        
+
+      }
+    }
+    
+    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   } catch (error) {
+    console.log(error);
+    
+   }
+  }
 
   axios.defaults.withCredentials = true;
-  const handleSubmit = (e) => {
+
+  
+    /*const handleSubmit = async(e) => {
     e.preventDefault();
-    
-    axios
-    
-     // .post("http://localhost:5000/form/getFilteredData", formData)
-    .post("https://guest-posting-marketplace-web-backend.onrender.com/form/getFilteredData", formData)
+   const response =  await axios
+      .post("http://localhost:5000/form/getFilteredData", formData)
+    //.post("https://guest-posting-marketplace-web-backend.onrender.com/form/getFilteredData", formData)
       .then((response) => {
         console.log(response.data);
         setUsers(response.data);
+         pastactivitiesAdd(response.data)
         toast.success("Data Fetch Successfully");
       })
       .catch((error) => {
         console.log(error);
         toast.error(error.message);
       });
+  };*/
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await axios.post(
+       // "http://localhost:5000/form/getFilteredData"
+        "https://guest-posting-marketplace-web-backend.onrender.com/form/getFilteredData"
+        , formData);
+      console.log("Fetched data:", response.data);
+      setUsers(response.data);
+  
+      // Call pastactivitiesAdd without await since handleSubmit is already async
+      pastactivitiesAdd(response.data);
+  
+      toast.success("Data Fetch Successfully");
+    } catch (error) {
+      console.log("Error fetching data:", error);
+      toast.error(error.message);
+    }
   };
+  
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl text-white bg-blue-700 p-2 my-2">FAQ</h1>
+      <h1 className="text-2xl  p-2 my-2"//text-white bg-blue-700
+      >FAQ</h1>
 
       <form
         onSubmit={handleSubmit}

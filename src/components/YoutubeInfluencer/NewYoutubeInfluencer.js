@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useTheme } from '../../context/ThemeProvider';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import NewYoutubeInfluencerTable from './NewYoutubeInfluencerTable';
+import { UserContext } from '../../context/userContext';
 
 const NewYoutubeInfluencer = () => {
   const { isDarkTheme } = useTheme();
+  const { userData } = useContext(UserContext);
   const [formData, setFormData] = useState({
     username: "",
     fullname: "",
@@ -106,6 +108,75 @@ const NewYoutubeInfluencer = () => {
     setLocationQuery("")
   }
 
+  const createDescriptionElements = (formData, users) => {
+    const elements = [
+      { key: 'Username', value: formData.username },
+      { key: 'Full Name', value: formData.fullName },
+      { key: 'Profile Picture', value: formData.profilePicture },
+      { key: 'Bio', value: formData.bio },
+      { key: 'Followers Count', value: formData.followersCount },
+      { key: 'Following Count', value: formData.followingCount },
+      { key: 'Posts Count', value: formData.postsCount },
+      { key: 'Engagement Rate', value: `${formData.engagementRate}%` },
+      { key: 'Average Likes', value: formData.averageLikes },
+      { key: 'Average Comments', value: formData.averageComments },
+      { key: 'Category', value: formData.category },
+      { key: 'Location', value: formData.location },
+      { key: 'Language', value: formData.language },
+      { key: 'Verified Status', value: formData.verifiedStatus ? 'Verified' : 'Not Verified' },
+      { key: 'Collaboration Rates (Post)', value: formData.collaborationRates.post },
+      { key: 'Collaboration Rates (Story)', value: formData.collaborationRates.story },
+      { key: 'Collaboration Rates (Reel)', value: formData.collaborationRates.reel },
+      { key: 'Past Collaborations', value: formData.pastCollaborations.join(', ') },
+      { key: 'Media Kit', value: formData.mediaKit },
+      { key: 'Total results', value: users?.length }
+  ];
+  
+
+  const formattedElements = elements
+        .filter(element => element.value)
+        .map(element => `${element.key}: ${element.value}`)
+        .join(', ');
+  return `You created ${formattedElements}`;
+};
+const generateShortDescription = (formData, users) => {
+  const elements = createDescriptionElements(formData, users).split(', ');
+  
+ 
+  const shortElements = elements.slice(0, 2);
+
+  return `You created a new YouTube Influencer with ${shortElements.join(' and ')} successfully.`;
+};
+
+  const pastactivitiesAdd=async(users)=>{
+    const description = createDescriptionElements(formData, users);
+    const shortDescription = generateShortDescription(formData, users);
+  
+   try {
+    const activityData={
+      userId:userData?._id,
+      action:"Created a new YouTube Influencer",
+      section:"YouTube Influencer",
+      role:userData?.role,
+      timestamp:new Date(),
+      details:{
+        type:"create",
+        filter:{formData,total:users.length},
+        description,
+        shortDescription
+        
+
+      }
+    }
+    
+    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+   // axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   } catch (error) {
+    console.log(error);
+    
+   }
+  }
+
   const handleSubmit = async(e) => { 
     e.preventDefault()
     const formDataToSend=new FormData()
@@ -169,7 +240,9 @@ const NewYoutubeInfluencer = () => {
       );
       setAddYotubeInfluencer((prev) => [...prev, response.data.data]);
       console.log(formDataToSend)
+      pastactivitiesAdd(formDataToSend);
       toast.success("Influencer added Successfully");
+
     } catch (error) {
       console.log("Error adding influencer", error);
       toast.error(`Error adding influencer ${error}`);
@@ -216,23 +289,24 @@ setFormData(prev=>({
 
   return (
     <div className='container mx-auto p-4'>
-      <h1 className='text-xl font-bold text-white bg-blue-700  p-3'>Youtube Influencers</h1>
+      <h1 className='text-xl font-bold   p-3'//text-white bg-blue-700
+      >Youtube Influencers</h1>
       <form onSubmit={handleSubmit} className='mb-4 p-4 bg-gray-100 rounded-lg shadow-md'>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-          <label className='block'>
-            <span className='text-gray-700'>Username</span>
+          <div className='block'>
+            <label className='text-gray-700'>Username</label>
             <input type='text' name='username' placeholder='Username'
               value={formData.username} onChange={handleChange}
               className='p-2 border border-gray-300 rounded w-full' required />
-          </label>
-          <label className='block'>
-            <span className='text-gray-700'>Full Name</span>
+          </div>
+          <div className='block'>
+            <label className='text-gray-700'>Full Name</label>
             <input type='text' name='fullname' placeholder='Full Name'
               value={formData.fullname} onChange={handleChange}
               className='p-2 border border-gray-300 rounded w-full' required />
-          </label>
-          <label className='block'>
-            <span className='text-gray-700'>profile Picture Url</span>
+          </div>
+          <div className='block'>
+            <label className='text-gray-700'>profile Picture Url</label>
             <div className='flex items-center space-x-2'>
               <label className='flex items-center'>
                 <input type='radio' name='profileUrlOption' value="manual" checked={profileUrlOption==="manual"}
@@ -250,29 +324,29 @@ setFormData(prev=>({
               <input type='file' name='profilePicture' placeholder='Profile Picture URL' value={formData.profilePicture} onChange={handleFileChange}
                 className='p-2 border border-gray-300 rounded w-full' />
             )}
-          </label>
-          <label className='block'>
-            <span className='text-gray-700'>Bio</span>
+          </div>
+          <div className='block'>
+            <label className='text-gray-700'>Bio</label>
             <textarea name='bio' placeholder='Bio' value={formData.bio} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' />
-          </label>
-          <label className='block'>
-            <span className='text-gray-700'>Followers Count</span>
+          </div>
+          <div className='block'>
+            <label className='text-gray-700'>Followers Count</label>
             <input type='number' name='followersCount' placeholder='Followers Count' value={formData.followersCount} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' />
-          </label>
-          <label className='block'>
-            <span className='text-gray-700'>videos Count</span>
+          </div>
+          <div className='block'>
+            <label className='text-gray-700'>videos Count</label>
             <input type='number' name='videosCount' placeholder='Videos Count' value={formData.videosCount} onChange={handleChange} className='p-2 border border-gray-700 rounded w-full'/>
-          </label>
-          <label className='block'>
-            <span className='text-gray-700'>Engagement Rate</span>
+          </div>
+          <div className='block'>
+            <label className='text-gray-700'>Engagement Rate</label>
             <input type='number' name='engagementRate' placeholder='Engagement Rate' value={formData.engagementRate} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full'/>
-          </label>
-          <label className='block'>
-            <span className='text-gray-700'>Average Views</span>
+          </div>
+          <div className='block'>
+            <label className='text-gray-700'>Average Views</label>
             <input type='number' name='averageViews' placeholder='Average Views' value={formData.averageViews} onChange={handleChange} className='p-2 border border-gray-700 rounded w-full'/>
-          </label>
-          <label className='block'>
-            <span className='text-gray-700'>Category</span>
+          </div>
+          <div className='block'>
+            <label className='text-gray-700'>Category</label>
             <select name='category' value={formData.category} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full'>
                <option value="Technology">Technology</option>
                <option value="Beauty and Fashion">Beauty and Fashion</option>
@@ -297,9 +371,9 @@ setFormData(prev=>({
                <option value="Mental Health and Self-Care">Mental Health and Self-Care</option>
                <option value="History and Culture">History and Culture</option>
             </select>
-          </label>
-          <label className='block'>
-            <span className='text-gray-700'>Location</span>
+          </div>
+          <div className='block'>
+            <label className='text-gray-700'>Location</label>
             <input type='text' name='location' placeholder='Search Location'  value={locationQuery}
               onChange={handleLocationChange} 
             className='p-2 border border-gray-300 rounded w-full'/>
@@ -316,9 +390,9 @@ setFormData(prev=>({
                 ))}
               </ul>
             )}
-          </label>
-          <label className='block'>
-            <span className='text-gray-700'>Language</span>
+          </div>
+          <div className='block'>
+            <label className='text-gray-700'>Language</label>
             <select name='language' value={formData.language} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full'>
             <option value="English">English</option>
               <option value="Hindi">Hindi</option>
@@ -333,47 +407,47 @@ setFormData(prev=>({
               <option value="Kannada">Kannada</option>
               <option value="Other">Other</option>
             </select>
-          </label>
-          <label className='block'>
-            <span className='text-gray-700'>Collaboration Rates</span>
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-              <label className='block'>
-                <span className='text-gray-700'>Sponsored Videos</span>
-                <input type='number' name='collaborationRates.sponsoredVideos' placeholder='Sponsored Videos' value={formData.collaborationRates.sponsoredVideos} onChange={handleChange}  className='p-2 border border-gray-300 rounded w-full'/>
-              </label>
-              <label className='block'>
-                <span className='text-gray-700'>Product Reviews</span>
-                <input type='number' name='collaborationRates.productReviews' placeholder='Product Reviews' value={formData.collaborationRates.productReviews} onChange={handleChange}  className='p-2 border border-gray-300 rounded w-full'/>
-              </label>
-              <label className='block'>
-                <span className='text-gray-700'>Shoutouts</span>
-                <input type='number' name='collaborationRates.shoutouts' placeholder='Shoutouts' value={formData.collaborationRates.shoutouts} onChange={handleChange}  className='p-2 border border-gray-300 rounded w-full'/>
-              </label>
-            </div>
-          </label>
-          <label className='block'>
-            <span className='text-gray-700'>Past Collaborations</span>
-            <textarea name='pastCollaborations' placeholder='Past Collaborations' value={formData.pastCollaborations} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full'/>
-          </label>
-          <label className='block grid-col-1'>
-          <span className='text-gray-700'>Audience Demographics</span>
-          <div className='grid grid-col-1 md:grid-cols-1 gap-4'>
-            <label className='block'>
-              <span className='text-gray-700'>Age</span>
-              <textarea name='audienceDemographics.age' placeholder='Age' value={formData.audienceDemographics.age} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' />
-            </label>
-            <label className='block'>
-              <span className='text-gray-700'>Gender</span>
-              <textarea name='audienceDemographics.gender' placeholder='Gender' value={formData.audienceDemographics.gender} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' />
-            </label>
-            <label className='block'>
-              <span className='text-gray-700'>Geographic Distribution</span>
-              <textarea name='audienceDemographics.geographicDistribution' placeholder='Geographic Distribution' value={formData.audienceDemographics.geographicDistribution} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' />
-            </label>
           </div>
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Media Kit</span>
+          <div className='block'>
+            <label className='text-gray-700'>Collaboration Rates</label>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+              <div className='block'>
+                <label className='text-gray-700'>Sponsored Videos</label>
+                <input type='number' name='collaborationRates.sponsoredVideos' placeholder='Sponsored Videos' value={formData.collaborationRates.sponsoredVideos} onChange={handleChange}  className='p-2 border border-gray-300 rounded w-full'/>
+              </div>
+              <div className='block'>
+                <label className='text-gray-700'>Product Reviews</label>
+                <input type='number' name='collaborationRates.productReviews' placeholder='Product Reviews' value={formData.collaborationRates.productReviews} onChange={handleChange}  className='p-2 border border-gray-300 rounded w-full'/>
+              </div>
+              <div className='block'>
+                <label className='text-gray-700'>Shoutouts</label>
+                <input type='number' name='collaborationRates.shoutouts' placeholder='Shoutouts' value={formData.collaborationRates.shoutouts} onChange={handleChange}  className='p-2 border border-gray-300 rounded w-full'/>
+              </div>
+            </div>
+          </div>
+          <div className='block'>
+            <label className='text-gray-700'>Past Collaborations</label>
+            <textarea name='pastCollaborations' placeholder='Past Collaborations' value={formData.pastCollaborations} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full'/>
+          </div>
+          <div className='block grid-col-1'>
+          <label className='text-gray-700'>Audience Demographics</label>
+          <div className='grid grid-col-1 md:grid-cols-1 gap-4'>
+            <div className='block'>
+              <label className='text-gray-700'>Age</label>
+              <textarea name='audienceDemographics.age' placeholder='Age' value={formData.audienceDemographics.age} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' />
+            </div>
+            <div className='block'>
+              <label className='text-gray-700'>Gender</label>
+              <textarea name='audienceDemographics.gender' placeholder='Gender' value={formData.audienceDemographics.gender} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' />
+            </div>
+            <div className='block'>
+              <label className='text-gray-700'>Geographic Distribution</label>
+              <textarea name='audienceDemographics.geographicDistribution' placeholder='Geographic Distribution' value={formData.audienceDemographics.geographicDistribution} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' />
+            </div>
+          </div>
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Media Kit</label>
             <div className="flex items-center space-x-2">
               <label className="flex items-center">
                 <input
@@ -416,7 +490,7 @@ setFormData(prev=>({
               className="p-2 border border-gray-300 rounded w-full"
             />
             )}
-          </label>
+          </div>
         </div>
         <div className='mt-4 flex justify-center md:justify-end space-x-4 mt-8'>
           <button onClick={handleReset} type='button' className='p-2 bg-gray-600 text-white rounded hover:bg-gray-900 transition-all duration-300'>

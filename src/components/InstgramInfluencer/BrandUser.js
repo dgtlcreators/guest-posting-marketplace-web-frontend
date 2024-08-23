@@ -111,7 +111,7 @@ const BrandUser = () => {
   const fetchInfluencers = async () => {
     try {
       
-      //const response = await axios.get("http://localhost:5000/instagraminfluencers/getAllInstagraminfluencer");
+     // const response = await axios.get("http://localhost:5000/instagraminfluencers/getAllInstagraminfluencer");
       const response = await axios.get("https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/getAllInstagraminfluencer");
    // console.log(response.data.instagramInfluencer)
       setInfluencers(response.data.instagramInfluencer);
@@ -196,9 +196,74 @@ const BrandUser = () => {
   };
 
   axios.defaults.withCredentials = true;
+
+  const pastactivitiesAdd=async(users)=>{
+    const description = [
+      formData.username ? `Username: ${formData.username}` : '',
+      formData.followersCountFrom || formData.followersCountTo ? `Followers Count from ${formData.followersCountFrom || 'N/A'} to ${formData.followersCountTo || 'N/A'}` : '',
+      formData.engagementRateFrom || formData.engagementRateTo ? `Engagement Rate from ${formData.engagementRateFrom || 'N/A'} to ${formData.engagementRateTo || 'N/A'}` : '',
+      formData.category ? `Category: ${formData.category}` : '',
+      formData.location ? `Location: ${formData.location}` : '',
+      formData.language ? `Language: ${formData.language}` : '',
+      formData.verifiedStatus ? `Verified Status: ${formData.verifiedStatus}` : '',
+      formData.collaborationRates.postFrom || formData.collaborationRates.postTo ? `Post Collaboration Rates from ${formData.collaborationRates.postFrom || 'N/A'} to ${formData.collaborationRates.postTo || 'N/A'}` : '',
+      formData.collaborationRates.storyFrom || formData.collaborationRates.storyTo ? `Story Collaboration Rates from ${formData.collaborationRates.storyFrom || 'N/A'} to ${formData.collaborationRates.storyTo || 'N/A'}` : '',
+      formData.collaborationRates.reelFrom || formData.collaborationRates.reelTo ? `Reel Collaboration Rates from ${formData.collaborationRates.reelFrom || 'N/A'} to ${formData.collaborationRates.reelTo || 'N/A'}` : '',
+      `Total results: ${users.length}`
+    ]
+    .filter(Boolean)
+    .join(', ');
+    const shortDescription=`You searched ${formData.followersCountFrom ? 'Followers Count' : 'Engagement Rate'} from ${formData.followersCountFrom || formData.engagementRateFrom} to ${formData.followersCountTo || formData.engagementRateTo} and got ${users.length} results`;
+
+   try {
+    const activityData={
+      userId:userData?._id,
+      action:"Performed a search for Instagram Influencers",//"Searched for Instagram Influencers",
+      section:"Instagram Influencer",
+      role:userData?.role,
+      timestamp:new Date(),
+      details:{
+        type:"filter",
+        filter:{formData,total:users.length},
+        description,
+        shortDescription
+        
+
+      }
+    }
+    
+    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+   // axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   } catch (error) {
+    console.log(error);
+    
+   }
+  }
+   /*const pastactivitiesAdd=async()=>{
+    try {
+     const activityData={
+       userId:userData?._id,
+       userName:userData?.name,
+      // userEmail:
+       action:"Searched for Instagram Influencers",
+       section:"Guest Post",
+       role:userData?.role,
+       timestamp:new Date(),
+       details:{
+         filter:{formData,total:influencers.length},
+ 
+       }
+     }
+     axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+    } catch (error) {
+     console.log(error);
+     
+    }
+   }
   
-  const handleSubmit = (e) => {
+ const handleSubmit = (e) => {
     e.preventDefault();
+    pastactivitiesAdd()
     //console.log(formData)
     const formDataToSend = {
       ...formData,
@@ -206,8 +271,8 @@ const BrandUser = () => {
     };
     
     axios
-      .post("https://guest-posting-marketplace-web-backend.onrender.com/userbrand/filter", formData)
-     // .post("http://localhost:5000/userbrand/filter", formDataToSend)
+      //.post("https://guest-posting-marketplace-web-backend.onrender.com/userbrand/filter", formData)
+      .post("http://localhost:5000/userbrand/filter", formDataToSend)
       .then((response) => {
         console.log(response.data);
         setInfluencers(response.data);
@@ -217,14 +282,38 @@ const BrandUser = () => {
         console.log(error);
         toast.error(error.message);
       });
-  };
+  };*/
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    try {
+
+      const formDataToSend = {
+        ...formData,
+        verifiedStatus:formData.verifiedStatus===""?"": formData.verifiedStatus === 'verified',
+      };
+      
+      const response = await axios
+        .post("https://guest-posting-marketplace-web-backend.onrender.com/userbrand/filter", formData)
+       // .post("http://localhost:5000/userbrand/filter", formDataToSend)
+       
+          console.log(response.data);
+          setInfluencers(response.data);
+          pastactivitiesAdd(response.data);
+          toast.success("Data Fetch Successfully")
+      
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  }
 
   return (
     <>
    
     <div className="p-4 max-w-6xl mx-auto overflow-x-auto">
      { /*<h1 className="text-2xl text-white bg-blue-700 p-2 my-2">Influencer Filter</h1>*/}
-     <h1 className="text-2xl text-white bg-blue-700 p-2 my-2">FAQ</h1>
+     <h1 className="text-2xl   p-2 my-2">FAQ</h1>
       <form onSubmit={handleSubmit} className="bg-gray-200 shadow-xl p-4 relative">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {/* Username */}
@@ -674,7 +763,8 @@ const BrandUser = () => {
 
       {influencers.length > 0 && (
         <div className="mt-4">
-          <h2 className="text-xl text-white bg-blue-700 p-2 my-2">
+          <h2 className="text-xl   p-2 my-2"// text-white bg-blue-700 
+        >
           Influencer List
           </h2>
           <BrandUserTable influencers={influencers} setInfluencers={setInfluencers} />

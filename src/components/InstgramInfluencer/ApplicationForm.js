@@ -30,7 +30,7 @@ const ApplicationForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post('https://guest-posting-marketplace-web-backend.onrender.com/userbrand/addapplications', formData);
-     // const response = await axios.post('http://localhost:5000/userbrand/addapplications', formData);
+      //const response = await axios.post('http://localhost:5000/userbrand/addapplications', formData);
       alert(response.data.message);
       setFormData({
         brandName: '',
