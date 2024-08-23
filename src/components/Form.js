@@ -27,6 +27,7 @@ const Form = () => {
     monthlyTraffic: "",
     mozSpamScore: "",
     publisherURL: "",
+    publisherName: "",
     userId:userId
   };
 
@@ -61,6 +62,8 @@ const Form = () => {
     formData.monthlyTraffic ? `Monthly Traffic: ${formData.monthlyTraffic}` : '',
     formData.mozSpamScore ? `Moz Spam Score: ${formData.mozSpamScore}` : '',
     formData.publisherURL ? `Publisher URL: ${formData.publisherURL}` : '',
+    formData.publisherName ? `Publisher Name: ${formData.publisherName}` : '',
+     
       
       `Total results: ${users.length}`
     ]
@@ -273,6 +276,7 @@ const Form = () => {
               <option value="No Follow">No Follow</option>
             </select>
           </div>
+          
           <div className="flex flex-col">
             <label htmlFor="publisherURL" className="font-medium">
               Publisher URL
@@ -285,6 +289,22 @@ const Form = () => {
               pattern="https?://.*"
               placeholder="https://www.google.com"
               value={formData.publisherURL}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="publisherName" className="font-medium">
+            Publisher Name
+            </label>
+            <input
+              type="url"
+              id="publisherName"
+              name="publisherName"
+             // title="Please ensure to provide proper format of the name"
+              //pattern="https?://.*"
+              placeholder="Publisher Name"
+              value={formData.publisherName}
               onChange={handleChange}
               className="focus:outline focus:outline-blue-400 p-2"
             />
