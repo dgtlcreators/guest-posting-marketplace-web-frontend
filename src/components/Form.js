@@ -298,7 +298,7 @@ const Form = () => {
             Publisher Name
             </label>
             <input
-              type="url"
+              type="text"
               id="publisherName"
               name="publisherName"
              // title="Please ensure to provide proper format of the name"

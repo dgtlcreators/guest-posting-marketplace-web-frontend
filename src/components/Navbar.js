@@ -41,14 +41,18 @@ const Navbar = () => {
   const openProfile = Boolean(anchorElProfile);
 
   return (
-    <AppBar position="static" className='nav'>
-      <Toolbar>
-        <Typography id="heading" variant="h6" noWrap  style={{ color: 'inherit' }}>
-          <div className="flex items-center space-x-2 nav bg-transparent"  style={{ backgroundColor: 'transparent' }}>
+    <AppBar position="static"  className={`nav ${isDarkTheme ? 'dark' : 'light'}`}>
+      <Toolbar >
+        
+        <Typography  variant="h6" noWrap style={{
+    backgroundColor: isDarkTheme ? 'transparent' : 'transparent', 
+    color: isDarkTheme ? '#ffffff' : '#000000',
+  }} >
+          <div className="flex items-center space-x-2 nav" >
             <img src="https://res.cloudinary.com/domay7jbi/image/upload/v1724391266/tzu7lr5lgedv32ol48lu.png"
             //src="./creatorexchangepng.png" //src="https://api.asm.skype.com/v1/objects/0-jhb-d4-c3e3520ecdd3d82daeda53ea29f90fcf/views/imgpsh_fullsize_anim" 
             alt="CreatorsXchange Logo" className="h-10" />
-            <span className="text-xl font-bold  bg-transparent"  style={{ backgroundColor: 'transparent' }}>CreatorsXchange</span>
+            <span className="text-xl font-bold "  >CreatorsXchange</span>
           </div>
         </Typography>
         <div style={{ flexGrow: 1 }} />

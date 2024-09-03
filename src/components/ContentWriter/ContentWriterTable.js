@@ -114,17 +114,17 @@ const ContentWriterTable = ({contentWriters,setContentWriters}) => {
         <table className="min-w-full bg-white text-sm">
           <thead>
             <tr className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base">
-              <th className="px-4 py-2">S.No</th>
-              <th className="px-4 py-2" onClick={() => handleSort("name")}>Name {renderSortIcon("name")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("experience")}>Experience {renderSortIcon("experience")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("expertise")}>Expertise {renderSortIcon("expertise")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("languages")}>Languages {renderSortIcon("languages")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("industry")}>Industries {renderSortIcon("industry")}</th>
-               <th className="px-4 py-2" onClick={() => handleSort("subCategories")}>Subcategories {renderSortIcon("subCategories")}</th>
-              <th className="px-4 py-2" onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
-              <th className="py-3 px-4 uppercase  ">Apply</th>
+              <th className="border px-4 py-2">S.No</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("name")}>Name {renderSortIcon("name")}</th>
+              {/*<th className="border px-4 py-2" onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>*/}
+              <th className="border px-4 py-2" onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("experience")}>Experience {renderSortIcon("experience")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("expertise")}>Expertise {renderSortIcon("expertise")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("languages")}>Languages {renderSortIcon("languages")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("industry")}>Industries {renderSortIcon("industry")}</th>
+               <th className="border px-4 py-2" onClick={() => handleSort("subCategories")}>Subcategories {renderSortIcon("subCategories")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
+              <th className="border py-3 px-4 uppercase  ">Apply</th>
               {/*<th className="py-3 px-4 uppercase font-semibold text-sm uppercase">Actions</th>*/}
             </tr>
           </thead>
@@ -133,7 +133,7 @@ const ContentWriterTable = ({contentWriters,setContentWriters}) => {
               <tr key={writer._id} className="hover:bg-gray-100 transition-colors">
                 <td className="border px-4 py-2">{index + 1}</td>
                 <td className="border px-4 py-2">{writer.name}</td>
-                <td className="border px-4 py-2">{writer.bio}</td>
+               {/* <td className="border px-4 py-2">{writer.bio}</td>*/}
                 <td className="border px-4 py-2">{writer.location}</td>
                 <td className="border px-4 py-2">{writer.experience}</td>
                 <td className="border px-4 py-2">

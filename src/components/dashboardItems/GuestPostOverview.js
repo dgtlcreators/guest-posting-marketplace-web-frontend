@@ -191,8 +191,8 @@ const GuestPostOverview = () => {
   }
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg mb-2">
-      <h2 className="text-xl font-bold mb-4">Guest Post Overview</h2>
+    <div className="p-4  shadow-md rounded-lg mb-2">
+      <h1 className="text-xl font-bold mb-4 p-2">Guest Post Overview</h1>
       
       {/*<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div className="p-4 rounded-lg flex flex-col items-center">
@@ -213,16 +213,16 @@ const GuestPostOverview = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div className="p-4 rounded-lg flex flex-col items-center  shadow-md rounded-lg" ref={chartSpark3Ref}>
-      <h3 className="text-lg font-semibold">Total Publishers</h3>
+      <h3 className="text-lg font-semibold bg-transparent">Total Publishers</h3>
       <p className="text-2xl">{publisherCount}</p>
       </div>
         <div className="p-4 rounded-lg flex flex-col items-center  shadow-md rounded-lg" ref={chartSpark1Ref}>
-        <h3 className="text-lg font-semibold">Total Monthly Traffic</h3>
+        <h3 className="text-lg font-semibold bg-transparent">Total Monthly Traffic</h3>
         <p className="text-2xl">{totalMonthlyTraffic}</p>
         </div>
         <div className="p-4 rounded-lg flex flex-col items-center r shadow-md rounded-lg" ref={chartSpark2Ref}>
        
-        <h3 className="text-lg font-semibold">Distinct Categories</h3>
+        <h3 className="text-lg font-semibold bg-transparent">Distinct Categories</h3>
         <p className="text-2xl">{distinctCategories.size}</p>
         </div>
        

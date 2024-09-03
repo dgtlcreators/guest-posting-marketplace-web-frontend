@@ -76,7 +76,7 @@ const RadarChart = ({ data }) => {
     };
 
     return (
-        <div className="p-4 w-full max-w-md mx-auto p-4 bg-white rounded-lg shadow-lg">
+        <div className="p-4 w-full max-w-md mx-auto p-4  rounded-lg shadow-lg calendar">
             <div className="flex flex-col mb-4">
                 <label htmlFor="mozSpamScore">Moz Spam Score</label>
                 <select

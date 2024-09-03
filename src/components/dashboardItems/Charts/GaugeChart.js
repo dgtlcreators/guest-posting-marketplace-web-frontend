@@ -64,7 +64,7 @@ const GaugeChart = ({ data }) => {
   }, [formattedAverageEngagementRate]);
 
   return (
-    <div className='w-full max-w-md mx-auto p-4 bg-white rounded-lg shadow-lg'
+    <div className='w-full max-w-md mx-auto p-4  rounded-lg shadow-lg calendar'
       ref={chartRef}
       style={{ width: '100%', height: '400px' }} 
     />

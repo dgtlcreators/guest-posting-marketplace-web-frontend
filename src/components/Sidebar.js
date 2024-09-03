@@ -91,7 +91,10 @@ export default function Sidebar() {
           <Avatar src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&name=${userData?.name || 'User'}`} />
           {expanded && userData && (
             <div className="ml-2">
-              <Typography variant="h6">{userData.name || 'User'}</Typography>
+              <Typography variant="h6"  style={{
+    backgroundColor: isDarkTheme ? 'transparent' : 'transparent', 
+    
+  }}>{userData.name || 'User'}</Typography>
               <Typography variant="body2">{userData.email || 'user@example.com'}</Typography>
             </div>
           )}

@@ -10,11 +10,21 @@ const ProtectedRoute = ({  children, requiredRole }) => {
   //if (!userData) {
   //  return <Navigate to="/login" />;
  // }
- if (!userData || (requiredRole && userData.role !== requiredRole)) {
+ /*if (!userData || (requiredRole && userData.role !== requiredRole)) {
   return <Navigate to="/login" />;
 }
 
-  return children;
+  return children;*/
+  if (!userData) {
+    return <Navigate to="/login" />;
+  }
+
+  
+  if (userData.role === "Super Admin" || (requiredRole && userData.role === requiredRole)) {
+    return children;
+  }
+
+  return <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;

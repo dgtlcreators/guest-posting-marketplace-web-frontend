@@ -55,7 +55,7 @@ const MapChart = ({ data }) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-4 bg-white rounded-lg shadow-lg">
+    <div className="w-full max-w-md mx-auto p-4  rounded-lg shadow-lg calendar">
       <MapContainer
         center={[37.9, -77]}
         zoom={2}

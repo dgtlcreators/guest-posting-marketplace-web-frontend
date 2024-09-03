@@ -47,6 +47,7 @@ const YoutubeInfluencer = () => {
   useEffect(() => {
     fetchInfluencers();
   })
+  
   const fetchInfluencers = async () => {
     try {
       
@@ -214,7 +215,7 @@ const YoutubeInfluencer = () => {
       >FAQ</h1>
       <form onSubmit={handleSubmit} className="bg-gray-200 shadow-xl p-4 relative">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div className="flex flex-col">
+        {/*<div className="flex flex-col">
           <label htmlFor="username">Username</label>
           <input
             type="text"
@@ -224,9 +225,9 @@ const YoutubeInfluencer = () => {
             onChange={handleChange}
             className="focus:outline focus:outline-blue-400 p-2"
           />
-        </div>
+        </div>*/}
         <div className="flex flex-col">
-          <label htmlFor="followersCountFrom">followers Count From</label>
+          <label htmlFor="followersCountFrom">Followers Count From</label>
           <input
             type="number"
             id="followersCountFrom"
@@ -461,7 +462,7 @@ const YoutubeInfluencer = () => {
             className="focus:outline focus:outline-blue-400 p-2"
           />
         </div>
-        <div className="flex flex-col">
+        {/*<div className="flex flex-col">
           <label htmlFor="pastCollaborations">Past Collaborations</label>
           <textarea
             
@@ -504,7 +505,7 @@ const YoutubeInfluencer = () => {
             onChange={handleChange}
             className="focus:outline focus:outline-blue-400 p-2"
           />
-        </div>
+        </div>*/}
       </div>
       <div className="flex-end">
         <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4 rounded">

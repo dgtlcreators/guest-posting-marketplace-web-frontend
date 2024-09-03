@@ -70,7 +70,7 @@ const DistributedColumns = ({ data }) => {
   };
 
   return (
-    <div className='w-full max-w-md mx-auto p-4 bg-white rounded-lg shadow-lg'>
+    <div className='w-full max-w-md mx-auto p-4  rounded-lg shadow-lg calendar'>
       <div className="flex flex-col mb-4">
         <label htmlFor="monthlyTraffic">Monthly Traffic</label>
         <select

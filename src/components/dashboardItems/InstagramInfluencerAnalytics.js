@@ -42,8 +42,8 @@ const InstagramInfluencerAnalytics = () => {
     return <div>Error: {error.message}</div>;
   }
   return (
-    <div className="mt-1 p-4 bg-white shadow-md rounded-lg">
-      <h2 className="text-xl font-bold mb-2">Instagram Influencer Analytics</h2>
+    <div className="mt-1 p-4  shadow-md rounded-lg">
+      <h1 className="text-xl font-bold mb-2 p-2">Instagram Influencer Analytics</h1>
      
       <div className="chart-container flex flex-wrap gap-4">
       <div className="chart-item flex-1 min-w-[300px]">

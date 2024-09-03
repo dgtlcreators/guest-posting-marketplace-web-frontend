@@ -191,21 +191,21 @@ const InstagramInfluencerOverview = () => {
   }
 
   return (
-     <div className="p-4 bg-white shadow-md rounded-lg">
-      <h2 className="text-xl font-bold mb-4">Instagram Influencer Overview</h2>
+     <div className="p-4 shadow-md rounded-lg">
+      <h1 className="text-xl font-bold mb-4 p-2">Instagram Influencer Overview</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="p-4 rounded-lg flex flex-col items-center shadow-md rounded-lg" ref={chartSpark3Ref}>
-        <h3 className="text-lg font-semibold">Total Influencers</h3>
+        <h3 className="text-lg font-semibold bg-transparent">Total Influencers</h3>
         <p className="text-2xl">{influencerCount}</p>
         </div>
         <div className="p-4 rounded-lg flex flex-col items-center shadow-md rounded-lg" ref={chartSpark1Ref}>
-        <h3 className="text-lg font-semibold">Total Followers</h3>
+        <h3 className="text-lg font-semibold bg-transparent">Total Followers</h3>
         <p className="text-2xl">{totalFollowers}</p>
         
         </div>
         <div className="p-4 rounded-lg flex flex-col items-center shadow-md rounded-lg" ref={chartSpark2Ref}>
-        <h3 className="text-lg font-semibold">Avg Engagement Rate</h3>
+        <h3 className="text-lg font-semibold bg-transparent">Avg Engagement Rate</h3>
         <p className="text-2xl">{averageEngagementRate.toFixed(2)}%</p>
         </div>
       </div>

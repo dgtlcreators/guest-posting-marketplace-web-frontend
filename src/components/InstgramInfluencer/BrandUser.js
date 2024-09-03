@@ -316,7 +316,7 @@ const BrandUser = () => {
      <h1 className="text-2xl   p-2 my-2">FAQ</h1>
       <form onSubmit={handleSubmit} className="bg-gray-200 shadow-xl p-4 relative">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {/* Username */}
+          {/* Username 
           <div className="flex flex-col">
             <label htmlFor="username">Username</label>
             <input
@@ -328,6 +328,7 @@ const BrandUser = () => {
               className="focus:outline focus:outline-blue-400 p-2"
             />
           </div>
+          */}
 
           {/* Followers Count From */}
           <div className="flex flex-col">

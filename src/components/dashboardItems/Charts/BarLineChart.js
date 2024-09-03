@@ -123,7 +123,7 @@ const BarLineChart = ({ data }) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-4 bg-white rounded-lg shadow-lg">
+    <div className="w-full max-w-md mx-auto p-4  rounded-lg shadow-lg calendar">
       <ApexCharts
         options={languageOptions}
         series={languageOptions.series}

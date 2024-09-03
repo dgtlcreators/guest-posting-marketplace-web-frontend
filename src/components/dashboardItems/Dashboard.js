@@ -11,6 +11,10 @@ const Dashboard = () => {
   const { isDarkTheme } = useTheme();
   const [section, setSection] = useState('all');
 
+  const getButtonClasses = (isActive) => {
+    return `btn ${isActive ? 'btn-active' : ''} ${isDarkTheme ? 'text-white bg-gray-800' : 'text-black bg-white'}`;
+  };
+
   const renderSection = () => {
     switch (section) {
       case 'guestPost':
@@ -93,7 +97,8 @@ const Dashboard = () => {
     <div className="container mx-auto p-4">
       <div className="flex flex-wrap space-x-4 mb-4">
         <motion.button
-          className={`btn ${section === 'all' ? 'btn-active' : ''}`}
+         className={getButtonClasses(section === 'all')}
+          //className={`btn ${section === 'all' ? 'btn-active' : ''}`}
           onClick={() => setSection('all')}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -101,7 +106,8 @@ const Dashboard = () => {
           All
         </motion.button>
         <motion.button
-          className={`btn ${section === 'guestPost' ? 'btn-active' : ''}`}
+        className={getButtonClasses(section === 'guestPost')}
+         // className={`btn ${section === 'guestPost' ? 'btn-active' : ''}`}
           onClick={() => setSection('guestPost')}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -109,7 +115,8 @@ const Dashboard = () => {
           Guest Post
         </motion.button>
         <motion.button
-          className={`btn ${section === 'instagramInfluencer' ? 'btn-active' : ''}`}
+        className={getButtonClasses(section === 'instagramInfluencer')}
+          //className={`btn ${section === 'instagramInfluencer' ? 'btn-active' : ''}`}
           onClick={() => setSection('instagramInfluencer')}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
