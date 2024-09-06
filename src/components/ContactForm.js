@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useTheme } from "../context/ThemeProvider";
+import { UserContext } from "../context/userContext";
 
 
 const ContactForm = ({ publisher, onClose ,url}) => {
   const { isDarkTheme } = useTheme();
+  const { userData,localhosturl } = useContext(UserContext); 
   console.log(publisher)
   const [formData, setFormData] = useState({
     name: "",
@@ -23,8 +25,8 @@ const ContactForm = ({ publisher, onClose ,url}) => {
     try {
       // Send contact form data to backend
       const response = await axios.post(
-       // `http://localhost:5000/${url}/addContact`,
-       `https://guest-posting-marketplace-web-backend.onrender.com/${url}/addContact`,
+        `${localhosturl}/${url}/addContact`,
+      // `https://guest-posting-marketplace-web-backend.onrender.com/${url}/addContact`,
        // "http://localhost:5000/superAdmin/addContact",
        //  "https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/addContact",
         {

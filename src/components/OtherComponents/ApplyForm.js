@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { UserContext } from '../context/userContext';
+import { UserContext } from '../../context/userContext';
 import axios from 'axios';
-import { useTheme } from '../context/ThemeProvider';
+import { useTheme } from '../../context/ThemeProvider';
 import { toast } from 'react-toastify';
 
 const ApplyForm = ({ section, publisher }) => {
-  const { userData } = useContext(UserContext); 
+  const { userData,localhosturl } = useContext(UserContext); 
   const { isDarkTheme } = useTheme();
   const userId = userData?._id;
   const publisherId = publisher?._id;
@@ -57,6 +57,7 @@ const generateShortDescription = (formData, users) => {
 
   const pastactivitiesAdd=async(users)=>{
    // console.log("users: ",users)
+   const formData={}
     const description = createDescriptionElements(formData, users);
     const shortDescription = generateShortDescription(formData, users);
   
@@ -76,8 +77,8 @@ const generateShortDescription = (formData, users) => {
 
       }
     }
-    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
-   // axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   
+    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
    } catch (error) {
     console.log(error);
     
@@ -89,8 +90,8 @@ const generateShortDescription = (formData, users) => {
     
     try {
       
-      const response = await axios.post('https://guest-posting-marketplace-web-backend.onrender.com/applyroute/apply', {
-     // const response = await axios.post('http://localhost:5000/applyroute/apply', {
+      
+      const response = await axios.post(`${localhosturl}/applyroute/apply`, {
         userId,
         publisherId,
         name: formData.name,
@@ -128,7 +129,8 @@ const generateShortDescription = (formData, users) => {
       {!isFormVisible ? (
         <button 
           onClick={() => setIsFormVisible(true)}
-          className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
+          className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+          //"px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
         >
           Apply
         </button>

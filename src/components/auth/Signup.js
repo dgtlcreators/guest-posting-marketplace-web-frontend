@@ -13,7 +13,7 @@ function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setUserData } = useContext(UserContext);
+  const { setUserData ,localhosturl} = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -22,8 +22,8 @@ function Signup() {
 
     axios
     
-     // .post("http://localhost:5000/user/signup", { name, email, password })
-      .post("https://guest-posting-marketplace-web-backend.onrender.com/user/signup", { name, email, password })
+     .post(`${localhosturl}/user/signup`, { name, email, password })
+     
       .then((response) => {
         toast.success("Signed up successfully")
         setUserData(response.data.user);

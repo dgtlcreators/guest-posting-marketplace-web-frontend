@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import ApexCharts from 'apexcharts';
 import { useTheme } from '../../context/ThemeProvider';
+import { UserContext } from '../../context/userContext';
 
 
 const GuestPostOverview = () => {
@@ -9,6 +10,7 @@ const GuestPostOverview = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { userData ,localhosturl} = useContext(UserContext);
 
   const chartSpark1Ref = useRef(null);
   const chartSpark2Ref = useRef(null);
@@ -22,8 +24,8 @@ const GuestPostOverview = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://guest-posting-marketplace-web-backend.onrender.com/form/getData');
-      //  const response = await axios.get('http://localhost:5000/form/getData');
+        
+        const response = await axios.get(`${localhosturl}/form/getData`);
         const fetchedData = response.data.data;
 
         setData(fetchedData);

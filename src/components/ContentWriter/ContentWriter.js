@@ -4,13 +4,14 @@ import ContentWriterTable from './ContentWriterTable';
 import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeProvider';
 import { UserContext } from '../../context/userContext';
+import SaveSearch from "../OtherComponents/SaveSearch.js";
 
 
 const ContentWriter = () => {
   const { isDarkTheme } = useTheme();
-  const { userData } = useContext(UserContext);
+  const { userData,localhosturl } = useContext(UserContext);
   const userId = userData?._id;
-  const [formData, setFormData] = useState({
+  const initialFormData={
     name: '',
     bio: '',
     experienceFrom: '',
@@ -31,7 +32,8 @@ const ContentWriter = () => {
     industry: [{ type: '', other: '', subCategories: [{ type: '', other: '' }] }],
     //industry: [{ type: '', other: '' }],
     //subCategories: [{ type: '', other: '' }]
-  });
+  }
+  const [formData, setFormData] = useState(initialFormData);
   
 
 
@@ -200,8 +202,8 @@ const ContentWriter = () => {
 
       }
     }
-  //  axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
-    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
+    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
+    
    } catch (error) {
     console.log(error);
     
@@ -215,11 +217,12 @@ const ContentWriter = () => {
       expertise: formData.expertise.map(exp => exp.type === 'Other' ? exp.other : exp.type).filter(Boolean),
       languages: formData.languages.map(lang => lang.name === 'Other' ? lang.other : lang.name).filter(Boolean)
     };*/
+   
     const transformedData = {
       ...formData,
-      expertise: formData.expertise
-        .map(exp => exp.type === 'Other' ? exp.other : exp.type)
-        .filter(Boolean),
+      //expertise: formData.expertise
+       // .map(exp => exp.type === 'Other' ? exp.other : exp.type)
+       // .filter(Boolean),
       languages: formData.languages
         .filter(lang => lang.name) 
         .map(lang => ({
@@ -235,8 +238,8 @@ const ContentWriter = () => {
     
     e.preventDefault();
     try {
-      const response = await axios.post('https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/contentWritersFilter', transformedData);
-      //const response = await axios.post('http://localhost:5000/contentwriters/contentWritersFilter', transformedData);
+      const response = await axios.post(`${localhosturl}/contentwriters/contentWritersFilter`, transformedData);
+      
       setWriters(response.data.data);
       console.log(response.data,response.data.data)
       pastactivitiesAdd(response.data.data);
@@ -245,6 +248,10 @@ const ContentWriter = () => {
       toast.error(`Error fetching filtered writers ${error}`)
       console.error('Error fetching filtered writers:', error);
     }
+  };
+
+  const handleReset = () => {
+    setFormData(initialFormData);
   };
 
 
@@ -324,16 +331,7 @@ const ContentWriter = () => {
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>*/}
-          <div className="block">
-            <label className="text-gray-700">Location</label>
-            <input
-              type="text"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
+        
           <div className="block">
             <label className="text-gray-700">Experience From (years)</label>
             <input
@@ -364,7 +362,16 @@ const ContentWriter = () => {
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
-         
+          <div className="block">
+            <label className="text-gray-700">Location</label>
+            <input
+              type="text"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
           <div className="block">
           <label //className="text-xl font-bold text-blue-600"
           >Industry</label>
@@ -375,7 +382,7 @@ const ContentWriter = () => {
                   name={`industry.${outerIndex}.type`}
                   value={item.type}
                   onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded w-1/3"
+                  className="p-2 border border-gray-300 rounded w-full"
                 >
                   <option value="">Select Industry</option>
                   {Object.keys(industrySubCategories).map((industry) => (
@@ -438,59 +445,11 @@ const ContentWriter = () => {
           >
             Add Industry
           </button>*/}
+        
+      
+          
         </div>
-         { /*<label className='block'>
-          <span className="text-gray-700">Industry</span>
-          {formData.industry.map((ids,idx)=>(
-            <div key={idx} className='flex items-center mb-2'>
-              <select
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          value={selectedIndustry}
-          onChange={handleIndustryChange}
-        >
-          <option value="">Select Industry</option>
-          {Object.keys(industrySubCategories).map((industry) => (
-            <option key={industry} value={industry}>
-              {industry}
-            </option>
-          ))}
-        </select>
-              {ids.type==="Other" && (
-                  <input
-                    type="text"
-                    name={`industry.${idx}.other`}
-                    value={ids.other}
-                    onChange={handleChange}
-                    placeholder="Enter Industry manually"
-                    className="p-2 border border-gray-300 rounded w-full"
-                  />
-                )}
-            </div>
-          ))}
-                {subCategories.length > 0 && (
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Sub-categories</label>
-          <div className="mt-1">
-            {formData.subCategories.map((subCategory) => (
-              <div key={subCategory} className="flex items-center">
-                <input
-                  type="checkbox"
-                  id={subCategory}
-                  value={subCategory}
-                  onChange={handleSubCategoryChange}
-                  className="mr-2"
-                />
-                <label htmlFor={subCategory} className="text-sm text-gray-700">
-                  {subCategory}
-                </label>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-          </label>*/}
-          <div className="block">
+        <div className="block">
             <label className="text-gray-700">Expertise</label>
             {formData.expertise.map((exp, idx) => (
               <div key={idx} className="flex items-center mb-2">
@@ -534,7 +493,7 @@ const ContentWriter = () => {
               Add Expertise
             </button>*/}
           </div>
-          <div className="block">
+        <div className="block">
             <label className="text-gray-700">Languages</label>
             {formData.languages.map((lang, idx) => (
               <div key={idx} className="flex items-center mb-2">
@@ -593,11 +552,10 @@ const ContentWriter = () => {
               Add Language
             </button>*/}
           </div>
-        </div>
 
         {/*<div className="mt-4">
           <h2 className="text-lg font-semibold mb-2">Collaboration Rates</h2>*/}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+         
             <div className="block">
               <label className="text-gray-700">Collaboration Rates Post (From)</label>
               <input
@@ -658,19 +616,88 @@ const ContentWriter = () => {
                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-            </div>
+            
       {/*</div>*/}
-
-        <button
-          type="submit"
-          className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
+       
+        </div>
+         { /*<label className='block'>
+          <span className="text-gray-700">Industry</span>
+          {formData.industry.map((ids,idx)=>(
+            <div key={idx} className='flex items-center mb-2'>
+              <select
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          value={selectedIndustry}
+          onChange={handleIndustryChange}
         >
-          Filter Writers
-        </button>
-      </form>
+          <option value="">Select Industry</option>
+          {Object.keys(industrySubCategories).map((industry) => (
+            <option key={industry} value={industry}>
+              {industry}
+            </option>
+          ))}
+        </select>
+              {ids.type==="Other" && (
+                  <input
+                    type="text"
+                    name={`industry.${idx}.other`}
+                    value={ids.other}
+                    onChange={handleChange}
+                    placeholder="Enter Industry manually"
+                    className="p-2 border border-gray-300 rounded w-full"
+                  />
+                )}
+            </div>
+          ))}
+                {subCategories.length > 0 && (
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Sub-categories</label>
+          <div className="mt-1">
+            {formData.subCategories.map((subCategory) => (
+              <div key={subCategory} className="flex items-center">
+                <input
+                  type="checkbox"
+                  id={subCategory}
+                  value={subCategory}
+                  onChange={handleSubCategoryChange}
+                  className="mr-2"
+                />
+                <label htmlFor={subCategory} className="text-sm text-gray-700">
+                  {subCategory}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
+          </label>*/}
+         
+
+      <div className="flex items-center justify-end space-x-2 mt-3">       
+           <SaveSearch  section="ContenWriters" formDataList={formData}/>
+          <button
+            type="reset"
+            onClick={handleReset}
+            className="py-2 px-4 bg-gray-900 text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-700 hover:scale-105"
+          >
+            Reset
+          </button>
+          <button
+            type="submit"
+            className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
+          >
+            Search
+          </button>
+        </div>
+      </form>
+      <div className="mt-4">
+          <h2 className="text-xl   p-2 my-2"// text-white bg-blue-700 
+        >
+          Content Writer List
+          </h2>
   
      <ContentWriterTable contentWriters={writers} setContentWriters={setWriters}/>
+     </div>
     </div>
   );
 };

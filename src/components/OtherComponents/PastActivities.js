@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useTheme } from '@emotion/react';
-import { UserContext } from '../context/userContext';
+import { UserContext } from '../../context/userContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSearch,
@@ -14,11 +14,11 @@ import {
   faCheckSquare,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import { ThemeContext } from '../context/ThemeProvider'; // Add your ThemeProvider context file here
+import { ThemeContext } from '../../context/ThemeProvider'; // Add your ThemeProvider context file here
 
 const PastActivities = () => {
   const { isDarkTheme } = useTheme();
-  const { userData } = useContext(UserContext);
+  const { userData ,localhosturl} = useContext(UserContext);
   const userId = userData?._id;
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,8 +35,8 @@ const PastActivities = () => {
       setLoading(true);
       try {
         
-        const response = await axios.get('https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/getAllpastactivities', {
-       // const response = await axios.get('http://localhost:5000/pastactivities/getAllpastactivities', {
+       
+        const response = await axios.get(`${localhosturl}/pastactivities/getAllpastactivities`, {
           params: {
             userId,
             sections: filter.sections.length > 0 ? filter.sections : undefined,

@@ -17,9 +17,11 @@ export default function Sidebar() {
   const { userData, signOut } = useContext(UserContext); 
   const userId = userData?._id;
   const navigate = useNavigate();
+  const isSuperAdmin = userData?.role === 'Super Admin';
+  const isAdmin = userData?.role === 'Admin';
 
   const handleSignOut = () => {
-    console.log("logpot clicked")
+    console.log("logout clicked")
     signOut();
     navigate("/login"); 
   };
@@ -60,6 +62,7 @@ export default function Sidebar() {
           <SidebarItem icon={<FaYoutube />} text="YouTube Influencer" to="/youtube-influencer" />
           <SidebarItem icon={<FaEdit />} text="Content Writers" to="/content-writers" />
           <SidebarItem icon={<FaHistory />} text="Past Activities" to="/past-activities" />
+          <SidebarItem icon={<FaUserShield />} text="Super Admin" to="/superadmin" />
           <ListItem button onClick={handleNewAddedClick} sx={{ pl: expanded ? 2 : 0 }}>
             <ListItemIcon>{<FaPlus />}</ListItemIcon>
             {expanded && <ListItemText primary="New Added" />}
@@ -68,7 +71,7 @@ export default function Sidebar() {
           <Collapse in={newAddedOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
             <SidebarItem icon={<FaRegFileAlt />} text="Reports" to="/reports" nested/>
-               <SidebarItem icon={<FaUserShield />} text="Super Admin" to="/superadmin" nested/>
+              
                <SidebarItem icon={<FaPen />} text="Guest Post Add" to="/addGuestpost" //to="/admin" 
               nested />
               <SidebarItem icon={<FaInstagram />} text="Instagram Influencer Add" to="/addInstagramInfluencer" //to="/instagramInfluencer" 

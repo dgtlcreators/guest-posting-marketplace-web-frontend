@@ -13,7 +13,7 @@ import { UserContext } from "../../context/userContext";
 
 const NewContentWriter = () => {
   const { isDarkTheme } = useTheme();
-  const { userData } = useContext(UserContext);
+  const { userData,localhosturl } = useContext(UserContext);
   const [formData, setFormData] = useState({
     name: "",
     bio: "",
@@ -147,18 +147,18 @@ const NewContentWriter = () => {
     const fieldKey = parts[3]; 
     updatedIndustry[index].subCategories = updatedIndustry[index].subCategories || [];
 
-    // Update the subCategories based on checkbox state
+    
     const updatedSubCategories = [...updatedIndustry[index].subCategories];
 
     if (checked) {
-        // Add new subcategory if it's checked
+        
         if (!updatedSubCategories[subIndex]) {
             updatedSubCategories[subIndex] = { type: value };
         } else {
             updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: value };
         }
     } else {
-        // Remove subcategory if it's unchecked
+        
         updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: '' };
     }
     const uniqueSubCategories = Array.from(
@@ -276,8 +276,8 @@ const generateShortDescription = (formData, users) => {
       }
     }
     
-    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
-    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
+   
    } catch (error) {
     console.log(error);
     
@@ -296,8 +296,8 @@ const generateShortDescription = (formData, users) => {
 
     try {
       const response = await axios.post(
-        //"http://localhost:5000/contentwriters/createcontentwriter",
-        "https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/createcontentwriter",
+        `${localhosturl}/contentwriters/createcontentwriter`,
+       
         formData,
         {
           headers: {

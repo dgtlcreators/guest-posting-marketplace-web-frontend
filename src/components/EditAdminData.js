@@ -10,7 +10,7 @@ import { useTheme } from "../context/ThemeProvider";
 
 const EditAdminForm = () => {
   const { isDarkTheme } = useTheme();
-  const { userData } = useContext(UserContext);
+  const { userData,localhosturl } = useContext(UserContext);
 
  
 //console.log(userData)
@@ -19,7 +19,7 @@ const EditAdminForm = () => {
   const [adminData, setAdminData] = useState({
     publisherName: "",
     publisherEmail: "",
-    publisherNumber: "",
+    publisherPhoneNo: "",
     publisherURL: "",
     ahrefsDR: "",
     mozDA: "",
@@ -35,8 +35,8 @@ const EditAdminForm = () => {
     const fetchAdminData = async () => {
       try {
         
-       // const response = await axios.get(`http://localhost:5000/superAdmin/getOneAdminData/${id}`);
-      const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/getOneAdminData/${id}`);
+        const response = await axios.get(`${localhosturl}/superAdmin/getOneAdminData/${id}`);
+     console.log("data get ",response.data)
         setAdminData(response.data);
       } catch (error) {
         console.error("Error fetching admin data:", error);
@@ -101,8 +101,8 @@ const EditAdminForm = () => {
         }
       }
       
-      axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
-     // axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+      
+      axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
      } catch (error) {
       console.log(error);
       
@@ -113,8 +113,8 @@ const EditAdminForm = () => {
     e.preventDefault();
     try {
       const response=
-    //  await axios.put(`http://localhost:5000/superAdmin/updateOneAdminData/${id}`, adminData);
-     await axios.put(`https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/updateOneAdminData/${id}`, adminData);
+      await axios.put(`${localhosturl}/superAdmin/updateOneAdminData/${id}`, adminData);
+      console.log("data get ",adminData,response)
       toast.success("Admin data updated successfully");
       await pastactivitiesAdd(adminData);
       navigate("/superadmin");
@@ -123,16 +123,16 @@ const EditAdminForm = () => {
       console.error("Error updating admin data:", error);
     }
   };
-  if (!userData || userData.role !== "Admin" ) {
-    return <Navigate to="/login" />;
-  }
+  //if (!userData || userData.role !== "Admin" ) {
+  //  return <Navigate to="/login" />;
+  //}
 
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Edit Admin Data</h2>
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <form onSubmit={handleSubmit} className=" shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="publisherName">
+          <label className="block text-700 text-sm font-bold mb-2" htmlFor="publisherName">
             Publisher Name
           </label>
           <input
@@ -140,7 +140,7 @@ const EditAdminForm = () => {
             name="publisherName"
             value={adminData.publisherName}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
         <div className="flex flex-col">
@@ -182,7 +182,7 @@ const EditAdminForm = () => {
             </select>
           </div>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="publisherEmail">
+          <label className="block text-700 text-sm font-bold mb-2" htmlFor="publisherEmail">
             Publisher Email
           </label>
           <input
@@ -190,23 +190,23 @@ const EditAdminForm = () => {
             name="publisherEmail"
             value={adminData.publisherEmail}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="publisherNumber">
-            Publisher Number
+          <label className="block text-700 text-sm font-bold mb-2" htmlFor="publisherPhoneNo">
+          publisher Phone No
           </label>
           <input
             type="text"
-            name="publisherNumber"
+            name="publisherPhoneNo"
             value={adminData.publisherPhoneNo}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="publisherURL">
+          <label className="block text-700 text-sm font-bold mb-2" htmlFor="publisherURL">
             Publisher URL
           </label>
           <input
@@ -214,11 +214,11 @@ const EditAdminForm = () => {
             name="publisherURL"
             value={adminData.publisherURL}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ahrefsDR">
+          <label className="block text-700 text-sm font-bold mb-2" htmlFor="ahrefsDR">
             Ahrefs DR
           </label>
           <input
@@ -226,11 +226,11 @@ const EditAdminForm = () => {
             name="ahrefsDR"
             value={adminData.ahrefsDR}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="mozDA">
+          <label className="block text-700 text-sm font-bold mb-2" htmlFor="mozDA">
             Moz DA
           </label>
           <input
@@ -238,7 +238,7 @@ const EditAdminForm = () => {
             name="mozDA"
             value={adminData.mozDA}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
         <div className="flex flex-col">
@@ -284,7 +284,7 @@ const EditAdminForm = () => {
             </select>
           </div>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="price">
+          <label className="block text-700 text-sm font-bold mb-2" htmlFor="price">
             Price
           </label>
           <input
@@ -292,7 +292,7 @@ const EditAdminForm = () => {
             name="price"
             value={adminData.price}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
         <div className="flex flex-col">
@@ -373,7 +373,7 @@ const EditAdminForm = () => {
               </option>
             </select>
           </div>
-        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white p-2 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
           Update Admin
         </button>
       </form>

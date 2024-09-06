@@ -2,15 +2,16 @@
 
 import axios from "axios";
 import { useContext, useState } from "react";
-import FormTable from "./FormTable.js";
+import GuestpostTable from "./GuestpostTable.js";
 import { toast } from "react-toastify";
-import { UserContext } from "../context/userContext.js";
-import { useTheme } from "../context/ThemeProvider.js";
+import { UserContext } from "../../context/userContext.js";
+import { useTheme } from "../../context/ThemeProvider.js";
+import SaveSearch from "../OtherComponents/SaveSearch.js";
 
 
-const Form = () => {
+const Guestpost = () => {
   const { isDarkTheme } = useTheme();
-  const { userData } = useContext(UserContext); 
+  const { userData,localhosturl } = useContext(UserContext); 
   const userId = userData?._id;
  // console.log(userData,userId)
 
@@ -88,8 +89,8 @@ const Form = () => {
       }
     }
     
-    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
-    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   
+    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
    } catch (error) {
     console.log(error);
     
@@ -120,8 +121,8 @@ const Form = () => {
   
     try {
       const response = await axios.post(
-       // "http://localhost:5000/form/getFilteredData"
-        "https://guest-posting-marketplace-web-backend.onrender.com/form/getFilteredData"
+        `${localhosturl}/form/getFilteredData`
+       
         , formData);
       console.log("Fetched data:", response.data);
       setUsers(response.data);
@@ -134,6 +135,12 @@ const Form = () => {
       console.log("Error fetching data:", error);
       toast.error(error.message);
     }
+  };
+
+  const handleSaveSearch = () => {
+    // Save the form data to local storage or send it to the server
+    //localStorage.setItem("savedSearch", JSON.stringify(formData));
+    toast.success("Search saved successfully!");
   };
   
 
@@ -278,7 +285,8 @@ const Form = () => {
           </div>
           
           <div className="flex flex-col">
-            <label htmlFor="publisherURL" className="font-medium">
+            <label htmlFor="publisherURL" //className="font-medium"
+            >
               Publisher URL
             </label>
             <input
@@ -294,7 +302,8 @@ const Form = () => {
             />
           </div>
           <div className="flex flex-col">
-            <label htmlFor="publisherName" className="font-medium">
+            <label htmlFor="publisherName" //className="font-medium"
+            >
             Publisher Name
             </label>
             <input
@@ -414,16 +423,24 @@ const Form = () => {
 
         {/* Buttons */}
         <div className="flex items-center justify-end space-x-2">
+       {/* <button
+            type="button"
+            onClick={handleSaveSearch}
+            className="py-2 px-4 bg-green-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-green-500 hover:scale-105"
+          >
+            Save Search
+          </button>*/}
+           <SaveSearch section="Guestpost" formDataList={formData}/>
           <button
             type="reset"
             onClick={handleReset}
-            className="py-2 px-4 bg-gray-900 text-white rounded"
+            className="py-2 px-4 bg-gray-900 text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-700 hover:scale-105"
           >
             Reset
           </button>
           <button
             type="submit"
-            className="py-2 px-4 bg-blue-600 text-white rounded"
+            className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
           >
             Search
           </button>
@@ -431,9 +448,15 @@ const Form = () => {
       </form>
 
       {/* Display User Fetched Data */}
-      <FormTable users={users} />
+      <div className="mt-4">
+          <h2 className="text-xl   p-2 my-2"// text-white bg-blue-700 
+        >
+          Guestpost List
+          </h2>
+      <GuestpostTable users={users} />
+      </div>
     </div>
   );
 };
 
-export default Form;
+export default Guestpost;

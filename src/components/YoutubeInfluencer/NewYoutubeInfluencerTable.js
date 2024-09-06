@@ -9,7 +9,7 @@ import { UserContext } from '../../context/userContext';
 
 const NewYoutubeInfluencerTable = ({addYotubeInfluencer,setAddYotubeInfluencer}) => {
   const { isDarkTheme } = useTheme();
-  const { userData } = useContext(UserContext);
+  const { userData,localhosturl } = useContext(UserContext);
   const [influencers, setInfluencers] = useState([]);
   const [originalUsers, setOriginalUsers] = useState([]);
 
@@ -143,8 +143,8 @@ const NewYoutubeInfluencerTable = ({addYotubeInfluencer,setAddYotubeInfluencer})
   useEffect(()=>{
     const fetchInfluencer=async()=>{
       try {
-        const response = await axios.get("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/getAllYoutubeInfluencer")
-        // const response = await axios.get("http://localhost:5000/youtubeinfluencers/getAllYoutubeInfluencer");
+      
+         const response = await axios.get(`${localhosturl}/youtubeinfluencers/getAllYoutubeInfluencer`);
           
         setInfluencers(response.data.data)
         setOriginalUsers(response.data.data)
@@ -218,8 +218,8 @@ const generateShortDescription = (formData, users) => {
       }
     }
     
-    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
-    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+    
+    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
    } catch (error) {
     console.log(error);
     
@@ -230,8 +230,8 @@ const generateShortDescription = (formData, users) => {
     try {
       await axios.delete(
         
-        //`http://localhost:5000/youtubeinfluencers/deleteYoutubeInfluencer/${id}`
-        `https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/deleteYoutubeInfluencer/${id}`
+        `${localhosturl}/youtubeinfluencers/deleteYoutubeInfluencer/${id}`
+       
       );
       const user = influencers.find((user) => user._id === id);
      
@@ -290,8 +290,8 @@ const handleClearFilter=()=>{
                     src={
                       influencer?.profilePicture?.startsWith('https')
                         ? influencer.profilePicture
-                        : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.profilePicture}`
-                      // : `http://localhost:5000${influencer.profilePicture}`
+                       // : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.profilePicture}`
+                       : `${localhosturl}${influencer.profilePicture}`
                     }
                     alt="Profile"
                     className="w-12 h-12 object-cover rounded-full"
@@ -324,8 +324,8 @@ const handleClearFilter=()=>{
                     src={
                       influencer?.mediaKit?.startsWith('http')
                         ? influencer.mediaKit
-                        : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.mediaKit}`
-                      //  : `http://localhost:5000${influencer.mediaKit}`
+                       // : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.mediaKit}`
+                        : `${localhosturl}${influencer.mediaKit}`
                     }
                     alt="Profile"
                     className="w-12 h-12 object-cover rounded-full"

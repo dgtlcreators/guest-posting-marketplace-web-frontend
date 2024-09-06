@@ -24,7 +24,7 @@ ChartJS.register(
 
 const Admin = () => {
   const { isDarkTheme } = useTheme();
-  const { userData } = useContext(UserContext); 
+  const { userData ,localhosturl} = useContext(UserContext); 
   const userId = userData?._id;
   console.log(userData,userId)
   const initialFormData = {
@@ -60,8 +60,8 @@ const Admin = () => {
     e.preventDefault();
     try {
      
-      //await axios.post("http://localhost:5000/admin/createAdminData",
-      await axios.post(" https://guest-posting-marketplace-web-backend.onrender.com/admin/createAdminData",
+      await axios.post(`${localhosturl}/admin/createAdminData`,
+     
         formDatas
       );
       toast.success("Successfully Created");

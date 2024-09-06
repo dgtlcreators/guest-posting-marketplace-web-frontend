@@ -10,7 +10,7 @@ import { UserContext } from '../../context/userContext';
 
 const NewContentWriterTable = () => {
   const { isDarkTheme } = useTheme();
-  const { userData } = useContext(UserContext);
+  const { userData ,localhosturl} = useContext(UserContext);
   const [contentWriters, setContentWriters] = useState([]);
   const [originalWriters, setOriginalWriters] = useState([]);
   const [sortedField, setSortedField] = useState(null);
@@ -22,8 +22,8 @@ const NewContentWriterTable = () => {
     const fetchContentWriters = async () => {
       try {
         
-        const response = await axios.get("https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/getallcontentwriters");
-      //  const response = await axios.get("http://localhost:5000/contentwriters/getallcontentwriters");
+        const response = await axios.get(`${localhosturl}/contentwriters/getallcontentwriters`);
+
         setContentWriters(response.data.data);
         setOriginalWriters(response.data.data);
       } catch (error) {
@@ -120,8 +120,8 @@ const generateShortDescription = (formData, users) => {
       }
     }
     
-    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
-   // axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
+
    } catch (error) {
     console.log(error);
     
@@ -130,8 +130,8 @@ const generateShortDescription = (formData, users) => {
 
   const deleteContentWriter = async (id) => {
     try {
-      await axios.delete(`https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/deletecontentwriter/${id}`);
-     // await axios.delete(`http://localhost:5000/contentwriters/deletecontentwriter/${id}`);
+     
+     await axios.delete(`${localhosturl}/contentwriters/deletecontentwriter/${id}`);
       toast.success("Content Writer Deleted Successfully");
       const user = contentWriters.find((user) => user._id === id);
      

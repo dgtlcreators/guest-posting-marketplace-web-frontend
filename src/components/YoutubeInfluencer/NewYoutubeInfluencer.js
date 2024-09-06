@@ -7,7 +7,7 @@ import { UserContext } from '../../context/userContext';
 
 const NewYoutubeInfluencer = () => {
   const { isDarkTheme } = useTheme();
-  const { userData } = useContext(UserContext);
+  const { userData ,localhosturl} = useContext(UserContext);
   const [formData, setFormData] = useState({
     username: "",
     fullname: "",
@@ -169,8 +169,8 @@ const generateShortDescription = (formData, users) => {
       }
     }
     
-    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
-   // axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   
+    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
    } catch (error) {
     console.log(error);
     
@@ -229,8 +229,8 @@ const generateShortDescription = (formData, users) => {
     }
     try {
       const response = await axios.post(
-      //  "http://localhost:5000/youtubeinfluencers/addYoutubeInfluencer",
-        "https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/addYoutubeInfluencer",
+        `${localhosturl}/youtubeinfluencers/addYoutubeInfluencer`,
+        
         formDataToSend,
         {
           headers: {
@@ -321,8 +321,14 @@ setFormData(prev=>({
               <input type='text' name='profilePicture' placeholder='Profile Picture URL' value={formData.profilePicture} onChange={handleChange}
                 className='p-2 border border-gray-300 rounded w-full' />
             ) : (
-              <input type='file' name='profilePicture' placeholder='Profile Picture URL' value={formData.profilePicture} onChange={handleFileChange}
-                className='p-2 border border-gray-300 rounded w-full' />
+              <input
+              type="file"
+              name='profilePicture' placeholder='Profile Picture URL'
+              
+              onChange={handleFileChange}
+              className="p-2 border border-gray-300 rounded w-full"
+            />
+              
             )}
           </div>
           <div className='block'>

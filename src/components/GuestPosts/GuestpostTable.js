@@ -108,23 +108,30 @@ export default FormTable;
 
 
 
-import React, { useMemo, useState } from "react";
-
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-
-import {  useNavigate } from "react-router-dom";
+import {  Link, useNavigate } from "react-router-dom";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
-import { useTheme } from "../context/ThemeProvider";
-import ApplyForm from "./ApplyForm";
+
+import { useTheme } from "../../context/ThemeProvider";
+import { UserContext } from "../../context/userContext";
+
+import { saveAs } from "file-saver";
+import { CSVLink } from "react-csv";
+import Papa from "papaparse";
+import ApplyForm from "../OtherComponents/ApplyForm";
+import Bookmark from "../OtherComponents/Bookmark";
+import Pagination from "../OtherComponents/Pagination";
 
 
 
-const FormTable = ({ users, setUsers }) => { 
+const GuestpostTable = ({ users, setUsers }) => { 
   const { isDarkTheme } = useTheme();
   const navigate = useNavigate();
   const [originalUsers, setOriginalUsers] = useState(users);
   const [sortedField, setSortedField] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
+  const { userData,localhosturl } = useContext(UserContext); 
  
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -139,6 +146,11 @@ const FormTable = ({ users, setUsers }) => {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [stripePromise, setStripePromise] = useState(null);
+
+
+  const [guestPosts, setGuestPosts] = useState(users)//([]);
+  const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   // Initialize Stripe promise once
   if (!stripePromise) {
@@ -257,10 +269,76 @@ const FormTable = ({ users, setUsers }) => {
     });
   };
 
+  const exportDataToCSV = () => {
+    const csvData = filteredUsers.map((user, index) => ({
+      SNo: index + 1,
+      MozDA: user.mozDA,
+      Categories:user.categories,
+      WebsiteLanguage:user.websiteLanguage,
+      AhrefsDR: user.ahrefsDR,
+      LinkType:user.linkType,
+      PublisherURL:user.publisherURL,
+      publisherName:user.publisherName,
+      Price: user.price,
+      MonthlyTraffic: user.monthlyTraffic,
+      mozSpamScore:user.mozSpamScore
+    }));
+
+    const csvString = Papa.unparse(csvData);
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, "exported_data.csv");
+  };
+
+
+  useEffect(() => { 
+    const fetchBookmarkedPosts = async () => {
+      try {
+        //const response = await axios.get(`/api/bookmark/${user._id}`);
+       // setBookmarkedPosts(response.data.map(b => b.guestPostId));
+      } catch (error) {
+        console.error('Error fetching bookmarked posts:', error);
+      }
+    };
+
+   
+    fetchBookmarkedPosts();
+  }, []);
+
+  const handleBookmark = async () => {
+    try {
+      if (isBookmarked) {
+       // await axios.delete('/api/bookmark/remove', { data: { userId: user._id, guestPostId: guestPost._id } });
+      } else {
+       // await axios.post('/api/bookmark/add', { userId: user._id, guestPostId: guestPost._id });
+      }
+      setIsBookmarked(!isBookmarked);
+    } catch (error) {
+      console.error('Error bookmarking guest post:', error);
+    }
+  };
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10); 
+
+  const paginatedUsers = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return filteredUsers.slice(startIndex, startIndex + pageSize);
+  }, [filteredUsers, currentPage, pageSize]);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const handlePageSizeChange = (e) => {
+    setPageSize(Number(e.target.value));
+    setCurrentPage(1); 
+  };
+
+
   return (
-    <div className="p-4">
+    <div className="p-2">
       <div className="flex items-center mb-4">
-        <div className="relative">
+       {/* <div className="relative">
           <input
             type="text"
             placeholder="Search by Categories"
@@ -270,21 +348,55 @@ const FormTable = ({ users, setUsers }) => {
           />
          {/* <div className="absolute right-3 top-2">
             <FaSearch className="text-gray-400" />
-          </div>*/}
+          </div>}
           <button
           onClick={handleClearFilter}
           className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
         >
           Clear Filter
         </button>
-        </div>
+        </div>*/}
       </div>
       <div className="table-container">
-        <p>Found: {filteredUsers.length}</p>
-        <div className='overflow-x-auto  p-4 rounded-lg shadow-md'>
-        <table className="min-w-full bg-white border border-gray-300">
+      <div className="flex flex-col items-center md:flex-row md:items-center justify-between space-y-2 md:space-y-0 md:space-x-2">
+  <p className="text-center  items-center md:text-left transition duration-300 ease-in-out transform hover:scale-105">
+    <strong>Found: {filteredUsers.length}</strong>
+  </p>
+  <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+    <>
+      <label className="mr-2 whitespace-nowrap transition duration-300 ease-in-out transform  hover:scale-105">Items per page:</label>
+      <select
+        value={pageSize}
+        onChange={handlePageSizeChange}
+        className="border border-gray-300 rounded-md py-2 px-2 transition duration-300 ease-in-out transform hover:scale-105"
+      >
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+      </select>
+    </>
+    <button
+      onClick={handleClearFilter}
+      className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
+    >
+      Clear Filter
+    </button>
+    <button
+      onClick={exportDataToCSV}
+      className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105"
+    >
+      Export Data
+    </button>
+  </div>
+</div>
+
+        <div className='overflow-x-auto  p-2 rounded-lg shadow-md'>
+        <table className="min-w-full  border border-gray-300">
           <thead>
-            <tr>
+            {/*<tr>
             <th className="py-2 px-4 border-b border-gray-200">Ahrefs DR
                 <select
                 value={sortConfig.key === "ahrefsDR" ? sortConfig.direction : ""}
@@ -352,23 +464,30 @@ const FormTable = ({ users, setUsers }) => {
               </th>
               
               <th className="py-2 px-4 border-b border-gray-200">Actions</th>
-            </tr>
-            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+            </tr>*/}
+            <tr className="bg-200 text-gray-600 uppercase text-sm leading-normal border">
               <th className="border py-3 px-2 md:px-6 text-left">S.No.</th>
-              <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("categories")}>Categories {renderSortIcon("categories")}</th>
-              <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("ahrefsDR")}>ahrefDR {renderSortIcon("ahrefsDR")}</th>
               <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("mozDA")}>mozDA {renderSortIcon("mozDA")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("categories")}>Categories {renderSortIcon("categories")}</th>
               <th className="border py-3 px-2 md:px-6 text-left" onClick={() => handleSort("websiteLanguage")}>Website Language {renderSortIcon("websiteLanguage")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("ahrefsDR")}>ahrefDR {renderSortIcon("ahrefsDR")}</th>
+           
+             
               <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("linkType")}>Link Type {renderSortIcon("linkType")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("publisherURL")}>Publisher URL {renderSortIcon("publisherURL")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("publisherName")}>Publisher Name {renderSortIcon("publisherName")}</th>
               <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("price")}>Price {renderSortIcon("price")}</th>
-              <th className="border py-3 px-2 md:px-6 text-left" onClick={() => handleSort("mozSpamScore")}>mozSpamScore {renderSortIcon("mozSpamScore")}</th>
               <th className="border py-3 px-2 md:px-6 text-left"  onClick={() => handleSort("monthlyTraffic")}>Monthly Traffic {renderSortIcon("monthlyTraffic")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left" onClick={() => handleSort("mozSpamScore")}>mozSpamScore {renderSortIcon("mozSpamScore")}</th>
+              
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>
+              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Bookmark</th>
+              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Profile</th>
               {/*<th className="border py-3 px-2 md:px-6 text-left uppercase ">Actions</th>*/}
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
-            {filteredUsers.length === 0 ? (
+            {paginatedUsers.length === 0 ? (
               <tr>
                 <td
                   colSpan="10"
@@ -378,40 +497,64 @@ const FormTable = ({ users, setUsers }) => {
                 </td>
               </tr>
             ) : (
-              filteredUsers.map((user, index) => (
+              paginatedUsers.map((user, index) => (
                 <tr
                   key={user._id}
-                  className="border-b border-gray-200 hover:bg-gray-100"
+                  className="border border-gray-200 hover:bg-gray-600 "
                 >
                   <td className=" border  py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {index + 1}
                   </td>
                   <td className="border  py-3 px-2 md:px-6 text-center text-md font-semibold">
-                    {user.categories}
-                  </td>
-                  <td className="border  py-3 px-2 md:px-6 text-center text-md font-semibold">
-                    {user.ahrefsDR}
-                  </td>
-                  <td className="border  py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {user.mozDA}
+                  </td>
+                  <td className="border  py-3 px-2 md:px-6 text-center text-md font-semibold">
+                    {user.categories}
                   </td>
                   <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {user.websiteLanguage}
                   </td>
+                  <td className="border  py-3 px-2 md:px-6 text-center text-md font-semibold">
+                    {user.ahrefsDR}
+                  </td>
+                 
+                 
                   <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {user.linkType}
+                  </td>
+                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
+                    {user.publisherURL}
+                  </td>
+                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
+                    {user.publisherName}
                   </td>
                   <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {user.price}
                   </td>
                   <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                    {user.mozSpamScore}
-                  </td>
-                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {user.monthlyTraffic}
                   </td>
+                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
+                    {user.mozSpamScore}
+                  </td>
+                  
                   <td  className="border py-3 px-2 md:px-6 text-center text-md font-semibold"> 
                     <ApplyForm section="Guestpost" publisher={user}/>
+                  </td>
+                  <td  className="border py-3 px-2 md:px-6 text-center text-md font-semibold"> 
+                  <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"//hover:text-blue-500
+                >{ /*</td> onClick={handleBookmark} >
+                 </tr> <i className="fas fa-bookmark"></i>*/}
+                  <Bookmark section="Guestpost" publisher={user}/>
+                </button>
+                  </td>
+                  <td  className="border py-3 px-2 md:px-6 text-center text-md font-semibold"> 
+                  <Link
+                    to={`/guestpostProfile/${user._id}`}
+                    className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                  >
+                    View Profile
+                  </Link>
                   </td>
 
                   <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
@@ -429,10 +572,18 @@ const FormTable = ({ users, setUsers }) => {
             )}
           </tbody>
         </table>
+        
         </div>
+        <Pagination
+        totalItems={filteredUsers.length}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        onPageChange={setCurrentPage}
+        onPageSizeChange={setPageSize}
+      />
       </div>
     </div>
   );
 };
 
-export default FormTable;
+export default GuestpostTable;

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import { useTheme } from "../context/ThemeProvider";
+import { UserContext } from "../context/userContext";
 
 
 const AdminTable = () => {
@@ -10,13 +11,14 @@ const AdminTable = () => {
   const [originalUsers, setOriginalUsers] = useState([]);
   const [sortedField, setSortedField] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
+  const { userData ,localhosturl} = useContext(UserContext); 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-        //  "http://localhost:5000/admin/getAdminData"
-          "https://guest-posting-marketplace-web-backend.onrender.com/admin/getAdminData"
+         `${localhosturl}/admin/getAdminData`
+          
         );
         setUsers(response.data);
         setOriginalUsers(response.data); // Store original users data

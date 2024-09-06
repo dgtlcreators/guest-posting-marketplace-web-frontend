@@ -12,7 +12,7 @@ function Login() {
   const { isDarkTheme } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setUserData } = useContext(UserContext);
+  const { setUserData,localhosturl } = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -21,8 +21,8 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-     // .post("http://localhost:5000/user/login", { email, password })
-      .post("https://guest-posting-marketplace-web-backend.onrender.com/user/login", { email, password })
+      .post(`${localhosturl}/user/login`, { email, password })
+     
       .then((response) => {
         toast.success("Logged in successfully");
         console.log(response.data.user);

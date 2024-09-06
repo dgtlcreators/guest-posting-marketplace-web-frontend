@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeProvider';
+import { UserContext } from '../../context/userContext';
 
 
 const ApplicationsList = () => {
   const { isDarkTheme } = useTheme();
   const [applications, setApplications] = useState([]);
+  const { userData ,localhosturl} = useContext(UserContext);
 
   const fetchApplications = async () => {
     try {
-      //const response = await axios.get('http://localhost:5000/userbrand/getallapplications');
-      const response = await axios.get('https://guest-posting-marketplace-web-backend.onrender.com/userbrand/getallapplications');
+     
+      const response = await axios.get(`${localhosturl}/userbrand/getallapplications`);
       setApplications(response.data.data);
     } catch (error) {
       alert(error.response.data.error);
@@ -22,8 +24,8 @@ const ApplicationsList = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`https://guest-posting-marketplace-web-backend.onrender.com/userbrand/deleteapplications/${id}`);
-     // const response = await axios.delete(`http://localhost:5000/userbrand/deleteapplications/${id}`);
+     
+      const response = await axios.delete(`${localhosturl}/userbrand/deleteapplications/${id}`);
       alert(response.data.message);
       fetchApplications();
     } catch (error) {

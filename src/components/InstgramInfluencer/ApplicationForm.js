@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faEnvelope, faPhone, faDollarSign, faClipboard, faStickyNote, faHandshake, faUser } from '@fortawesome/free-solid-svg-icons';
 import 'tailwindcss/tailwind.css';
 import ApplicationsList from "./ApplicationsList"
 import { useTheme } from '../../context/ThemeProvider';
+import { UserContext } from '../../context/userContext';
 
 
 const ApplicationForm = () => {
@@ -18,6 +19,7 @@ const ApplicationForm = () => {
     budget: '',
     additionalNotes: '',
   });
+  const { userData ,localhosturl} = useContext(UserContext);
 
   const handleChange = (e) => {
     setFormData({
@@ -29,8 +31,8 @@ const ApplicationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://guest-posting-marketplace-web-backend.onrender.com/userbrand/addapplications', formData);
-      //const response = await axios.post('http://localhost:5000/userbrand/addapplications', formData);
+     
+      const response = await axios.post(`${localhosturl}/userbrand/addapplications`, formData);
       alert(response.data.message);
       setFormData({
         brandName: '',

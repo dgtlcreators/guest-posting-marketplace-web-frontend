@@ -8,7 +8,7 @@ import { useTheme } from '../../context/ThemeProvider';
 
 const EditInstagramInfluencer = () => {
   const { isDarkTheme} = useTheme();
-    const { userData } = useContext(UserContext);
+    const { userData,localhosturl } = useContext(UserContext);
     const { id } = useParams();
     const navigate = useNavigate()
     const [profileUrlOption, setProfileUrlOption] = useState("manual");
@@ -74,8 +74,8 @@ const EditInstagramInfluencer = () => {
     
       const fetchInfluencers = async () => {
         try {
-           const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/getInstagraminfluencerById/${id}`)
-         // const response = await axios.get(`http://localhost:5000/instagraminfluencers/getInstagraminfluencerById/${id}`);
+          
+          const response = await axios.get(`${localhosturl}/instagraminfluencers/getInstagraminfluencerById/${id}`);
         
           setFormData(response.data.instagramInfluencer);
          // setOriginalUsers(response.data.instagramInfluencer);
@@ -145,8 +145,8 @@ const EditInstagramInfluencer = () => {
           }
         }
         
-        axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
-        //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+       
+        axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
        } catch (error) {
         console.log(error);
         
@@ -157,8 +157,8 @@ const EditInstagramInfluencer = () => {
         try {
            // console.log(formData)
             
-          //   await axios.put(`http://localhost:5000/instagraminfluencers/updateInstagraminfluencer/${id}`, formData);
-     await axios.put(`https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/updateInstagraminfluencer/${id}`, formData);
+             await axios.put(`${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${id}`, formData);
+     
      
           toast.success("Instagram Influencer updated Successfully");
           pastactivitiesAdd(formData);
@@ -169,9 +169,9 @@ const EditInstagramInfluencer = () => {
         }
       }
 
-      if (!userData || userData.role !== "Admin" ) {
-        return <Navigate to="/login" />;
-      }
+      //if (!userData || userData.role !== "Admin" ) {
+      //  return <Navigate to="/login" />;
+     // }
     
     
   return (

@@ -10,7 +10,7 @@ import { UserContext } from "../context/userContext.js";
 
 const SuperAdminTable = () => {
   const { isDarkTheme } = useTheme();
-  const { userData } = useContext(UserContext); 
+  const { userData ,localhosturl} = useContext(UserContext); 
   const userId = userData?._id;
   const [users, setUsers] = useState([]);
   const [sortedField, setSortedField] = useState(null);
@@ -21,6 +21,7 @@ const SuperAdminTable = () => {
   const [selectedUserContacts, setSelectedUserContacts] = useState([]);
   const [showContactDetails,setShowContactDetails]=useState(false)
   const [originalUsers, setOriginalUsers] = useState([]);
+  
 
   
 
@@ -29,8 +30,8 @@ const SuperAdminTable = () => {
     try {
       
       const response = await axios.get(
-       // "http://localhost:5000/superAdmin/getAllAdminData"
-       "https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/getAllAdminData"
+        `${localhosturl}/superAdmin/getAllAdminData`
+       
       );
       setUsers(response.data);
       setOriginalUsers(response.data); 
@@ -94,8 +95,8 @@ const generateShortDescription = (formData, users) => {
       }
     }
     
-    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
-    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+    
+    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
    } catch (error) {
     console.log(error);
     
@@ -106,8 +107,8 @@ const generateShortDescription = (formData, users) => {
     try {
       const response=await axios.delete(
         
-       // `http://localhost:5000/superAdmin/deleteOneAdminData/${userId}`
-        `https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/deleteOneAdminData/${userId}`
+        `${localhosturl}/superAdmin/deleteOneAdminData/${userId}`
+        
       );
       
       const user = users.find((user) => user._id === userId);
@@ -171,8 +172,8 @@ const generateShortDescription = (formData, users) => {
   const handleShowContactDetails = async (userId) => {
     setShowContactDetails(true)
     try {
-    // const response = await axios.get(`http://localhost:5000/superAdmin/getContactsByPublisher/${userId}`);
-     const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/superAdmin/getContactsByPublisher/${userId}`);
+     const response = await axios.get(`${localhosturl}/superAdmin/getContactsByPublisher/${userId}`);
+    
       console.log(response.data)
       setSelectedUserContacts(response.data);
     } catch (error) {
@@ -230,104 +231,102 @@ const generateShortDescription = (formData, users) => {
         <table className="min-w-full bg-white">
           <thead className="bg-blue-700 text-white">
             <tr>
-              <th className="py-3 px-4 uppercase font-semibold text-sm">
-                S.No.
-              </th>
+              <th className="border py-3 px-4 uppercase font-semibold text-sm">S.No.</th>
               <th
-                className="py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
+                className="border py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
                 onClick={() => handleSort("publisherName")}
               >
                 Publisher Name {renderSortIcon("publisherName")}
               </th>
               <th
-                className="py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
+                className="border py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
                 onClick={() => handleSort("publisherEmail")}
               >
                 Publisher Email {renderSortIcon("publisherEmail")}
               </th>
               <th
-                className="py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
+                className="border py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
                 onClick={() => handleSort("publisherPhoneNo")}
               >
                 Publisher Number {renderSortIcon("publisherPhoneNo")}
               </th>
               <th
-                className="py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
+                className="border py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
                 onClick={() => handleSort("publisherURL")}
               >
                 Publisher URL {renderSortIcon("publisherURL")}
               </th>
               <th
-                className="py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
+                className="border py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
                 onClick={() => handleSort("categories")}
               >
                 Categories {renderSortIcon("categories")}
               </th>
               <th
-                className="py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
+                className="border py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
                 onClick={() => handleSort("ahrefsDR")}
               >
                 ahrefDR {renderSortIcon("ahrefsDR")}
               </th>
               <th
-                className="py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
+                className="border py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
                 onClick={() => handleSort("mozDA")}
               >
                 mozDA {renderSortIcon("mozDA")}
               </th>
               <th
-                className="py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
+                className="border py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
                 onClick={() => handleSort("websiteLanguage")}
               >
                 Website Language {renderSortIcon("websiteLanguage")}
               </th>
               <th
-                className="py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
+                className="border py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
                 onClick={() => handleSort("linkType")}
               >
                 Link Type {renderSortIcon("linkType")}
               </th>
               <th
-                className="py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
+                className="border py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
                 onClick={() => handleSort("price")}
               >
                 Price {renderSortIcon("price")}
               </th>
               <th
-                className="py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
+                className="border py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
                 onClick={() => handleSort("mozSpamScore")}
               >
                 Moz Spam Score {renderSortIcon("mozSpamScore")}
               </th>
               <th
-                className="py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
+                className="border py-3 px-4 uppercase font-semibold text-sm cursor-pointer"
                 onClick={() => handleSort("monthlyTraffic")}
               >
                 Monthly Traffic {renderSortIcon("monthlyTraffic")}
               </th>
-              <th className="py-3 px-4 uppercase font-semibold text-sm">Actions</th>
-              <th  className="py-3 px-4 uppercase font-semibold text-sm">Contact</th>
+              <th className="border py-3 px-4 uppercase font-semibold text-sm">Actions</th>
+              <th  className="border py-3 px-4 uppercase font-semibold text-sm">Contact</th>
             </tr>
           </thead>
           <tbody className="text-gray-700">
             {filteredUsers.map((user, index) => (
               <tr key={user._id} className="bg-gray-100 border-b border-gray-200">
-                <td className="py-3 px-4">{index + 1}</td>
-                <td className="py-3 px-4">{user.publisherName}</td>
-                <td className="py-3 px-4">{user.publisherEmail}</td>
-                <td className="py-3 px-4">{user.publisherPhoneNo}</td>
-                <td><a href={user.publisherURL} target="_blank" rel="noopener noreferrer"  className=" text-blue-500 hover:underline">
+                <td className="border py-3 px-4">{index + 1}</td>
+                <td className="border py-3 px-4">{user.publisherName}</td>
+                <td className="border py-3 px-4">{user.publisherEmail}</td>
+                <td className="border py-3 px-4">{user.publisherPhoneNo}</td>
+                <td className="border py-3 px-4"><a href={user.publisherURL} target="_blank" rel="noopener noreferrer"  className=" text-blue-500 hover:underline">
                     {user.publisherURL}
                   </a></td>
-                <td className="py-3 px-4">{user.categories}</td>
-                <td className="py-3 px-4">{user.ahrefsDR}</td>
-                <td className="py-3 px-4">{user.mozDA}</td>
-                <td className="py-3 px-4">{user.websiteLanguage}</td>
-                <td className="py-3 px-4">{user.linkType}</td>
-                <td className="py-3 px-4">{user.price}</td>
-                <td className="py-3 px-4">{user.mozSpamScore}</td>
-                <td className="py-3 px-4">{user.monthlyTraffic}</td>
-                <td className="py-3 px-4">
+                <td className="border py-3 px-4">{user.categories}</td>
+                <td className="border py-3 px-4">{user.ahrefsDR}</td>
+                <td className="border py-3 px-4">{user.mozDA}</td>
+                <td className="border py-3 px-4">{user.websiteLanguage}</td>
+                <td className="border py-3 px-4">{user.linkType}</td>
+                <td className="border py-3 px-4">{user.price}</td>
+                <td className="border py-3 px-4">{user.mozSpamScore}</td>
+                <td className="border py-3 px-4">{user.monthlyTraffic}</td>
+                <td className="border py-3 px-4">
                   <button
                     onClick={() => deleteUser(user._id)}
                     className="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded my-2"
@@ -342,7 +341,7 @@ const generateShortDescription = (formData, users) => {
                   </Link>
                 
                 </td>
-                <td  className="py-3 px-4">
+                <td  className="border py-3 px-4">
                 <button
                     onClick={() => handleBuyClick(user)}
                     className="bg-green-500 hover:bg-green-700 text-white py-1 px-3 rounded"

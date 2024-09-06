@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Linecharts from './Charts/Linecharts';
 import BarCharts from './Charts/BarCharts';
 import RadialBarCharts from './Charts/RadialBarCharts';
@@ -8,6 +8,7 @@ import BarLineChart from './Charts/BarLineChart.js';
 import GaugeChart from './Charts/GaugeChart.js';
 import MapChart from './Charts/MapChart.js';
 import { useTheme } from '../../context/ThemeProvider.js';
+import { UserContext } from '../../context/userContext.js';
 
 
 
@@ -17,12 +18,13 @@ const InstagramInfluencerAnalytics = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { userData ,localhosturl} = useContext(UserContext);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/getAllInstagraminfluencer');
-        // const response = await axios.get('http://localhost:5000/instagraminfluencers/getAllInstagraminfluencer');
+       
+         const response = await axios.get(`${localhosturl}/instagraminfluencers/getAllInstagraminfluencer`);
         setData(response.data.instagramInfluencer);
         setLoading(false);
       } catch (err) {

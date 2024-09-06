@@ -4,13 +4,15 @@ import { UserContext } from '../../context/userContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import YoutubeInfluencerTable from "./YoutubeInfluencerTable"
+import SaveSearch from "../OtherComponents/SaveSearch.js";
 
 const YoutubeInfluencer = () => {
   const { isDarkTheme } = useTheme();
-  const { userData } = useContext(UserContext);
+  const { userData,localhosturl } = useContext(UserContext);
   const userId = userData?._id;
   const initialFormData = {
     username: "",
+    fullname:"",
     followersCountFrom: "",
     followersCountTo: "",
     videosCountFrom: "",
@@ -51,8 +53,8 @@ const YoutubeInfluencer = () => {
   const fetchInfluencers = async () => {
     try {
       
-    //  const response = await axios.get("http://localhost:5000/youtubeinfluencers/getAllYoutubeInfluencer");
-      const response = await axios.get("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/getAllYoutubeInfluencer");
+      const response = await axios.get(`${localhosturl}/youtubeinfluencers/getAllYoutubeInfluencer`);
+     
   
     //  setInfluencers(response.data.data);
     } catch (error) {
@@ -127,6 +129,7 @@ const YoutubeInfluencer = () => {
   const pastactivitiesAdd=async(users)=>{
     const description = [
       formData.username ? `Username: ${formData.username}` : '',
+      formData.fullname ? `Fullname: ${formData.fullname}` : '',
       formData.followersCountFrom || formData.followersCountTo ? `Followers Count from ${formData.followersCountFrom || 'N/A'} to ${formData.followersCountTo || 'N/A'}` : '',
       formData.videosCountFrom || formData.videosCountTo ? `Videos Count from ${formData.videosCountFrom || 'N/A'} to ${formData.videosCountTo || 'N/A'}` : '',
       formData.engagementRateFrom || formData.engagementRateTo ? `Engagement Rate from ${formData.engagementRateFrom || 'N/A'} to ${formData.engagementRateTo || 'N/A'}` : '',
@@ -165,8 +168,8 @@ const YoutubeInfluencer = () => {
       }
     }
     
-    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
-    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   
+    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
    } catch (error) {
     console.log(error);
     
@@ -179,8 +182,8 @@ const YoutubeInfluencer = () => {
     e.preventDefault();
     try {
       const response = await  axios
-       .post("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/youtubeInfluencesFilter", formData)
-      //  .post("http://localhost:5000/youtubeinfluencers/youtubeInfluencesFilter", formData)
+       //.post("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/youtubeInfluencesFilter", formData)
+        .post(`${localhosturl}/youtubeinfluencers/youtubeInfluencesFilter`, formData)
         // console.log(response.data.data);
         setInfluencers(response.data.data);
         pastactivitiesAdd(response.data.data);
@@ -226,6 +229,17 @@ const YoutubeInfluencer = () => {
             className="focus:outline focus:outline-blue-400 p-2"
           />
         </div>*/}
+        <div className="flex flex-col">
+          <label htmlFor="fullname">Fullname</label>
+          <input
+            type="text"
+            id="fullname"
+            name="fullname"
+            value={formData.fullname}
+            onChange={handleChange}
+            className="focus:outline focus:outline-blue-400 p-2"
+          />
+        </div>
         <div className="flex flex-col">
           <label htmlFor="followersCountFrom">Followers Count From</label>
           <input
@@ -507,16 +521,24 @@ const YoutubeInfluencer = () => {
           />
         </div>*/}
       </div>
-      <div className="flex-end">
-        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4 rounded">
-          Search
-        </button>
-        <button type="button" onClick={handleReset} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 mt-4 ml-4 rounded">
-          Reset
-        </button>
-      </div>
+      <div className="flex items-center justify-end space-x-2">       
+           <SaveSearch section="YoutubeInfluencer"formDataList={formData}/>
+          <button
+            type="reset"
+            onClick={handleReset}
+            className="py-2 px-4 bg-gray-900 text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-700 hover:scale-105"
+          >
+            Reset
+          </button>
+          <button
+            type="submit"
+            className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
+          >
+            Search
+          </button>
+        </div>
       </form>
-      {influencers.length > 0 &&
+     
         <div className="mt-4">
           <h2 className="text-xl p-2 my-2"// text-white bg-blue-700 
           >
@@ -527,7 +549,7 @@ const YoutubeInfluencer = () => {
         
         </div>
         
-      }
+      
     </div>
 
   )

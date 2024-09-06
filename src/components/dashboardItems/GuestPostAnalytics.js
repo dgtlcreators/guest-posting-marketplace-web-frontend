@@ -1,6 +1,6 @@
 
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
 import PieChart from './Charts/PieChart';
@@ -9,6 +9,7 @@ import DistributedColumns from './Charts/DistributedColumns';
 import RadarChart from './Charts/RadarChart';
 import MixedChart from './Charts/MixedChart';
 import { useTheme } from '../../context/ThemeProvider';
+import { UserContext } from '../../context/userContext';
 
 
 const GuestPostAnalytics = () => {
@@ -16,12 +17,13 @@ const GuestPostAnalytics = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { userData ,localhosturl} = useContext(UserContext);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-       // const response = await axios.get('http://localhost:5000/form/getData');
-        const response = await axios.get('https://guest-posting-marketplace-web-backend.onrender.com/form/getData');
+        const response = await axios.get(`${localhosturl}/form/getData`);
+       
         setData(response.data.data);
         setLoading(false);
       } catch (err) {

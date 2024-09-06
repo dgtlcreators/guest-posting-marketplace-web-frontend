@@ -1,43 +1,55 @@
 // src/App.js
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+
+
 
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
+import NotificationList from './components/Notifications/NotificationList.js';
 
-import Form from './components/Form';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
-//import SignOut from './components/auth/SignOut';
-import Admin from './components/Admin';
-import { UserProvider } from './context/userContext';
-import PathNotFound from './components/PathNotFound';
-import PastActivities from './components/PastActivities';
-import ProtectedRoute from './components/ProtectedRoute';
-import SuperAdmin from './components/SuperAdmin';
-import Dashboard from './components/dashboardItems/Dashboard';
-import EditAdminData from './components/EditAdminData';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-import CheckoutForm from './CheckoutForm';
-import InstagramInfluencer from './components/InstgramInfluencer/InstagramInfluencer';
-import EditInstagramInfluencer from "./components/InstgramInfluencer/EditInstagramInfluencer";
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
-import BrandUser from './components/InstgramInfluencer/BrandUser';
-import ApplicationForm from './components/InstgramInfluencer/ApplicationForm';
-import InfluencerProfile from './components/InstgramInfluencer/InfluencerProfile';
 
-import NewContentWriter from "./components/ContentWriter/NewContentWriter.js"
+import { UserProvider } from './context/userContext';
+import ProtectedRoute from './components/ProtectedRoute';
+
+import Guestpost from './components/GuestPosts/Guestpost.js';
+import GuestPostProfile from './components/GuestPosts/GuestPostProfile.js';
+
+
+import Admin from './components/Admin';
+import SuperAdmin from './components/SuperAdmin';
+import EditAdminData from './components/EditAdminData';
+
+import InstagramInfluencer from './components/InstgramInfluencer/InstagramInfluencer.js';
+import NewInstagramInfluencer from './components/InstgramInfluencer/NewInstagramInfluencer.js';
+import EditInstagramInfluencer from "./components/InstgramInfluencer/EditInstagramInfluencer";
+import InfluencerProfile from './components/InstgramInfluencer/InfluencerProfile';
+import ApplicationForm from './components/InstgramInfluencer/ApplicationForm';
+
+import YoutubeInfluencer from './components/YoutubeInfluencer/YoutubeInfluencer.js';
+import NewYoutubeInfluencer from './components/YoutubeInfluencer/NewYoutubeInfluencer.js';
+import EditYoutubeInfluencer from './components/YoutubeInfluencer/EditYoutubeInfluencer.js';
+import YoutubeInfluencerProfile from './components/YoutubeInfluencer/YoutubeInfluencerProfile.js';
+
 import ContentWriter from "./components/ContentWriter/ContentWriter.js"
+import NewContentWriter from "./components/ContentWriter/NewContentWriter.js"
 import EditContentWriter from "./components/ContentWriter/EditContentWriter.js"
 import ContentWriterProfile from "./components/ContentWriter/ContentWriterProfile.js"
-import NewYoutubeInfluencer from './components/YoutubeInfluencer/NewYoutubeInfluencer.js';
-import YoutubeInfluencerProfile from './components/YoutubeInfluencer/YoutubeInfluencerProfile.js';
-import EditYoutubeInfluencer from './components/YoutubeInfluencer/EditYoutubeInfluencer.js';
-import YoutubeInfluencer from './components/YoutubeInfluencer/YoutubeInfluencer.js';
 
 import Reports from './components/Reports.js';
+import Dashboard from './components/dashboardItems/Dashboard';
+import PathNotFound from './components/PathNotFound';
+import PastActivities from './components/OtherComponents/PastActivities';
+import CheckoutForm from './CheckoutForm';
+
+
+
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -61,96 +73,70 @@ function App() {
 
 function AppContent() {
   const showNavbarAndSidebar = useShowNavbarAndSidebar();
- // console.log(process.env.Local_Url)
+  // console.log(process.env.Local_Url)
   return (
     <div className="flex flex-col h-screen">
       {showNavbarAndSidebar && <Navbar />}
       <div className="flex flex-1 overflow-hidden">
         {showNavbarAndSidebar && <Sidebar />}
         <main className="flex-1 overflow-y-auto p-4">
-         <Routes>
-         <Route path="/" element={<Navigate to="/guestpost" />} />
-            {/*<Route path="/" element={<Navigate to="/guestpost" //to="/form"
-             />} />*/}
-            <Route
-              //path="/form"
-              path="/guestpost"
-              element={
-                <ProtectedRoute>
-                  <Elements stripe={stripePromise}>
-                  <Form />
-                </Elements>
-                </ProtectedRoute>
-              }
-            />
+          <Routes>
+
+            {/**Auth */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/past-activities" element={<PastActivities />} />
-            <Route 
-            path="/addGuestpost"
-             // path="/admin"
-              element={
-                <ProtectedRoute  requiredRole="Admin">
-                  <Admin />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/superadmin"
-              element={
-                <ProtectedRoute  requiredRole="Admin">
-                  <SuperAdmin />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/editadmindata/:id" //path="/editadmindata/:id" 
-            element={ <ProtectedRoute><EditAdminData /> </ProtectedRoute>} />
-           
-            <Route
-              path="/checkout"
-              element={
-                <Elements stripe={stripePromise}>
-                  <CheckoutForm />
-                </Elements>
-              }
-            />
-              <Route
-              path="/addInstagramInfluencer"
-             // path="/instagramInfluencer"
-              element={
-                <ProtectedRoute  requiredRole="Admin">
-                  <InstagramInfluencer />
-                </ProtectedRoute>
-              }
-            />
-             <Route path="/influencerprofile/:id" element={ <ProtectedRoute requiredRole="Admin"><InfluencerProfile/> </ProtectedRoute>} />
-             <Route path="/editInstagramInfluencer/:id" element={ <ProtectedRoute requiredRole="Admin"><EditInstagramInfluencer /> </ProtectedRoute>} />
-             <Route path="/instagram-influencer" //path="/branduser"
-              element={<BrandUser />} />
-             <Route path='/addContentWriters'
-             // path="/newContentWriters"
-              element={
-                <ProtectedRoute  requiredRole="Admin">
-                  <NewContentWriter />
-                </ProtectedRoute>
-              }
-            />
-             <Route path="/contentWriterprofile/:id" element={ <ProtectedRoute requiredRole="Admin"><ContentWriterProfile/> </ProtectedRoute>} />
-             <Route path="/editContentWriter/:id" element={ <ProtectedRoute requiredRole="Admin"><EditContentWriter /> </ProtectedRoute>} />
-             <Route path="/content-writers" //path="/content-writers" 
-             element={<ContentWriter />} />
-
-             <Route path='/addYoutubeInfluencer' element={<ProtectedRoute requiredRole="Admin"><NewYoutubeInfluencer/></ProtectedRoute>}/>
-             <Route path='/youtubeInfluencerProfile/:id' element={<ProtectedRoute requiredRole="Admin"><YoutubeInfluencerProfile/></ProtectedRoute>}/>
-             <Route path='/edityoutubeInfluencer/:id' element={<ProtectedRoute requiredRole="Admin"><EditYoutubeInfluencer/></ProtectedRoute>}/>
-             <Route path='/youtube-influencer' element={<YoutubeInfluencer/>}/>
-
-             <Route path="/application" element={<ApplicationForm />} />
-
-             <Route path='/reports' element={<Reports />}/>
             
-             <Route path="/dashboard" element={<Dashboard />} />
-             <Route path="*" element={<PathNotFound />} />
+            {/**Super Admin Routes */}
+
+            <Route path="/superadmin" element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}><SuperAdmin /></ProtectedRoute>} />
+            <Route path="/editadmindata/:id" element={<ProtectedRoute><EditAdminData /> </ProtectedRoute>} />
+
+            {/*GuestPost*/}
+            <Route path="/" element={<Navigate to="/guestpost" />} />
+            <Route path="/guestpost" element={<ProtectedRoute><Elements stripe={stripePromise}>
+              <Guestpost />
+            </Elements></ProtectedRoute>} />
+            <Route path="/addGuestpost" element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}><Admin /></ProtectedRoute>} />
+            <Route path="/guestpostProfile/:id" element={<GuestPostProfile />} />
+            
+            
+            {/**Instagram Routes */}
+            <Route path="/instagram-influencer" element={<InstagramInfluencer />} />
+            <Route path="/addInstagramInfluencer" element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]} >
+              <NewInstagramInfluencer /></ProtectedRoute>} />
+            <Route path="/editInstagramInfluencer/:id" element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}>
+              <EditInstagramInfluencer /> </ProtectedRoute>} />
+            <Route path="/influencerprofile/:id" element={<InfluencerProfile />} />
+
+            {/**Youtube Routes */}
+            <Route path='/youtube-influencer' element={<YoutubeInfluencer />} />
+            <Route path='/addYoutubeInfluencer' element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}>
+              <NewYoutubeInfluencer /></ProtectedRoute>} />
+            <Route path='/edityoutubeInfluencer/:id' element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}>
+              <EditYoutubeInfluencer /></ProtectedRoute>} />
+            <Route path='/youtubeInfluencerProfile/:id' element={<YoutubeInfluencerProfile />} />
+
+            {/**Content writer Routes */}
+            <Route path="/content-writers" element={<ContentWriter />} />
+            <Route path='/addContentWriters' element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}>
+              <NewContentWriter /></ProtectedRoute>} />
+            <Route path="/editContentWriter/:id" element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}>
+              <EditContentWriter /> </ProtectedRoute>} />
+            <Route path="/contentWriterprofile/:id" element={<ContentWriterProfile />} />
+
+
+
+
+            {/**Other Routes */}
+            <Route path="/past-activities" element={<PastActivities />} />
+            <Route path="/application" element={<ApplicationForm />} />
+            <Route path='/reports' element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}>
+            <Reports /></ProtectedRoute>} />
+            <Route path="/notifications" element={<NotificationList />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="*" element={<PathNotFound />} />
+
+            <Route path="/checkout" element={<Elements stripe={stripePromise}><CheckoutForm /></Elements>} /> 
           </Routes>
         </main>
       </div>
@@ -356,74 +342,74 @@ function App() {
         <CheckoutForm />
       </Elements>
     </div>*///}
-   /* <div className="flex justify-center h-screen w-screen">
-      
+/* <div className="flex justify-center h-screen w-screen">
+   
 
-      <UserProvider>
-        <BrowserRouter>
-        <Navbar/>
-        <div className="mt-16">
-          <Routes>
-            <Route path="/" element={<Navigate to="/form" />} />
-            <Route
-              path="/form"
-              element={
-                <ProtectedRoute>
-                  <Elements stripe={stripePromise}>
-                  <Form />
-                </Elements>
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute>
-                  <Admin />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/superadmin"
-              element={
-                <ProtectedRoute>
-                  <SuperAdmin />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/editadmindata/:id" element={<EditAdminData />} />
-            <Route path="*" element={<PathNotFound />} />
-            <Route
-              path="/checkout"
-              element={
-                <Elements stripe={stripePromise}>
-                  <CheckoutForm />
-                </Elements>
-              }
-            />
-              <Route
-              path="/instagramInfluencer"
-              element={
-                <ProtectedRoute>
-                  <InstagramInfluencer />
-                </ProtectedRoute>
-              }
-            />
-             <Route path="/editInstagramInfluencer/:id" element={<EditInstagramInfluencer />} />
-             <Route path="/branduser" element={<BrandUser />} />
-             <Route path="/application" element={<ApplicationForm />} />
-             <Route path="/influencerprofile/:id" element={<InfluencerProfile/>} />
-          </Routes>
-          </div>
-        </BrowserRouter>
-      
-        
-      </UserProvider>
-    </div>
-    </>
-  );
+   <UserProvider>
+     <BrowserRouter>
+     <Navbar/>
+     <div className="mt-16">
+       <Routes>
+         <Route path="/" element={<Navigate to="/form" />} />
+         <Route
+           path="/form"
+           element={
+             <ProtectedRoute>
+               <Elements stripe={stripePromise}>
+               <Form />
+             </Elements>
+             </ProtectedRoute>
+           }
+         />
+         <Route path="/login" element={<Login />} />
+         <Route path="/signup" element={<Signup />} />
+         <Route
+           path="/admin"
+           element={
+             <ProtectedRoute>
+               <Admin />
+             </ProtectedRoute>
+           }
+         />
+         <Route
+           path="/superadmin"
+           element={
+             <ProtectedRoute>
+               <SuperAdmin />
+             </ProtectedRoute>
+           }
+         />
+         <Route path="/editadmindata/:id" element={<EditAdminData />} />
+         <Route path="*" element={<PathNotFound />} />
+         <Route
+           path="/checkout"
+           element={
+             <Elements stripe={stripePromise}>
+               <CheckoutForm />
+             </Elements>
+           }
+         />
+           <Route
+           path="/instagramInfluencer"
+           element={
+             <ProtectedRoute>
+               <InstagramInfluencer />
+             </ProtectedRoute>
+           }
+         />
+          <Route path="/editInstagramInfluencer/:id" element={<EditInstagramInfluencer />} />
+          <Route path="/branduser" element={<BrandUser />} />
+          <Route path="/application" element={<ApplicationForm />} />
+          <Route path="/influencerprofile/:id" element={<InfluencerProfile/>} />
+       </Routes>
+       </div>
+     </BrowserRouter>
+   
+     
+   </UserProvider>
+ </div>
+ </>
+);
 }
 
 export default App;*/

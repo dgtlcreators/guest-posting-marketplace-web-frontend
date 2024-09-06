@@ -154,7 +154,7 @@ body {
   }
   
   body.dark th {
-    background-color: #444444; 
+    background-color: #444444;
     color: #ffffff; 
     border: 1px solid #555555; 
   }
@@ -171,4 +171,55 @@ body {
     color: #ffffff; 
     border: 1px solid #555555; 
   }
+
+  /* index.css */
+
+/* Fade-in animation for table rows */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover effect animation */
+@keyframes hoverEffect {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.02);
+  }
+}
+
+/* Apply the fade-in animation to table rows */
+table tbody tr {
+  animation: fadeIn 0.5s ease-in-out;
+  transition: transform 0.3s ease-in-out;
+}
+
+
+
+/* Light Mode Table Row Hover Effect */
+body.light table tbody tr:hover {
+ /* animation: hoverEffect 0.3s ease-in-out;*/
+  background-color: rgba(0, 0, 0, 0.2); /* Light mode hover color */
+}
+
+/* Dark Mode Table Row Hover Effect */
+body.dark table tbody tr:hover {
+  /*animation: hoverEffect 0.3s ease-in-out;*/
+  background-color: rgba(255, 255, 255, 0.3); /* Dark mode hover color */
+}
+
+
+/* Add smooth background color transition */
+table tbody tr {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
   

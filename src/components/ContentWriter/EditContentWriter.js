@@ -8,7 +8,7 @@ import { UserContext } from '../../context/userContext';
 
 const EditContentWriter = () => {
   const { isDarkTheme } = useTheme();
-  const { userData } = useContext(UserContext);
+  const { userData,localhosturl } = useContext(UserContext);
   const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -39,8 +39,8 @@ const EditContentWriter = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/getcontentwriter/${id}`);
-       // const response = await axios.get(`http://localhost:5000/contentwriters/getcontentwriter/${id}`);
+       
+       const response = await axios.get(`${localhosturl}/contentwriters/getcontentwriter/${id}`);
         const writer = response.data.data;
 
         setFormData({
@@ -236,8 +236,8 @@ const generateShortDescription = (formData, users) => {
 
       }
     }
-    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
-    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+    
+    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
    } catch (error) {
     console.log(error);
     
@@ -264,8 +264,8 @@ const generateShortDescription = (formData, users) => {
     }
 
     try {
-      const response = await axios.put(`https://guest-posting-marketplace-web-backend.onrender.com/contentwriters/updatecontentwriter/${id}`, {
-   //  const response = await axios.put(`http://localhost:5000/contentwriters/updatecontentwriter/${id}`, {
+      const response = await axios.put(`${localhosturl}/contentwriters/updatecontentwriter/${id}`, {
+   
         ...formData,
         expertise: cleanedExpertise,
         languages: cleanedLanguages,

@@ -1,70 +1,76 @@
-import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import InstagramInfluencerTable from "./InstagramInfluencerTable";
+import { useContext, useEffect, useState } from "react";
+import InstagramInfluencerTable from "./InstagramInfluencerTable.js"; 
 import { toast } from "react-toastify";
-import { useTheme } from "../../context/ThemeProvider";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/userContext.js";
+import { Link } from "react-router-dom";
+import { useTheme } from "../../context/ThemeProvider.js";
+import SaveSearch from "../OtherComponents/SaveSearch.js";
+
+
 
 
 const InstagramInfluencer = () => {
   const { isDarkTheme } = useTheme();
-  const { userData } = useContext(UserContext); 
+
+  const { userData ,localhosturl} = useContext(UserContext); 
   const userId = userData?._id;
-  const [formData, setFormData] = useState({
+
+  const initialFormData = {
     username: "",
-    fullName: "",
-    profilePicture: "",
-    bio: "",
-    followersCount: 0,
-    followingCount: 0,
-    postsCount: 0,
-    engagementRate: 0,
-    averageLikes: 0,
-    averageComments: 0,
+    fullName:"",
+    followersCountFrom: "",
+    followersCountTo: "",
+    engagementRateFrom: "",
+    engagementRateTo: "",
     category: "",
     location: "",
     language: "",
-    verifiedStatus: false,
-    collaborationRates: { post: 0, story: 0, reel: 0 },
-    pastCollaborations: [],
-    mediaKit: "",
-  });
+    verifiedStatus: "",
+    collaborationRates: {
+      postFrom: "",
+      postTo: "",
+      storyFrom: "",
+      storyTo: "",
+      reelFrom: "",
+      reelTo: ""
+    },
+  
+  
+    userId: userId
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
+  const [influencers, setInfluencers] = useState([]);
+  const [savedSearches, setSavedSearches] = useState([]);
+  const [bookmarkedInfluencers, setBookmarkedInfluencers] = useState([]);
+  const [recentActivities, setRecentActivities] = useState([]);
 
   const [locationQuery, setLocationQuery] = useState("");
   const [locationResults, setLocationResults] = useState([]);
 
 
-  const [profileUrlOption, setProfileUrlOption] = useState("manual");
-  const [mediaKitOption, setMediaKitOption] = useState("manual");
-  const [addInfluencer, setAddInfluencer] = useState([]);
-
-  
-
-  
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (name.startsWith('collaborationRates')) {
-      const key = name.split('.')[1]; 
-      setFormData((prev) => ({
-        ...prev,
-        collaborationRates: {
-          ...prev.collaborationRates,
-          [key]: type === 'number' ? parseFloat(value) : value,
-        },
-      }));
-    } else if (name === 'pastCollaborations') {
-      setFormData((prev) => ({
-        ...prev,
-        pastCollaborations: value.split(',').map((item) => item.trim()),
-      }));
+    const { name, value } = e.target;
+    const nameArray = name.split('.');
+
+    if (nameArray.length === 1) {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: type === 'checkbox' ? checked : type === 'number' ? parseFloat(value) : value,
-      }));
+      setFormData({
+        ...formData,
+        [nameArray[0]]: {
+          ...formData[nameArray[0]],
+          [nameArray[1]]: value,
+        },
+      });
     }
   };
   
+
   const handleLocationChange = async (e) => {
     const query = e.target.value;
     setLocationQuery(query);
@@ -95,59 +101,133 @@ const InstagramInfluencer = () => {
     setLocationResults([]);
   };
 
-  const createDescriptionElements = (formData, users) => {
-    const elements = [
-      { key: 'Username', value: formData.username },
-      { key: 'Full Name', value: formData.fullName },
-      { key: 'Profile Picture', value: formData.profilePicture },
-      { key: 'Bio', value: formData.bio },
-      { key: 'Followers Count', value: formData.followersCount },
-      { key: 'Following Count', value: formData.followingCount },
-      { key: 'Posts Count', value: formData.postsCount },
-      { key: 'Engagement Rate', value: `${formData.engagementRate}%` },
-      { key: 'Average Likes', value: formData.averageLikes },
-      { key: 'Average Comments', value: formData.averageComments },
-      { key: 'Category', value: formData.category },
-      { key: 'Location', value: formData.location },
-      { key: 'Language', value: formData.language },
-      { key: 'Verified Status', value: formData.verifiedStatus ? 'Verified' : 'Not Verified' },
-      { key: 'Collaboration Rates (Post)', value: formData.collaborationRates.post },
-      { key: 'Collaboration Rates (Story)', value: formData.collaborationRates.story },
-      { key: 'Collaboration Rates (Reel)', value: formData.collaborationRates.reel },
-      { key: 'Past Collaborations', value: formData.pastCollaborations.join(', ') },
-      { key: 'Media Kit', value: formData.mediaKit },
-      { key: 'Total results', value: users?.length }
-  ];
+
+
+  useEffect(() => {
+        
+    //fetchInfluencers();
+    //fetchSavedSearches();
+   // fetchBookmarkedInfluencers();
+   // fetchRecentActivities();
+  }, []);
+
+  const fetchInfluencers = async () => {
+    try {
+      
+      const response = await axios.get(`${localhosturl}/instagraminfluencers/getAllInstagraminfluencer`);
+     
+   
+      setInfluencers(response.data.instagramInfluencer);
+     // setOriginalUsers(response.data.instagramInfluencer);
+    } catch (error) {
+      console.error("Error fetching influencers", error);
+    }
+  };
+  const fetchSavedSearches = async () => {
+    try {
+
+      const response = await axios.get(`${localhosturl}/user/${userId}/savedSearches`);
+      setSavedSearches(response.data.savedSearches);
+    } catch (error) {
+      console.error("Error fetching saved searches", error);
+    }
+  };
+
+  const fetchBookmarkedInfluencers = async () => {
+    try {
+     
+      const response = await axios.get(`${localhosturl}/user/${userId}/bookmarkedInfluencers`);
+      setBookmarkedInfluencers(response.data.bookmarkedInfluencers);
+    } catch (error) {
+      console.error("Error fetching bookmarked influencers", error);
+    }
+  };
+
+  const fetchRecentActivities = async () => {
+    try {
+      
+      const response = await axios.get(`${localhosturl}/user/${userId}/recentActivities`);
+      setRecentActivities(response.data.recentActivities);
+    } catch (error) {
+      console.error("Error fetching recent activities", error);
+    }
+  };
+  const saveSearchQuery = async () => {
+    try {
+    
+      await axios.post(`${localhosturl}/savedSearches`, {
+        userId: userId,
+        searchQuery: formData,
+      });
+      toast.success("Search query saved");
+    } catch (error) {
+      toast.error("Failed to save search query");
+    }
+  };
+  const bookmarkInfluencer = async (influencerId) => {
+    try {
+      
+        await axios.post(`${localhosturl}/bookmarkedInfluencers`, {
+        userId: userId,
+        influencerId: influencerId,
+      });
+      toast.success("Influencer bookmarked");
+    } catch (error) {
+      toast.error("Failed to bookmark influencer");
+    }
+  };
   
 
-  const formattedElements = elements
-        .filter(element => element.value)
-        .map(element => `${element.key}: ${element.value}`)
-        .join(', ');
-  return `${formattedElements}`;
-};
-const generateShortDescription = (formData, users) => {
-  const elements = createDescriptionElements(formData, users).split(', ');
-  
- 
-  const shortElements = elements.slice(0, 2);
+  const recordRecentActivity = async (activity) => {
+    try {
+     
+        await axios.post(`${localhosturl}/recentActivities`, {
+        userId: userId,
+        activity: activity,
+      });
+      toast.success("Activity recorded");
+    } catch (error) {
+      toast.error("Failed to record activity");
+    }
+  };
 
-  return `You created a new Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
-};
+  
+  
+  
+  const handleReset = () => {
+    setFormData(initialFormData);
+  };
+
+  axios.defaults.withCredentials = true;
 
   const pastactivitiesAdd=async(users)=>{
-    const description = createDescriptionElements(formData, users);
-    const shortDescription = generateShortDescription(formData, users);
-  
+    const description = [
+      formData.username ? `Username: ${formData.username}` : '',
+      formData.fullName ? `Fullname: ${formData.fullName}` : '',
+      formData.followersCountFrom || formData.followersCountTo ? `Followers Count from ${formData.followersCountFrom || 'N/A'} to ${formData.followersCountTo || 'N/A'}` : '',
+      formData.engagementRateFrom || formData.engagementRateTo ? `Engagement Rate from ${formData.engagementRateFrom || 'N/A'} to ${formData.engagementRateTo || 'N/A'}` : '',
+      formData.category ? `Category: ${formData.category}` : '',
+      formData.location ? `Location: ${formData.location}` : '',
+      formData.language ? `Language: ${formData.language}` : '',
+      formData.verifiedStatus ? `Verified Status: ${formData.verifiedStatus}` : '',
+      formData.collaborationRates.postFrom || formData.collaborationRates.postTo ? `Post Collaboration Rates from ${formData.collaborationRates.postFrom || 'N/A'} to ${formData.collaborationRates.postTo || 'N/A'}` : '',
+      formData.collaborationRates.storyFrom || formData.collaborationRates.storyTo ? `Story Collaboration Rates from ${formData.collaborationRates.storyFrom || 'N/A'} to ${formData.collaborationRates.storyTo || 'N/A'}` : '',
+      formData.collaborationRates.reelFrom || formData.collaborationRates.reelTo ? `Reel Collaboration Rates from ${formData.collaborationRates.reelFrom || 'N/A'} to ${formData.collaborationRates.reelTo || 'N/A'}` : '',
+      `Total results: ${users.length}`
+    ]
+    .filter(Boolean)
+    .join(', ');
+    const shortDescription=`You searched ${formData.followersCountFrom ? 'Followers Count' : 'Engagement Rate'} from ${formData.followersCountFrom || formData.engagementRateFrom} to ${formData.followersCountTo || formData.engagementRateTo} and got ${users.length} results`;
+
    try {
     const activityData={
       userId:userData?._id,
-      action:"Created a new Instagram Influencer",
+      action:"Performed a search for Instagram Influencers",//"Searched for Instagram Influencers",
       section:"Instagram Influencer",
       role:userData?.role,
       timestamp:new Date(),
       details:{
-        type:"create",
+        type:"filter",
         filter:{formData,total:users.length},
         description,
         shortDescription
@@ -156,291 +236,184 @@ const generateShortDescription = (formData, users) => {
       }
     }
     
-    axios.post("https://guest-posting-marketplace-web-backend.onrender.com/pastactivities/createPastActivities", activityData)
-    //axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+   
+   axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
    } catch (error) {
     console.log(error);
     
    }
   }
-  
-
-
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    console.log(files,files[0])
-    setFormData((prev) => ({
-      ...prev,
-      [name]: files[0].name,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("formdata: ",formData)
-    console.log("collaborationRates.post",formData.collaborationRates.post)
-    const formDataToSend = new FormData();
-    formDataToSend.append("username", formData.username);
-    formDataToSend.append("fullName", formData.fullName);
-    formDataToSend.append("bio", formData.bio);
-    formDataToSend.append("followersCount", formData.followersCount);
-    formDataToSend.append("followingCount", formData.followingCount);
-    formDataToSend.append("postsCount", formData.postsCount);
-    formDataToSend.append("engagementRate", formData.engagementRate);
-    formDataToSend.append("averageLikes", formData.averageLikes);
-    formDataToSend.append("averageComments", formData.averageComments);
-    formDataToSend.append("category", formData.category);
-    formDataToSend.append("location", formData.location);
-    formDataToSend.append("language", formData.language);
-    formDataToSend.append("verifiedStatus", formData.verifiedStatus);
-    formDataToSend.append("collaborationRates[post]", formData.collaborationRates.post);
-    formDataToSend.append("collaborationRates[story]", formData.collaborationRates.story);
-    formDataToSend.append("collaborationRates[reel]", formData.collaborationRates.reel);
-   // formDataToSend.append("collaborationRates", JSON.stringify(formData.collaborationRates));
- 
-    formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
-  
-
-    if (profileUrlOption === "system" && formData.profilePicture) {
-      formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
-    } else {
-      formDataToSend.append("profilePicture", formData.profilePicture);
-    }
-  
-    if (mediaKitOption === "system" && formData.mediaKit) {
-      formDataToSend.append("mediaKit", document.querySelector('input[name="mediaKit"]').files[0]);
-    } else {
-      formDataToSend.append("mediaKit", formData.mediaKit);
-    }
- 
+   /*const pastactivitiesAdd=async()=>{
     try {
+     const activityData={
+       userId:userData?._id,
+       userName:userData?.name,
+      // userEmail:
+       action:"Searched for Instagram Influencers",
+       section:"Guest Post",
+       role:userData?.role,
+       timestamp:new Date(),
+       details:{
+         filter:{formData,total:influencers.length},
+ 
+       }
+     }
+     axios.post("http://localhost:5000/pastactivities/createPastActivities", activityData)
+    } catch (error) {
+     console.log(error);
      
-        const response = await axios.post("https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/addInstagraminfluencer", formDataToSend, {
-       // const response = await axios.post("http://localhost:5000/instagraminfluencers/addInstagraminfluencer", formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-     // setInfluencers((prev) => [...prev, response.data.instagramInfluencer]);
-    // ((prevInfluencers) => [...prevInfluencers, newInfluencer]);
-    setAddInfluencer((prev) => [...prev, response.data.instagramInfluencer]);
-      console.log(formDataToSend)
-      toast.success("Influencer added Successfully");
-      pastactivitiesAdd(formDataToSend);
-      handleReset();
-    } catch (error) {
-      toast.error(`Error adding influencer ${error}`);
-      console.error("Error adding influencer", error);
     }
-  };
+   }
   
+ const handleSubmit = (e) => {
+    e.preventDefault();
+    pastactivitiesAdd()
+    //console.log(formData)
+    const formDataToSend = {
+      ...formData,
+      verifiedStatus:formData.verifiedStatus===""?"": formData.verifiedStatus === 'verified',
+    };
+    
+    axios
+      //.post("https://guest-posting-marketplace-web-backend.onrender.com/userbrand/filter", formData)
+      .post("http://localhost:5000/userbrand/filter", formDataToSend)
+      .then((response) => {
+        console.log(response.data);
+        setInfluencers(response.data);
+        toast.success("Data Fetch Successfully");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      });
+  };*/
 
-  /*const handleSubmit = async (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     try {
-      const form = new FormData();
-      for (const key in formData) {
-        if (formData[key] instanceof File) {
-          form.append(key, formData[key]);
-        } else {
-          form.append(key, formData[key]);
-        }
-      }
-  
-      const response = await axios.post("http://localhost:5000/instagraminfluencers/addInstagraminfluencer", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      setInfluencers((prev) => [...prev, response.data.instagramInfluencer]);
-      handleReset();
+
+      const formDataToSend = {
+        ...formData,
+        verifiedStatus:formData.verifiedStatus===""?"": formData.verifiedStatus === 'verified',
+      };
+      
+      const response = await axios
+        
+        .post(`${localhosturl}/userbrand/filter`, formDataToSend)
+       
+          console.log(response.data);
+          setInfluencers(response.data);
+          pastactivitiesAdd(response.data);
+          toast.success("Data Fetch Successfully")
+      
     } catch (error) {
-      console.error("Error adding influencer", error);
+      console.log(error);
+      toast.error(error.message);
     }
-  };*/
-  
-
-
-  const handleReset=()=>{
-    setFormData({
-        username: "",
-        fullName: "",
-        profilePicture: "",
-        bio: "",
-        followersCount: 0,
-        followingCount: 0,
-        postsCount: 0,
-        engagementRate: 0,
-        averageLikes: 0,
-        averageComments: 0,
-        category: "",
-        location: "",
-        language: "",
-        verifiedStatus: false,
-        collaborationRates: { post: 0, story: 0, reel: 0 },
-        pastCollaborations: [],
-        mediaKit: "",
-      });
-      setLocationQuery("")
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-xl font-bold mb-3 p-3"//"text-2xl font-bold mb-4 text-blue-600 text-white bg-blue-700 "
-      >Instagram Influencers</h1>
-      <form onSubmit={handleSubmit} className="mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="block">
-            <label className="text-gray-700">Username</label>
+    <>
+   
+    <div className="p-4 max-w-6xl mx-auto overflow-x-auto">
+     { /*<h1 className="text-2xl text-white bg-blue-700 p-2 my-2">Influencer Filter</h1>*/}
+     <h1 className="text-2xl   p-2 my-2">FAQ</h1>
+      <form onSubmit={handleSubmit} className="bg-gray-200 shadow-xl p-4 relative">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {/* Username 
+          <div className="flex flex-col">
+            <label htmlFor="username">Username</label>
             <input
               type="text"
+              id="username"
               name="username"
-              placeholder="Username"
               value={formData.username}
               onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-              required
+              className="focus:outline focus:outline-blue-400 p-2"
             />
           </div>
-          <div className="block">
-            <label className="text-gray-700">Full Name</label>
+          */}
+           <div className="flex flex-col">
+            <label htmlFor="fullName">FullName</label>
             <input
               type="text"
+              id="fullName"
               name="fullName"
-              placeholder="Full Name"
               value={formData.fullName}
               onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
+              className="focus:outline focus:outline-blue-400 p-2"
             />
           </div>
-          <div className="block">
-            <label className="text-gray-700">Profile Picture URL</label>
-            <div className="flex items-center space-x-2">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="profileUrlOption"
-                  value="manual"
-                  checked={profileUrlOption === "manual"}
-                  onChange={() => setProfileUrlOption("manual")}
-                  className="mr-2"
-                />
-                Manual
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="profileUrlOption"
-                  value="system"
-                  checked={profileUrlOption === "system"}
-                  onChange={() => setProfileUrlOption("system")}
-                  className="mr-2"
-                />
-                From System
-              </label>
-            </div>
-            {profileUrlOption === "manual" ? (
-              <input
-                type="text"
-                name="profilePicture"
-                placeholder="Profile Picture URL"
-                value={formData.profilePicture}
-                onChange={handleChange}
-                className="p-2 border border-gray-300 rounded w-full"
-              />
-            ) : (
-                <input
-                type="file"
-                name="profilePicture"
-                onChange={handleFileChange}
-                className="p-2 border border-gray-300 rounded w-full"
-              />
-            )}
-          </div>
-          <div className="block">
-            <label className="text-gray-700">Bio</label>
-            <textarea
-              name="bio"
-              placeholder="Bio"
-              value={formData.bio}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </div>
-          <div className="block">
-            <label className="text-gray-700">Followers Count</label>
+
+          {/* Followers Count From */}
+          <div className="flex flex-col">
+            <label htmlFor="followersCountFrom">Followers Count From</label>
             <input
               type="number"
-              name="followersCount"
-              placeholder="Followers Count"
-              value={formData.followersCount}
+              id="followersCountFrom"
+              name="followersCountFrom"
+              min="0"
+              value={formData.followersCountFrom}
               onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
+              className="focus:outline focus:outline-blue-400 p-2"
             />
           </div>
-          <div className="block">
-            <label className="text-gray-700">Following Count</label>
+
+          {/* Followers Count To */}
+          <div className="flex flex-col">
+            <label htmlFor="followersCountTo">Followers Count To</label>
             <input
               type="number"
-              name="followingCount"
-              placeholder="Following Count"
-              value={formData.followingCount}
+              id="followersCountTo"
+              name="followersCountTo"
+              min="0"
+              value={formData.followersCountTo}
               onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
+              className="focus:outline focus:outline-blue-400 p-2"
             />
           </div>
-          <div className="block">
-            <label className="text-gray-700">Posts Count</label>
+
+          {/* Engagement Rate From */}
+          <div className="flex flex-col">
+            <label htmlFor="engagementRateFrom">Engagement Rate From</label>
             <input
               type="number"
-              name="postsCount"
-              placeholder="Posts Count"
-              value={formData.postsCount}
+              id="engagementRateFrom"
+              name="engagementRateFrom"
+              min="0"
+              step="0.01"
+              value={formData.engagementRateFrom}
               onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
+              className="focus:outline focus:outline-blue-400 p-2"
             />
           </div>
-          <div className="block">
-            <label className="text-gray-700">Engagement Rate</label>
+
+          {/* Engagement Rate To */}
+          <div className="flex flex-col">
+            <label htmlFor="engagementRateTo">Engagement Rate To</label>
             <input
               type="number"
-              name="engagementRate"
-              placeholder="Engagement Rate"
-              value={formData.engagementRate}
+              id="engagementRateTo"
+              name="engagementRateTo"
+              min="0"
+              step="0.01"
+              value={formData.engagementRateTo}
               onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
+              className="focus:outline focus:outline-blue-400 p-2"
             />
           </div>
-          <div className="block">
-            <label className="text-gray-700">Average Likes</label>
-            <input
-              type="number"
-              name="averageLikes"
-              placeholder="Average Likes"
-              value={formData.averageLikes}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </div>
-          <div className="block">
-            <label className="text-gray-700">Average Comments</label>
-            <input
-              type="number"
-              name="averageComments"
-              placeholder="Average Comments"
-              value={formData.averageComments}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </div>
-          <div className="block">
-            <label className="text-gray-700">Category</label>
+
+          {/* Category */}
+          <div className="flex flex-col">
+          <label htmlFor="category">Category</label>
             <select
+              id="category"
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
+              className="focus:outline focus:outline-blue-400 cursor-pointer p-2"
             >
+              <option value="">All</option>
               <option value="Agriculture">Agriculture</option>
               <option value="Animals and Pets">Animals and Pets</option>
               <option value="Art">Art</option>
@@ -462,28 +435,29 @@ const generateShortDescription = (formData, users) => {
               <option value="App Development">App Development</option>
             </select>
           </div>
-         {/* <label className="block">
-            <span className="text-gray-700">Location</span>
+
+          {/* Location */}
+          <div className="flex flex-col">
+           {/* <label htmlFor="location">Location</label>
             <input
               type="text"
+              id="location"
               name="location"
-              placeholder="Location"
               value={formData.location}
               onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </label>*/}
-          <div className="block">
-            <label className="text-gray-700">Location</label>
+              className="focus:outline focus:outline-blue-400 p-2"
+            />*/}
+            <label htmlFor="location">Location</label>
+           
             <input
               type="text"
               name="location"
               placeholder="Search Location"
               value={locationQuery}
               onChange={handleLocationChange}
-              className="p-2 border border-gray-300 rounded w-full"
+              className="focus:outline focus:outline-blue-400 p-2"
             />
-            {locationResults.length > 0 && (
+             {locationResults.length > 0 && (
               <ul className="mt-2 border border-gray-300 rounded w-full bg-white max-h-40 overflow-auto">
                 {locationResults.map((location) => (
                   <li
@@ -497,14 +471,18 @@ const generateShortDescription = (formData, users) => {
               </ul>
             )}
           </div>
-          <div className="block">
-            <label className="text-gray-700">Language</label>
+
+          {/* Language */}
+          <div className="flex flex-col">
+          <label htmlFor="language">Language</label>
             <select
+              id="language"
               name="language"
               value={formData.language}
               onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
+              className="focus:outline focus:outline-blue-400 cursor-pointer p-2"
             >
+              <option value="">All</option>
               <option value="English">English</option>
               <option value="Hindi">Hindi</option>
               <option value="Punjabi">Punjabi</option>
@@ -516,134 +494,318 @@ const generateShortDescription = (formData, users) => {
               <option value="Telugu">Telugu</option>
               <option value="Bengali">Bengali</option>
               <option value="Kannada">Kannada</option>
-              <option value="Other">Other</option>
             </select>
           </div>
-         
-          <label className="flex items-center">
-            <input
-              type="checkbox"
+
+          {/* Verified Status */}
+          <div className="flex flex-col">
+            <label htmlFor="verifiedStatus">Verified Status</label>
+            <select
+              id="verifiedStatus"
               name="verifiedStatus"
-              checked={formData.verifiedStatus}
+              value={formData.verifiedStatus}
               onChange={handleChange}
-              className="mr-2"
-            />
-            Verified Status
-          </label>
-          <div className="block">
-            <label className="text-gray-700">Collaboration Rates</label>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="block">
-                <label className="text-gray-700">Post Rate</label>
-                <input
-                  type="number"
-                  name="collaborationRates.post"
-                  placeholder="Post Rate"
-                  value={formData.collaborationRates.post}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded w-full"
-                />
-              </div>
-              <div className="block">
-                <label className="text-gray-700">Story Rate</label>
-                <input
-                  type="number"
-                  name="collaborationRates.story"
-                  placeholder="Story Rate"
-                  value={formData.collaborationRates.story}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded w-full"
-                />
-              </div>
-              <div className="block">
-                <label className="text-gray-700">Reel Rate</label>
-                <input
-                  type="number"
-                  name="collaborationRates.reel"
-                  placeholder="Reel Rate"
-                  value={formData.collaborationRates.reel}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded w-full"
-                />
-              </div>
-            </div>
+              className="focus:outline focus:outline-blue-400 cursor-pointer p-2"
+            >
+              <option value="">All</option>
+              <option value="verified">Verified</option>
+              <option value="unverified">Unverified</option>
+            </select>
           </div>
-          <div className="block">
-            <label className="text-gray-700">Past Collaborations</label>
-            <textarea
-              name="pastCollaborations"
-              placeholder="Past Collaborations"
-              value={formData.pastCollaborations.join(", ")}
+
+          {/* Collaboration Rates */}
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRates.postFrom">Collaboration Rate for Post (From)</label>
+            <input
+              type="number"
+              id="collaborationRates.postFrom"
+              name="collaborationRates.postFrom"
+              min="0"
+              value={formData.collaborationRates.postFrom}
               onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
+              className="focus:outline focus:outline-blue-400 p-2"
             />
           </div>
-         
-          <div className="block">
-            <label className="text-gray-700">Media Kit</label>
-            <div className="flex items-center space-x-2">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="mediaKitOption"
-                  value="manual"
-                  checked={mediaKitOption === "manual"}
-                  onChange={() => setMediaKitOption("manual")}
-                  className="mr-2"
-                />
-                Manual
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="mediaKitOption"
-                  value="system"
-                  checked={mediaKitOption === "system"}
-                  onChange={() => setMediaKitOption("system")}
-                  className="mr-2"
-                />
-                From System
-              </label>
-            </div>
-            {mediaKitOption === "manual" ? (
-              <input
-                type="text"
-                name="mediaKit"
-                placeholder="Media Kit URL"
-                value={formData.mediaKit}
-                onChange={handleChange}
-                className="p-2 border border-gray-300 rounded w-full"
-              />
-            ) : (
-              <input
-              type="file"
-              name="mediaKit"
-              
-              onChange={handleFileChange}
-              className="p-2 border border-gray-300 rounded w-full"
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRates.postTo">Collaboration Rate for Post (To)</label>
+            <input
+              type="number"
+              id="collaborationRates.postTo"
+              name="collaborationRates.postTo"
+              min="0"
+              value={formData.collaborationRates.postTo}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
             />
-            )}
+          </div>
+
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRates.storyFrom">Collaboration Rate for Story (From)</label>
+            <input
+              type="number"
+              id="collaborationRates.storyFrom"
+              name="collaborationRates.storyFrom"
+              min="0"
+              value={formData.collaborationRates.storyFrom}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRates.storyTo">Collaboration Rate for Story (To)</label>
+            <input
+              type="number"
+              id="collaborationRates.storyTo"
+              name="collaborationRates.storyTo"
+              min="0"
+              value={formData.collaborationRates.storyTo}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRates.reelFrom">Collaboration Rate for Reel (From)</label>
+            <input
+              type="number"
+              id="collaborationRates.reelFrom"
+              name="collaborationRates.reelFrom"
+              min="0"
+              value={formData.collaborationRates.reelFrom}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRates.reelTo">Collaboration Rate for Reel (To)</label>
+            <input
+              type="number"
+              id="collaborationRates.reelTo"
+              name="collaborationRates.reelTo"
+              min="0"
+              value={formData.collaborationRates.reelTo}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
           </div>
         </div>
-        <div className="mt-4 flex justify-center md:justify-end space-x-4 mt-8">
-        <button onClick={handleReset}
-            type="button"
-            className="p-2  bg-gray-600 text-white rounded hover:bg-gray-900 transition-all duration-300"
+        <div className="flex items-center justify-end space-x-2">       
+           <SaveSearch  section="InstagramInfluencer" formDataList={formData}/>
+          <button
+            type="reset"
+            onClick={handleReset}
+            className="py-2 px-4 bg-gray-900 text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-700 hover:scale-105"
           >
             Reset
           </button>
           <button
             type="submit"
-            className="p-2 bg-blue-600 text-white rounded hover:bg-blue-900 transition-all duration-300"
+            className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
           >
-            Add Influencer
+            Search
           </button>
-         
         </div>
+        
       </form>
-      <InstagramInfluencerTable addInfluencer={addInfluencer}/>
+
+      {
+      /*
+      <form
+        onSubmit={handleSubmit}
+        className="bg-gray-200 shadow-xl p-4 relative"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="flex flex-col">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="followersCount">Followers Count</label>
+            <input
+              type="number"
+              id="followersCount"
+              name="followersCount"
+              min="0"
+              value={formData.followersCount}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="engagementRate">Engagement Rate</label>
+            <input
+              type="number"
+              id="engagementRate"
+              name="engagementRate"
+              min="0"
+              step="0.01"
+              value={formData.engagementRate}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="category">Category</label>
+            <select
+              id="category"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 cursor-pointer p-2"
+            >
+              <option value="">All</option>
+              <option value="Agriculture">Agriculture</option>
+              <option value="Animals and Pets">Animals and Pets</option>
+              <option value="Art">Art</option>
+              <option value="Automobiles">Automobiles</option>
+              <option value="Business">Business</option>
+              <option value="Books">Books</option>
+              <option value="Beauty">Beauty</option>
+              <option value="Career and Employment">Career and Employment</option>
+              <option value="Computer">Computer</option>
+              <option value="Construction and Repairs">Construction and Repairs</option>
+              <option value="Culture">Culture</option>
+              <option value="Ecommerce">E-commerce</option>
+              <option value="Education">Education</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Environment">Environment</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Finance">Finance</option>
+              <option value="Web Development">Web Development</option>
+              <option value="App Development">App Development</option>
+            </select>
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="location">Location</label>
+            <input
+              type="text"
+              id="location"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="language">Language</label>
+            <select
+              id="language"
+              name="language"
+              value={formData.language}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 cursor-pointer p-2"
+            >
+              <option value="">All</option>
+              <option value="English">English</option>
+              <option value="Hindi">Hindi</option>
+              <option value="Punjabi">Punjabi</option>
+              <option value="Marathi">Marathi</option>
+              <option value="Gujarati">Gujarati</option>
+              <option value="Urdu">Urdu</option>
+              <option value="Odia">Odia</option>
+              <option value="Tamil">Tamil</option>
+              <option value="Telugu">Telugu</option>
+              <option value="Bengali">Bengali</option>
+              <option value="Kannada">Kannada</option>
+            </select>
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="verifiedStatus">Verified Status</label>
+            <select
+              id="verifiedStatus"
+              name="verifiedStatus"
+              value={formData.verifiedStatus}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 cursor-pointer p-2"
+            >
+              <option value="">All</option>
+              <option value="true">Verified</option>
+              <option value="false">Not Verified</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 my-4">
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRatePost">Collaboration Rate (Post)</label>
+            <input
+              type="number"
+              id="collaborationRatePost"
+              name="collaborationRatePost"
+              min="0"
+              value={formData.collaborationRatePost}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRateStory">Collaboration Rate (Story)</label>
+            <input
+              type="number"
+              id="collaborationRateStory"
+              name="collaborationRateStory"
+              min="0"
+              value={formData.collaborationRateStory}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRateReel">Collaboration Rate (Reel)</label>
+            <input
+              type="number"
+              id="collaborationRateReel"
+              name="collaborationRateReel"
+              min="0"
+              value={formData.collaborationRateReel}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-4">
+          <button
+            type="button"
+            onClick={handleReset}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          >
+            Reset
+          </button>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Filter
+          </button>
+        </div>
+      </form>*/}
+
+      {//influencers.length > 0 && (
+        <div className="mt-4">
+          <h2 className="text-xl   p-2 my-2"// text-white bg-blue-700 
+        >
+          Instagram Influencer List
+          </h2>
+          <InstagramInfluencerTable influencers={influencers} setInfluencers={setInfluencers} />
+        </div>
+      //)
+      }
     </div>
+    </>
   );
 };
 
 export default InstagramInfluencer;
+
+
+
+
+

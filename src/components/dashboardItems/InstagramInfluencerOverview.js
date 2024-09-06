@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import ApexCharts from 'apexcharts';
 import { useTheme } from '../../context/ThemeProvider';
+import { UserContext } from '../../context/userContext';
 
 
 const InstagramInfluencerOverview = () => {
@@ -9,13 +10,14 @@ const InstagramInfluencerOverview = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { userData ,localhosturl} = useContext(UserContext);
 
   // State to hold the counts
   const [influencerCount, setInfluencerCount] = useState(0);
   const [totalFollowers, setTotalFollowers] = useState(0);
   const [averageEngagementRate, setAverageEngagementRate] = useState(0);
 
-  // Refs for the chart elements
+  
   const chartSpark1Ref = useRef(null);
   const chartSpark2Ref = useRef(null);
   const chartSpark3Ref = useRef(null);
@@ -23,11 +25,10 @@ const InstagramInfluencerOverview = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://guest-posting-marketplace-web-backend.onrender.com/instagraminfluencers/getAllInstagraminfluencer');
-        //const response = await axios.get('http://localhost:5000/instagraminfluencers/getAllInstagraminfluencer');
+       
+        const response = await axios.get(`${localhosturl}/instagraminfluencers/getAllInstagraminfluencer`);
         const fetchedData = response.data.instagramInfluencer;
 
-        // Process data to compute counts
         setData(fetchedData);
         setInfluencerCount(fetchedData.length);
 

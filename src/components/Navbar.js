@@ -6,7 +6,8 @@ import { AppBar, Toolbar,  Typography, Badge, Avatar, Button, Popover, InputBase
 import SearchIcon from '@mui/icons-material/Search';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useTheme } from '../context/ThemeProvider';
-import NotificationDropdown from './NotificationDropdown.js';
+import NotificationDropdown from './Notifications/NotificationDropdown.js';
+import ViewAllNotifications from './Notifications/ViewAllNotifications.js';
 import ProfileDropdown from './ProfileDropdown.js';
 import IconButton from '@mui/material/IconButton';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
@@ -15,8 +16,16 @@ const Navbar = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [anchorElNotification, setAnchorElNotification] = useState(null);
   const [anchorElProfile, setAnchorElProfile] = useState(null);
+  const [showAllNotifications, setShowAllNotifications] = useState(false);
   const { isDarkTheme, toggleTheme } = useTheme();
 
+  const [notifications, setNotifications] = useState([
+    { id: 1, text: "New Comment on your post", time: "5 mins ago", seen: false },
+    { id: 2, text: "New Follower", time: "10 mins ago", seen: false },
+    { id: 3, text: "New Like on your post", time: "15 mins ago", seen: true },
+  ]);
+
+  
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
   };
@@ -39,6 +48,10 @@ const Navbar = () => {
 
   const openNotification = Boolean(anchorElNotification);
   const openProfile = Boolean(anchorElProfile);
+
+  const handleViewAllClick = () => {
+    setShowAllNotifications(true);
+  };
 
   return (
     <AppBar position="static"  className={`nav ${isDarkTheme ? 'dark' : 'light'}`}>
@@ -70,7 +83,34 @@ const Navbar = () => {
         </IconButton>
 
         {/* Notification Dropdown */}
-        <IconButton color="inherit" onClick={handleNotificationClick}>
+         <IconButton color="inherit" onClick={handleNotificationClick}>
+          <Badge badgeContent={notifications.filter(item=>item.seen===false).length} color="error">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+        <Popover
+          open={openNotification}
+          anchorEl={anchorElNotification}
+          onClose={handleNotificationClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          {showAllNotifications ? (
+            <ViewAllNotifications
+              notifications={notifications}
+              onClose={handleNotificationClose}
+            />
+          ) : (
+            <NotificationDropdown notifications={notifications} onViewAllClick={handleViewAllClick} />
+          )}
+        </Popover>
+        {/*<IconButton color="inherit" onClick={handleNotificationClick}>
           <Badge badgeContent={3} color="error">
             <NotificationsIcon />
           </Badge>
@@ -89,7 +129,7 @@ const Navbar = () => {
           }}
         >
           <NotificationDropdown />
-        </Popover>
+        </Popover>*/}
 
         {/* Profile Dropdown */}
         <IconButton color="inherit" onClick={handleProfileClick}>
