@@ -14,11 +14,11 @@ import ApplyForm from "../OtherComponents/ApplyForm";
 import Bookmark from "../OtherComponents/Bookmark";
 import Pagination from "../OtherComponents/Pagination";
 
-const YoutubeInfluencerTable = ({influencers, setInfluencers}) => {
+const YoutubeInfluencerTable = () => {
   const { isDarkTheme } = useTheme();
   const { userData,localhosturl } = useContext(UserContext);
   
-  //const [influencers, setInfluencers] = useState([]);
+  const [influencers, setInfluencers] = useState([]);
   const [originalUsers, setOriginalUsers] = useState([]);
 
   const [sortedField, setSortedField] = useState(null);
@@ -156,17 +156,22 @@ const filteredUsers = influencers
 const exportDataToCSV = () => {
   const csvData = filteredUsers.map((user, index) => ({
     SNo: index + 1,
-    FullName: user.fullname,
-   // ProfilePicture:user.profilePicture,
-    FollowersCount:user.followersCount,
-    EngagementRate: user.engagementRate,
-    AverageViews:user.averageViews,
-    Category:user.category,
-    Location:user.location,
-    Language:user.language,
-    //VerifiedStatus: user.verifiedStatus,
-    CollaborationRates:  `Sponsored Videos: ${user.collaborationRates.sponsoredVideos || 0}, Product Reviews: ${user.collaborationRates.productReviews || 0}, Shoutouts: ${user.collaborationRates.shoutouts || 0}`,//user.collaborationRates,
-   
+  //  Username:user.username,
+  FullName: user.fullname,
+ ProfilePicture:user.profilePicture,
+// Bio:user.bio,
+  FollowersCount:user.followersCount,
+ // videosCount:user.videosCount,
+  EngagementRate: user.engagementRate,
+  AverageViews:user.averageViews,
+  Category:user.category,
+  Location:user.location,
+  Language:user.language,
+ 
+  CollaborationRates:  `Sponsored Videos: ${user.collaborationRates.sponsoredVideos || 0}, Product Reviews: ${user.collaborationRates.productReviews || 0}, Shoutouts: ${user.collaborationRates.shoutouts || 0}`,//user.collaborationRates,
+ // pastCollaborations:user.pastCollaborations,
+ // audienceDemographics:`Age: ${user.audienceDemographics.age || {}}, Gender: ${user.audienceDemographics.gender || {}}, Geographic Distribution: ${user.audienceDemographics.geographicDistribution || {}}`,
+ // mediaKit:user.mediaKit
   }));
 
   const csvString = Papa.unparse(csvData);

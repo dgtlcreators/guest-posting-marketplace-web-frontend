@@ -521,7 +521,7 @@ const YoutubeInfluencer = () => {
           />
         </div>*/}
       </div>
-      <div className="flex items-center justify-end space-x-2">       
+      <div className="flex items-center justify-end space-x-2 mt-3">       
            <SaveSearch section="YoutubeInfluencer"formDataList={formData}/>
           <button
             type="reset"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Calendar from 'react-calendar';
@@ -10,6 +10,7 @@ import Chart from 'chart.js/auto';
 import * as XLSX from 'xlsx';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
+import { UserContext } from '../context/userContext';
 
 
 const Reports = () => {
@@ -19,6 +20,7 @@ const Reports = () => {
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const chartRef = useRef(null);
+  const { userData,localhosturl } = useContext(UserContext);
 
  {/* useEffect(() => {
     if (darkMode) {
@@ -121,8 +123,8 @@ const Reports = () => {
 
     try {
       
-      await axios.post('https://guest-posting-marketplace-web-backend.onrender.com/applyroute/importData', formData);
-     // await axios.post('http://localhost:5000/applyroute/importData', formData);
+     
+     await axios.post(`${localhosturl}/applyroute/importData`, formData);
       toast.success('Data imported successfully');
     } catch (error) {
       console.error('Error importing data:', error);
@@ -132,11 +134,11 @@ const Reports = () => {
   const handleExport = async () => {
     setLoading(true);
     try {
-        // Fetch data from the server
+        
         //const response = await axios.get('http://localhost:5000/applyroute/getReportData');
         const reportData =reports //response.data;
 
-        // Create a new workbook and a worksheet
+        
         const workbook = XLSX.utils.book_new();
         const worksheetData = reportData.map((report) => ({
             'User ID': report.userId,
@@ -188,8 +190,8 @@ const Reports = () => {
     const formattedEndDate = formatLocalDate(endDate);
 
     try {
-      const response = await axios.get(`https://guest-posting-marketplace-web-backend.onrender.com/applyroute/getDailyReports`, {
-     // const response = await axios.get(`http://localhost:5000/applyroute/getDailyReports`, {
+    
+      const response = await axios.get(`${localhosturl}/applyroute/getDailyReports`, {
         params: {
           startDate: formattedStartDate,
           endDate: formattedEndDate

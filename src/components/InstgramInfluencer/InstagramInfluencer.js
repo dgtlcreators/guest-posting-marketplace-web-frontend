@@ -589,7 +589,7 @@ const InstagramInfluencer = () => {
             />
           </div>
         </div>
-        <div className="flex items-center justify-end space-x-2">       
+        <div className="flex items-center justify-end space-x-2 mt-3">       
            <SaveSearch  section="InstagramInfluencer" formDataList={formData}/>
           <button
             type="reset"

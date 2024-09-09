@@ -115,15 +115,16 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
     const csvData = filteredUsers.map((user, index) => ({
       SNo: index + 1,
       Name: user.name,
-      Experience:user.experience,
-      Email:user.email,
+      Email: user.email,
+      Experience: user.experience,
+      
       Location: user.location,
-      Industry:user.industry,
-      Expertise:user.expertise,
-      Language:user.language,
+      Industry: user.industry,
+      Expertise: user.expertise,
+      Language: user.language,
       subCategories: user.subCategories,
       CollaborationRates: `Post: ${user.collaborationRates.post || 0}, Story: ${user.collaborationRates.story || 0}, Reel: ${user.collaborationRates.reel || 0}`,
-     
+
     }));
 
     const csvString = Papa.unparse(csvData);
@@ -131,7 +132,7 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
     saveAs(blob, "exported_data.csv");
   };
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10); 
+  const [pageSize, setPageSize] = useState(10);
 
   const paginatedUsers = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize;
@@ -140,46 +141,46 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
 
   const handlePageSizeChange = (e) => {
     setPageSize(Number(e.target.value));
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   return (
     <div className="table-container">
-       <div className="pb-3 flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0 md:space-x-2">
-  <p className="text-center md:text-left transition duration-300 ease-in-out transform  hover:scale-105">
-    <strong>Found: {filteredUsers.length}</strong>
-  </p>
-  <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
-    <>
-      <label className="mr-2 whitespace-nowrap transition duration-300 ease-in-out transform  hover:scale-105">Items per page:</label>
-      <select
-        value={pageSize}
-        onChange={handlePageSizeChange}
-        className="border border-gray-300 rounded-md py-2 px-2 transition duration-300 ease-in-out transform  hover:scale-105"
-      >
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="15">15</option>
-        <option value="20">20</option>
-        <option value="25">25</option>
-        <option value="30">30</option>
-      </select>
-    </>
-    <button
-      onClick={handleClearFilter}
-      className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
-    >
-      Clear Filter
-    </button>
-    <button
-      onClick={exportDataToCSV}
-      className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105"
-    >
-      Export Data
-    </button>
-  </div>
-</div>
-    
+      <div className="pb-3 flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0 md:space-x-2">
+        <p className="text-center md:text-left transition duration-300 ease-in-out transform  hover:scale-105">
+          <strong>Found: {filteredUsers.length}</strong>
+        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+          <>
+            <label className="mr-2 whitespace-nowrap transition duration-300 ease-in-out transform  hover:scale-105">Items per page:</label>
+            <select
+              value={pageSize}
+              onChange={handlePageSizeChange}
+              className="border border-gray-300 rounded-md py-2 px-2 transition duration-300 ease-in-out transform  hover:scale-105"
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="25">25</option>
+              <option value="30">30</option>
+            </select>
+          </>
+          <button
+            onClick={handleClearFilter}
+            className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
+          >
+            Clear Filter
+          </button>
+          <button
+            onClick={exportDataToCSV}
+            className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105"
+          >
+            Export Data
+          </button>
+        </div>
+      </div>
+
       <div className="overflow-x-auto  p-4 rounded-lg shadow-md">
         <table className="min-w-full bg-white text-sm">
           <thead>
@@ -193,7 +194,7 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
               <th className="border px-4 py-2" onClick={() => handleSort("industry")}>Industries {renderSortIcon("industry")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("expertise")}>Expertise {renderSortIcon("expertise")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("languages")}>Languages {renderSortIcon("languages")}</th>
-              
+
               <th className="border px-4 py-2" onClick={() => handleSort("subCategories")}>Subcategories {renderSortIcon("subCategories")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>
@@ -214,83 +215,83 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
               </tr>
             ) : (
               paginatedUsers.map((writer, index) => (
-              <tr key={writer._id} className="hover:bg-gray-100 transition-colors">
-                <td className="border px-4 py-2">{index + 1}</td>
-                <td className="border px-4 py-2">{writer.name}</td>
-                <td className="border px-4 py-2">{writer.experience}</td>
-                <td className="border px-4 py-2">{writer.email}</td>
-                {/* <td className="border px-4 py-2">{writer.bio}</td>*/}
-                <td className="border px-4 py-2">{writer.location}</td>
-                <td className="border px-4 py-2">
-                  <ul className="list-disc pl-5">
-                    {writer.industry.map((industries, idx) => (
-                      <li key={idx}>
-                        <strong>{industries.type}:</strong>
-                        <ul className="list-disc pl-5">
-                          {industries.subCategories.map((subCategory, subIdx) => (
-                            <li key={subIdx}>{subCategory?.type}</li>
-                          ))}
-                        </ul>
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-                <td className="border px-4 py-2">
-                  <ul className="list-disc pl-5">
-                    {writer.expertise.map((expert, idx) => (
-                      <li key={idx}>
-                        <div key={idx}>{expert.type}</div>
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-                <td className="border px-4 py-2">
-                  <ul className="list-disc pl-5">
+                <tr key={writer._id} className="hover:bg-gray-100 transition-colors">
+                  <td className="border px-4 py-2">{index + 1}</td>
+                  <td className="border px-4 py-2">{writer.name}</td>
+                  <td className="border px-4 py-2">{writer.experience}</td>
+                  <td className="border px-4 py-2">{writer.email}</td>
+                  {/* <td className="border px-4 py-2">{writer.bio}</td>*/}
+                  <td className="border px-4 py-2">{writer.location}</td>
+                  <td className="border px-4 py-2">
+                    <ul className="list-disc pl-5">
+                      {writer.industry.map((industries, idx) => (
+                        <li key={idx}>
+                          <strong>{industries.type}:</strong>
+                          <ul className="list-disc pl-5">
+                            {industries.subCategories.map((subCategory, subIdx) => (
+                              <li key={subIdx}>{subCategory?.type}</li>
+                            ))}
+                          </ul>
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td className="border px-4 py-2">
+                    <ul className="list-disc pl-5">
+                      {writer.expertise.map((expert, idx) => (
+                        <li key={idx}>
+                          <div key={idx}>{expert.type}</div>
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td className="border px-4 py-2">
+                    <ul className="list-disc pl-5">
 
-                    {writer.languages.map((lang, idx) => (
-                      <li key={idx} className="mb-2">
-                        <span key={idx} className="">
-                          {/*`${lang.name==="Other"?`Other: ${lang.other}`:lang.name} (${lang.proficiency})`*/}
-                          {`${lang.name} (${lang.proficiency})`}
-                        </span></li>
-                    ))}
-                  </ul>
-                </td>
-                <td className="border px-4 py-2">
-                  <ul className="list-disc pl-5">
-                    {writer.industry.map((industries, idx) => (
-                      <li key={idx}>{industries.type}</li>
-                    ))}
-                  </ul>
-                </td>
-               
-                <td className="border px-4 py-2 text-center">
-                  {writer.collaborationRates ? (
-                    <div>
-                      <div>Post: {writer.collaborationRates.post}</div>
-                      <div>Story: {writer.collaborationRates.story}</div>
-                      <div>Reel: {writer.collaborationRates.reel}</div>
-                    </div>
-                  ) : (
-                    'N/A'
-                  )}
-                </td>
-                <td className="border px-4 py-2 text-center"><ApplyForm section="ContenWriters" publisher={writer} /></td>
-                <td  className="border py-3 px-2 md:px-6 text-center text-md font-semibold"> 
-                  <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
-                ><Bookmark  section="ContenWriters" publisher={writer}/></button>
-                </td>
-                <td className="border px-4 py-2 text-center">
-                <Link
-                    to={`/contentWriterprofile/${writer._id}`}
-                    className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
-                  >
-                    View Profile
-                  </Link>
-                </td>
-                
-                
-                {/* <td className="border py-3 px-4">
+                      {writer.languages.map((lang, idx) => (
+                        <li key={idx} className="mb-2">
+                          <span key={idx} className="">
+                            {/*`${lang.name==="Other"?`Other: ${lang.other}`:lang.name} (${lang.proficiency})`*/}
+                            {`${lang.name} (${lang.proficiency})`}
+                          </span></li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td className="border px-4 py-2">
+                    <ul className="list-disc pl-5">
+                      {writer.industry.map((industries, idx) => (
+                        <li key={idx}>{industries.type}</li>
+                      ))}
+                    </ul>
+                  </td>
+
+                  <td className="border px-4 py-2 text-center">
+                    {writer.collaborationRates ? (
+                      <div>
+                        <div>Post: {writer.collaborationRates.post}</div>
+                        <div>Story: {writer.collaborationRates.story}</div>
+                        <div>Reel: {writer.collaborationRates.reel}</div>
+                      </div>
+                    ) : (
+                      'N/A'
+                    )}
+                  </td>
+                  <td className="border px-4 py-2 text-center"><ApplyForm section="ContenWriters" publisher={writer} /></td>
+                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
+                    <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
+                    ><Bookmark section="ContenWriters" publisher={writer} /></button>
+                  </td>
+                  <td className="border px-4 py-2 text-center">
+                    <Link
+                      to={`/contentWriterprofile/${writer._id}`}
+                      className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                    >
+                      View Profile
+                    </Link>
+                  </td>
+
+
+                  {/* <td className="border py-3 px-4">
                 <button
                     onClick={() => handleBuyClick(writer)}
                     className="bg-green-500 hover:bg-green-700 text-white py-1 px-3 rounded"
@@ -305,12 +306,12 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
                 </button>
                  
                 </td>*/}
-              </tr>
-            )))}
+                </tr>
+              )))}
           </tbody>
         </table>
       </div>
-      {filteredUsers.length>0 && <Pagination
+      {filteredUsers.length > 0 && <Pagination
         totalItems={filteredUsers.length}
         currentPage={currentPage}
         pageSize={pageSize}

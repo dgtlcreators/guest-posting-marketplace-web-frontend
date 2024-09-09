@@ -8,7 +8,7 @@ import { UserContext } from "../../context/userContext";
 
 const NewInstagramInfluencer = () => {
   const { isDarkTheme } = useTheme();
-  const { userData,localhosturl } = useContext(UserContext); 
+  const { userData, localhosturl } = useContext(UserContext);
   const userId = userData?._id;
   const [formData, setFormData] = useState({
     username: "",
@@ -37,14 +37,14 @@ const NewInstagramInfluencer = () => {
   const [profileUrlOption, setProfileUrlOption] = useState("manual");
   const [mediaKitOption, setMediaKitOption] = useState("manual");
   const [addInfluencer, setAddInfluencer] = useState([]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  
 
-  
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (name.startsWith('collaborationRates')) {
-      const key = name.split('.')[1]; 
+      const key = name.split('.')[1];
       setFormData((prev) => ({
         ...prev,
         collaborationRates: {
@@ -64,7 +64,7 @@ const NewInstagramInfluencer = () => {
       }));
     }
   };
-  
+
   const handleLocationChange = async (e) => {
     const query = e.target.value;
     setLocationQuery(query);
@@ -117,58 +117,58 @@ const NewInstagramInfluencer = () => {
       { key: 'Past Collaborations', value: formData.pastCollaborations.join(', ') },
       { key: 'Media Kit', value: formData.mediaKit },
       { key: 'Total results', value: users?.length }
-  ];
-  
+    ];
 
-  const formattedElements = elements
-        .filter(element => element.value)
-        .map(element => `${element.key}: ${element.value}`)
-        .join(', ');
-  return `${formattedElements}`;
-};
-const generateShortDescription = (formData, users) => {
-  const elements = createDescriptionElements(formData, users).split(', ');
-  
- 
-  const shortElements = elements.slice(0, 2);
 
-  return `You created a new Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
-};
+    const formattedElements = elements
+      .filter(element => element.value)
+      .map(element => `${element.key}: ${element.value}`)
+      .join(', ');
+    return `${formattedElements}`;
+  };
+  const generateShortDescription = (formData, users) => {
+    const elements = createDescriptionElements(formData, users).split(', ');
 
-  const pastactivitiesAdd=async(users)=>{
+
+    const shortElements = elements.slice(0, 2);
+
+    return `You created a new Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
+  };
+
+  const pastactivitiesAdd = async (users) => {
     const description = createDescriptionElements(formData, users);
     const shortDescription = generateShortDescription(formData, users);
-  
-   try {
-    const activityData={
-      userId:userData?._id,
-      action:"Created a new Instagram Influencer",
-      section:"Instagram Influencer",
-      role:userData?.role,
-      timestamp:new Date(),
-      details:{
-        type:"create",
-        filter:{formData,total:users.length},
-        description,
-        shortDescription
-        
 
+    try {
+      const activityData = {
+        userId: userData?._id,
+        action: "Created a new Instagram Influencer",
+        section: "Instagram Influencer",
+        role: userData?.role,
+        timestamp: new Date(),
+        details: {
+          type: "create",
+          filter: { formData, total: users.length },
+          description,
+          shortDescription
+
+
+        }
       }
+
+
+      axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
+    } catch (error) {
+      console.log(error);
+
     }
-    
-   
-    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
-   } catch (error) {
-    console.log(error);
-    
-   }
   }
-  
+
 
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    console.log(files,files[0])
+    console.log(files, files[0])
     setFormData((prev) => ({
       ...prev,
       [name]: files[0].name,
@@ -177,8 +177,8 @@ const generateShortDescription = (formData, users) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("formdata: ",formData)
-    console.log("collaborationRates.post",formData.collaborationRates.post)
+    console.log("formdata: ", formData)
+    console.log("collaborationRates.post", formData.collaborationRates.post)
     const formDataToSend = new FormData();
     formDataToSend.append("username", formData.username);
     formDataToSend.append("fullName", formData.fullName);
@@ -196,34 +196,34 @@ const generateShortDescription = (formData, users) => {
     formDataToSend.append("collaborationRates[post]", formData.collaborationRates.post);
     formDataToSend.append("collaborationRates[story]", formData.collaborationRates.story);
     formDataToSend.append("collaborationRates[reel]", formData.collaborationRates.reel);
-   // formDataToSend.append("collaborationRates", JSON.stringify(formData.collaborationRates));
- 
+    // formDataToSend.append("collaborationRates", JSON.stringify(formData.collaborationRates));
+
     formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
-  
+
 
     if (profileUrlOption === "system" && formData.profilePicture) {
       formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
     } else {
       formDataToSend.append("profilePicture", formData.profilePicture);
     }
-  
+
     if (mediaKitOption === "system" && formData.mediaKit) {
       formDataToSend.append("mediaKit", document.querySelector('input[name="mediaKit"]').files[0]);
     } else {
       formDataToSend.append("mediaKit", formData.mediaKit);
     }
- 
+
     try {
-     
-       
-        const response = await axios.post(`${localhosturl}/instagraminfluencers/addInstagraminfluencer`, formDataToSend, {
+
+
+      const response = await axios.post(`${localhosturl}/instagraminfluencers/addInstagraminfluencer`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-     // setInfluencers((prev) => [...prev, response.data.instagramInfluencer]);
-    // ((prevInfluencers) => [...prevInfluencers, newInfluencer]);
-    setAddInfluencer((prev) => [...prev, response.data.instagramInfluencer]);
+      // setInfluencers((prev) => [...prev, response.data.instagramInfluencer]);
+      // ((prevInfluencers) => [...prevInfluencers, newInfluencer]);
+      setAddInfluencer((prev) => [...prev, response.data.instagramInfluencer]);
       console.log(formDataToSend)
       toast.success("Influencer added Successfully");
       pastactivitiesAdd(formDataToSend);
@@ -233,7 +233,7 @@ const generateShortDescription = (formData, users) => {
       console.error("Error adding influencer", error);
     }
   };
-  
+
 
   /*const handleSubmit = async (e) => {
     e.preventDefault();
@@ -258,30 +258,30 @@ const generateShortDescription = (formData, users) => {
       console.error("Error adding influencer", error);
     }
   };*/
-  
 
 
-  const handleReset=()=>{
+
+  const handleReset = () => {
     setFormData({
-        username: "",
-        fullName: "",
-        profilePicture: "",
-        bio: "",
-        followersCount: 0,
-        followingCount: 0,
-        postsCount: 0,
-        engagementRate: 0,
-        averageLikes: 0,
-        averageComments: 0,
-        category: "",
-        location: "",
-        language: "",
-        verifiedStatus: false,
-        collaborationRates: { post: 0, story: 0, reel: 0 },
-        pastCollaborations: [],
-        mediaKit: "",
-      });
-      setLocationQuery("")
+      username: "",
+      fullName: "",
+      profilePicture: "",
+      bio: "",
+      followersCount: 0,
+      followingCount: 0,
+      postsCount: 0,
+      engagementRate: 0,
+      averageLikes: 0,
+      averageComments: 0,
+      category: "",
+      location: "",
+      language: "",
+      verifiedStatus: false,
+      collaborationRates: { post: 0, story: 0, reel: 0 },
+      pastCollaborations: [],
+      mediaKit: "",
+    });
+    setLocationQuery("")
   }
 
   return (
@@ -349,7 +349,7 @@ const generateShortDescription = (formData, users) => {
                 className="p-2 border border-gray-300 rounded w-full"
               />
             ) : (
-                <input
+              <input
                 type="file"
                 name="profilePicture"
                 onChange={handleFileChange}
@@ -462,7 +462,7 @@ const generateShortDescription = (formData, users) => {
               <option value="App Development">App Development</option>
             </select>
           </div>
-         {/* <label className="block">
+          {/* <label className="block">
             <span className="text-gray-700">Location</span>
             <input
               type="text"
@@ -519,7 +519,7 @@ const generateShortDescription = (formData, users) => {
               <option value="Other">Other</option>
             </select>
           </div>
-         
+
           <label className="flex items-center">
             <input
               type="checkbox"
@@ -578,7 +578,7 @@ const generateShortDescription = (formData, users) => {
               className="p-2 border border-gray-300 rounded w-full"
             />
           </div>
-         
+
           <div className="block">
             <label className="text-gray-700">Media Kit</label>
             <div className="flex items-center space-x-2">
@@ -616,32 +616,37 @@ const generateShortDescription = (formData, users) => {
               />
             ) : (
               <input
-              type="file"
-              name="mediaKit"
-              
-              onChange={handleFileChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
+                type="file"
+                name="mediaKit"
+
+                onChange={handleFileChange}
+                className="p-2 border border-gray-300 rounded w-full"
+              />
             )}
           </div>
         </div>
-        <div className="mt-4 flex justify-center md:justify-end space-x-4 mt-8">
-        <button onClick={handleReset}
-            type="button"
-            className="p-2  bg-gray-600 text-white rounded hover:bg-gray-900 transition-all duration-300"
+        <div className="flex items-center justify-end space-x-2">
+          <button
+            type="reset"
+            onClick={handleReset}
+            className="py-2 px-4 bg-gray-900 text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-700 hover:scale-105 hover:animate-resetColorChange"
           >
             Reset
           </button>
           <button
             type="submit"
-            className="p-2 bg-blue-600 text-white rounded hover:bg-blue-900 transition-all duration-300"
+            className="py-2 px-4 bg-blue-900 text-white rounded transition duration-300 ease-in-out transform hover:scale-105 hover:animate-submitColorChange"
           >
-            Add Influencer
+           Add Influencer
           </button>
-         
         </div>
+
       </form>
-      <NewInstagramInfluencerTable addInfluencer={addInfluencer}/>
+      <h2 className="text-xl   p-2 my-2"// text-white bg-blue-700 
+      >
+        Instagram Influencer List
+      </h2>
+      <NewInstagramInfluencerTable key={refreshKey} />
     </div>
   );
 };

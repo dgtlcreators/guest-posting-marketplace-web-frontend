@@ -8,6 +8,7 @@ import { UserContext } from '../../context/userContext';
 const NewYoutubeInfluencer = () => {
   const { isDarkTheme } = useTheme();
   const { userData ,localhosturl} = useContext(UserContext);
+  const [refreshKey, setRefreshKey] = useState(0);
   const [formData, setFormData] = useState({
     username: "",
     fullname: "",
@@ -435,23 +436,24 @@ setFormData(prev=>({
             <label className='text-gray-700'>Past Collaborations</label>
             <textarea name='pastCollaborations' placeholder='Past Collaborations' value={formData.pastCollaborations} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full'/>
           </div>
-          <div className='block grid-col-1'>
+         {/* <div className='block grid-col-1'>
           <label className='text-gray-700'>Audience Demographics</label>
-          <div className='grid grid-col-1 md:grid-cols-1 gap-4'>
+          <div className='grid grid-col-1 md:grid-cols-1 gap-4'>*/}
             <div className='block'>
-              <label className='text-gray-700'>Age</label>
+              <label className='text-gray-700'>Audience Demographics (Age)</label>
               <textarea name='audienceDemographics.age' placeholder='Age' value={formData.audienceDemographics.age} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' />
             </div>
             <div className='block'>
-              <label className='text-gray-700'>Gender</label>
+              <label className='text-gray-700'>Audience Demographics (Gender)</label>
               <textarea name='audienceDemographics.gender' placeholder='Gender' value={formData.audienceDemographics.gender} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' />
             </div>
             <div className='block'>
-              <label className='text-gray-700'>Geographic Distribution</label>
+              <label className='text-gray-700'>Audience Demographics (Geographic Distribution)</label>
               <textarea name='audienceDemographics.geographicDistribution' placeholder='Geographic Distribution' value={formData.audienceDemographics.geographicDistribution} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' />
             </div>
-          </div>
-          </div>
+          {/*</div>
+          </div>*/}
+
           <div className="block">
             <label className="text-gray-700">Media Kit</label>
             <div className="flex items-center space-x-2">
@@ -498,16 +500,24 @@ setFormData(prev=>({
             )}
           </div>
         </div>
-        <div className='mt-4 flex justify-center md:justify-end space-x-4 mt-8'>
-          <button onClick={handleReset} type='button' className='p-2 bg-gray-600 text-white rounded hover:bg-gray-900 transition-all duration-300'>
+        
+        <div className="flex items-center justify-end space-x-2">
+          <button
+            type="reset"
+            onClick={handleReset}
+            className="py-2 px-4 bg-gray-900 text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-700 hover:scale-105 hover:animate-resetColorChange"
+          >
             Reset
           </button>
-          <button type='submit' className='p-2 bg-blue-600 text-white rounded hover:bg-blue-900 transition-all duration-300'>
-          Add Influencer
+          <button
+            type="submit"
+            className="py-2 px-4 bg-blue-900 text-white rounded transition duration-300 ease-in-out transform hover:scale-105 hover:animate-submitColorChange"
+          >
+            Add Influencer
           </button>
-        </div>
+          </div>
       </form>
-      <NewYoutubeInfluencerTable  addYotubeInfluencer={addYotubeInfluencer} setAddYotubeInfluencer={setAddYotubeInfluencer} />
+      <NewYoutubeInfluencerTable key={refreshKey}  />
     </div>
   )
 }

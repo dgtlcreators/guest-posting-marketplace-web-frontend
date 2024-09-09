@@ -551,7 +551,7 @@ const GuestpostTable = ({ users, setUsers }) => {
                   <td  className="border py-3 px-2 md:px-6 text-center text-md font-semibold"> 
                   <Link
                     to={`/guestpostProfile/${user._id}`}
-                    className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                    className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1 hover:animate-submitColorChange"
                   >
                     View Profile
                   </Link>
@@ -574,13 +574,13 @@ const GuestpostTable = ({ users, setUsers }) => {
         </table>
         
         </div>
-        <Pagination
+       {filteredUsers.length>0 && <Pagination
         totalItems={filteredUsers.length}
         currentPage={currentPage}
         pageSize={pageSize}
         onPageChange={setCurrentPage}
         onPageSizeChange={setPageSize}
-      />
+      />}
       </div>
     </div>
   );

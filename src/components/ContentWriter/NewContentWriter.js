@@ -13,22 +13,26 @@ import { UserContext } from "../../context/userContext";
 
 const NewContentWriter = () => {
   const { isDarkTheme } = useTheme();
-  const { userData,localhosturl } = useContext(UserContext);
+  const { userData, localhosturl } = useContext(UserContext);
   const [formData, setFormData] = useState({
     name: "",
     bio: "",
+    email: "",
+    location: "",
+
     experience: 0,
     expertise: [{ type: "", other: "" }],
-    location: "",
+
     languages: [{ name: "", other: "", proficiency: "" }],
+
     collaborationRates: { post: 0, story: 0, reel: 0 },
-    email: "",
     industry: [{ type: '', other: '', subCategories: [{ type: '', other: '' }] }],
     // industry: [{ type: '', other: '',  }],
     //subCategories: [{ type: '', other: '' }]
   });
 
-  const [addContenwriter,setAddContenwriter]=useState([])
+  const [addContenwriter, setAddContenwriter] = useState([])
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const industrySubCategories = {
     Technology: ['Software', 'Hardware', 'AI', 'Networking', 'Other'],
@@ -91,18 +95,18 @@ const NewContentWriter = () => {
       console.log(`Updating ${key} for language at index ${index} to ${value}`);
       setFormData((prev) => {
         const updatedLanguages = [...prev.languages];
-       
+
         if (key === 'name') {
           // Ensure unique language names
           if (value === "Other" || !updatedLanguages.some((lang, idx) => idx !== index && lang.name === value)) {
             updatedLanguages[index][key] = value;
-          
+
           }
         } else {
           updatedLanguages[index][key] = value;
         }
-       // updatedLanguages[index][key] = value;
-        console.log(updatedLanguages);  
+        // updatedLanguages[index][key] = value;
+        console.log(updatedLanguages);
         return { ...prev, languages: updatedLanguages };
       });
     } else if (name.startsWith('expertise')) {
@@ -110,72 +114,72 @@ const NewContentWriter = () => {
 
       setFormData((prev) => {
         const updatedExpertise = [...prev.expertise];
-       // updatedExpertise[index][key] = value;
-       if (key === 'type') {
-        // Ensure type is unique
-        if (value === "Other" || !updatedExpertise.some((exp, idx) => idx !== index && exp.type === value)) {
+        // updatedExpertise[index][key] = value;
+        if (key === 'type') {
+          // Ensure type is unique
+          if (value === "Other" || !updatedExpertise.some((exp, idx) => idx !== index && exp.type === value)) {
+            updatedExpertise[index][key] = value;
+          }
+        }
+        else {
           updatedExpertise[index][key] = value;
         }
-      } 
-      else {
-        updatedExpertise[index][key] = value;
-      }
-   
+
         return { ...prev, expertise: updatedExpertise };
       });
     }
     else if (name.startsWith('industry')) {
       const [outerIndex, key] = name.split('.').slice(1);
       setFormData((prev) => {
-          const updatedIndustry = [...prev.industry];
-          //console.log("key: ",key)
-          if (key === 'type') {
-              updatedIndustry[outerIndex] = {
-                  ...updatedIndustry[outerIndex],
-                  [key]: value,
-                  subCategories: updatedIndustry[outerIndex].subCategories || [],
-              };
-          } else if (key === 'other') {
-              updatedIndustry[outerIndex] = {
-                  ...updatedIndustry[outerIndex],
-                  [key]: value,
-              };
-          } else if (key === 'subCategories') {
-            const parts = name.split('.').slice(1);
-    const index = parseInt(parts[0], 10);
-    const subIndex = parseInt(parts[2], 10);
-    const fieldKey = parts[3]; 
-    updatedIndustry[index].subCategories = updatedIndustry[index].subCategories || [];
+        const updatedIndustry = [...prev.industry];
+        //console.log("key: ",key)
+        if (key === 'type') {
+          updatedIndustry[outerIndex] = {
+            ...updatedIndustry[outerIndex],
+            [key]: value,
+            subCategories: updatedIndustry[outerIndex].subCategories || [],
+          };
+        } else if (key === 'other') {
+          updatedIndustry[outerIndex] = {
+            ...updatedIndustry[outerIndex],
+            [key]: value,
+          };
+        } else if (key === 'subCategories') {
+          const parts = name.split('.').slice(1);
+          const index = parseInt(parts[0], 10);
+          const subIndex = parseInt(parts[2], 10);
+          const fieldKey = parts[3];
+          updatedIndustry[index].subCategories = updatedIndustry[index].subCategories || [];
 
-    
-    const updatedSubCategories = [...updatedIndustry[index].subCategories];
 
-    if (checked) {
-        
-        if (!updatedSubCategories[subIndex]) {
-            updatedSubCategories[subIndex] = { type: value };
-        } else {
-            updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: value };
-        }
-    } else {
-        
-        updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: '' };
-    }
-    const uniqueSubCategories = Array.from(
-      new Map(
-        updatedSubCategories
-          .filter(sub => sub && sub.type && sub.type.trim() !== '')  
-          .map(sub => [sub.type, sub])
-      ).values()
-    );
-  
-    updatedIndustry[index].subCategories = uniqueSubCategories;  
+          const updatedSubCategories = [...updatedIndustry[index].subCategories];
 
-    //updatedIndustry[index].subCategories = updatedSubCategories;
+          if (checked) {
+
+            if (!updatedSubCategories[subIndex]) {
+              updatedSubCategories[subIndex] = { type: value };
+            } else {
+              updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: value };
+            }
+          } else {
+
+            updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: '' };
           }
-          return { ...prev, industry: updatedIndustry };
+          const uniqueSubCategories = Array.from(
+            new Map(
+              updatedSubCategories
+                .filter(sub => sub && sub.type && sub.type.trim() !== '')
+                .map(sub => [sub.type, sub])
+            ).values()
+          );
+
+          updatedIndustry[index].subCategories = uniqueSubCategories;
+
+          //updatedIndustry[index].subCategories = updatedSubCategories;
+        }
+        return { ...prev, industry: updatedIndustry };
       });
-  }
+    }
     else {
       setFormData((prev) => ({
         ...prev,
@@ -185,11 +189,11 @@ const NewContentWriter = () => {
   };
 
   const handleAddLanguage = (newExpertise) => {
-   setFormData((prev) => ({
+    setFormData((prev) => ({
       ...prev,
       languages: [...prev.languages, { name: "", other: "", proficiency: "" }],
     }));
-   
+
   };
 
   const handleRemoveLanguage = (index) => {
@@ -219,7 +223,7 @@ const NewContentWriter = () => {
       if (!lang.name) errors.push(`Language ${index + 1} name is required.`);
       if (!lang.proficiency) errors.push(`Language ${index + 1} proficiency is required.`);
     });
-   // return
+    // return
     return errors;
   };
 
@@ -227,66 +231,68 @@ const NewContentWriter = () => {
     const elements = [
       { key: 'Name', value: formData.name },
       { key: 'Bio', value: formData.bio },
+      { key: 'Email', value: formData.email },
+      { key: 'Location', value: formData.location },
       { key: 'Experience', value: formData.experience },
       { key: 'Expertise', value: formData.expertise.map(exp => `${exp.type} ${exp.other ? ' (Other: ' + exp.other + ')' : ''}`).join(', ') },
-      { key: 'Location', value: formData.location },
+
       { key: 'Languages', value: formData.languages.map(lang => `${lang.name} ${lang.other ? ' (Other: ' + lang.other + ')' : ''} - Proficiency: ${lang.proficiency}`).join(', ') },
       { key: 'Collaboration Rates (Post)', value: formData.collaborationRates.post },
       { key: 'Collaboration Rates (Story)', value: formData.collaborationRates.story },
       { key: 'Collaboration Rates (Reel)', value: formData.collaborationRates.reel },
-      { key: 'Email', value: formData.email },
+
       { key: 'Industry', value: formData.industry.map(ind => `${ind.type} ${ind.other ? ' (Other: ' + ind.other + ')' : ''}${ind.subCategories.length ? ' - Subcategories: ' + ind.subCategories.map(sub => `${sub.type}${sub.other ? ' (Other: ' + sub.other + ')' : ''}`).join(', ') : ''}`).join(', ') }
-  ];
-  
-  
+    ];
 
-  const formattedElements = elements
-        .filter(element => element.value)
-        .map(element => `${element.key}: ${element.value}`)
-        .join(', ');
-  return `${formattedElements}`;
-};
-const generateShortDescription = (formData, users) => {
-  const elements = createDescriptionElements(formData, users).split(', ');
-  
- 
-  const shortElements = elements.slice(0, 2);
 
-  return `You created a new Content Writer with ${shortElements.join(' and ')} successfully.`;
-};
 
-  const pastactivitiesAdd=async(users)=>{
+    const formattedElements = elements
+      .filter(element => element.value)
+      .map(element => `${element.key}: ${element.value}`)
+      .join(', ');
+    return `${formattedElements}`;
+  };
+  const generateShortDescription = (formData, users) => {
+    const elements = createDescriptionElements(formData, users).split(', ');
+
+
+    const shortElements = elements.slice(0, 2);
+
+    return `You created a new Content Writer with ${shortElements.join(' and ')} successfully.`;
+  };
+
+  const pastactivitiesAdd = async (users) => {
     const description = createDescriptionElements(formData, users);
     const shortDescription = generateShortDescription(formData, users);
-  
-   try {
-    const activityData={
-      userId:userData?._id,
-      action:"Created a new Content Writer",
-      section:"Content Writer",
-      role:userData?.role,
-      timestamp:new Date(),
-      details:{
-        type:"create",
-        filter:{formData,total:users.length},
-        description,
-        shortDescription
-        
 
+    try {
+      const activityData = {
+        userId: userData?._id,
+        action: "Created a new Content Writer",
+        section: "Content Writer",
+        role: userData?.role,
+        timestamp: new Date(),
+        details: {
+          type: "create",
+          filter: { formData, total: users.length },
+          description,
+          shortDescription
+
+
+        }
       }
+
+      axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
+
+    } catch (error) {
+      console.log(error);
+
     }
-    
-    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
-   
-   } catch (error) {
-    console.log(error);
-    
-   }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting form data:", formData); 
+    console.log("Submitting form data:", formData);
 
     const validationErrors = validateFormData();
     if (validationErrors.length > 0) {
@@ -297,7 +303,7 @@ const generateShortDescription = (formData, users) => {
     try {
       const response = await axios.post(
         `${localhosturl}/contentwriters/createcontentwriter`,
-       
+
         formData,
         {
           headers: {
@@ -313,6 +319,26 @@ const generateShortDescription = (formData, users) => {
       console.error("Error:", error.response ? error.response.data : error.message);
     }
   };
+
+  const handleReset = () => {
+    setFormData({
+      name: "",
+      bio: "",
+      email: "",
+      location: "",
+  
+      experience: 0,
+      expertise: [{ type: "", other: "" }],
+  
+      languages: [{ name: "", other: "", proficiency: "" }],
+  
+      collaborationRates: { post: 0, story: 0, reel: 0 },
+      industry: [{ type: '', other: '', subCategories: [{ type: '', other: '' }] }],
+      // industry: [{ type: '', other: '',  }],
+      //subCategories: [{ type: '', other: '' }]
+    });
+
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -332,20 +358,20 @@ const generateShortDescription = (formData, users) => {
             />
           </div>
           <div className="block">
-            <label className="text-gray-700">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
+            <label className="text-gray-700">Bio</label>
+            <textarea
+              name="bio"
+              value={formData.bio}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
           </div>
           <div className="block">
-            <label className="text-gray-700">Bio</label>
-            <textarea
-              name="bio"
-              value={formData.bio}
+            <label className="text-gray-700">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
@@ -358,9 +384,10 @@ const generateShortDescription = (formData, users) => {
               value={formData.location}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
-              
+
             />
           </div>
+
           <div className="block">
             <label className="text-gray-700">Experience</label>
             <input
@@ -371,81 +398,10 @@ const generateShortDescription = (formData, users) => {
               className="p-2 border border-gray-300 rounded w-full"
             />
           </div>
-          <div className="block col-span-2">
-          <label className="text-xl font-bold text-blue-600">Industry</label>
-          {formData.industry.map((item, outerIndex) => (
-            <div key={outerIndex} className="border p-4 mb-4 rounded">
-              <div className="flex items-center space-x-2 mb-2">
-                <select
-                  name={`industry.${outerIndex}.type`}
-                  value={item.type}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded w-1/3"
-                >
-                  <option value="">Select Industry</option>
-                  {Object.keys(industrySubCategories).map((industry) => (
-                    <option key={industry} value={industry}>{industry}</option>
-                  ))}
-                  <option value="Other">Other</option>
-                </select>
-                {item.type === "Other" && (
-                  <input
-                    type="text"
-                    name={`industry.${outerIndex}.other`}
-                    value={item.other}
-                    onChange={handleChange}
-                    placeholder="Other Industry"
-                    className="p-2 border border-gray-300 rounded w-2/3"
-                  />
-                )}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveIndustry(outerIndex)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  Remove Industry
-                </button>
-              </div>
-              {item.type && industrySubCategories[item.type] && (
-                <div className="mb-4">
-                  <label className="block mb-2 text-gray-700">Sub Categories</label>
-                  {industrySubCategories[item.type].map((subCategory, innerIndex) => {
-            const isChecked = item?.subCategories.some(sub => sub?.type === subCategory?true:false);
-            return (
-                <div key={innerIndex} className="flex items-center space-x-2 mb-2">
-                    <input
-                        type="checkbox"
-                        name={`industry.${outerIndex}.subCategories.${innerIndex}.type`}
-                        value={subCategory}
-                        checked={isChecked}
-                        onChange={(e) => handleChange(e, outerIndex, innerIndex)}
-                        className="mr-2"
-                    />
-                    <label className="text-gray-700">{subCategory}</label>
-                </div>
-            );
-        })}
-                 {/* <button
-                    type="button"
-                    onClick={() => handleAddSubCategory(outerIndex)}
-                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-                  >
-                    Add Sub Category
-                  </button>*/}
-                </div>
-              )}
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={handleAddIndustry}
-            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          >
-            Add Industry
-          </button>
-        </div>
+         
 
-          {/*<label className="block">
+          {/*
+        <label className="block">
             <span className="text-gray-700">Industry</span>
             {formData.industry.map((ind, outerIdx) => (
               <div key={outerIdx} className="flex flex-col mb-2">
@@ -528,45 +484,45 @@ const generateShortDescription = (formData, users) => {
           <div className="block">
             <label className="text-gray-700">Expertise</label>
             {formData.expertise.map((exp, idx) => (
-  <div key={idx} className="flex items-center mb-2">
-    <select
-      name={`expertise.${idx}.type`}
-      value={exp.type}
-      onChange={handleChange}
-      className="p-2 border border-gray-300 rounded w-full mr-2"
-    >
-      <option value="">Select Expertise</option>
-      <option value="SEO">SEO</option>
-      <option value="Content Marketing">Content Marketing</option>
-      <option value="Technical Writing">Technical Writing</option>
-      <option value="Other">Other</option>
-    </select>
-    {exp.type === "Other" && (
-      <input
-        type="text"
-        name={`expertise.${idx}.other`}
-        value={exp.other}
-        onChange={handleChange}
-        placeholder="Enter expertise manually"
-        className="p-2 border border-gray-300 rounded w-full"
-      />
-    )}
-    <button
-      type="button"
-      onClick={() => handleRemoveExpertise(idx)}
-      className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
-    >
-      Remove
-    </button>
-  </div>
-))}
-<button
-  type="button"
-  onClick={handleAddExpertise}
-  className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
->
-  Add Expertise
-</button>
+              <div key={idx} className="flex items-center mb-2">
+                <select
+                  name={`expertise.${idx}.type`}
+                  value={exp.type}
+                  onChange={handleChange}
+                  className="p-2 border border-gray-300 rounded w-full mr-2"
+                >
+                  <option value="">Select Expertise</option>
+                  <option value="SEO">SEO</option>
+                  <option value="Content Marketing">Content Marketing</option>
+                  <option value="Technical Writing">Technical Writing</option>
+                  <option value="Other">Other</option>
+                </select>
+                {exp.type === "Other" && (
+                  <input
+                    type="text"
+                    name={`expertise.${idx}.other`}
+                    value={exp.other}
+                    onChange={handleChange}
+                    placeholder="Enter expertise manually"
+                    className="p-2 border border-gray-300 rounded w-full"
+                  />
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleRemoveExpertise(idx)}
+                  className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={handleAddExpertise}
+              className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
+            >
+              Add Expertise
+            </button>
           </div>
           <div className="block col-span-2">
             <label className="text-gray-700">Languages</label>
@@ -656,13 +612,98 @@ const generateShortDescription = (formData, users) => {
               className="p-2 border border-gray-300 rounded w-full"
             />
           </div>
+          <div className="block col-span-2">
+            <label className="text-xl ">Industry</label>
+            {formData.industry.map((item, outerIndex) => (
+              <div key={outerIndex} className="border p-4 mb-4 rounded">
+                <div className="flex items-center space-x-2 mb-2">
+                  <select
+                    name={`industry.${outerIndex}.type`}
+                    value={item.type}
+                    onChange={handleChange}
+                    className="p-2 border border-gray-300 rounded w-1/3"
+                  >
+                    <option value="">Select Industry</option>
+                    {Object.keys(industrySubCategories).map((industry) => (
+                      <option key={industry} value={industry}>{industry}</option>
+                    ))}
+                    <option value="Other">Other</option>
+                  </select>
+                  {item.type === "Other" && (
+                    <input
+                      type="text"
+                      name={`industry.${outerIndex}.other`}
+                      value={item.other}
+                      onChange={handleChange}
+                      placeholder="Other Industry"
+                      className="p-2 border border-gray-300 rounded w-2/3"
+                    />
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveIndustry(outerIndex)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    Remove Industry
+                  </button>
+                </div>
+                {item.type && industrySubCategories[item.type] && (
+                  <div className="mb-4">
+                    <label className="block mb-2 text-gray-700">Sub Categories</label>
+                    {industrySubCategories[item.type].map((subCategory, innerIndex) => {
+                      const isChecked = item?.subCategories.some(sub => sub?.type === subCategory ? true : false);
+                      return (
+                        <div key={innerIndex} className="flex items-center space-x-2 mb-2">
+                          <input
+                            type="checkbox"
+                            name={`industry.${outerIndex}.subCategories.${innerIndex}.type`}
+                            value={subCategory}
+                            checked={isChecked}
+                            onChange={(e) => handleChange(e, outerIndex, innerIndex)}
+                            className="mr-2"
+                          />
+                          <label className="text-gray-700">{subCategory}</label>
+                        </div>
+                      );
+                    })}
+                    {/* <button
+                    type="button"
+                    onClick={() => handleAddSubCategory(outerIndex)}
+                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                  >
+                    Add Sub Category
+                  </button>*/}
+                  </div>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={handleAddIndustry}
+              className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+            >
+              Add Industry
+            </button>
+          </div>
         </div>
-        
-        <button type="submit" className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">
+
+        <div className="flex items-center justify-end space-x-2">
+          <button
+            type="reset"
+            onClick={handleReset}
+            className="py-2 px-4 bg-gray-900 text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-700 hover:scale-105 hover:animate-resetColorChange"
+          >
+            Reset
+          </button>
+          <button
+            type="submit"
+            className="py-2 px-4 bg-blue-900 text-white rounded transition duration-300 ease-in-out transform hover:scale-105 hover:animate-submitColorChange"
+          >
           Submit
-        </button>
+          </button>
+        </div>
       </form>
-      <NewContentWriterTable addContenwriter={addContenwriter} setAddcontenwriter={setAddContenwriter} />
+      <NewContentWriterTable key={refreshKey} />
     </div>
   );
 };

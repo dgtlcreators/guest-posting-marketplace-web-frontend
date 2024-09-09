@@ -1,24 +1,37 @@
 
 import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeProvider';
 import { UserContext } from '../../context/userContext';
 
-const NewInstagramInfluencerTable = ({addInfluencer}) => {
+import { saveAs } from "file-saver";
+import { CSVLink } from "react-csv";
+import Papa from "papaparse";
+import ApplyForm from "../OtherComponents/ApplyForm";
+import ShowApplyForm from "../OtherComponents/ShowApplyForm";
+import Bookmark from "../OtherComponents/Bookmark";
+import Pagination from "../OtherComponents/Pagination";
+
+
+
+const NewInstagramInfluencerTable = () => {
   const { isDarkTheme } = useTheme();
-  const { userData,localhosturl } = useContext(UserContext); 
+  const { userData, localhosturl } = useContext(UserContext);
   const userId = userData?._id;
   const [influencers, setInfluencers] = useState([]);
   const [originalUsers, setOriginalUsers] = useState([]);
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchInfluencers = async () => {
       try {
-        
-       const response = await axios.get(`${localhosturl}/instagraminfluencers/getAllInstagraminfluencer`);
-        
+
+        const response = await axios.get(`${localhosturl}/instagraminfluencers/getAllInstagraminfluencer`);
+
         setInfluencers(response.data.instagramInfluencer);
         setOriginalUsers(response.data.instagramInfluencer);
         //setInfluencers(addInfluencer)
@@ -26,12 +39,12 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
         console.error("Error fetching influencers", error);
       }
     };
-  
+
     fetchInfluencers();
   }, []);
 
-  
- // console.log(originalUsers, influencers);
+
+  // console.log(originalUsers, influencers);
   const [sortedField, setSortedField] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
 
@@ -44,7 +57,7 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
     setSortedField(field);
     setSortDirection(direction);
     const sortedUsers = [...influencers].sort((a, b) => {
-     
+
       if (a[field] < b[field]) {
         return direction === "asc" ? -1 : 1;
       }
@@ -64,9 +77,9 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
   };
 
   const handleClearFilter = () => {
-  
-    setSortedField(null); 
-    setSortDirection("asc"); 
+
+    setSortedField(null);
+    setSortDirection("asc");
     setInfluencers(originalUsers)
   };
 
@@ -92,63 +105,63 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
       { key: 'Audience Demographics (Geographic Distribution)', value: formData.audienceDemographics.geographicDistribution.join(', ') },
       { key: 'Media Kit', value: formData.mediaKit },
       { key: 'Total results', value: users?.length }
-  ];
-  
-  
+    ];
 
-  const formattedElements = elements
-        .filter(element => element.value)
-        .map(element => `${element.key}: ${element.value}`)
-        .join(', ');
-  return `${formattedElements}`;
-};
-const generateShortDescription = (formData, users) => {
-  const elements = createDescriptionElements(formData, users).split(', ');
-  
- 
-  const shortElements = elements.slice(0, 2);
 
-  return `You created a Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
-};
-const pastactivitiesAdd=async(users)=>{
-  const formData={}
-  const description = createDescriptionElements(formData, users);
-  const shortDescription = generateShortDescription(formData, users);
 
- try {
-  const activityData={
-    userId:userData?._id,
-    action:"Deleted a Instagram Influencer",
-    section:"Instagram Influencer",
-    role:userData?.role,
-    timestamp:new Date(),
-    details:{
-      type:"delete",
-      filter:{formData,total:users.length},
-      description,
-      shortDescription
-      
+    const formattedElements = elements
+      .filter(element => element.value)
+      .map(element => `${element.key}: ${element.value}`)
+      .join(', ');
+    return `${formattedElements}`;
+  };
+  const generateShortDescription = (formData, users) => {
+    const elements = createDescriptionElements(formData, users).split(', ');
+
+
+    const shortElements = elements.slice(0, 2);
+
+    return `You created a Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
+  };
+  const pastactivitiesAdd = async (users) => {
+    const formData = {}
+    const description = createDescriptionElements(formData, users);
+    const shortDescription = generateShortDescription(formData, users);
+
+    try {
+      const activityData = {
+        userId: userData?._id,
+        action: "Deleted a Instagram Influencer",
+        section: "Instagram Influencer",
+        role: userData?.role,
+        timestamp: new Date(),
+        details: {
+          type: "delete",
+          filter: { formData, total: users.length },
+          description,
+          shortDescription
+
+
+        }
+      }
+
+
+      axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
+    } catch (error) {
+      console.log(error);
 
     }
   }
-  
 
-  axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
- } catch (error) {
-  console.log(error);
-  
- }
-}
-
-  const deleteInstagramInfluencer=async(id)=>{
+  const deleteInstagramInfluencer = async (id) => {
     try {
       await axios.delete(
-        
+
         `${localhosturl}/instagraminfluencers/deleteInstagraminfluencer/${id}`
-       
+
       );
       const user = influencers.find((user) => user._id === id);
-     
+
       await pastactivitiesAdd(user);
       toast.success("Instagram Influencer Deleted Successfully");
       setInfluencers(influencers.filter((influencer) => influencer._id !== id));
@@ -158,16 +171,95 @@ const pastactivitiesAdd=async(users)=>{
     }
   }
 
-  
+  const handleViewProfile = (influencer) => {
+    navigate(`/influencerprofile/${influencer._id}`);
+  };
+
+  const filteredUsers = influencers
+
+  const exportDataToCSV = () => {
+    const csvData = filteredUsers.map((user, index) => ({
+      SNo: index + 1,
+      Username:user.username,
+      FullName: user.fullName,
+      ProfilePicture:user.profilePicture,
+      Bio:user.bio,
+      FollowersCount:user.followersCount,
+      FollowingCount:user.followingCount,
+      PostsCount:user.postsCount,
+      EngagementRate: user.engagementRate,
+      AverageLikes:user.averageLikes,
+      AverageComments:user.averageComments,
+      Category:user.category,
+      Location:user.location,
+      Language:user.language,
+      VerifiedStatus: user.verifiedStatus,
+      CollaborationRates: `Post: ${user.collaborationRates.post || 0}, Story: ${user.collaborationRates.story || 0}, Reel: ${user.collaborationRates.reel || 0}`,
+      pastCollaborations:user.pastCollaborations,
+      mediaKit:user.mediaKit
+    }));
+
+    const csvString = Papa.unparse(csvData);
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, "exported_data.csv");
+  };
+
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedUsers = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return filteredUsers.slice(startIndex, startIndex + pageSize);
+  }, [filteredUsers, currentPage, pageSize]);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const handlePageSizeChange = (e) => {
+    setPageSize(Number(e.target.value));
+    setCurrentPage(1);
+  };
+
+
   return (
     <div className="table-container">
-     <div className="mb-4">
-        <button
-          onClick={handleClearFilter}
-          className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
-        >
-          Clear Filter
-        </button></div>
+
+      <div className="flex mb-3 flex-col items-center md:flex-row md:items-center justify-between space-y-2 md:space-y-0 md:space-x-2">
+        <p className="text-center  items-center md:text-left transition duration-300 ease-in-out transform hover:scale-105">
+          <strong>Found: {filteredUsers.length}</strong>
+        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+          <>
+            <label className="mr-2 whitespace-nowrap transition duration-300 ease-in-out transform  hover:scale-105">Items per page:</label>
+            <select
+              value={pageSize}
+              onChange={handlePageSizeChange}
+              className="border border-gray-300 rounded-md py-2 px-2 transition duration-300 ease-in-out transform hover:scale-105"
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="25">25</option>
+              <option value="30">30</option>
+            </select>
+          </>
+          <button
+            onClick={handleClearFilter}
+            className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
+          >
+            Clear Filter
+          </button>
+          <button
+            onClick={exportDataToCSV}
+            className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105"
+          >
+            Export Data
+          </button>
+        </div>
+      </div>
       <div className="overflow-x-auto  p-4 rounded-lg shadow-md">
         <table className="min-w-full  text-sm">
           <thead>
@@ -190,86 +282,122 @@ const pastactivitiesAdd=async(users)=>{
               <th className="border px-4 py-2" onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("pastCollaborations")}>Past Collaborations {renderSortIcon("pastCollaborations")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("mediaKit")}>Media Kit {renderSortIcon("mediaKit")}</th>
-              <th className="border py-3 px-4 uppercase font-semibold text-sm">Actions</th>
+              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Actions</th>
+              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>
+              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Bookmark</th>
+              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Profile</th>
             </tr>
           </thead>
           <tbody>
-            {influencers.map((influencer, index) => (
-              <tr key={influencer._id} className="hover:bg-gray-100 transition-colors">
-                <td className="border px-4 py-2">{index + 1}</td>
-                <td className="border px-4 py-2">{influencer.username}</td>
-                <td className="border px-4 py-2">{influencer.fullName}</td>
-                <td className="border px-4 py-2">
-                <img
-                    src={
-                      influencer?.profilePicture?.startsWith('https')
-                        ? influencer.profilePicture
-                       // : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.profilePicture}`
-                        : `${localhosturl}${influencer.profilePicture}`
-                    }
-                    alt="Profile"
-                    className="w-12 h-12 object-cover rounded-full"
-                  />
-
-                </td>
-                <td className="border px-4 py-2">{influencer.bio}</td>
-                <td className="border px-4 py-2">{influencer.followersCount}</td>
-                <td className="border px-4 py-2">{influencer.followingCount}</td>
-                <td className="border px-4 py-2">{influencer.postsCount}</td>
-                <td className="border px-4 py-2">{influencer.engagementRate}</td>
-                <td className="border px-4 py-2">{influencer.averageLikes}</td>
-                <td className="border px-4 py-2">{influencer.averageComments}</td>
-                <td className="border px-4 py-2">{influencer.category}</td>
-                <td className="border px-4 py-2">{influencer.location}</td>
-                <td className="border px-4 py-2">{influencer.language}</td>
-                <td className="border px-4 py-2">{influencer.verifiedStatus ? 'Verified' : 'Not Verified'}</td>
-                
-                <td className="border px-4 py-2 text-center">
-                  {influencer.collaborationRates ? (
-                    <div>
-                      <div>Post: {influencer.collaborationRates.post}</div>
-                      <div>Story: {influencer.collaborationRates.story}</div>
-                      <div>Reel: {influencer.collaborationRates.reel}</div>
-                    </div>
-                  ) : (
-                    'N/A'
-                  )}
-                </td>
-                <td className="border px-4 py-2">{influencer.pastCollaborations}</td>
-                <td className="border px-4 py-2">
-                <img
-                    src={
-                      influencer?.mediaKit?.startsWith('http')
-                        ? influencer.mediaKit
-                       // : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.mediaKit}`
-                        : `${localhosturl}${influencer.mediaKit}`
-                    }
-                    alt="Profile"
-                    className="w-12 h-12 object-cover rounded-full"
-                  />
-
-                </td>
-                <td className="border py-3 px-4">
-                <Link
-                    to={`/editInstagramInfluencer/${influencer._id}`}
-                    className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded"
-                  >
-                    EDIT
-                  </Link>
-                  <button
-                    onClick={() => deleteInstagramInfluencer(influencer._id)}
-                    className="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded my-2"
-                  >
-                    <i className="fa-solid fa-trash"></i> DELETE
-                  </button>
-                  
-                
+            {paginatedUsers.length === 0 ? (
+              <tr >
+                <td
+                  colSpan="10"
+                  className="py-3 px-6 text-center text-lg font-semibold"
+                >
+                  No Data Found
                 </td>
               </tr>
-            ))}
+            ) : (
+              paginatedUsers.map((influencer, index) => (
+                <tr key={influencer._id} className="hover:bg-gray-100 transition-colors">
+                  <td className="border px-4 py-2">{index + 1}</td>
+                  <td className="border px-4 py-2">{influencer.username}</td>
+                  <td className="border px-4 py-2">{influencer.fullName}</td>
+                  <td className="border px-4 py-2">
+                    <img
+                      src={
+                        influencer?.profilePicture?.startsWith('https')
+                          ? influencer.profilePicture
+                          // : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.profilePicture}`
+                          : `${localhosturl}${influencer.profilePicture}`
+                      }
+                      alt="Profile"
+                      className="w-12 h-12 object-cover rounded-full"
+                    />
+
+                  </td>
+                  <td className="border px-4 py-2">{influencer.bio}</td>
+                  <td className="border px-4 py-2">{influencer.followersCount}</td>
+                  <td className="border px-4 py-2">{influencer.followingCount}</td>
+                  <td className="border px-4 py-2">{influencer.postsCount}</td>
+                  <td className="border px-4 py-2">{influencer.engagementRate}</td>
+                  <td className="border px-4 py-2">{influencer.averageLikes}</td>
+                  <td className="border px-4 py-2">{influencer.averageComments}</td>
+                  <td className="border px-4 py-2">{influencer.category}</td>
+                  <td className="border px-4 py-2">{influencer.location}</td>
+                  <td className="border px-4 py-2">{influencer.language}</td>
+                  <td className="border px-4 py-2">{influencer.verifiedStatus ? 'Verified' : 'Not Verified'}</td>
+
+                  <td className="border px-4 py-2 text-center">
+                    {influencer.collaborationRates ? (
+                      <div>
+                        <div>Post: {influencer.collaborationRates.post}</div>
+                        <div>Story: {influencer.collaborationRates.story}</div>
+                        <div>Reel: {influencer.collaborationRates.reel}</div>
+                      </div>
+                    ) : (
+                      'N/A'
+                    )}
+                  </td>
+                  <td className="border px-4 py-2">{influencer.pastCollaborations}</td>
+                  <td className="border px-4 py-2">
+                    <img
+                      src={
+                        influencer?.mediaKit?.startsWith('http')
+                          ? influencer.mediaKit
+                          // : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.mediaKit}`
+                          : `${localhosturl}${influencer.mediaKit}`
+                      }
+                      alt="Profile"
+                      className="w-12 h-12 object-cover rounded-full"
+                    />
+
+                  </td>
+                  <td className="border py-3 px-4">
+                    <Link
+                      to={`/editInstagramInfluencer/${influencer._id}`}
+                      className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                    >
+                      EDIT
+                    </Link>
+                    <button
+                      onClick={() => deleteInstagramInfluencer(influencer._id)}
+                      className="border bg-red-500 hover:bg-red-700 text-white py-1 px-4 rounded my-2 transition-transform transform hover:-translate-y-1"
+                    >
+                      DELETE
+                    </button>
+
+
+                  </td>
+                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
+                    <ApplyForm section="InstagramInfluencer" publisher={influencer} />
+                    <ShowApplyForm section="InstagramInfluencer" publisher={influencer} />
+                  </td>
+                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
+                    <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
+                    ><Bookmark section="InstagramInfluencer" publisher={influencer} /></button>
+                  </td>
+                  <td className="border py-2 px-4">
+                    <button
+                      onClick={() => handleViewProfile(influencer)}
+                      className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                    >
+                      View Profile
+                    </button>
+                  </td>
+                </tr>
+              )))}
           </tbody>
         </table>
       </div>
+      {filteredUsers.length > 0 && <Pagination
+        totalItems={filteredUsers.length}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        onPageChange={setCurrentPage}
+        onPageSizeChange={setPageSize}
+      />}
     </div>
   );
 };

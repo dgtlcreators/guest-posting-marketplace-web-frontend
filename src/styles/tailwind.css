@@ -217,9 +217,44 @@ body.dark table tbody tr:hover {
 }
 
 
-/* Add smooth background color transition */
 table tbody tr {
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
+@keyframes submitColorChange {
+  0% {
+    background-color: #1e3a8a; /* Dark Blue */
+  }
+  33% {
+    background-color: #60a5fa; /* Light Blue */
+  }
+  66% {
+    background-color: #2563eb; /* Medium Blue */
+  }
+  100% {
+    background-color: #1e3a8a; /* Dark Blue */
+  }
+}
 
+.hover\:animate-submitColorChange:hover {
+  animation: submitColorChange 1.5s infinite;
+}
+
+@keyframes resetColorChange {
+  0% {
+    background-color: #1f2937; /* Dark Gray */
+  }
+  33% {
+    background-color: #9ca3af; /* Light Gray */
+  }
+  66% {
+    background-color: #6b7280; /* Medium Gray */
+  }
+  100% {
+    background-color: #1f2937; /* Dark Gray */
+  }
+}
+
+.hover\:animate-resetColorChange:hover {
+  animation: resetColorChange 1.5s infinite;
+}
   

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useTheme } from '../../context/ThemeProvider';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -6,10 +6,18 @@ import { toast } from 'react-toastify';
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
 import { UserContext } from '../../context/userContext';
 
+import { saveAs } from "file-saver";
+import { CSVLink } from "react-csv";
+import Papa from "papaparse";
+import ApplyForm from "../OtherComponents/ApplyForm";
+import ShowApplyForm from "../OtherComponents/ShowApplyForm";
+import Bookmark from "../OtherComponents/Bookmark";
+import Pagination from "../OtherComponents/Pagination";
 
-const NewYoutubeInfluencerTable = ({addYotubeInfluencer,setAddYotubeInfluencer}) => {
+
+const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer }) => {
   const { isDarkTheme } = useTheme();
-  const { userData,localhosturl } = useContext(UserContext);
+  const { userData, localhosturl } = useContext(UserContext);
   const [influencers, setInfluencers] = useState([]);
   const [originalUsers, setOriginalUsers] = useState([]);
 
@@ -84,7 +92,7 @@ const NewYoutubeInfluencerTable = ({addYotubeInfluencer,setAddYotubeInfluencer})
   
     setInfluencers(sortedUsers);
   };*/
-  
+
   const handleSort = (field) => {
     let direction = "asc";
     if (sortedField === field && sortDirection === "asc") {
@@ -92,33 +100,33 @@ const NewYoutubeInfluencerTable = ({addYotubeInfluencer,setAddYotubeInfluencer})
     }
     setSortedField(field);
     setSortDirection(direction);
-  
+
     const resolveField = (obj, path) => path.split('.').reduce((o, key) => (o && o[key] !== undefined) ? o[key] : '', obj);
-  
+
     const sortedUsers = [...influencers].sort((a, b) => {
       let aValue = resolveField(a, field);
       let bValue = resolveField(b, field);
       //console.log("Comparing:", aValue, bValue);
-  
+
       if (typeof aValue === 'object' && aValue !== null) {
         aValue = JSON.stringify(aValue);
       }
       if (typeof bValue === 'object' && bValue !== null) {
         bValue = JSON.stringify(bValue);
       }
-  
+
       if (Array.isArray(aValue)) {
         aValue = aValue.join(", ");
       }
       if (Array.isArray(bValue)) {
         bValue = bValue.join(", ");
       }
-  
+
       if (typeof aValue === 'string' && typeof bValue === 'string') {
         aValue = aValue.toLowerCase();
         bValue = bValue.toLowerCase();
       }
-  
+
       if (aValue < bValue) {
         return direction === "asc" ? -1 : 1;
       }
@@ -127,25 +135,25 @@ const NewYoutubeInfluencerTable = ({addYotubeInfluencer,setAddYotubeInfluencer})
       }
       return 0;
     });
-  
+
     setInfluencers(sortedUsers);
   };
-  
 
-  const renderSortIcon = (field) =>{
-    if(sortedField===field){
-      return sortDirection==="asc"?<FaSortUp/>:<FaSortDown/>
+
+  const renderSortIcon = (field) => {
+    if (sortedField === field) {
+      return sortDirection === "asc" ? <FaSortUp /> : <FaSortDown />
     }
-    return <FaSort/>
+    return <FaSort />
   }
 
 
-  useEffect(()=>{
-    const fetchInfluencer=async()=>{
+  useEffect(() => {
+    const fetchInfluencer = async () => {
       try {
-      
-         const response = await axios.get(`${localhosturl}/youtubeinfluencers/getAllYoutubeInfluencer`);
-          
+
+        const response = await axios.get(`${localhosturl}/youtubeinfluencers/getAllYoutubeInfluencer`);
+
         setInfluencers(response.data.data)
         setOriginalUsers(response.data.data)
       } catch (error) {
@@ -154,7 +162,7 @@ const NewYoutubeInfluencerTable = ({addYotubeInfluencer,setAddYotubeInfluencer})
     }
 
     fetchInfluencer()
-  },[])
+  }, [])
 
   const createDescriptionElements = (formData, users) => {
     const elements = [
@@ -178,63 +186,63 @@ const NewYoutubeInfluencerTable = ({addYotubeInfluencer,setAddYotubeInfluencer})
       { key: 'Past Collaborations', value: users.pastCollaborations.join(', ') },
       { key: 'Media Kit', value: users.mediaKit },
       { key: 'Total results', value: users?.length }
-  ];
-  
+    ];
 
-  const formattedElements = elements
-        .filter(element => element.value)
-        .map(element => `${element.key}: ${element.value}`)
-        .join(', ');
-  return `You deleted ${formattedElements}`;
-};
-const generateShortDescription = (formData, users) => {
-  const elements = createDescriptionElements(formData, users).split(', ');
-  
- 
-  const shortElements = elements.slice(0, 2);
 
-  return `You deleted a YouTube Influencer with ${shortElements.join(' and ')} successfully.`;
-};
+    const formattedElements = elements
+      .filter(element => element.value)
+      .map(element => `${element.key}: ${element.value}`)
+      .join(', ');
+    return `You deleted ${formattedElements}`;
+  };
+  const generateShortDescription = (formData, users) => {
+    const elements = createDescriptionElements(formData, users).split(', ');
 
-  const pastactivitiesAdd=async(users)=>{
-    const formData={}
+
+    const shortElements = elements.slice(0, 2);
+
+    return `You deleted a YouTube Influencer with ${shortElements.join(' and ')} successfully.`;
+  };
+
+  const pastactivitiesAdd = async (users) => {
+    const formData = {}
     const description = createDescriptionElements(formData, users);
     const shortDescription = generateShortDescription(formData, users);
-  
-   try {
-    const activityData={
-      userId:userData?._id,
-      action:"Deleted a new YouTube Influencer",
-      section:"YouTube Influencer",
-      role:userData?.role,
-      timestamp:new Date(),
-      details:{
-        type:"delete",
-        filter:{formData,total:users.length},
-        description,
-        shortDescription
-        
 
+    try {
+      const activityData = {
+        userId: userData?._id,
+        action: "Deleted a new YouTube Influencer",
+        section: "YouTube Influencer",
+        role: userData?.role,
+        timestamp: new Date(),
+        details: {
+          type: "delete",
+          filter: { formData, total: users.length },
+          description,
+          shortDescription
+
+
+        }
       }
+
+
+      axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
+    } catch (error) {
+      console.log(error);
+
     }
-    
-    
-    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
-   } catch (error) {
-    console.log(error);
-    
-   }
   }
 
-  const deleteInstagramInfluencer=async(id)=>{
+  const deleteInstagramInfluencer = async (id) => {
     try {
       await axios.delete(
-        
+
         `${localhosturl}/youtubeinfluencers/deleteYoutubeInfluencer/${id}`
-       
+
       );
       const user = influencers.find((user) => user._id === id);
-     
+
       await pastactivitiesAdd(user);
       toast.success("Instagram Influencer Deleted Successfully");
       setInfluencers(influencers.filter((influencer) => influencer._id !== id));
@@ -244,54 +252,147 @@ const generateShortDescription = (formData, users) => {
     }
   }
 
-const handleClearFilter=()=>{
-  setInfluencers(originalUsers)
-  setSortDirection("asc")
-  setSortedField(null)
-}
+  const handleClearFilter = () => {
+    setInfluencers(originalUsers)
+    setSortDirection("asc")
+    setSortedField(null)
+  }
+
+  const filteredUsers = influencers
+
+  const exportDataToCSV = () => {
+      const csvData = filteredUsers.map((user, index) => ({
+        SNo: index + 1,
+    Username:user.username,
+  FullName: user.fullname,
+ ProfilePicture:user.profilePicture,
+ Bio:user.bio,
+  FollowersCount:user.followersCount,
+  videosCount:user.videosCount,
+  EngagementRate: user.engagementRate,
+  AverageViews:user.averageViews,
+  Category:user.category,
+  Location:user.location,
+  Language:user.language,
+ 
+  CollaborationRates:  `Sponsored Videos: ${user.collaborationRates.sponsoredVideos || 0}, Product Reviews: ${user.collaborationRates.productReviews || 0}, Shoutouts: ${user.collaborationRates.shoutouts || 0}`,//user.collaborationRates,
+  pastCollaborations:user.pastCollaborations,
+  audienceDemographics:`Age: ${user.audienceDemographics.age || {}}, Gender: ${user.audienceDemographics.gender || {}}, Geographic Distribution: ${user.audienceDemographics.geographicDistribution || {}}`,
+  mediaKit:user.mediaKit
+      }));
+
+      const csvString = Papa.unparse(csvData);
+      const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+      saveAs(blob, "exported_data.csv");
+  };
+
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedUsers = useMemo(() => {
+      const startIndex = (currentPage - 1) * pageSize;
+      return filteredUsers.slice(startIndex, startIndex + pageSize);
+  }, [filteredUsers, currentPage, pageSize]);
+
+  const handlePageChange = (newPage) => {
+      setCurrentPage(newPage);
+  };
+
+  const handlePageSizeChange = (e) => {
+      setPageSize(Number(e.target.value));
+      setCurrentPage(1);
+  };
+
 
   return (
     <div className='table-container'>
-      <div className='mb-4'>
-        <button onClick={handleClearFilter} className='bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded'>Clear Filter</button>
+
+
+      <div className="flex mb-3 flex-col items-center md:flex-row md:items-center justify-between space-y-2 md:space-y-0 md:space-x-2">
+        <p className="text-center  items-center md:text-left transition duration-300 ease-in-out transform hover:scale-105">
+          <strong>Found: {filteredUsers.length}</strong>
+        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+          <>
+            <label className="mr-2 whitespace-nowrap transition duration-300 ease-in-out transform  hover:scale-105">Items per page:</label>
+            <select
+              value={pageSize}
+              onChange={handlePageSizeChange}
+              className="border border-gray-300 rounded-md py-2 px-2 transition duration-300 ease-in-out transform hover:scale-105"
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="25">25</option>
+              <option value="30">30</option>
+            </select>
+          </>
+          <button
+            onClick={handleClearFilter}
+            className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
+          >
+            Clear Filter
+          </button>
+          <button
+            onClick={exportDataToCSV}
+            className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105"
+          >
+            Export Data
+          </button>
+        </div>
       </div>
       <div className='overflow-x-auto  p-4 rounded-lg shadow-md'>
         <table className='min-w-full bg-white text-sm'>
           <thead>
             <tr className='bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base'>
               <th className='px-4 py-2'>S.No </th>
-              <th className='px-4 py-2'  onClick={() => handleSort("username")}>Username {renderSortIcon("username")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("fullname")}>Full Name {renderSortIcon("fullname")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("profilePicture")}>Profile Picture {renderSortIcon("profilePicture")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("followersCount")}>Followers {renderSortIcon("followersCount")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("videosCount")}>videos Count {renderSortIcon("videosCount")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("engagementRate")}>Engagement Rate {renderSortIcon("engagementRate")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("averageViews")}>Average Views {renderSortIcon("averageViews")}</th>
-              <th className='px-4 py-2'   onClick={() => handleSort("category")}>Category {renderSortIcon("category")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("language")}>Language {renderSortIcon("language")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("pastCollaborations")}>Past Collaborations {renderSortIcon("pastCollaborations")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("audienceDemographics")}>Audience Demographics {renderSortIcon("audienceDemographics")}</th>
-              <th className='px-4 py-2'  onClick={() => handleSort("mediaKit")}>mediaKit  {renderSortIcon("mediaKit")}</th>
-              <th className="py-3 px-4 uppercase font-semibold text-sm">Actions</th>
-             
+              <th className='px-4 py-2' onClick={() => handleSort("username")}>Username {renderSortIcon("username")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("fullname")}>Full Name {renderSortIcon("fullname")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("profilePicture")}>Profile Picture {renderSortIcon("profilePicture")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("followersCount")}>Followers {renderSortIcon("followersCount")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("videosCount")}>videos Count {renderSortIcon("videosCount")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("engagementRate")}>Engagement Rate {renderSortIcon("engagementRate")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("averageViews")}>Average Views {renderSortIcon("averageViews")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("category")}>Category {renderSortIcon("category")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("language")}>Language {renderSortIcon("language")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("pastCollaborations")}>Past Collaborations {renderSortIcon("pastCollaborations")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("audienceDemographics")}>Audience Demographics {renderSortIcon("audienceDemographics")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("mediaKit")}>mediaKit  {renderSortIcon("mediaKit")}</th>
+              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Actions</th>
+              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>
+              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Bookmark</th>
+              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Profile</th>
+
             </tr>
           </thead>
           <tbody>
-            {influencers.map((influencer,index)=>(
+            {paginatedUsers.length === 0 ? (
+              <tr >
+                <td
+                  colSpan="10"
+                  className="py-3 px-6 text-center text-lg font-semibold"
+                >
+                  No Data Found
+                </td>
+              </tr>
+            ) : (
+              paginatedUsers.map((influencer, index) => (
               <tr key={influencer._id} className='hover:bg-gray-100 transition-colors'>
-                <td className='border px-4 py-2'>{index+1}</td>
+                <td className='border px-4 py-2'>{index + 1}</td>
                 <td className='border px-4 py-2'>{influencer.username}</td>
                 <td className='border px-4 py-2'>{influencer.fullname}</td>
                 <td className='border px-4 py-2'>
-                <img
+                  <img
                     src={
                       influencer?.profilePicture?.startsWith('https')
                         ? influencer.profilePicture
-                       // : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.profilePicture}`
-                       : `${localhosturl}${influencer.profilePicture}`
+                        // : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.profilePicture}`
+                        : `${localhosturl}${influencer.profilePicture}`
                     }
                     alt="Profile"
                     className="w-12 h-12 object-cover rounded-full"
@@ -305,26 +406,26 @@ const handleClearFilter=()=>{
                 <td className='border px-4 py-2'>{influencer.category}</td>
                 <td className='border px-4 py-2'>{influencer.location}</td>
                 <td className='border px-4 py-2'>{influencer.language}</td>
-                <td className='border px-4 py-2'>{influencer.collaborationRates?(
+                <td className='border px-4 py-2'>{influencer.collaborationRates ? (
                   <div>
                     <div>Sponsored Videos: {influencer.collaborationRates.sponsoredVideos}</div>
                     <div>Product Reviews: {influencer.collaborationRates.productReviews}</div>
                     <div>Shoutouts: {influencer.collaborationRates.shoutouts}</div>
                   </div>
-                ):"N/A"}</td>
+                ) : "N/A"}</td>
                 <td className='border px-4 py-2'>{influencer.pastCollaborations.join(",")}</td>
-                <td className='border px-4 py-2'>{influencer.audienceDemographics?
-                <div>
-                  <div>Age: {influencer.audienceDemographics.age.join(",")}</div>
-                  <div>Gender: {influencer.audienceDemographics.gender.join(",")}</div>
-                  <div>Geographic Distribution: {influencer.audienceDemographics.geographicDistribution.join(",")}</div>
-                </div>:"N/A"}</td>
+                <td className='border px-4 py-2'>{influencer.audienceDemographics ?
+                  <div>
+                    <div>Age: {influencer.audienceDemographics.age.join(",")}</div>
+                    <div>Gender: {influencer.audienceDemographics.gender.join(",")}</div>
+                    <div>Geographic Distribution: {influencer.audienceDemographics.geographicDistribution.join(",")}</div>
+                  </div> : "N/A"}</td>
                 <td className='border px-4 py-2'>
-                <img
+                  <img
                     src={
                       influencer?.mediaKit?.startsWith('http')
                         ? influencer.mediaKit
-                       // : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.mediaKit}`
+                        // : `https://guest-posting-marketplace-web-backend.onrender.com${influencer.mediaKit}`
                         : `${localhosturl}${influencer.mediaKit}`
                     }
                     alt="Profile"
@@ -333,26 +434,50 @@ const handleClearFilter=()=>{
 
                 </td>
                 <td className='py-3 px-4'>
-                <Link
+                  <Link
                     to={`/edityoutubeInfluencer/${influencer._id}`}
-                    className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded"
+                    className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                   >
                     EDIT
                   </Link>
-                <button
+                  <button
                     onClick={() => deleteInstagramInfluencer(influencer._id)}
-                    className="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded my-2"
+                    className="border bg-red-500 hover:bg-red-700 text-white py-1 px-4 rounded my-2 transition-transform transform hover:-translate-y-1"
                   >
-                    <i className="fa-solid fa-trash"></i> DELETE
+                     DELETE
                   </button>
                 </td>
-                
-                
+                <td className='border py-3 px-4'>
+                  <ApplyForm section="YoutubeInfluencer" publisher={influencer}/>
+                  <ShowApplyForm section="YoutubeInfluencer" publisher={influencer} />
+                  </td>
+               <td  className="border py-3 px-2 md:px-6 text-center text-md font-semibold"> 
+                  <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
+                ><Bookmark  section="YoutubeInfluencer" publisher={influencer}/></button>
+                </td>
+                <td className='border py-3 px-4'>
+                <Link
+                    to={`/youtubeInfluencerProfile/${influencer._id}`}
+                    className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                  >
+                    View Profile
+                  </Link>
+               
+                </td>
+
+
               </tr>
-            ))}
+            )))}
           </tbody>
         </table>
       </div>
+      {filteredUsers.length>0 && <Pagination
+        totalItems={filteredUsers.length}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        onPageChange={setCurrentPage}
+        onPageSizeChange={setPageSize}
+      />}
 
     </div>
   )

@@ -20,9 +20,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 import Guestpost from './components/GuestPosts/Guestpost.js';
 import GuestPostProfile from './components/GuestPosts/GuestPostProfile.js';
+import NewGuestpost from './components/GuestPosts/NewGuestpost.js';
 
 
-import Admin from './components/Admin';
 import SuperAdmin from './components/SuperAdmin';
 import EditAdminData from './components/EditAdminData';
 
@@ -96,7 +96,7 @@ function AppContent() {
             <Route path="/guestpost" element={<ProtectedRoute><Elements stripe={stripePromise}>
               <Guestpost />
             </Elements></ProtectedRoute>} />
-            <Route path="/addGuestpost" element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}><Admin /></ProtectedRoute>} />
+            <Route path="/addGuestpost" element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}><NewGuestpost /></ProtectedRoute>} />
             <Route path="/guestpostProfile/:id" element={<GuestPostProfile />} />
             
             
