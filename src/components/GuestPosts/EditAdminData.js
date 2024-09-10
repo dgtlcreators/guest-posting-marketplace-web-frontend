@@ -4,11 +4,11 @@ import axios from "axios";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { UserContext } from "../context/userContext";
-import { useTheme } from "../context/ThemeProvider";
+import { UserContext } from "../../context/userContext";
+import { useTheme } from "../../context/ThemeProvider";
 
 
-const EditGuestpostData = () => {
+const EditAdminForm = () => {
   const { isDarkTheme } = useTheme();
   const { userData,localhosturl } = useContext(UserContext);
 
@@ -78,7 +78,7 @@ const EditGuestpostData = () => {
   
     const shortElements = elements.slice(0, 2);
   
-    return `You deleted a guest post ${shortElements.length>0?"":"with"} ${shortElements.join(' and ')} successfully.`;
+    return `You updated a guest post ${shortElements.length>0?"":"with"} ${shortElements.join(' and ')} successfully.`;
   };
   
     const pastactivitiesAdd=async(users)=>{
@@ -144,7 +144,7 @@ const EditGuestpostData = () => {
           />
         </div>
         <div className="flex flex-col">
-            <label htmlFor="categories" className="font-medium">
+            <label htmlFor="categories" className="block text-700 text-sm font-bold mb-2">
               Categories
             </label>
             <select
@@ -153,7 +153,7 @@ const EditGuestpostData = () => {
               required
               value={adminData.categories}
               onChange={handleChange}
-              className="form-input border rounded p-2"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline "
             >
               {/* Options */}
               <option value="Agriculture">Agriculture</option>
@@ -242,7 +242,7 @@ const EditGuestpostData = () => {
           />
         </div>
         <div className="flex flex-col">
-            <label htmlFor="websiteLanguage" className="font-medium">
+            <label htmlFor="websiteLanguage" className="block text-700 text-sm font-bold mb-2">
               Website Language
             </label>
             <select
@@ -251,7 +251,7 @@ const EditGuestpostData = () => {
               required
               value={adminData.websiteLanguage}
               onChange={handleChange}
-              className="form-input border rounded p-2"
+              className=" shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
             >
               {/* Options */}
               <option value="English">English</option>
@@ -268,7 +268,7 @@ const EditGuestpostData = () => {
             </select>
           </div>
         <div className="flex flex-col">
-            <label htmlFor="linkType" className="font-medium">
+            <label htmlFor="linkType" className="block text-700 text-sm font-bold mb-2">
               Link Type
             </label>
             <select
@@ -277,7 +277,7 @@ const EditGuestpostData = () => {
               required
               value={adminData.linkType}
               onChange={handleChange}
-              className="form-input border rounded p-2"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value="Do Follow">Do Follow</option>
               <option value="No Follow">No Follow</option>
@@ -296,7 +296,7 @@ const EditGuestpostData = () => {
           />
         </div>
         <div className="flex flex-col">
-            <label htmlFor="mozSpamScore" className="font-medium">
+            <label htmlFor="mozSpamScore" className="block text-700 text-sm font-bold mb-2">
               Moz Spam Score
             </label>
             <select
@@ -305,7 +305,7 @@ const EditGuestpostData = () => {
               required
               value={adminData.mozSpamScore}
               onChange={handleChange}
-              className="form-input border rounded p-2"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
             >
               {/* Options */}
               <option value="Spam Score <= 01">Spam Score {"<="} 01</option>
@@ -317,7 +317,7 @@ const EditGuestpostData = () => {
             </select>
           </div>
         <div className="flex flex-col">
-            <label htmlFor="monthlyTraffic" className="font-medium">
+            <label htmlFor="monthlyTraffic" className="block text-700 text-sm font-bold mb-2">
               Monthly Traffic
             </label>
             <select
@@ -326,7 +326,7 @@ const EditGuestpostData = () => {
               required
               value={adminData.monthlyTraffic}
               onChange={handleChange}
-              className="form-input border rounded p-2"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline "
             >
               {/* Options */}
               <option value="Monthly Traffic >= 1000">
@@ -373,7 +373,7 @@ const EditGuestpostData = () => {
               </option>
             </select>
           </div>
-        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white p-2 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        <button type="submit" className="mt-3 bg-blue-500 hover:bg-blue-700 text-white p-2 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
           Update Admin
         </button>
       </form>
@@ -381,7 +381,7 @@ const EditGuestpostData = () => {
   );
 };
 
-export default EditGuestpostData;
+export default EditAdminForm;
 
 
 

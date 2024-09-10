@@ -4,11 +4,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa"; 
 import ContactForm from "./ContactForm.js";
-import { useTheme } from "../context/ThemeProvider.js";
-import { UserContext } from "../context/userContext.js";
+import { useTheme } from "../../context/ThemeProvider.js";
+import { UserContext } from "../../context/userContext.js";
 
 
-const SuperAdminTable = () => {
+const SuperAdminTable1 = () => {
   const { isDarkTheme } = useTheme();
   const { userData ,localhosturl} = useContext(UserContext); 
   const userId = userData?._id;
@@ -490,4 +490,4 @@ const generateShortDescription = (formData, users) => {
   );
 };
 
-export default SuperAdminTable;
+export default SuperAdminTable1;

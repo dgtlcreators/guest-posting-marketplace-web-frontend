@@ -1,4 +1,318 @@
-/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import NewSuperAdminTable from "./NewSuperAdminTable.js"
+import { useTheme } from '@emotion/react';
+import { UserContext } from '../../context/userContext.js';
+import { toast } from 'react-toastify';
+
+
+
+const SuperAdmin = () => {
+  const { isDarkTheme } = useTheme();
+  const { userData, localhosturl } = useContext(UserContext);
+  const userId = userData?._id;
+  const [users, setUsers] = useState([]);
+  
+  const initialUser = {
+    name: '',
+    email: '',
+    password: '',
+    role: 'Brand User',
+    permissions: {
+      instagram: {
+        add: false,
+        edit: false,
+        delete: false,
+        bookmark: false,
+        apply: false
+      },
+      youtube: {
+        add: false,
+        edit: false,
+        delete: false,
+        bookmark: false,
+        apply: false
+      },
+      contentWriter: {
+        add: false,
+        edit: false,
+        delete: false,
+        bookmark: false,
+        apply: false
+      },
+      guestPost: {
+        add: false,
+        edit: false,
+        delete: false,
+        bookmark: false,
+        apply: false
+      }
+    }
+  }
+  const [formData, setFormData] = useState(initialUser);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+
+  const handlePermissionChange = (e, module, field) => {
+    setFormData({
+      ...formData,
+      permissions: {
+        ...formData.permissions,
+        [module]: {
+          ...formData.permissions[module],
+          [field]: e.target.checked
+        }
+      }
+    });
+  };
+
+
+  
+
+
+  const handleDeleteUser = (id) => {
+    axios.delete(`http://localhost:5000/user/deleteUser/${id}`)
+      .then(() => setUsers(users.filter(user => user._id !== id)))
+      .catch(error => console.error('Error deleting user:', error));
+  };
+
+  const handleReset = () => {
+    setFormData(initialUser);
+
+  }
+
+  const createDescriptionElements = (formData, users) => {
+    const formatValue = (value) => {
+      if (typeof value === 'object' && value !== null) {
+        return JSON.stringify(value, null, 2); // Pretty-print object
+      }
+      return value;
+    };
+  
+    const elements = [
+      { key: 'Name', value: formData.name },
+      { key: 'Email', value: formData.email },
+      { key: 'Role', value: formData.role },
+      { key: 'Bio', value: formData.bio },
+      { key: 'Permissions (Instagram)', value: formatValue(formData.permissions.instagram) },
+      { key: 'Permissions (YouTube)', value: formatValue(formData.permissions.youtube) },
+      { key: 'Permissions (ContentWriter)', value: formatValue(formData.permissions.contentWriter) },
+      { key: 'Permissions (GuestPost)', value: formatValue(formData.permissions.guestPost) },
+      { key: 'Total Results', value: users?.length }
+    ];
+
+
+    const formattedElements = elements
+      .filter(element => element.value)
+      .map(element => `${element.key}: ${element.value}`)
+      .join(', ');
+    return `${formattedElements}`;
+  };
+  const generateShortDescription = (formData, users) => {
+    const elements = createDescriptionElements(formData, users).split(', ');
+
+
+    const shortElements = elements.slice(0, 2);
+
+    return `You created a new User with ${shortElements.join(' and ')} successfully.`;
+  };
+
+  const pastactivitiesAdd = async (users) => {
+    const description = createDescriptionElements(formData, users);
+    const shortDescription = generateShortDescription(formData, users);
+
+    try {
+      const activityData = {
+        userId: userData?._id,
+        action: "Created a new User",
+        section: "User",
+        role: userData?.role,
+        timestamp: new Date(),
+        details: {
+          type: "create",
+          filter: { formData, total: users.length },
+          description,
+          shortDescription
+
+
+        }
+      }
+      axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleSubmit = async (e) => {
+  try {
+    e.preventDefault();
+    axios.post(`${localhosturl}/user/addUser`, formData)
+    .then(response => {
+      setUsers([...users, response.data.user]);
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        role: 'Brand User',
+        permissions: {
+          instagram: { add: false, edit: false, delete: false, bookmark: false, apply: false },
+          youtube: { add: false, edit: false, delete: false, bookmark: false, apply: false },
+          contentWriter: { add: false, edit: false, delete: false, bookmark: false, apply: false },
+          guestPost: { add: false, edit: false, delete: false, bookmark: false, apply: false }
+        }
+      });
+    })
+    toast.success("User Added Successfully")
+    
+  } catch (error) {
+    toast.error(`Error Adding User: ${error.message}`);
+    console.error("Error Adding User:", error);
+  }
+   
+  };
+  useEffect(() => {
+    const fetchUsers = async () => {
+        try {
+            const response = await axios.get(`${localhosturl}/user/getAllUser`)
+            console.log(response.data.users)
+            setUsers(response.data.users)
+            //setOriginalUsers(response.data.users)
+        } catch (error) {
+            console.error("Error fetching Users", error);
+        }
+    }
+
+    fetchUsers();
+
+}, []);
+
+
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-xl font-bold mb-3 p-3"//"text-2xl font-bold mb-4 text-blue-600 text-white bg-blue-700 "
+      >Users</h1>
+      <form onSubmit={handleSubmit} className="mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="block">
+            <label className="text-gray-700">Name</label>
+            <input 
+            type="text" 
+            name="name" 
+            placeholder="Name" 
+            value={formData.name} 
+            onChange={handleChange}  
+            className="p-2 border border-gray-300 rounded w-full" 
+            required />
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Email</label>
+            <input type="email" 
+            name="email" 
+            placeholder="Email" 
+            value={formData.email} 
+            onChange={handleChange}  
+            className="p-2 border border-gray-300 rounded w-full" required />
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Password</label>
+            <input type="text" 
+            name="password" 
+            placeholder="Password" 
+            value={formData.password} onChange={handleChange}  
+            className="p-2 border border-gray-300 rounded w-full" required />
+          </div>
+          <div className="block">
+            <label className="text-gray-700">Role</label>
+            <select name="role" value={formData.role} onChange={handleChange}
+           className="p-2 border border-gray-300 rounded w-full" required  >
+          <option value="Admin">Admin</option>
+          <option value="User">User</option>
+          <option value="Super Admin">Super Admin</option>
+          <option value="Brand User">Brand User</option>
+        </select>
+          </div>
+        </div>
+
+
+       
+        
+       
+        <div className="mt-4">
+    {['instagram', 'youtube', 'contentWriter', 'guestPost'].map((module) => (
+      <div key={module} className="mb-4">
+        <label className="text-lg  mb-2">{module.charAt(0).toUpperCase() + module.slice(1)}</label>
+        <div className="flex flex-wrap gap-4">
+          {['add', 'edit', 'delete',// 'bookmark', 'apply'
+
+          ].map((action) => (
+            <label key={action} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                name={`${module}_${action}`}
+                checked={formData.permissions[module][action]}
+                onChange={(e) => handlePermissionChange(e, module, action)}
+                className="form-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded"
+              />
+              <span className="">{action}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+
+      
+        
+
+        <div className="flex items-center justify-end space-x-2 mt-3">
+          <button
+            type="reset"
+            onClick={handleReset}
+            className="py-2 px-4 bg-gray-900 text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-700 hover:scale-105 hover:animate-resetColorChange"
+          >
+            Reset
+          </button>
+          <button
+            type="submit"
+            className="py-2 px-4 bg-blue-900 text-white rounded transition duration-300 ease-in-out transform hover:scale-105 hover:animate-submitColorChange"
+          >
+            Add User
+          </button>
+        </div>
+      </form>
+
+
+      <h2 className="text-xl   p-2 my-2"// text-white bg-blue-700 
+      >
+        Users List
+      </h2>
+      <NewSuperAdminTable key={refreshKey} users={users} setUsers={setUsers}/>
+
+    
+    </div>
+  );
+};
+
+export default SuperAdmin;
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
 import { useContext, useState } from "react";
 import axios from "axios";
 import SuperAdminTable from "./SuperAdminTable.js";
@@ -212,7 +526,7 @@ const generateShortDescription = (formData, users) => {
         onSubmit={handleSubmit}
         className="space-y-6 md:space-y-8 bg-gray-200 shadow-xl p-4"
       >
-        {/* 1st Row */}
+       
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="flex flex-col">
             <label htmlFor="mozDA" className="font-medium">
@@ -242,7 +556,7 @@ const generateShortDescription = (formData, users) => {
               onChange={handleChange}
               className="form-input border rounded p-2"
             >
-              {/* Options */}
+              
               <option value="Agriculture">Agriculture</option>
               <option value="Animals and Pets">Animals and Pets</option>
               <option value="Art">Art</option>
@@ -279,7 +593,7 @@ const generateShortDescription = (formData, users) => {
               onChange={handleChange}
               className="form-input border rounded p-2"
             >
-              {/* Options */}
+              
               <option value="English">English</option>
               <option value="Hindi">Hindi</option>
               <option value="Punjabi">Punjabi</option>
@@ -312,7 +626,7 @@ const generateShortDescription = (formData, users) => {
           </div>
         </div>
 
-        {/* 2nd Row */}
+       
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col">
             <label htmlFor="ahrefsDR" className="font-medium">
@@ -348,7 +662,7 @@ const generateShortDescription = (formData, users) => {
           </div>
         </div>
 
-        {/* 3rd Row */}
+        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex flex-col">
             <label htmlFor="price" className="font-medium">
@@ -378,7 +692,7 @@ const generateShortDescription = (formData, users) => {
               onChange={handleChange}
               className="form-input border rounded p-2"
             >
-              {/* Options */}
+             
               <option value="Monthly Traffic >= 1000">
                 Monthly Traffic {">="} 1000
               </option>
@@ -434,7 +748,7 @@ const generateShortDescription = (formData, users) => {
               onChange={handleChange}
               className="form-input border rounded p-2"
             >
-              {/* Options */}
+              
               <option value="Spam Score <= 01">Spam Score {"<="} 01</option>
               <option value="Spam Score <= 02">Spam Score {"<="} 02</option>
               <option value="Spam Score <= 05">Spam Score {"<="} 05</option>
@@ -445,7 +759,7 @@ const generateShortDescription = (formData, users) => {
           </div>
         </div>
 
-        {/* 4th Row */}
+       
         {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col">
             <label htmlFor="siteWorkedWith" className="font-medium">
@@ -485,9 +799,9 @@ const generateShortDescription = (formData, users) => {
               </option>
             </select>
           </div>
-        </div> */}
+        </div> ///last}
 
-        {/* 5th Row - New Inputs */}
+        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex flex-col">
             <label htmlFor="publisherName" className="font-medium">
@@ -535,7 +849,7 @@ const generateShortDescription = (formData, users) => {
           </div>
         </div>
 
-        {/* Buttons */}
+       
         <div className="flex justify-center md:justify-end space-x-4 mt-8">
           <button
             type="reset"
@@ -559,3 +873,4 @@ const generateShortDescription = (formData, users) => {
 };
 
 export default SuperAdmin;
+*/

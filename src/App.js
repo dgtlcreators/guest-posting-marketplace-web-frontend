@@ -19,12 +19,14 @@ import { UserProvider } from './context/userContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 import Guestpost from './components/GuestPosts/Guestpost.js';
+import EditGuestpostData from './components/GuestPosts/EditAdminData.js';
 import GuestPostProfile from './components/GuestPosts/GuestPostProfile.js';
 import NewGuestpost from './components/GuestPosts/NewGuestpost.js';
 
-
-import SuperAdmin from './components/SuperAdmin';
-import EditAdminData from './components/EditAdminData';
+import Superadmin from './components/SuperAdmin/Superadmin.js';
+import NewsuperAdmin from './components/SuperAdmin/NewsuperAdmin.js';
+import EditSuperadmin from './components/SuperAdmin/EditSuperadmin.js';
+import SuperadminProfile from './components/SuperAdmin/SuperadminProfile.js';
 
 import InstagramInfluencer from './components/InstgramInfluencer/InstagramInfluencer.js';
 import NewInstagramInfluencer from './components/InstgramInfluencer/NewInstagramInfluencer.js';
@@ -87,9 +89,10 @@ function AppContent() {
             <Route path="/signup" element={<Signup />} />
             
             {/**Super Admin Routes */}
-
-            <Route path="/superadmin" element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}><SuperAdmin /></ProtectedRoute>} />
-            <Route path="/editadmindata/:id" element={<ProtectedRoute><EditAdminData /> </ProtectedRoute>} />
+            <Route path="/superadmin" element={<ProtectedRoute requiredRoles={["Super Admin"]}><Superadmin /></ProtectedRoute>} />
+            <Route path="/addSuperadmin" element={<ProtectedRoute requiredRoles={["Super Admin"]}><NewsuperAdmin /></ProtectedRoute>} />
+            <Route path="/editsuperadmin/:id" element={<ProtectedRoute requiredRoles={["Super Admin"]}><EditSuperadmin /> </ProtectedRoute>} />
+            <Route path="/superadminProfile/:id" element={<ProtectedRoute requiredRoles={["Super Admin"]}><SuperadminProfile /></ProtectedRoute>} />
 
             {/*GuestPost*/}
             <Route path="/" element={<Navigate to="/guestpost" />} />
@@ -97,8 +100,10 @@ function AppContent() {
               <Guestpost />
             </Elements></ProtectedRoute>} />
             <Route path="/addGuestpost" element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}><NewGuestpost /></ProtectedRoute>} />
+            <Route path="/editguestpostdata/:id" element={<ProtectedRoute><EditGuestpostData /> </ProtectedRoute>} />
             <Route path="/guestpostProfile/:id" element={<GuestPostProfile />} />
             
+
             
             {/**Instagram Routes */}
             <Route path="/instagram-influencer" element={<InstagramInfluencer />} />

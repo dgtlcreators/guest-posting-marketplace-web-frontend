@@ -356,7 +356,7 @@ const NewGuestpostTable = () => {
                                     <td className="border px-4 py-2">{user.mozSpamScore}</td>
                                     <td className="border py-3 px-4">
                                     <Link
-                                            to={`/editadmindata/${user._id}`}
+                                            to={`/editguestpostdata/${user._id}`}
                                             className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                                         >
                                             EDIT

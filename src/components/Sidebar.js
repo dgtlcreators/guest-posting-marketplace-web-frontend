@@ -4,7 +4,7 @@ import React, { useState, useContext, createContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Divider, Avatar, Typography, Collapse, Popover } from '@mui/material';
 import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from '@mui/icons-material';
-import { FaHome, FaPen, FaInstagram, FaYoutube, FaEdit, FaHistory, FaPlus, FaSignOutAlt, FaUserShield, FaRegFileAlt } from 'react-icons/fa';
+import { FaHome, FaPen, FaInstagram, FaYoutube, FaEdit, FaHistory, FaPlus, FaSignOutAlt, FaUserShield, FaRegFileAlt, FaUsersCog, FaUserPlus, FaUsers } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeProvider';
 import { UserContext } from "../context/userContext.js";
 
@@ -13,6 +13,7 @@ const SidebarContext = createContext();
 export default function Sidebar() {
   const [expanded, setExpanded] = useState(true);
   const [newAddedOpen, setNewAddedOpen] = useState(false);
+  const [superAdminOpen, setSuperAdminOpen] = useState(false);
   const { isDarkTheme, toggleTheme } = useTheme();
   const { userData, signOut } = useContext(UserContext); 
   const userId = userData?._id;
@@ -28,6 +29,9 @@ export default function Sidebar() {
 
   const handleNewAddedClick = () => {
     setNewAddedOpen(prev => !prev);
+  };
+  const handleSuperAdminClick = () => {
+    setSuperAdminOpen(prev => !prev);
   };
 
   return (
@@ -62,10 +66,29 @@ export default function Sidebar() {
           <SidebarItem icon={<FaYoutube />} text="YouTube Influencer" to="/youtube-influencer" />
           <SidebarItem icon={<FaEdit />} text="Content Writers" to="/content-writers" />
           <SidebarItem icon={<FaHistory />} text="Past Activities" to="/past-activities" />
-          <SidebarItem icon={<FaUserShield />} text="Super Admin" to="/superadmin" />
+        {/*  <SidebarItem icon={<FaUserShield />} text="Super Admin" to="/addSuperadmin" />*/}
+
+          {isSuperAdmin && (
+            <>
+              <ListItem button onClick={handleSuperAdminClick} sx={{ pl: expanded ? 2 : 0 }}>
+                <ListItemIcon><FaUsersCog /></ListItemIcon> {/* Updated icon */}
+                {expanded && <ListItemText primary="Super Admin Section" />} {/* Updated title */}
+                {superAdminOpen ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+              <Collapse in={superAdminOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <SidebarItem icon={<FaUsers />} text="User Management" to="/superadmin" nested />
+                  <SidebarItem icon={<FaUserPlus />} text="Add Super Admin" to="/addSuperadmin" nested /> {/* Updated icon and title */}
+                </List>
+              </Collapse>
+            </>
+          )}
+          {(isSuperAdmin || isAdmin ) && (
+            <>
           <ListItem button onClick={handleNewAddedClick} sx={{ pl: expanded ? 2 : 0 }}>
             <ListItemIcon>{<FaPlus />}</ListItemIcon>
-            {expanded && <ListItemText primary="New Added" />}
+            {expanded && <ListItemText primary="Admin Section"//"New Added" 
+            />}
             {newAddedOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={newAddedOpen} timeout="auto" unmountOnExit>
@@ -82,6 +105,7 @@ export default function Sidebar() {
               nested />
             </List>
           </Collapse>
+          </>)}
           <ListItem button onClick={handleSignOut} sx={{ pl: expanded ? 2 : 0 }}>
           <ListItemIcon><FaSignOutAlt /></ListItemIcon>
           {expanded && <ListItemText primary="Sign Out" />}

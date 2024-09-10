@@ -11,6 +11,7 @@ import * as XLSX from 'xlsx';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { UserContext } from '../context/userContext';
+import ReportTable from './ReportTable.js';
 
 
 const Reports = () => {
@@ -20,9 +21,9 @@ const Reports = () => {
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const chartRef = useRef(null);
-  const { userData,localhosturl } = useContext(UserContext);
+  const { userData, localhosturl } = useContext(UserContext);
 
- {/* useEffect(() => {
+  {/* useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
     } else {
@@ -40,7 +41,7 @@ const Reports = () => {
       // Create a new workbook and a worksheet
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet('Report');
-  
+
       // Define table columns
       worksheet.columns = [
         { header: 'User ID', key: 'userId', width: 15 },
@@ -52,7 +53,7 @@ const Reports = () => {
         { header: 'Status', key: 'status', width: 15 },
         { header: 'Created At', key: 'createdAt', width: 20 },
       ];
-  
+
       // Add data to the worksheet
       reports.forEach((report) => {
         worksheet.addRow({
@@ -66,11 +67,11 @@ const Reports = () => {
           createdAt: new Date(report.createdAt).toLocaleString(),
         });
       });
-  
+
       // Generate a chart using Chart.js
       const chartCanvas = document.createElement('canvas');
       const ctx = chartCanvas.getContext('2d');
-  
+
       new Chart(ctx, {
         type: 'bar', // You can choose 'line', 'bar', 'pie', etc.
         data: {
@@ -92,21 +93,21 @@ const Reports = () => {
           }
         }
       });
-  
+
       // Convert chart to image
       const chartImage = chartCanvas.toDataURL('image/png');
-  
+
       // Add the chart image to the worksheet
       const imageId = workbook.addImage({
         base64: chartImage,
         extension: 'png',
       });
       worksheet.addImage(imageId, 'I2:M10'); // Position the image within cells
-  
+
       // Write the Excel file and trigger download
       const buffer = await workbook.xlsx.writeBuffer();
       saveAs(new Blob([buffer]), 'report_with_chart.xlsx');
-  
+
       toast.success('Report generated successfully');
     } catch (error) {
       console.error('Error generating report:', error);
@@ -115,16 +116,16 @@ const Reports = () => {
       setLoading(false);
     }
   };
-  
+
   const handleImport = async (event) => {
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append('file', file);
 
     try {
-      
-     
-     await axios.post(`${localhosturl}/applyroute/importData`, formData);
+
+
+      await axios.post(`${localhosturl}/applyroute/importData`, formData);
       toast.success('Data imported successfully');
     } catch (error) {
       console.error('Error importing data:', error);
@@ -134,49 +135,49 @@ const Reports = () => {
   const handleExport = async () => {
     setLoading(true);
     try {
-        
-        //const response = await axios.get('http://localhost:5000/applyroute/getReportData');
-        const reportData =reports //response.data;
 
-        
-        const workbook = XLSX.utils.book_new();
-        const worksheetData = reportData.map((report) => ({
-            'User ID': report.userId,
-            'Publisher': report.publisher,
-            'Name': report.name,
-            'Email': report.email,
-            'Phone': report.phone,
-            'Section': report.section,
-            'Status': report.status,
-            'Created At': new Date(report.createdAt).toLocaleString(),
-        }));
+      //const response = await axios.get('http://localhost:5000/applyroute/getReportData');
+      const reportData = reports //response.data;
 
-        const worksheet = XLSX.utils.json_to_sheet(worksheetData);
 
-        // Append worksheet to workbook
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Report');
+      const workbook = XLSX.utils.book_new();
+      const worksheetData = reportData.map((report) => ({
+        'User ID': report.userId,
+        'Publisher': report.publisher,
+        'Name': report.name,
+        'Email': report.email,
+        'Phone': report.phone,
+        'Section': report.section,
+        'Status': report.status,
+        'Created At': new Date(report.createdAt).toLocaleString(),
+      }));
 
-        // Convert workbook to binary array and trigger download
-        const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const worksheet = XLSX.utils.json_to_sheet(worksheetData);
 
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'report.xlsx');
-        document.body.appendChild(link);
-        link.click();
+      // Append worksheet to workbook
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Report');
 
-        toast.success('Report generated successfully');
+      // Convert workbook to binary array and trigger download
+      const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'report.xlsx');
+      document.body.appendChild(link);
+      link.click();
+
+      toast.success('Report generated successfully');
     } catch (error) {
-        console.error('Error generating report:', error);
-        toast.error('Failed to generate report');
+      console.error('Error generating report:', error);
+      toast.error('Failed to generate report');
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   }
 
-  
+
 
   const handleDateChange = async () => {
     const formatLocalDate = (date) => {
@@ -190,7 +191,7 @@ const Reports = () => {
     const formattedEndDate = formatLocalDate(endDate);
 
     try {
-    
+
       const response = await axios.get(`${localhosturl}/applyroute/getDailyReports`, {
         params: {
           startDate: formattedStartDate,
@@ -228,7 +229,7 @@ const Reports = () => {
         },
       });
 
-     // setChartVisible(true); // Show the chart after data is loaded
+      // setChartVisible(true); // Show the chart after data is loaded
       toast.success('Report generated successfully');
 
     } catch (error) {
@@ -241,7 +242,7 @@ const Reports = () => {
   return (
     <div className={`p-8 transition duration-500  min-h-screen`}//${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}
     >
-        <h1 className="text-3xl  p-2">Reports</h1>
+      <h1 className="text-3xl  p-2">Reports</h1>
       {/*<div className="flex justify-between items-center mb-6">
        <h1 className="text-3xl font-bold">Reports</h1>
         <button
@@ -269,10 +270,10 @@ const Reports = () => {
             className="border rounded calendar"// border-gray-300 rounded p-2 dark:border-gray-700 dark:bg-gray-800
           />
         </div>
-        
+
       </div>
       <div className="flex justify-end mb-4">
-      <button
+        <button
           onClick={handleDateChange}
           className="ml-4 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 flex items-center"
         >
@@ -281,7 +282,7 @@ const Reports = () => {
         </button>
       </div>
 
-     { /*<div className="flex space-x-4 mb-4">
+      { /*<div className="flex space-x-4 mb-4">
         <button
           onClick={handleGenerateReport}
           className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 flex items-center"
@@ -309,18 +310,18 @@ const Reports = () => {
 
       <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-1 p-2">Daily Reports</h2>
-        {reports.length > 0 ? (<>
+        <>
           <div className="flex justify-end mb-4">
-          <button
-          onClick={handleExport}
-          className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-300 flex items-center"
-        >
-          <FiUpload className="mr-2" />
-          Export Data
-        </button>
- </div>
-       {/*   <canvas ref={chartRef} className="my-6"></canvas>*/}
-          <table className="w-full border-collapse">
+            <button
+              onClick={handleExport}
+              className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-300 flex items-center"
+            >
+              <FiUpload className="mr-2" />
+              Export Data
+            </button>
+          </div>
+          {/*   <canvas ref={chartRef} className="my-6"></canvas>*/}
+          {/*<table className="w-full border-collapse">
             <thead>
               <tr>
                 <th className="border p-2">User ID</th>
@@ -334,7 +335,27 @@ const Reports = () => {
               </tr>
             </thead>
             <tbody>
-              {reports.map((report) => (
+              {reports.length === 0 ? <tr>
+                <td
+                  colSpan="10"
+                  className="border py-3 px-6 text-center text-lg font-semibold"
+                >
+                  No reports available for the selected date range.
+                </td>
+              </tr> :
+              (
+                <>
+               { reports.map((report) => (
+                <>
+                  <ReportTable section="Content Writer" reports={report} />
+      <ReportTable section="Instagram Influencer" reports={report} />
+      <ReportTable section="YouTube Influencer" reports={report} />
+      <ReportTable section="Guest Post" reports={report} />
+      </>
+                ))}
+                </>
+              ) 
+              reports.map((report) => (
                 <tr key={report._id} className="hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300">
                   <td className="border p-2">{report.userId}</td>
                   <td className="border p-2">{report.publisher}</td>
@@ -344,15 +365,22 @@ const Reports = () => {
                   <td className="border p-2">{report.section}</td>
                   <td className="border p-2">{report.status}</td>
                   <td className="border p-2">{new Date(report.createdAt).toLocaleString()}</td>
-                </tr>
-              ))}
+                </tr
+              ))///end
+              }
+
             </tbody>
           </table>
-          </>) : (
-          <p>No reports available for the selected date range.</p>
-        )}
+          
+          </div>*/}
+           <ReportTable section="ContenWriters" reports={reports} />
+      <ReportTable section="InstagramInfluencer" reports={reports} />
+      <ReportTable section="YoutubeInfluencer" reports={reports} />
+      <ReportTable section="Guestpost" reports={reports} />
+      </>
+       
       </div>
-      
+
     </div>
   );
 };
