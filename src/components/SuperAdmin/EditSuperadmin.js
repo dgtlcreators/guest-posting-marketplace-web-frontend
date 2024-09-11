@@ -2,13 +2,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useTheme } from '@emotion/react';
 import { UserContext } from '../../context/userContext.js';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const EditSuperadmin = () => {
   const { isDarkTheme } = useTheme();
   const { userData, localhosturl } = useContext(UserContext);
   const userId = userData?._id;
   const {id}=useParams()
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const initialUser = {
     name: '',
@@ -20,29 +22,33 @@ const EditSuperadmin = () => {
         add: false,
         edit: false,
         delete: false,
-        bookmark: false,
-        apply: false
+        bookmark: true,
+        apply: true,
+        profile:true
       },
       youtube: {
         add: false,
         edit: false,
         delete: false,
-        bookmark: false,
-        apply: false
+        bookmark: true,
+        apply: true,
+        profile:true
       },
       contentWriter: {
         add: false,
         edit: false,
         delete: false,
-        bookmark: false,
-        apply: false
+        bookmark: true,
+        apply: true,
+        profile:true
       },
       guestPost: {
         add: false,
         edit: false,
         delete: false,
-        bookmark: false,
-        apply: false
+        bookmark: true,
+        apply: true,
+        profile:true
       }
     }
   }
@@ -57,8 +63,39 @@ const EditSuperadmin = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  /*
+  const handlePermissionChange = (e, module, field) => {
+    if (formData.role === 'User' || formData.role === 'Brand User') {
+      return; // Prevent toggling permissions for 'User' or 'Brand User'
+    }
+  
+    const updatedPermissions = {
+      ...formData.permissions,
+      [module]: {
+        ...formData.permissions[module],
+        [field]: e.target.checked
+      }
+    };
+  
+    setFormData({
+      ...formData,
+      permissions: updatedPermissions
+    });
+  };
+  */
+  
 
   const handlePermissionChange = (e, module, field) => {
+   // if (formData.role == 'User' || formData.role == 'Brand User') {
+      // Don't allow toggling permissions for User and Brand User
+     // return;
+  //  }
+  if (formData.role === 'User' || formData.role === 'Brand User') {
+    if (field === 'add' || field === 'edit' || field === 'delete') {
+      // Disable toggling permissions for 'add', 'edit', 'delete' for User and Brand User
+      return;
+    }
+  }
     setFormData({
       ...formData,
       permissions: {
@@ -76,7 +113,8 @@ const EditSuperadmin = () => {
       try {
         
         const response = await axios.get(`${localhosturl}/user/getUserId/${id}`);
-        console.log(response.data.data)
+        console.log("Get Response ",response)
+        //console.log(response.data.data)
         setUsers(response.data.data);
         setFormData(response.data.data)
         //pastactivitiesAdd(response.data.users);
@@ -88,30 +126,62 @@ const EditSuperadmin = () => {
     fetchUsers();
   }, [id]);
 
-
+  useEffect(() => {
+  
+    if (formData.role == 'Admin' || formData.role == 'Super Admin') {
+      // Automatically check 'add', 'edit', 'delete' for Admin and Super Admin
+      setFormData((prevState) => ({
+        ...prevState,
+        permissions: {
+          instagram: { add: true, edit: true, delete: true },
+          youtube: { add: true, edit: true, delete: true },
+          contentWriter: { add: true, edit: true, delete: true },
+          guestPost: { add: true, edit: true, delete: true },
+        },
+      }));
+    } else {
+      // Disable 'add', 'edit', 'delete' for User and Brand User
+      setFormData((prevState) => ({
+        ...prevState,
+        permissions: {
+          instagram: { add: false, edit: false, delete: false,bookmark: true, apply: true, profile: true },
+          youtube: { add: false, edit: false, delete: false,bookmark: true, apply: true, profile: true },
+          contentWriter: { add: false, edit: false, delete: false,bookmark: true, apply: true, profile: true },
+          guestPost: { add: false, edit: false, delete: false,bookmark: true, apply: true, profile: true },
+        },
+      }));
+    }
+  }, [formData.role]);
   
 
   const handleSubmit = async (e) => {
+    console.log("formData ",formData)
+    e.preventDefault()
     try {
-      e.preventDefault();
-      axios.put(`${localhosturl}/user/updateUse/${id}`, formData)
-      .then(response => {
-        setUsers([...users, response.data.user]);
-        setFormData({
+     // e.preventDefault();
+     const response= axios.put(`${localhosturl}/user/updateUser/${id}`, formData)
+      //.then(response => {
+        console.log("response ",response)
+       // setUsers([...users, response.data.data]);
+       //setUsers(response.data)
+        /*setFormData({
           name: '',
           email: '',
           password: '',
           role: 'Brand User',
           permissions: {
-            instagram: { add: false, edit: false, delete: false, bookmark: false, apply: false },
-            youtube: { add: false, edit: false, delete: false, bookmark: false, apply: false },
-            contentWriter: { add: false, edit: false, delete: false, bookmark: false, apply: false },
-            guestPost: { add: false, edit: false, delete: false, bookmark: false, apply: false }
+            instagram: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true },
+            youtube: { add: false, edit: false, delete: false,bookmark: true, apply: true, profile: true },
+            contentWriter: { add: false, edit: false, delete: false,bookmark: true, apply: true, profile: true },
+            guestPost: { add: false, edit: false, delete: false,bookmark: true, apply: true, profile: true }
           }
-        });
-      })
+        });*/
+     // })
+     navigate("/addSuperadmin");
+     toast.success("User updated successfully");
       
-    } catch (error) {    
+    } catch (error) { 
+      console.log("Error ",error)   
     }
  
     };
@@ -170,7 +240,7 @@ const EditSuperadmin = () => {
     <div key={module} className="mb-4">
       <label className="text-lg  mb-2">{module.charAt(0).toUpperCase() + module.slice(1)}</label>
       <div className="flex flex-wrap gap-4">
-        {['add', 'edit', 'delete',// 'bookmark', 'apply'
+        {['add', 'edit', 'delete',"bookmark","apply","profile","showprofile","filter"// 'bookmark', 'apply'
 
         ].map((action) => (
           <label key={action} className="flex items-center space-x-2">
@@ -180,6 +250,13 @@ const EditSuperadmin = () => {
               checked={formData.permissions[module][action]}
               onChange={(e) => handlePermissionChange(e, module, action)}
               className="form-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded"
+              disabled={(formData.role === 'User' || formData.role === 'Brand User') && 
+                (action === 'add' || action === 'edit' || action === 'delete')} // Disable for User and Brand User
+              title={((formData.role === 'User' || formData.role === 'Brand User') && 
+                (action === 'add' || action === 'edit' || action === 'delete')) 
+                ? `${formData.role} are not allowed to access this feature`
+              :undefined  //: "Click to toggle permission"
+              }
             />
             <span className="">{action}</span>
           </label>

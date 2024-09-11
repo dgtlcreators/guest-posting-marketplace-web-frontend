@@ -18,6 +18,8 @@ function Login() {
 
   axios.defaults.withCredentials = true;
 
+  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
@@ -25,7 +27,7 @@ function Login() {
      
       .then((response) => {
         toast.success("Logged in successfully");
-        console.log(response.data.user);
+        console.log("response.data.user Login ",response.data.user);
         setUserData(response.data.user);
         //navigate("/form");
         navigate("/guestpost")

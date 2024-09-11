@@ -245,8 +245,7 @@ const generateShortDescription = (formData, users) => {
       formDataToSend.append("mediaKit", formData.mediaKit);
     }
     try {
-      const response = await axios.put(
-        `${localhosturl}/youtubeinfluencers/updateYoutubeInfluencer/${id}`,
+      const response = await axios.put(`${localhosturl}/youtubeinfluencers/updateYoutubeInfluencer/${id}`,
        
         formDataToSend,
         {

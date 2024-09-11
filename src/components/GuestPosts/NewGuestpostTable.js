@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
+import { FaSort, FaSortUp, FaSortDown, FaBookmark } from "react-icons/fa";
 import { useTheme } from "../../context/ThemeProvider";
 import { UserContext } from "../../context/userContext";
 
@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 
+
 const NewGuestpostTable = () => {
     const { isDarkTheme } = useTheme();
     const [users, setUsers] = useState([]);
@@ -22,6 +23,8 @@ const NewGuestpostTable = () => {
     const [sortedField, setSortedField] = useState(null);
     const [sortDirection, setSortDirection] = useState("asc");
     const { userData, localhosturl } = useContext(UserContext);
+//console.log("userData.permissions.guestPost.bookmark ",userData.permissions.guestPost.bookmark)
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -205,6 +208,27 @@ const NewGuestpostTable = () => {
         setCurrentPage(1);
     };
 
+    const handleToggleBookmark = async (influencer) => {
+        const updatedBookmarkStatus = !influencer.isBookmarked;
+        try {
+            await axios.put(`${localhosturl}/superAdmin/updateOneAdminData/${influencer._id}`, {
+                isBookmarked: updatedBookmarkStatus,
+            });
+            if (updatedBookmarkStatus) {
+                toast.success("Added to Bookmarks!");
+            } else {
+                toast.success("Removed from Bookmarks!");
+            }
+
+
+            setUsers(prev =>
+                prev.map(i => i._id === influencer._id ? { ...i, isBookmarked: updatedBookmarkStatus } : i)
+            );
+        } catch (error) {
+            console.error('Error updating bookmark status', error);
+        }
+    };
+
 
     return (
         <div className="container mx-auto p-4">
@@ -355,19 +379,27 @@ const NewGuestpostTable = () => {
                                     <td className="border px-4 py-2">{user.monthlyTraffic}</td>
                                     <td className="border px-4 py-2">{user.mozSpamScore}</td>
                                     <td className="border py-3 px-4">
-                                    <Link
+                                        <Link disabled={userData.permissions.guestPost.edit} 
+                                            title={userData.permissions.guestPost.edit
+                                               ? "You are not allowed to access this feature"
+                                             :undefined  // : ""
+                                            }
                                             to={`/editguestpostdata/${user._id}`}
-                                            className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                                            className="btn-dis border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                                         >
                                             EDIT
                                         </Link>
-                                        <button
+                                        <button disabled={userData.permissions.guestPost.delete} 
+                                            title={userData.permissions.guestPost.delete
+                                               ? "You are not allowed to access this feature"
+                                            :undefined   // : ""
+                                            }
                                             onClick={() => deleteUser(user._id)}
                                             className="border bg-red-500 hover:bg-red-700 text-white py-1 px-4 rounded my-2 transition-transform transform hover:-translate-y-1"
                                         >
                                             DELETE
                                         </button>
-                                       
+
 
                                     </td>
                                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
@@ -375,16 +407,31 @@ const NewGuestpostTable = () => {
                                         <ShowApplyForm section="Guestpost" publisher={user} />
                                     </td>
                                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                                        <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"//hover:text-blue-500
-                                        >{ /*</td> onClick={handleBookmark} >
-                 </tr> <i className="fas fa-bookmark"></i>*/}
-                                            <Bookmark section="Guestpost" publisher={user} />
+                                        <button disabled={userData.permissions.guestPost.bookmark} 
+                                            title={userData.permissions.guestPost.bookmark
+                                               ? "You are not allowed to access this feature":undefined
+                                               // : ""
+                                            }
+                                            onClick={() => handleToggleBookmark(user)}
+                                            className={`btn-dis  text-gray-600 focus:outline-none transition-transform transform hover:-translate-y-1 ${user.isBookmarked ? 'text-yellow-500' : 'text-gray-400'
+                                                } ${!userData.permissions.guestPost.bookmark && 'btn-enabled'}`}
+                                        >
+                                            <FaBookmark />
+                                            {/*user.isBookmarked ? ' Bookmarked' : ' Bookmark'*/}
                                         </button>
+                                        { /*<button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"//hover:text-blue-500
+                                        >
+                                            <Bookmark section="Guestpost" publisher={user} />
+                                        </button>*/}
                                     </td>
                                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                                        <Link
+                                        <Link  disabled={userData.permissions.guestPost.profile} 
+                                            title={userData.permissions.guestPost.profile
+                                               ? "You are not allowed to access this feature":undefined
+                                               // : ""
+                                            }
                                             to={`/guestpostProfile/${user._id}`}
-                                            className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                                            className="btn-dis  border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                                         >
                                             View Profile
                                         </Link>

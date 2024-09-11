@@ -4,7 +4,7 @@ import React, { useState, useContext, createContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Divider, Avatar, Typography, Collapse, Popover } from '@mui/material';
 import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from '@mui/icons-material';
-import { FaHome, FaPen, FaInstagram, FaYoutube, FaEdit, FaHistory, FaPlus, FaSignOutAlt, FaUserShield, FaRegFileAlt, FaUsersCog, FaUserPlus, FaUsers } from 'react-icons/fa';
+import { FaHome, FaPen, FaInstagram, FaYoutube, FaEdit, FaHistory, FaPlus, FaSignOutAlt, FaUserShield, FaRegFileAlt, FaUsersCog, FaUserPlus, FaUsers, FaList } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeProvider';
 import { UserContext } from "../context/userContext.js";
 
@@ -59,6 +59,7 @@ export default function Sidebar() {
         <Divider />
         <List>
           <SidebarItem icon={<FaHome />} text="Dashboard" to="/dashboard" />
+          <SidebarItem icon={<FaList />} text="My Lists" to="/my-lists" />
           <SidebarItem icon={<FaPen />} text="Guest Post" to="/guestpost" //to="/form" 
           />
           <SidebarItem icon={<FaInstagram />} text="Instagram Influencer" to="/instagram-influencer" //to="/branduser" 

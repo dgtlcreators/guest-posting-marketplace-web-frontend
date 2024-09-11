@@ -23,42 +23,62 @@ const SuperAdmin = () => {
         add: false,
         edit: false,
         delete: false,
-        bookmark: false,
-        apply: false
+        bookmark: true,
+        apply: true,
+        profile:true
       },
       youtube: {
         add: false,
         edit: false,
         delete: false,
-        bookmark: false,
-        apply: false
+        bookmark: true,
+        apply: true,
+        profile:true
       },
       contentWriter: {
         add: false,
         edit: false,
         delete: false,
-        bookmark: false,
-        apply: false
+        bookmark: true,
+        apply: true,
+        profile:true
       },
       guestPost: {
         add: false,
         edit: false,
         delete: false,
-        bookmark: false,
-        apply: false
+        bookmark: true,
+        apply: true,
+        profile:true
       }
     }
   }
   const [formData, setFormData] = useState(initialUser);
   const [refreshKey, setRefreshKey] = useState(0);
 
+  const [tooltip, setTooltip] = useState(null);
+
+  const handleMouseEnter = (e, message) => {
+    setTooltip({ message, top: e.clientY, left: e.clientX });
+  };
+
+  const handleMouseLeave = () => {
+    setTooltip(null);
+  };
 
   const handleChange = (e) => {
+   
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
 
   const handlePermissionChange = (e, module, field) => {
+
+    if (formData.role === 'User' || formData.role === 'Brand User') {
+      // Don't allow toggling permissions for User and Brand User
+      return;
+    }
+  
     setFormData({
       ...formData,
       permissions: {
@@ -160,10 +180,10 @@ const SuperAdmin = () => {
         password: '',
         role: 'Brand User',
         permissions: {
-          instagram: { add: false, edit: false, delete: false, bookmark: false, apply: false },
-          youtube: { add: false, edit: false, delete: false, bookmark: false, apply: false },
-          contentWriter: { add: false, edit: false, delete: false, bookmark: false, apply: false },
-          guestPost: { add: false, edit: false, delete: false, bookmark: false, apply: false }
+          instagram: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true,showprofile:true,filter:true  },
+          youtube: { add: false, edit: false, delete: false, bookmark: true, apply: true , profile: true,showprofile:true,filter:true },
+          contentWriter: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
+          guestPost: { add: false, edit: false, delete: false, bookmark: true, apply:true, profile: true,showprofile:true,filter:true  }
         }
       });
     })
@@ -190,6 +210,33 @@ const SuperAdmin = () => {
     fetchUsers();
 
 }, []);
+
+useEffect(() => {
+  
+  if (formData.role === 'Admin' || formData.role === 'Super Admin') {
+    // Automatically check 'add', 'edit', 'delete' for Admin and Super Admin
+    setFormData((prevState) => ({
+      ...prevState,
+      permissions: {
+        instagram: { add: true, edit: true, delete: true,bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
+        youtube: { add: true, edit: true, delete: true,bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
+        contentWriter: { add: true, edit: true, delete: true,bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
+        guestPost: { add: true, edit: true, delete: true,bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
+      },
+    }));
+  } else {
+    // Disable 'add', 'edit', 'delete' for User and Brand User
+    setFormData((prevState) => ({
+      ...prevState,
+      permissions: {
+        instagram: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true,showprofile:true,filter:true  },
+          youtube: { add: false, edit: false, delete: false, bookmark: true, apply: true , profile: true,showprofile:true,filter:true },
+          contentWriter: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
+          guestPost: { add: false, edit: false, delete: false, bookmark: true, apply:true, profile: true,showprofile:true,filter:true  }
+       },
+    }));
+  }
+}, [formData.role]);
 
 
   return (
@@ -243,29 +290,42 @@ const SuperAdmin = () => {
         
        
         <div className="mt-4">
-    {['instagram', 'youtube', 'contentWriter', 'guestPost'].map((module) => (
-      <div key={module} className="mb-4">
-        <label className="text-lg  mb-2">{module.charAt(0).toUpperCase() + module.slice(1)}</label>
-        <div className="flex flex-wrap gap-4">
-          {['add', 'edit', 'delete',// 'bookmark', 'apply'
-
-          ].map((action) => (
-            <label key={action} className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                name={`${module}_${action}`}
-                checked={formData.permissions[module][action]}
-                onChange={(e) => handlePermissionChange(e, module, action)}
-                className="form-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded"
-              />
-              <span className="">{action}</span>
-            </label>
-          ))}
-        </div>
+  {['instagram', 'youtube', 'contentWriter', 'guestPost'].map((module) => (
+    <div key={module} className="mb-4">
+      <label className="text-lg mb-2">{module.charAt(0).toUpperCase() + module.slice(1)}</label>
+      <div className="flex flex-wrap gap-4">
+        {['add', 'edit', 'delete',"bookmark","apply","profile","showprofile","filter"].map((action) => (
+          <label key={action} className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              name={`${module}_${action}`}
+              checked={formData.permissions[module][action]}
+              onChange={(e) => handlePermissionChange(e, module, action)}
+              className="btn-dis form-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded"
+              disabled={(formData.role === 'User' || formData.role === 'Brand User') && 
+                (action === 'add' || action === 'edit' || action === 'delete')} 
+              title={((formData.role === 'User' || formData.role === 'Brand User') && 
+                (action === 'add' || action === 'edit' || action === 'delete'))
+                ? `${formData.role} are not allowed to access this feature` 
+               :undefined //: "Click to toggle permission"
+              }
+            />
+            <span className="">{action}</span>
+            
+          </label>
+        ))}
       </div>
-    ))}
-  </div>
-
+    </div>
+  ))}
+  {/*tooltip && (
+          <div
+            className="absolute bg-gray-800 text-white text-xs p-2 rounded"
+            style={{ top: tooltip.top, left: tooltip.left }}
+          >
+            {tooltip.message}
+          </div>
+        )*/}
+</div>
 
       
         

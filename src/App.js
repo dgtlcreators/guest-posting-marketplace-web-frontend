@@ -49,6 +49,7 @@ import Dashboard from './components/dashboardItems/Dashboard';
 import PathNotFound from './components/PathNotFound';
 import PastActivities from './components/OtherComponents/PastActivities';
 import CheckoutForm from './CheckoutForm';
+import MyLists from './components/MyLists.js';
 
 
 
@@ -81,6 +82,7 @@ function AppContent() {
       {showNavbarAndSidebar && <Navbar />}
       <div className="flex flex-1 overflow-hidden">
         {showNavbarAndSidebar && <Sidebar />}
+       {/* <button disabled title="I am Disabled Right Now">I am Disabled</button>*/}
         <main className="flex-1 overflow-y-auto p-4">
           <Routes>
 
@@ -140,6 +142,8 @@ function AppContent() {
             <Route path="/notifications" element={<NotificationList />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="*" element={<PathNotFound />} />
+
+            <Route path="/my-lists" element={<MyLists />} />
 
             <Route path="/checkout" element={<Elements stripe={stripePromise}><CheckoutForm /></Elements>} /> 
           </Routes>

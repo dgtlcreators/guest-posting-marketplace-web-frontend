@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
+import { FaSort, FaSortUp, FaSortDown, FaBookmark } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeProvider';
 import { toast } from 'react-toastify';
@@ -199,7 +199,25 @@ const NewContentWriterTable = () => {
     setPageSize(Number(e.target.value));
     setCurrentPage(1);
   };
+  const handleToggleBookmark = async (influencer) => {
+    const updatedBookmarkStatus = !influencer.isBookmarked;
+    try {
+        await axios.put(`${localhosturl}/contentwriters/updatecontentwriter/${influencer._id}`, {
+            isBookmarked: updatedBookmarkStatus,
+        });
+        if (updatedBookmarkStatus) {
+          toast.success("Added to Bookmarks!");
+        } else {
+          toast.success("Removed from Bookmarks!");
+        }
 
+        setContentWriters(prev =>
+            prev.map(i => i._id === influencer._id ? { ...i, isBookmarked: updatedBookmarkStatus } : i)
+        );
+    } catch (error) {
+        console.error('Error updating bookmark status', error);
+    }
+};
 
 
   return (
@@ -337,13 +355,21 @@ const NewContentWriterTable = () => {
                     </ul>
                   </td>
                   <td className="border py-3 px-4">
-                  <Link
+                  <Link disabled={userData.permissions.contentWriter.edit}
+                      title={userData.permissions.contentWriter.edit
+                        ? "You are not allowed to access this feature"
+                        : undefined  // : ""
+                      }
                       to={`/editContentWriter/${writer._id}`}
-                      className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                      className="btn-dis border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                     >
                       EDIT
                     </Link>
-                    <button
+                    <button  disabled={userData.permissions.contentWriter.delete}
+                      title={userData.permissions.contentWriter.delete
+                        ? "You are not allowed to access this feature"
+                        : undefined  // : ""
+                      }
                       onClick={() => deleteContentWriter(writer._id)}
                       className="border bg-red-500 hover:bg-red-700 text-white py-1 px-4 rounded my-2 transition-transform transform hover:-translate-y-1"
                     >
@@ -356,10 +382,27 @@ const NewContentWriterTable = () => {
                     <ShowApplyForm  section="ContenWriters" publisher={writer} />
                     </td>
                   <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                    <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
-                    ><Bookmark section="ContenWriters" publisher={writer} /></button>
+                    {/*<button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
+                    ><Bookmark section="ContenWriters" publisher={writer} /></button>*/}
+                     <button disabled={userData.permissions.contentWriter.bookmark}
+                      title={userData.permissions.contentWriter.bookmark
+                        ? "You are not allowed to access this feature"
+                        : undefined  // : ""
+                      }
+                        onClick={() => handleToggleBookmark(writer)}
+                        className={`text-gray-600 focus:outline-none transition-transform transform hover:-translate-y-1 ${writer.isBookmarked ? 'text-yellow-500' : 'text-gray-400'
+                          }`}
+                      >
+                        <FaBookmark />
+                        {/*writer.isBookmarked ? ' Bookmarked' : ' Bookmark'*/}
+                      </button>
                   </td>
                   <td className="border py-3 px-4"> <button
+                  disabled={userData.permissions.contentWriter.profile}
+                  title={userData.permissions.contentWriter.profile
+                    ? "You are not allowed to access this feature"
+                    : undefined  // : ""
+                  }
                     onClick={() => handleViewProfile(writer)}
                     className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                   >

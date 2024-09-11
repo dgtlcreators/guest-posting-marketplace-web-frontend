@@ -432,6 +432,7 @@ const Guestpost = () => {
           </button>*/}
            <SaveSearch section="Guestpost" formDataList={formData}/>
           <button
+          
             type="reset"
             onClick={handleReset}
             className="py-2 px-4 bg-gray-900 text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-700 hover:scale-105"
@@ -439,6 +440,11 @@ const Guestpost = () => {
             Reset
           </button>
           <button
+           disabled={userData.permissions.guestPost.filter} 
+           title={userData.permissions.guestPost.filter
+              ? "You are not allowed to access this feature":undefined
+              // : ""
+           }
             type="submit"
             className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
           >
@@ -453,7 +459,7 @@ const Guestpost = () => {
         >
           Guestpost List
           </h2>
-      <GuestpostTable users={users} />
+      <GuestpostTable users={users} setUsers={setUsers} />
       </div>
     </div>
   );

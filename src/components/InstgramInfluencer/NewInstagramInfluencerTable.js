@@ -1,11 +1,12 @@
 
 import axios from 'axios';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
+import { FaSort, FaSortUp, FaSortDown, FaBookmark } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeProvider';
 import { UserContext } from '../../context/userContext';
+
 
 import { saveAs } from "file-saver";
 import { CSVLink } from "react-csv";
@@ -180,23 +181,23 @@ const NewInstagramInfluencerTable = () => {
   const exportDataToCSV = () => {
     const csvData = filteredUsers.map((user, index) => ({
       SNo: index + 1,
-      Username:user.username,
+      Username: user.username,
       FullName: user.fullName,
-      ProfilePicture:user.profilePicture,
-      Bio:user.bio,
-      FollowersCount:user.followersCount,
-      FollowingCount:user.followingCount,
-      PostsCount:user.postsCount,
+      ProfilePicture: user.profilePicture,
+      Bio: user.bio,
+      FollowersCount: user.followersCount,
+      FollowingCount: user.followingCount,
+      PostsCount: user.postsCount,
       EngagementRate: user.engagementRate,
-      AverageLikes:user.averageLikes,
-      AverageComments:user.averageComments,
-      Category:user.category,
-      Location:user.location,
-      Language:user.language,
+      AverageLikes: user.averageLikes,
+      AverageComments: user.averageComments,
+      Category: user.category,
+      Location: user.location,
+      Language: user.language,
       VerifiedStatus: user.verifiedStatus,
       CollaborationRates: `Post: ${user.collaborationRates.post || 0}, Story: ${user.collaborationRates.story || 0}, Reel: ${user.collaborationRates.reel || 0}`,
-      pastCollaborations:user.pastCollaborations,
-      mediaKit:user.mediaKit
+      pastCollaborations: user.pastCollaborations,
+      mediaKit: user.mediaKit
     }));
 
     const csvString = Papa.unparse(csvData);
@@ -220,6 +221,29 @@ const NewInstagramInfluencerTable = () => {
   const handlePageSizeChange = (e) => {
     setPageSize(Number(e.target.value));
     setCurrentPage(1);
+  };
+
+  const handleToggleBookmark = async (influencer) => {
+    // Call an API or directly update the state to toggle isBookmarked
+    const updatedBookmarkStatus = !influencer.isBookmarked;
+
+    try {
+
+      await axios.put(`${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${influencer._id}`, {
+        isBookmarked: updatedBookmarkStatus,
+      });
+      if (updatedBookmarkStatus) {
+        toast.success("Added to Bookmarks!");
+      } else {
+        toast.success("Removed from Bookmarks!");
+      }
+
+      setInfluencers(prev =>
+        prev.map(i => i._id === influencer._id ? { ...i, isBookmarked: updatedBookmarkStatus } : i)
+      );
+    } catch (error) {
+      console.error('Error updating bookmark status', error);
+    }
   };
 
 
@@ -356,12 +380,21 @@ const NewInstagramInfluencerTable = () => {
                   </td>
                   <td className="border py-3 px-4">
                     <Link
+                      disabled={userData.permissions.instagram.edit}
+                      title={userData.permissions.instagram.edit
+                        ? "You are not allowed to access this feature"
+                        : undefined  // : ""
+                      }
                       to={`/editInstagramInfluencer/${influencer._id}`}
-                      className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                      className=" btn-dis border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                     >
                       EDIT
                     </Link>
-                    <button
+                    <button disabled={userData.permissions.instagram.delete}
+                      title={userData.permissions.instagram.delete
+                        ? "You are not allowed to access this feature"
+                        : undefined  // : ""
+                      }
                       onClick={() => deleteInstagramInfluencer(influencer._id)}
                       className="border bg-red-500 hover:bg-red-700 text-white py-1 px-4 rounded my-2 transition-transform transform hover:-translate-y-1"
                     >
@@ -374,12 +407,30 @@ const NewInstagramInfluencerTable = () => {
                     <ApplyForm section="InstagramInfluencer" publisher={influencer} />
                     <ShowApplyForm section="InstagramInfluencer" publisher={influencer} />
                   </td>
-                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
+                  {/*<td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
                     ><Bookmark section="InstagramInfluencer" publisher={influencer} /></button>
+                  </td>*/}
+                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
+                    <button disabled={userData.permissions.instagram.bookmark}
+                      title={userData.permissions.instagram.bookmark
+                        ? "You are not allowed to access this feature"
+                        : undefined  // : ""
+                      }
+                      onClick={() => handleToggleBookmark(influencer)}
+                      className={`text-gray-600 focus:outline-none transition-transform transform hover:-translate-y-1 ${influencer.isBookmarked ? 'text-yellow-500' : 'text-gray-400'
+                        }`}
+                    >
+                      <FaBookmark />
+                      {/*influencer.isBookmarked ? ' Bookmarked' : ' Bookmark'*/}
+                    </button>
                   </td>
                   <td className="border py-2 px-4">
-                    <button
+                    <button disabled={userData.permissions.instagram.profile}
+                      title={userData.permissions.instagram.profile
+                        ? "You are not allowed to access this feature"
+                        : undefined  // : ""
+                      }
                       onClick={() => handleViewProfile(influencer)}
                       className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                     >

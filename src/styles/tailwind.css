@@ -14,165 +14,183 @@
     color: #ffffff; 
   }*/
 
-  /* index.css */
+/* index.css */
 
 /* Default light mode styles */
 body {
-    background-color: #ffffff; 
-    color: #000000;
-    transition: background-color 0.3s, color 0.3s; 
-  }
-  
-  body.light {
-    background-color: #ffffff; 
-    color: #000000; 
-  }
-  
-  body.dark {
-    background-color: #333333; 
-    color: #ffffff; 
-    
-  }
-  
+  background-color: #ffffff;
+  color: #000000;
+  transition: background-color 0.3s, color 0.3s;
+}
 
-  .nav Typography {
-    background-color: #f0f0f0; 
-    color: #000000; 
-    transition: background-color 0.3s, color 0.3s; 
-  }
-  
-  body.dark .nav body.dark  Typography {
-    background-color: #444444; 
-    color: #ffffff; 
-  }
-  
+body.light {
+  background-color: #ffffff;
+  color: #000000;
+}
 
-  .sidebar {
-    background-color: #f8f9fa; 
-    color: #000000; 
-  }
-  
-  body.dark .sidebar {
-    background-color: #212121; 
-    color: #ffffff; 
-  }
-  
+body.dark {
+  background-color: #333333;
+  color: #ffffff;
 
-  .icon {
-    color: #000000; 
-  }
-  
-  body.dark .icon {
-    color: #ffffff; 
-  }
-  
+}
 
 
-  
- 
-  form {
-    background-color: #f9f9f9; 
-    color: #000000; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
-  }
-  
-  body.dark form {
-    background-color: #424242; 
-    color: #ffffff; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  }
-  
-  input,select, textarea,checkbox,.calendar {
-    background-color: #ffffff; 
-    color: #000000; 
-    border: 1px solid #cccccc; 
-    transition: background-color 0.3s, color 0.3s, border 0.3s;
-  }
-  
-  body.dark input,body.dark select, body.dark textarea, body.dark  checkbox, body.dark .calendar {
-    background-color: #333333; 
-    color: #ffffff; 
-    border: 1px solid #555555; 
-  }
-  
-  label {
-    color: #000000; 
-    transition: color 0.3s;
-  }
-  
-  body.dark label {
-    color: #ffffff; 
-  }
-  
+.nav Typography {
+  background-color: #f0f0f0;
+  color: #000000;
+  transition: background-color 0.3s, color 0.3s;
+}
 
-  h1, h2, h3, h4, h5, h6 {
-    color: #3a1616 ; 
-    background-color: #f0f0f0 ; 
-    transition: color 0.3s, background-color 0.3s;
-  }
-  
-  body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 {
-    color: #ffffff ; 
-    background-color: #252424 ; 
-  }
+body.dark .nav body.dark Typography {
+  background-color: #444444;
+  color: #ffffff;
+}
 
-  button {
-   /* background-color: #007bff;
+
+.sidebar {
+  background-color: #f8f9fa;
+  color: #000000;
+}
+
+body.dark .sidebar {
+  background-color: #212121;
+  color: #ffffff;
+}
+
+
+.icon {
+  color: #000000;
+}
+
+body.dark .icon {
+  color: #ffffff;
+}
+
+
+
+
+
+form {
+  background-color: #f9f9f9;
+  color: #000000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+body.dark form {
+  background-color: #424242;
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+input,
+select,
+textarea,
+checkbox,
+.calendar {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #cccccc;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+body.dark input,
+body.dark select,
+body.dark textarea,
+body.dark checkbox,
+body.dark .calendar {
+  background-color: #333333;
+  color: #ffffff;
+  border: 1px solid #555555;
+}
+
+label {
+  color: #000000;
+  transition: color 0.3s;
+}
+
+body.dark label {
+  color: #ffffff;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #3a1616;
+  background-color: #f0f0f0;
+  transition: color 0.3s, background-color 0.3s;
+}
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6 {
+  color: #ffffff;
+  background-color: #252424;
+}
+
+button {
+  /* background-color: #007bff;
     color: #ffffff; */
-    border: none; 
-    padding: 10px 20px; 
-    border-radius: 4px; 
-    cursor: pointer; 
-    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s; 
-  }
-  
-  button:hover {
-    /*background-color: #0056b3; */
-  }
-  
-  body.dark button {
-    /*background-color: #0056b3; 
-    color: #ffffff; */
-  }
-  
-  body.dark button:hover {
-    /*background-color: #003d80; */
-  }
-  
-  
-  
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  th {
-    background-color: #e0e0e0; 
-    color: #000000; 
-    border: 1px solid #cccccc; 
-  }
-  
-  body.dark th {
-    background-color: #444444;
-    color: #ffffff; 
-    border: 1px solid #555555; 
-  }
-  
-  td {
-    background-color: #ffffff; 
-    color: #000000;
-    border: 1px solid #cccccc; 
-    
-  }
-  
-  body.dark td {
-    background-color: #333333; 
-    color: #ffffff; 
-    border: 1px solid #555555; 
-  }
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
 
-  /* index.css */
+button:hover {
+  /*background-color: #0056b3; */
+}
+
+body.dark button {
+  /*background-color: #0056b3; 
+    color: #ffffff; */
+}
+
+body.dark button:hover {
+  /*background-color: #003d80; */
+}
+
+
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  background-color: #e0e0e0;
+  color: #000000;
+  border: 1px solid #cccccc;
+}
+
+body.dark th {
+  background-color: #444444;
+  color: #ffffff;
+  border: 1px solid #555555;
+}
+
+td {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #cccccc;
+
+}
+
+body.dark td {
+  background-color: #333333;
+  color: #ffffff;
+  border: 1px solid #555555;
+}
+
+/* index.css */
 
 /* Fade-in animation for table rows */
 @keyframes fadeIn {
@@ -180,6 +198,7 @@ body {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -191,6 +210,7 @@ body {
   from {
     transform: scale(1);
   }
+
   to {
     transform: scale(1.02);
   }
@@ -206,32 +226,42 @@ table tbody tr {
 
 /* Light Mode Table Row Hover Effect */
 body.light table tbody tr:hover {
- /* animation: hoverEffect 0.3s ease-in-out;*/
-  background-color: rgba(0, 0, 0, 0.2); /* Light mode hover color */
+  /* animation: hoverEffect 0.3s ease-in-out;*/
+  background-color: rgba(0, 0, 0, 0.2);
+  /* Light mode hover color */
 }
 
 /* Dark Mode Table Row Hover Effect */
 body.dark table tbody tr:hover {
   /*animation: hoverEffect 0.3s ease-in-out;*/
-  background-color: rgba(255, 255, 255, 0.3); /* Dark mode hover color */
+  background-color: rgba(255, 255, 255, 0.3);
+  /* Dark mode hover color */
 }
 
 
 table tbody tr {
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
 @keyframes submitColorChange {
   0% {
-    background-color: #1e3a8a; /* Dark Blue */
+    background-color: #1e3a8a;
+    /* Dark Blue */
   }
+
   33% {
-    background-color: #60a5fa; /* Light Blue */
+    background-color: #60a5fa;
+    /* Light Blue */
   }
+
   66% {
-    background-color: #2563eb; /* Medium Blue */
+    background-color: #2563eb;
+    /* Medium Blue */
   }
+
   100% {
-    background-color: #1e3a8a; /* Dark Blue */
+    background-color: #1e3a8a;
+    /* Dark Blue */
   }
 }
 
@@ -241,20 +271,77 @@ table tbody tr {
 
 @keyframes resetColorChange {
   0% {
-    background-color: #1f2937; /* Dark Gray */
+    background-color: #1f2937;
+    /* Dark Gray */
   }
+
   33% {
-    background-color: #9ca3af; /* Light Gray */
+    background-color: #9ca3af;
+    /* Light Gray */
   }
+
   66% {
-    background-color: #6b7280; /* Medium Gray */
+    background-color: #6b7280;
+    /* Medium Gray */
   }
+
   100% {
-    background-color: #1f2937; /* Dark Gray */
+    background-color: #1f2937;
+    /* Dark Gray */
   }
 }
 
 .hover\:animate-resetColorChange:hover {
   animation: resetColorChange 1.5s infinite;
 }
-  
+
+
+
+button:disabled,
+.btn-dis[disabled],
+.btn-dis:disabled button[disabled],
+input[type="checkbox"]:disabled {
+  border: 1px solid #999999;
+  background-color: darkgrey !important;
+  color: #fff;
+  padding: 10px;
+  cursor: not-allowed;
+  position: relative;
+}
+
+/* Optional Tooltip Style */
+button:disabled:hover::after,
+.btn-dis:disabled:hover::after,
+input[type="checkbox"]:disabled:hover::after {
+  /* content: attr(title);  Get content from the title attribute */
+  background-color: #333;
+  /* Tooltip background */
+  color: #fff;
+  /* Tooltip text color */
+  padding: 5px 10px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 100%;
+  /* Position above the button */
+  left: 50%;
+  /* Center align */
+  transform: translateX(-50%);
+  white-space: nowrap;
+  /* Ensure the text stays in one line */
+  opacity: 0.9;
+  /* Slight transparency */
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.btn {
+  border: 1px solid #999999;
+  background-color: blue;
+  color: #fff;
+  padding: 10px;
+}
+
+.btn-enabled {
+  background-color: transparent !important;
+   cursor: not-allowed;
+}

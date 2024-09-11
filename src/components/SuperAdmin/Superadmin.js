@@ -18,21 +18,33 @@ const Superadmin = () => {
     instagramDelete: false,
     instagramBookmark: false,
     instagramApply: false,
+    instagramProfile:false,
+    instagramShowProfile:false,
+    instagramFilter:false,
     youtubeAdd: false,
     youtubeEdit: false,
     youtubeDelete: false,
     youtubeBookmark: false,
     youtubeApply: false,
+    youtubeProfile:false,
+    youtubeShowProfile:false,
+    youtubeFilter:false,
     contentWriterAdd: false,
     contentWriterEdit: false,
     contentWriterDelete: false,
     contentWriterBookmark: false,
     contentWriterApply: false,
+    contentWriterProfile:false,
+    contentWriterShowProfile:false,
+    contentWriterFilter:false,
     guestPostAdd: false,
     guestPostEdit: false,
     guestPostDelete: false,
     guestPostBookmark: false,
     guestPostApply: false,
+    guestPostProfile:false,
+    guestPostShowProfile:false,
+    guestPostFilter:false
   });
   const [refreshKey, setRefreshKey] = useState(0);
   const [users, setUsers] = useState([]);
@@ -124,7 +136,7 @@ const Superadmin = () => {
             <div key={module} className="mb-4">
               <label className="text-lg mb-2">{module.charAt(0).toUpperCase() + module.slice(1)}</label>
               <div className="flex flex-wrap gap-4">
-                {['add', 'edit', 'delete', 'bookmark', 'apply'].map((action) => (
+                {['add', 'edit', 'delete', 'bookmark', 'apply',"profile","showprofile","filter"].map((action) => (
                   <label key={action} className="flex items-center space-x-2">
                     <input
                       type="checkbox"

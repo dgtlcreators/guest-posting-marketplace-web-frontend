@@ -510,6 +510,11 @@ setFormData(prev=>({
             Reset
           </button>
           <button
+          disabled={userData.permissions.youtube.add}
+          title={userData.permissions.youtube.add
+            ? "You are not allowed to access this feature"
+            : undefined  // : ""
+          }
             type="submit"
             className="py-2 px-4 bg-blue-900 text-white rounded transition duration-300 ease-in-out transform hover:scale-105 hover:animate-submitColorChange"
           >

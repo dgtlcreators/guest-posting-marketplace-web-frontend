@@ -11,6 +11,11 @@ const ShowApplyForm = ({ section, publisher }) => {
 
     const [isFormVisible, setIsFormVisible] = useState(false);
 
+    const disableCheck = (section === "Guestpost" && !userData.permissions.guestPost.apply) ||
+    (section === "InstagramInfluencer" && !userData.permissions.instagram.apply) ||
+    (section === "YoutubeInfluencer" && !userData.permissions.youtube.apply) ||
+    (section === "ContenWriters" && !userData.permissions.contentWriter.apply) 
+   
     
   const createDescriptionElements = (formData, users) => {
     // console.log("createDescriptionElements formData and users",formData,users)
@@ -76,7 +81,11 @@ const ShowApplyForm = ({ section, publisher }) => {
         <div className=""//"min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-700 via-gray-900 to-black"
         >
             {!isFormVisible ? (
-                <button
+                <button   disabled={disableCheck}
+                title={disableCheck
+                  ? "You are not allowed to access this feature"
+                  :undefined// : ""
+                }
                     onClick={() => setIsFormVisible(true)}
                     className="border bg-green-500 hover:bg-green-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                 //"px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"

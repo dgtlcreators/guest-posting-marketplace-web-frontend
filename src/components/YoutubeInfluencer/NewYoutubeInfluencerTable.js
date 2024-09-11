@@ -3,7 +3,7 @@ import { useTheme } from '../../context/ThemeProvider';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
+import { FaBookmark, FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
 import { UserContext } from '../../context/userContext';
 
 import { saveAs } from "file-saver";
@@ -304,6 +304,25 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
       setCurrentPage(1);
   };
 
+  const handleToggleBookmark = async (influencer) => {
+    const updatedBookmarkStatus = !influencer.isBookmarked;
+    try {
+        await axios.put(`${localhosturl}/youtubeinfluencers/updateYoutubeInfluencer/${influencer._id}`, {
+            isBookmarked: updatedBookmarkStatus,
+        });
+        if (updatedBookmarkStatus) {
+          toast.success("Added to Bookmarks!");
+        } else {
+          toast.success("Removed from Bookmarks!");
+        }
+
+        setInfluencers(prev =>
+            prev.map(i => i._id === influencer._id ? { ...i, isBookmarked: updatedBookmarkStatus } : i)
+        );
+    } catch (error) {
+        console.error('Error updating bookmark status', error);
+    }
+};
 
   return (
     <div className='table-container'>
@@ -433,14 +452,22 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
                   />
 
                 </td>
-                <td className='py-3 px-4'>
-                  <Link
+                <td className='border py-3 px-4'>
+                  <Link disabled={userData.permissions.youtube.edit}
+                      title={userData.permissions.youtube.edit
+                        ? "You are not allowed to access this feature"
+                        : undefined  // : ""
+                      }
                     to={`/edityoutubeInfluencer/${influencer._id}`}
-                    className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                    className="btn-dis border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                   >
                     EDIT
                   </Link>
-                  <button
+                  <button disabled={userData.permissions.youtube.delete}
+                      title={userData.permissions.youtube.delete
+                        ? "You are not allowed to access this feature"
+                        : undefined  // : ""
+                      }
                     onClick={() => deleteInstagramInfluencer(influencer._id)}
                     className="border bg-red-500 hover:bg-red-700 text-white py-1 px-4 rounded my-2 transition-transform transform hover:-translate-y-1"
                   >
@@ -452,13 +479,28 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
                   <ShowApplyForm section="YoutubeInfluencer" publisher={influencer} />
                   </td>
                <td  className="border py-3 px-2 md:px-6 text-center text-md font-semibold"> 
-                  <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
-                ><Bookmark  section="YoutubeInfluencer" publisher={influencer}/></button>
-                </td>
+                 {/* <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
+                ><Bookmark  section="YoutubeInfluencer" publisher={influencer}/></button>*/}
+                 <button disabled={userData.permissions.youtube.bookmark}
+                      title={userData.permissions.youtube.bookmark
+                        ? "You are not allowed to access this feature"
+                        : undefined  // : ""
+                      }
+                        onClick={() => handleToggleBookmark(influencer)}
+                        className={`text-gray-600 focus:outline-none transition-transform transform hover:-translate-y-1 ${influencer.isBookmarked ? 'text-yellow-500' : 'text-gray-400'
+                          }`}
+                      >
+                        <FaBookmark />
+                        {/*influencer.isBookmarked ? ' Bookmarked' : ' Bookmark'*/}
+                      </button></td>
                 <td className='border py-3 px-4'>
-                <Link
+                <Link disabled={userData.permissions.youtube.profile}
+                      title={userData.permissions.youtube.profile
+                        ? "You are not allowed to access this feature"
+                        : undefined  // : ""
+                      }
                     to={`/youtubeInfluencerProfile/${influencer._id}`}
-                    className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                    className="btn-dis border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                   >
                     View Profile
                   </Link>

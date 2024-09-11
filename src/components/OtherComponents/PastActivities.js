@@ -14,11 +14,13 @@ import {
   faCheckSquare,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import { ThemeContext } from '../../context/ThemeProvider'; // Add your ThemeProvider context file here
+import { ThemeContext } from '../../context/ThemeProvider';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const PastActivities = () => {
   const { isDarkTheme } = useTheme();
-  const { userData ,localhosturl} = useContext(UserContext);
+  const { userData, localhosturl } = useContext(UserContext);
   const userId = userData?._id;
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,8 +36,8 @@ const PastActivities = () => {
     const fetchPastActivities = async () => {
       setLoading(true);
       try {
-        
-       
+
+
         const response = await axios.get(`${localhosturl}/pastactivities/getAllpastactivities`, {
           params: {
             userId,
@@ -155,11 +157,27 @@ const PastActivities = () => {
     return <div className="text-center p-4 text-red-500 animate-pulse">Error: {error}</div>;
   }
 
+  const deletePastActivity = async (id) => {
+    try {
+
+      await axios.delete(`${localhosturl}/pastactivities/deletePastActivities/${id}`);
+      toast.success("Past Activity  Deleted Successfully");
+      const user = activities.find((user) => user._id === id);
+
+      //await pastactivitiesAdd(user);
+      //pastactivitiesAdd()
+      setActivities(activities.filter((writer) => writer._id !== id));
+    } catch (error) {
+      toast.error("Error deleting Content Writer");
+      console.error("Error deleting Content Writer:", error);
+    }
+  };
+
   return (
     <div className={`container mx-auto p-4 `}>
       <h1 className="text-2xl   p-2 my-2">Past Activities</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-       
+
         <div className="flex flex-col">
           <label className="font-medium mb-2">Section:</label>
           {['Instagram Influencer', 'YouTube Influencer', 'Content Writer', 'Guest Post', 'Apply', 'Super Admin'].map((section) => (
@@ -177,7 +195,7 @@ const PastActivities = () => {
           ))}
         </div>
 
-       
+
         <div className="flex flex-col">
           <label className="font-medium mb-2">Type:</label>
           {['filter', 'create', 'delete', 'update', 'view'].map((type) => (
@@ -195,7 +213,7 @@ const PastActivities = () => {
           ))}
         </div>
 
-        
+
         <div className="flex flex-col">
           <label htmlFor="sortOrder" className="font-medium mb-2">Sort Order:</label>
           <select
@@ -210,7 +228,7 @@ const PastActivities = () => {
           </select>
         </div>
 
-      
+
         <div className="flex flex-col">
           <label htmlFor="timeFrame" className="font-medium mb-2">Time Frame:</label>
           <select
@@ -238,24 +256,44 @@ const PastActivities = () => {
         </button>
       </div>
 
-     
+      <h1 className="text-2xl   p-2 my-2">Past Activities List</h1>
       <div className="grid grid-cols-1 gap-6">
-        {sortedActivities.map((activity) => (
+        {sortedActivities.length===0?<p className='py-3 px-6 text-center text-lg font-semibold'>No Data Found</p>:sortedActivities.map((activity) => (
           <div key={activity._id} className={`shadow-lg rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:scale-105 `} //${isDarkTheme ? 'bg-gray-700' : 'bg-gray-100'}
           >
-            <FontAwesomeIcon icon={faCalendarAlt} className="text-blue-500 text-2xl animate-pulse" />
-            <div className="flex-grow">
-              <h3 className="text-lg font-semibold p-2">{activity.user.name}</h3>
-              <p>Action: {activity.action}</p>
-              <p>Section: {activity.section}</p>
-              <p>{activity.details.shortDescription}</p>
-              <span className="text-gray-500 text-sm">
-                {new Date(activity.timestamp).toLocaleString()}
-              </span>
-            </div>
-           { /*<div className="flex items-center space-x-2">
+            
+              <FontAwesomeIcon icon={faCalendarAlt} className="text-blue-500 text-2xl animate-pulse" />
+              <div className="flex-grow">
+                <h3 className="text-lg font-semibold p-2">{activity.user.name}</h3>
+                <p>Action: {activity.action}</p>
+                <p>Section: {activity.section}</p>
+                <p>{activity.details.shortDescription}</p>
+                <span className="text-gray-500 text-sm">
+                  {new Date(activity.timestamp).toLocaleString()}
+                </span>
+              </div>
+              { /*<div className="flex items-center space-x-2">
               <FontAwesomeIcon icon={faCheckSquare} className="text-green-500" />
               <FontAwesomeIcon icon={faTimesCircle} className="text-red-500" />
+            </div>*/}
+            <div className="flex items-center space-x-2">
+            <button onClick={() => deletePastActivity(activity._id)}
+                className="  text-white py-1 px-4 rounded my-2 transition-transform transform hover:-translate-y-1">
+                  <FontAwesomeIcon icon={faTimesCircle} className="text-red-500" /></button>
+           
+            </div>
+          
+            {/*<div className="flex items-center justify-end space-x-2 mt-3">
+
+              {/*<Link
+                to={`/editpastActivity/${activity._id}`}
+                className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+              >
+                EDIT
+              </Link>/}
+              <button onClick={() => deletePastActivity(activity._id)}
+                className="border bg-red-500 hover:bg-red-700 text-white py-1 px-4 rounded my-2 transition-transform transform hover:-translate-y-1">
+                DELETE</button>
             </div>*/}
           </div>
         ))}
