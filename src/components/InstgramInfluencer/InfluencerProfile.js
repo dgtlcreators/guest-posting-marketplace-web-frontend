@@ -15,6 +15,7 @@ const InfluencerProfile = () => {
   const { id } = useParams();
   const [influencer, setInfluencer] = useState(null);
   const [form, setForm] = useState({
+    userId:userData?._id,
     brandName: '',
     contactPerson: '',
     email: '',
@@ -23,6 +24,7 @@ const InfluencerProfile = () => {
     collaborationType: '',
     budget: '',
     notes: ''
+    
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
 

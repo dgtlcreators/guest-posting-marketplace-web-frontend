@@ -12,6 +12,7 @@ const ContentWriter = () => {
   const { userData,localhosturl } = useContext(UserContext);
   const userId = userData?._id;
   const initialFormData={
+    userId:userData?._id,
     name: '',
     bio: '',
     experienceFrom: '',
@@ -238,7 +239,7 @@ const ContentWriter = () => {
     
     e.preventDefault();
     try {
-      const response = await axios.post(`${localhosturl}/contentwriters/contentWritersFilter`, transformedData);
+      const response = await axios.post(`${localhosturl}/contentwriters/contentWritersFilter`,{... transformedData,userId:userData?._id,});
       
       setWriters(response.data.data);
       console.log(response.data,response.data.data)
@@ -556,7 +557,7 @@ const ContentWriter = () => {
         {/*<div className="mt-4">
           <h2 className="text-lg font-semibold mb-2">Collaboration Rates</h2>*/}
          
-            <div className="block">
+            {/*<div className="block">
               <label className="text-gray-700">Collaboration Rates Post (From)</label>
               <input
                 type="number"
@@ -615,7 +616,7 @@ const ContentWriter = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
-            </div>
+            </div>*/}
             
       {/*</div>*/}
        

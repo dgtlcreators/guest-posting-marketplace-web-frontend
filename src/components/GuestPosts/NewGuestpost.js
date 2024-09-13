@@ -40,7 +40,7 @@ const NewGuestpost = () => {
         price: "1",
         monthlyTraffic: "Monthly Traffic >= 1000",
         mozSpamScore: "Spam Score <= 01",
-        userId: userId
+        userId:userData?._id,
         // siteWorkedWith: "",
         // publisherRole: "",
     };

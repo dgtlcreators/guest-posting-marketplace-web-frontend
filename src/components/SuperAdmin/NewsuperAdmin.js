@@ -12,7 +12,7 @@ const SuperAdmin = () => {
   const { userData, localhosturl } = useContext(UserContext);
   const userId = userData?._id;
   const [users, setUsers] = useState([]);
-  
+
   const initialUser = {
     name: '',
     email: '',
@@ -25,7 +25,9 @@ const SuperAdmin = () => {
         delete: false,
         bookmark: true,
         apply: true,
-        profile:true
+        profile: true, 
+        showprofile: true, 
+        filter: true
       },
       youtube: {
         add: false,
@@ -33,7 +35,9 @@ const SuperAdmin = () => {
         delete: false,
         bookmark: true,
         apply: true,
-        profile:true
+        profile: true, 
+        showprofile: true, 
+        filter: true
       },
       contentWriter: {
         add: false,
@@ -41,7 +45,9 @@ const SuperAdmin = () => {
         delete: false,
         bookmark: true,
         apply: true,
-        profile:true
+        profile: true, 
+        showprofile: true, 
+        filter: true
       },
       guestPost: {
         add: false,
@@ -49,7 +55,9 @@ const SuperAdmin = () => {
         delete: false,
         bookmark: true,
         apply: true,
-        profile:true
+        profile: true, 
+        showprofile: true, 
+        filter: true
       }
     }
   }
@@ -67,7 +75,7 @@ const SuperAdmin = () => {
   };
 
   const handleChange = (e) => {
-   
+
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -78,7 +86,7 @@ const SuperAdmin = () => {
       // Don't allow toggling permissions for User and Brand User
       return;
     }
-  
+
     setFormData({
       ...formData,
       permissions: {
@@ -92,7 +100,7 @@ const SuperAdmin = () => {
   };
 
 
-  
+
 
 
   const handleDeleteUser = (id) => {
@@ -113,7 +121,7 @@ const SuperAdmin = () => {
       }
       return value;
     };
-  
+
     const elements = [
       { key: 'Name', value: formData.name },
       { key: 'Email', value: formData.email },
@@ -169,74 +177,103 @@ const SuperAdmin = () => {
   }
 
   const handleSubmit = async (e) => {
-  try {
-    e.preventDefault();
-    axios.post(`${localhosturl}/user/addUser`, formData)
-    .then(response => {
-      setUsers([...users, response.data.user]);
-      setFormData({
-        name: '',
-        email: '',
-        password: '',
-        role: 'Brand User',
-        permissions: {
-          instagram: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true,showprofile:true,filter:true  },
-          youtube: { add: false, edit: false, delete: false, bookmark: true, apply: true , profile: true,showprofile:true,filter:true },
-          contentWriter: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
-          guestPost: { add: false, edit: false, delete: false, bookmark: true, apply:true, profile: true,showprofile:true,filter:true  }
-        }
-      });
-    })
-    toast.success("User Added Successfully")
-    
-  } catch (error) {
-    toast.error(`Error Adding User: ${error.message}`);
-    console.error("Error Adding User:", error);
-  }
-   
+    try {
+      e.preventDefault();
+      axios.post(`${localhosturl}/user/addUser`, formData)
+        .then(response => {
+          setUsers([...users, response.data.user]);
+          setFormData(initialUser);
+          setFormData({
+            name: '',
+            email: '',
+            password: '',
+            role: 'Brand User',
+            permissions: {
+              instagram: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true, showprofile: true, filter: true },
+              youtube: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true, showprofile: true, filter: true },
+              contentWriter: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true, showprofile: true, filter: true },
+              guestPost: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true, showprofile: true, filter: true }
+            }
+          });
+        })
+      toast.success("User Added Successfully")
+
+    } catch (error) {
+      toast.error(`Error Adding User: ${error.message}`);
+      console.error("Error Adding User:", error);
+    }
+
   };
   useEffect(() => {
     const fetchUsers = async () => {
-        try {
-            const response = await axios.get(`${localhosturl}/user/getAllUser`)
-            console.log(response.data.users)
-            setUsers(response.data.users)
-            //setOriginalUsers(response.data.users)
-        } catch (error) {
-            console.error("Error fetching Users", error);
-        }
+      try {
+        const response = await axios.get(`${localhosturl}/user/getAllUser`)
+        console.log(response.data.users)
+        setUsers(response.data.users)
+        //setOriginalUsers(response.data.users)
+      } catch (error) {
+        console.error("Error fetching Users", error);
+      }
     }
 
     fetchUsers();
 
-}, []);
+  }, []);
 
-useEffect(() => {
-  
-  if (formData.role === 'Admin' || formData.role === 'Super Admin') {
-    // Automatically check 'add', 'edit', 'delete' for Admin and Super Admin
-    setFormData((prevState) => ({
-      ...prevState,
-      permissions: {
-        instagram: { add: true, edit: true, delete: true,bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
-        youtube: { add: true, edit: true, delete: true,bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
-        contentWriter: { add: true, edit: true, delete: true,bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
-        guestPost: { add: true, edit: true, delete: true,bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
-      },
-    }));
-  } else {
-    // Disable 'add', 'edit', 'delete' for User and Brand User
-    setFormData((prevState) => ({
-      ...prevState,
-      permissions: {
-        instagram: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true,showprofile:true,filter:true  },
-          youtube: { add: false, edit: false, delete: false, bookmark: true, apply: true , profile: true,showprofile:true,filter:true },
-          contentWriter: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
-          guestPost: { add: false, edit: false, delete: false, bookmark: true, apply:true, profile: true,showprofile:true,filter:true  }
-       },
-    }));
-  }
-}, [formData.role]);
+  useEffect(() => {
+    
+    if (formData.role === 'Admin' || formData.role === 'Super Admin') {
+      // Automatically check 'add', 'edit', 'delete' for Admin and Super Admin
+      setFormData((prevState) => ({
+        ...prevState,
+        permissions: {
+          instagram: { add: true, edit: true, delete: true,bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
+          youtube: { add: true, edit: true, delete: true,bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
+          contentWriter: { add: true, edit: true, delete: true,bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
+          guestPost: { add: true, edit: true, delete: true,bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
+        },
+      }));
+    } else {
+      // Disable 'add', 'edit', 'delete' for User and Brand User
+      setFormData((prevState) => ({
+        ...prevState,
+        permissions: {
+          instagram: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true,showprofile:true,filter:true  },
+            youtube: { add: false, edit: false, delete: false, bookmark: true, apply: true , profile: true,showprofile:true,filter:true },
+            contentWriter: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true,showprofile:true,filter:true },
+            guestPost: { add: false, edit: false, delete: false, bookmark: true, apply:true, profile: true,showprofile:true,filter:true  }
+         },
+      }));
+    }
+  }, [formData.role]);
+
+  /**
+   * another 
+   * useEffect(() => {
+    if (formData.role === 'Admin' || formData.role === 'Super Admin') {
+      setFormData(prevState => ({
+        ...prevState,
+        permissions: {
+          instagram: { add: true, edit: true, delete: true, bookmark: true, apply: true, profile: true, showprofile: true, filter: true },
+          youtube: { add: true, edit: true, delete: true, bookmark: true, apply: true, profile: true, showprofile: true, filter: true },
+          contentWriter: { add: true, edit: true, delete: true, bookmark: true, apply: true, profile: true, showprofile: true, filter: true },
+          guestPost: { add: true, edit: true, delete: true, bookmark: true, apply: true, profile: true, showprofile: true, filter: true },
+        },
+      }));
+    } else {
+      setFormData(prevState => ({
+        ...prevState,
+        permissions: {
+          instagram: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true, showprofile: true, filter: true },
+          youtube: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true, showprofile: true, filter: true },
+          contentWriter: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true, showprofile: true, filter: true },
+          guestPost: { add: false, edit: false, delete: false, bookmark: true, apply: true, profile: true, showprofile: true, filter: true },
+        },
+      }));
+    }
+  }, [formData.role]);
+  /*
+   */
 
 
   return (
@@ -247,77 +284,77 @@ useEffect(() => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="block">
             <label className="text-gray-700">Name</label>
-            <input 
-            type="text" 
-            name="name" 
-            placeholder="Name" 
-            value={formData.name} 
-            onChange={handleChange}  
-            className="p-2 border border-gray-300 rounded w-full" 
-            required />
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 rounded w-full"
+              required />
           </div>
           <div className="block">
             <label className="text-gray-700">Email</label>
-            <input type="email" 
-            name="email" 
-            placeholder="Email" 
-            value={formData.email} 
-            onChange={handleChange}  
-            className="p-2 border border-gray-300 rounded w-full" required />
+            <input type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 rounded w-full" required />
           </div>
           <div className="block">
             <label className="text-gray-700">Password</label>
-            <input type="text" 
-            name="password" 
-            placeholder="Password" 
-            value={formData.password} onChange={handleChange}  
-            className="p-2 border border-gray-300 rounded w-full" required />
+            <input type="text"
+              name="password"
+              placeholder="Password"
+              value={formData.password} onChange={handleChange}
+              className="p-2 border border-gray-300 rounded w-full" required />
           </div>
           <div className="block">
             <label className="text-gray-700">Role</label>
             <select name="role" value={formData.role} onChange={handleChange}
-           className="p-2 border border-gray-300 rounded w-full" required  >
-          <option value="Admin">Admin</option>
-          <option value="User">User</option>
-          <option value="Super Admin">Super Admin</option>
-          <option value="Brand User">Brand User</option>
-        </select>
+              className="p-2 border border-gray-300 rounded w-full" required  >
+              <option value="Admin">Admin</option>
+              <option value="User">User</option>
+              <option value="Super Admin">Super Admin</option>
+              <option value="Brand User">Brand User</option>
+            </select>
           </div>
         </div>
 
 
-       
-        
-       
+
+
+
         <div className="mt-4">
-  {['instagram', 'youtube', 'contentWriter', 'guestPost'].map((module) => (
-    <div key={module} className="mb-4">
-      <label className="text-lg mb-2">{module.charAt(0).toUpperCase() + module.slice(1)}</label>
-      <div className="flex flex-wrap gap-4">
-        {['add', 'edit', 'delete',"bookmark","apply","profile","showprofile","filter"].map((action) => (
-          <label key={action} className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              name={`${module}_${action}`}
-              checked={formData.permissions[module][action]}
-              onChange={(e) => handlePermissionChange(e, module, action)}
-              className="btn-dis form-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded"
-              disabled={(formData.role === 'User' || formData.role === 'Brand User') && 
-                (action === 'add' || action === 'edit' || action === 'delete')} 
-              title={((formData.role === 'User' || formData.role === 'Brand User') && 
-                (action === 'add' || action === 'edit' || action === 'delete'))
-                ? `${formData.role} are not allowed to access this feature` 
-               :undefined //: "Click to toggle permission"
-              }
-            />
-            <span className="">{action}</span>
-            
-          </label>
-        ))}
-      </div>
-    </div>
-  ))}
-  {/*tooltip && (
+          {['instagram', 'youtube', 'contentWriter', 'guestPost'].map((module) => (
+            <div key={module} className="mb-4">
+              <label className="text-lg mb-2">{module.charAt(0).toUpperCase() + module.slice(1)}</label>
+              <div className="flex flex-wrap gap-4">
+                {['add', 'edit', 'delete', "bookmark", "apply", "profile", "showprofile", "filter"].map((action) => (
+                  <label key={action} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      name={`${module}_${action}`}
+                      checked={formData.permissions[module][action]}
+                      onChange={(e) => handlePermissionChange(e, module, action)}
+                      className="btn-dis form-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded"
+                      disabled={(formData.role === 'User' || formData.role === 'Brand User') &&
+                        (action === 'add' || action === 'edit' || action === 'delete')}
+                      title={((formData.role === 'User' || formData.role === 'Brand User') &&
+                        (action === 'add' || action === 'edit' || action === 'delete'))
+                        ? `${formData.role} are not allowed to access this feature`
+                        : undefined //: "Click to toggle permission"
+                      }
+                    />
+                    <span className="">{action}</span>
+
+                  </label>
+                ))}
+              </div>
+            </div>
+          ))}
+          {/*tooltip && (
           <div
             className="absolute bg-gray-800 text-white text-xs p-2 rounded"
             style={{ top: tooltip.top, left: tooltip.left }}
@@ -325,10 +362,10 @@ useEffect(() => {
             {tooltip.message}
           </div>
         )*/}
-</div>
+        </div>
 
-      
-        
+
+
 
         <div className="flex items-center justify-end space-x-2 mt-3">
           <button
@@ -352,9 +389,9 @@ useEffect(() => {
       >
         Users List
       </h2>
-      <NewSuperAdminTable key={refreshKey} users={users} setUsers={setUsers}/>
+      <NewSuperAdminTable key={refreshKey} users={users} setUsers={setUsers} />
 
-    
+
     </div>
   );
 };

@@ -414,7 +414,7 @@ const NewGuestpostTable = () => {
                                             }
                                             onClick={() => handleToggleBookmark(user)}
                                             className={`btn-dis  text-gray-600 focus:outline-none transition-transform transform hover:-translate-y-1 ${user.isBookmarked ? 'text-yellow-500' : 'text-gray-400'
-                                                } ${!userData.permissions.guestPost.bookmark && 'btn-enabled'}`}
+                                                } ${userData.permissions.guestPost.bookmark && 'btn-enabled'}`}
                                         >
                                             <FaBookmark />
                                             {/*user.isBookmarked ? ' Bookmarked' : ' Bookmark'*/}

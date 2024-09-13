@@ -10,6 +10,7 @@ const NewYoutubeInfluencer = () => {
   const { userData ,localhosturl} = useContext(UserContext);
   const [refreshKey, setRefreshKey] = useState(0);
   const [formData, setFormData] = useState({
+    userId:userData?._id,
     username: "",
     fullname: "",
     profilePicture: "",
@@ -232,7 +233,7 @@ const generateShortDescription = (formData, users) => {
       const response = await axios.post(
         `${localhosturl}/youtubeinfluencers/addYoutubeInfluencer`,
         
-        formDataToSend,
+        {...formDataToSend,userId:userData?._id,},
         {
           headers: {
             "Content-Type": "multipart/form-data",

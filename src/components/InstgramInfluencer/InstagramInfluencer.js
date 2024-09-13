@@ -293,7 +293,7 @@ const InstagramInfluencer = () => {
     try {
 
       const formDataToSend = {
-        ...formData,
+        ...formData,userId:userData?._id,
         verifiedStatus:formData.verifiedStatus===""?"": formData.verifiedStatus === 'verified',
       };
       

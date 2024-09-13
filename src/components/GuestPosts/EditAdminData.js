@@ -17,6 +17,7 @@ const EditAdminForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [adminData, setAdminData] = useState({
+    userId:userData?._id,
     publisherName: "",
     publisherEmail: "",
     publisherPhoneNo: "",

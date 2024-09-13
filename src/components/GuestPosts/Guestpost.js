@@ -16,6 +16,7 @@ const Guestpost = () => {
  // console.log(userData,userId)
 
   const initialFormData = {
+    userId:userData?._id,
     mozDA: "1",
     DAto: "100",
     categories: "",
@@ -440,8 +441,9 @@ const Guestpost = () => {
             Reset
           </button>
           <button
-           disabled={userData.permissions.guestPost.filter} 
-           title={userData.permissions.guestPost.filter
+           disabled={userData?.permissions?.guestPost?.filter !== undefined ? userData.permissions.guestPost.filter : true}
+
+           title={userData?.permissions?.guestPost?.filter
               ? "You are not allowed to access this feature":undefined
               // : ""
            }

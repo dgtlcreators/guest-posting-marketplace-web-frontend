@@ -10,10 +10,10 @@ const ApplyForm = ({ section, publisher }) => {
   const userId = userData?._id;
   const publisherId = publisher?._id;
 
-  const disableCheck = (section === "Guestpost" && !userData.permissions.guestPost.apply) ||
-  (section === "InstagramInfluencer" && !userData.permissions.instagram.apply) ||
-  (section === "YoutubeInfluencer" && !userData.permissions.youtube.apply) ||
-  (section === "ContenWriters" && !userData.permissions.contentWriter.apply) 
+  const disableCheck = (section === "Guestpost" && userData.permissions.guestPost.apply) ||
+  (section === "InstagramInfluencer" && userData.permissions.instagram.apply) ||
+  (section === "YoutubeInfluencer" && userData.permissions.youtube.apply) ||
+  (section === "ContenWriters" && userData.permissions.contentWriter.apply) 
  console.log("disableCheck ",disableCheck)
 
   const [isFormVisible, setIsFormVisible] = useState(false);

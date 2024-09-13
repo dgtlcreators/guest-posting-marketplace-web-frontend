@@ -15,6 +15,7 @@ const NewContentWriter = () => {
   const { isDarkTheme } = useTheme();
   const { userData, localhosturl } = useContext(UserContext);
   const [formData, setFormData] = useState({
+    userId:userData?._id,
     name: "",
     bio: "",
     email: "",
@@ -304,7 +305,7 @@ const NewContentWriter = () => {
       const response = await axios.post(
         `${localhosturl}/contentwriters/createcontentwriter`,
 
-        formData,
+        {...formData,userId:userData?._id,},
         {
           headers: {
             "Content-Type": "application/json",
@@ -507,22 +508,22 @@ const NewContentWriter = () => {
                     className="p-2 border border-gray-300 rounded w-full"
                   />
                 )}
-                <button
+                {/*<button
                   type="button"
                   onClick={() => handleRemoveExpertise(idx)}
                   className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
                 >
                   Remove
-                </button>
+                </button>*/}
               </div>
             ))}
-            <button
+           {/* <button
               type="button"
               onClick={handleAddExpertise}
               className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
             >
               Add Expertise
-            </button>
+            </button>*/}
           </div>
           <div className="block col-span-2">
             <label className="text-gray-700">Languages</label>
@@ -565,22 +566,22 @@ const NewContentWriter = () => {
                   <option value="Advanced">Advanced</option>
                   <option value="Native">Native</option>
                 </select>
-                <button
+                {/*<button
                   type="button"
                   onClick={() => handleRemoveLanguage(idx)}
                   className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
                 >
                   Remove
-                </button>
+                </button>*/}
               </div>
             ))}
-            <button
+            {/*<button
               type="button"
               onClick={handleAddLanguage}
               className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
             >
               Add Language
-            </button>
+            </button>*/}
           </div>
           <div className="block">
             <label className="text-gray-700">Collaboration Rates (Post)</label>
@@ -639,13 +640,13 @@ const NewContentWriter = () => {
                       className="p-2 border border-gray-300 rounded w-2/3"
                     />
                   )}
-                  <button
+                  {/*<button
                     type="button"
                     onClick={() => handleRemoveIndustry(outerIndex)}
                     className="text-red-500 hover:text-red-700"
                   >
                     Remove Industry
-                  </button>
+                  </button>*/}
                 </div>
                 {item.type && industrySubCategories[item.type] && (
                   <div className="mb-4">
@@ -677,13 +678,13 @@ const NewContentWriter = () => {
                 )}
               </div>
             ))}
-            <button
+            {/*<button
               type="button"
               onClick={handleAddIndustry}
               className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
             >
               Add Industry
-            </button>
+            </button>*/}
           </div>
         </div>
 

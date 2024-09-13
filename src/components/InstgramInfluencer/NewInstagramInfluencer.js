@@ -28,6 +28,7 @@ const NewInstagramInfluencer = () => {
     collaborationRates: { post: 0, story: 0, reel: 0 },
     pastCollaborations: [],
     mediaKit: "",
+    userId:userData?._id,
   });
 
   const [locationQuery, setLocationQuery] = useState("");
@@ -216,7 +217,7 @@ const NewInstagramInfluencer = () => {
     try {
 
 
-      const response = await axios.post(`${localhosturl}/instagraminfluencers/addInstagraminfluencer`, formDataToSend, {
+      const response = await axios.post(`${localhosturl}/instagraminfluencers/addInstagraminfluencer`, {...formDataToSend,userId:userData?._id,}, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -32,7 +32,6 @@
 
 
 
-/* eslint-disable react/prop-types */
 import { createContext, useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 
@@ -42,15 +41,22 @@ const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState(() => {
     // Retrieve user data from localStorage if available
     const storedUser = localStorage.getItem("user");
+    console.log("checking userData 0 ",storedUser)
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  console.log("checking userData 1 ",userData)
 
  // const localhosturl="http://localhost:5000"
 //const localhosturl="https://guest-posting-marketplace-web-backend.onrender.com"
 const localhosturl="https://guest-posting-marketplace-web-backend-1.onrender.com"
+
+
+const [loading, setLoading] = useState(true);
   const updateUserData = useCallback(
     (data) => {
+      
       setUserData(data);
+      console.log("checking userData 2 ",userData,data)
       if (data) {
         localStorage.setItem("user", JSON.stringify(data));
       } else {
@@ -60,6 +66,9 @@ const localhosturl="https://guest-posting-marketplace-web-backend-1.onrender.com
     [setUserData]
   );
 
+  console.log("checking userData 3 ",userData)
+
+
   const signOut = useCallback(() => {
     setUserData(null);
     localStorage.removeItem("user");
@@ -68,6 +77,8 @@ const localhosturl="https://guest-posting-marketplace-web-backend-1.onrender.com
   }, []);
 
   useEffect(() => {
+    
+    console.log("checking userData 4 ",userData)
     // Synchronize localStorage whenever userData changes
     if (userData !== null) {
       localStorage.setItem("user", JSON.stringify(userData));
@@ -75,6 +86,31 @@ const localhosturl="https://guest-posting-marketplace-web-backend-1.onrender.com
       localStorage.removeItem("user");
     }
   }, [userData]);
+
+  const userId = userData?.id;
+  console.log("checking userData 5 ",userData)
+
+ /* useEffect(() => {
+    console.log("checking userData 6 ",userData)
+    const fetchUserData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${localhosturl}/user/getUserId/${userId}`);
+        console.log("This is response ",response)
+        const data = await response.json();
+        updateUserData(data);
+        console.log("checking userData 7 ",userData)
+      } catch (error) {
+        toast.error("Unable to fetch user data");
+      } finally {
+        //setLoading(false);
+      }
+    };
+
+    if (!userData) {
+      fetchUserData();
+    }
+  }, [userData, updateUserData, localhosturl]);*/
 
   return (
     <UserContext.Provider value={{ userData, setUserData: updateUserData ,signOut,localhosturl}}>

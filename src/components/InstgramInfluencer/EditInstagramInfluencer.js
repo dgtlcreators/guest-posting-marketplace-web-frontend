@@ -14,6 +14,7 @@ const EditInstagramInfluencer = () => {
     const [profileUrlOption, setProfileUrlOption] = useState("manual");
     const [mediaKitOption, setMediaKitOption] = useState("manual");
     const [formData, setFormData] = useState({
+      userId:userData?._id,
         username: "",
         fullName: "",
         profilePicture: "",
@@ -157,7 +158,7 @@ const EditInstagramInfluencer = () => {
         try {
            // console.log(formData)
             
-             await axios.put(`${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${id}`, formData);
+             await axios.put(`${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${id}`, {...formData,userId:userData?._id,});
      
      
           toast.success("Instagram Influencer updated Successfully");

@@ -27,7 +27,7 @@ function Signup() {
       .then((response) => {
         toast.success("Signed up successfully")
         setUserData(response.data.user);
-        navigate("/form");
+        navigate("/guestpost");
       })
       .catch((error) => {
         toast.error(error?.response?.data?.message);

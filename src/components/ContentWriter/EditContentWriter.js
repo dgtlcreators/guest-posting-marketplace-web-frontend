@@ -12,6 +12,7 @@ const EditContentWriter = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    userId:userData?._id,
     name: "",
     bio: "",
     experience: 0,
@@ -266,7 +267,7 @@ const generateShortDescription = (formData, users) => {
     try {
       const response = await axios.put(`${localhosturl}/contentwriters/updatecontentwriter/${id}`, {
    
-        ...formData,
+        ...formData,userId:userData?._id,
         expertise: cleanedExpertise,
         languages: cleanedLanguages,
         industry:formData.industry.filter(item => item.type),
@@ -467,13 +468,13 @@ const generateShortDescription = (formData, users) => {
                     className="p-2 border border-gray-300 rounded w-2/3"
                   />
                 )}
-                <button
+               {/* <button
                   type="button"
                   onClick={() => handleRemoveIndustry(outerIndex)}
                   className="text-red-500 hover:text-red-700"
                 >
                   Remove Industry
-                </button>
+                </button>*/}
               </div>
               {item.type && industrySubCategories[item.type] && (
                 <div className="mb-4">
@@ -506,13 +507,13 @@ const generateShortDescription = (formData, users) => {
               )}
             </div>
           ))}
-          <button
+          {/*<button
             type="button"
             onClick={handleAddIndustry}
             className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
           >
             Add Industry
-          </button>
+          </button>*/}
         </div>
           <label className="block">
             <span className="text-gray-700">Expertise</span>
@@ -540,10 +541,13 @@ const generateShortDescription = (formData, users) => {
                     className="p-2 border border-gray-300 rounded w-full"
                   />
                 )}
-                <button type="button" onClick={() => handleRemoveExpertise(idx)} className="ml-2 bg-red-500 text-white py-1 px-2 rounded">Remove</button>
+              { /* <button type="button" onClick={() => handleRemoveExpertise(idx)} 
+                className="ml-2 bg-red-500 text-white py-1 px-2 rounded">Remove</button>*/}
               </div>
             ))}
-            <button type="button" onClick={handleAddExpertise} className="mt-2 bg-green-500 text-white py-2 px-4 rounded">Add Expertise</button>
+            {/*<button type="button" onClick={handleAddExpertise} 
+            className="mt-2 bg-green-500 text-white py-2 px-4 rounded">Add Expertise
+            </button>*/}
           </label>
           <label className="block col-span-2">
             <span className="text-gray-700">Languages</span>
@@ -583,10 +587,12 @@ const generateShortDescription = (formData, users) => {
                 <option value="Advanced">Advanced</option>
                 <option value="Native">Native</option>
               </select>
-                <button type="button" onClick={() => handleRemoveLanguage(idx)} className="ml-2 bg-red-500 text-white py-1 px-2 rounded">Remove</button>
+               {/* <button type="button" onClick={() => handleRemoveLanguage(idx)} 
+                className="ml-2 bg-red-500 text-white py-1 px-2 rounded">Remove</button>*/}
               </div>
             ))}
-            <button type="button" onClick={handleAddLanguage} className="ml-2 bg-blue-500 text-white py-1 px-2 rounded">Add Language</button>
+           {/* <button type="button" onClick={handleAddLanguage}
+             className="ml-2 bg-blue-500 text-white py-1 px-2 rounded">Add Language</button>*/}
           </label>
           <label className="block">
             <span className="text-gray-700">Collaboration Rates (Post)</span>

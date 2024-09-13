@@ -34,6 +34,7 @@ const EditYoutubeInfluencer = () => {
       geographicDistribution: []
     },
     mediaKit: "",
+    userId:userData?._id,
   })
 
   useEffect(() => {
@@ -247,7 +248,7 @@ const generateShortDescription = (formData, users) => {
     try {
       const response = await axios.put(`${localhosturl}/youtubeinfluencers/updateYoutubeInfluencer/${id}`,
        
-        formDataToSend,
+        {...formDataToSend,userId:userData?._id,},
         {
           headers: {
             "Content-Type": "multipart/form-data",
