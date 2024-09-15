@@ -511,8 +511,8 @@ setFormData(prev=>({
             Reset
           </button>
           <button
-          disabled={userData.permissions.youtube.add}
-          title={userData.permissions.youtube.add
+          disabled={!userData.permissions.youtube.add}
+          title={!userData.permissions.youtube.add
             ? "You are not allowed to access this feature"
             : undefined  // : ""
           }

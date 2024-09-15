@@ -300,8 +300,8 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
                   {/*  <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
                     ><Bookmark section="ContenWriters" publisher={writer} /></button>*/}
                     <button
-                    disabled={userData.permissions.contentWriter.bookmark}
-                    title={userData.permissions.contentWriter.bookmark
+                    disabled={!userData.permissions.contentWriter.bookmark}
+                    title={!userData.permissions.contentWriter.bookmark
                       ? "You are not allowed to access this feature"
                       : undefined  // : ""
                     }
@@ -315,8 +315,8 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
                   </td>
                   <td className="border px-4 py-2 text-center">
                     <Link
-                      disabled={userData.permissions.contentWriter.profile}
-                      title={userData.permissions.contentWriter.profile
+                      disabled={!userData.permissions.contentWriter.profile}
+                      title={!userData.permissions.contentWriter.profile
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }

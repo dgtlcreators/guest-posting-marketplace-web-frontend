@@ -493,8 +493,8 @@ const NewGuestpost = () => {
                         Reset
                     </button>
                     <button
-                    disabled={userData.permissions.guestPost.add} 
-                    title={userData.permissions.guestPost.add
+                    disabled={!userData.permissions.guestPost.add} 
+                    title={!userData.permissions.guestPost.add
                        ? "You are not allowed to access this feature"
                      :undefined  // : ""
                     }

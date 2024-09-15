@@ -380,8 +380,8 @@ const NewInstagramInfluencerTable = () => {
                   </td>
                   <td className="border py-3 px-4">
                     <Link
-                      disabled={userData.permissions.instagram.edit}
-                      title={userData.permissions.instagram.edit
+                      disabled={!userData.permissions.instagram.edit}
+                      title={!userData.permissions.instagram.edit
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }
@@ -390,8 +390,8 @@ const NewInstagramInfluencerTable = () => {
                     >
                       EDIT
                     </Link>
-                    <button disabled={userData.permissions.instagram.delete}
-                      title={userData.permissions.instagram.delete
+                    <button disabled={!userData.permissions.instagram.delete}
+                      title={!userData.permissions.instagram.delete
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }
@@ -412,8 +412,8 @@ const NewInstagramInfluencerTable = () => {
                     ><Bookmark section="InstagramInfluencer" publisher={influencer} /></button>
                   </td>*/}
                   <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                    <button disabled={userData.permissions.instagram.bookmark}
-                      title={userData.permissions.instagram.bookmark
+                    <button disabled={!userData.permissions.instagram.bookmark}
+                      title={!userData.permissions.instagram.bookmark
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }
@@ -426,8 +426,8 @@ const NewInstagramInfluencerTable = () => {
                     </button>
                   </td>
                   <td className="border py-2 px-4">
-                    <button disabled={userData.permissions.instagram.profile}
-                      title={userData.permissions.instagram.profile
+                    <button disabled={!userData.permissions.instagram.profile}
+                      title={!userData.permissions.instagram.profile
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }

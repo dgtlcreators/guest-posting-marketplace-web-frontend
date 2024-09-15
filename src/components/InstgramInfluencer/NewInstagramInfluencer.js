@@ -635,8 +635,8 @@ const NewInstagramInfluencer = () => {
             Reset
           </button>
           <button
-           disabled={userData.permissions.instagram.add} 
-                    title={userData.permissions.instagram.add
+           disabled={!userData.permissions.instagram.add} 
+                    title={!userData.permissions.instagram.add
                        ? "You are not allowed to access this feature"
                      :undefined  // : ""
                     }

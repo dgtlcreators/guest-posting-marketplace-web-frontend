@@ -49,7 +49,7 @@ import Dashboard from './components/dashboardItems/Dashboard';
 import PathNotFound from './components/PathNotFound';
 import PastActivities from './components/OtherComponents/PastActivities';
 import CheckoutForm from './CheckoutForm';
-import MyLists from './components/MyLists.js';
+import MyLists from './components/MyLists/MyLists.js';
 
 
 

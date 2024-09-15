@@ -1,10 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import ContentWriterTable from './ContentWriterTable';
 import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeProvider';
 import { UserContext } from '../../context/userContext';
 import SaveSearch from "../OtherComponents/SaveSearch.js";
+import { useLocation } from 'react-router-dom';
 
 
 const ContentWriter = () => {
@@ -304,6 +305,45 @@ const ContentWriter = () => {
       return { ...prev, industry: updatedIndustry };
     });
   };
+
+  const location = useLocation();
+  const [toastShown, setToastShown] = useState(false);
+  useEffect(() => {
+    if (location?.state?.formData) {
+      const formData = location.state.formData;
+     
+      const flattenedFormData = formData["0"] || formData; 
+      console.log("Flattened FormData", flattenedFormData);
+  
+      setFormData(prevState => ({
+        ...initialFormData,
+        ...flattenedFormData
+      }));
+      fetchUsers(formData)
+      location.state.formData = null; 
+    }
+  }, [location?.state?.formData]);
+  
+const fetchUsers=async(formData)=>{
+  try {
+    const response = await axios.post(
+      `${localhosturl}/contentwriters/contentWritersFilter`
+     
+      , formData);
+    console.log("Fetched data:", response.data.data);
+    setWriters(response.data.data);
+
+   
+    if (!toastShown) {
+      toast.success("Saved Data Fetch Successfully");
+      setToastShown(true); 
+    }
+   // toast.success("Saved Data Fetch Successfully");
+  } catch (error) {
+    console.log("Error fetching data:", error);
+    toast.error(error.message);
+  }
+}
 
 
   return (
@@ -684,8 +724,8 @@ const ContentWriter = () => {
             Reset
           </button>
           <button
-           disabled={userData.permissions.contentWriter.filter}
-           title={userData.permissions.contentWriter.filter
+           disabled={!userData.permissions.contentWriter.filter}
+           title={!userData.permissions.contentWriter.filter
              ? "You are not allowed to access this feature"
              : undefined  // : ""
            }

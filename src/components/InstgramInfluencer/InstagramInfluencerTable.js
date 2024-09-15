@@ -285,8 +285,8 @@ const InstagramInfluencerTable = ({ influencers, setInfluencers }) => {
                       </button>
                     </td>
                     <td className="border py-2 px-4">
-                      <button  disabled={userData.permissions.instagram.profile}
-                      title={userData.permissions.instagram.profile
+                      <button  disabled={!userData.permissions.instagram.profile}
+                      title={!userData.permissions.instagram.profile
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }

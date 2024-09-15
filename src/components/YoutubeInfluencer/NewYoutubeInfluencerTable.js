@@ -453,8 +453,8 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
 
                 </td>
                 <td className='border py-3 px-4'>
-                  <Link disabled={userData.permissions.youtube.edit}
-                      title={userData.permissions.youtube.edit
+                  <Link disabled={!userData.permissions.youtube.edit}
+                      title={!userData.permissions.youtube.edit
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }
@@ -463,8 +463,8 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
                   >
                     EDIT
                   </Link>
-                  <button disabled={userData.permissions.youtube.delete}
-                      title={userData.permissions.youtube.delete
+                  <button disabled={!userData.permissions.youtube.delete}
+                      title={!userData.permissions.youtube.delete
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }
@@ -481,8 +481,8 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
                <td  className="border py-3 px-2 md:px-6 text-center text-md font-semibold"> 
                  {/* <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
                 ><Bookmark  section="YoutubeInfluencer" publisher={influencer}/></button>*/}
-                 <button disabled={userData.permissions.youtube.bookmark}
-                      title={userData.permissions.youtube.bookmark
+                 <button disabled={!userData.permissions.youtube.bookmark}
+                      title={!userData.permissions.youtube.bookmark
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }
@@ -494,8 +494,8 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
                         {/*influencer.isBookmarked ? ' Bookmarked' : ' Bookmark'*/}
                       </button></td>
                 <td className='border py-3 px-4'>
-                <Link disabled={userData.permissions.youtube.profile}
-                      title={userData.permissions.youtube.profile
+                <Link disabled={!userData.permissions.youtube.profile}
+                      title={!userData.permissions.youtube.profile
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }

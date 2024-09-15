@@ -696,8 +696,8 @@ const NewContentWriter = () => {
           >
             Reset
           </button>
-          <button  disabled={userData.permissions.contentWriter.add}
-                      title={userData.permissions.contentWriter.add
+          <button  disabled={!userData.permissions.contentWriter.add}
+                      title={!userData.permissions.contentWriter.add
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }

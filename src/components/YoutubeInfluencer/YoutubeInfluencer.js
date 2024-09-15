@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import YoutubeInfluencerTable from "./YoutubeInfluencerTable"
 import SaveSearch from "../OtherComponents/SaveSearch.js";
+import { useLocation } from 'react-router-dom';
 
 const YoutubeInfluencer = () => {
   const { isDarkTheme } = useTheme();
@@ -212,6 +213,45 @@ const YoutubeInfluencer = () => {
       });
   }
   */
+
+  const location = useLocation();
+  const [toastShown, setToastShown] = useState(false);
+  useEffect(() => {
+    if (location?.state?.formData) {
+      const formData = location.state.formData;
+     
+      const flattenedFormData = formData["0"] || formData; 
+      console.log("Flattened FormData", flattenedFormData);
+  
+      setFormData(prevState => ({
+        ...initialFormData,
+        ...flattenedFormData
+      }));
+      fetchUsers(formData)
+      location.state.formData = null; 
+    }
+  }, [location?.state?.formData]);
+  
+const fetchUsers=async(formData)=>{
+  try {
+    const response = await axios.post(
+      `${localhosturl}/youtubeinfluencers/youtubeInfluencesFilter`
+     
+      , formData);
+    console.log("Fetched data:", response.data.data);
+    setInfluencers(response.data.data);
+
+   
+    if (!toastShown) {
+      toast.success("Saved Data Fetch Successfully");
+      setToastShown(true); 
+    }
+   // toast.success("Saved Data Fetch Successfully");
+  } catch (error) {
+    console.log("Error fetching data:", error);
+    toast.error(error.message);
+  }
+}
 
   return (
     <div className='p-4 max-w-6xl mx-auto overflow-x-auto'>
@@ -532,8 +572,8 @@ const YoutubeInfluencer = () => {
             Reset
           </button>
           <button
-           disabled={userData.permissions.youtube.filter}
-           title={userData.permissions.youtube.filter
+           disabled={!userData.permissions.youtube.filter}
+           title={!userData.permissions.youtube.filter
              ? "You are not allowed to access this feature"
              : undefined  // : ""
            }

@@ -1,22 +1,24 @@
 /* eslint-disable react/prop-types */
 
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import GuestpostTable from "./GuestpostTable.js";
 import { toast } from "react-toastify";
 import { UserContext } from "../../context/userContext.js";
 import { useTheme } from "../../context/ThemeProvider.js";
 import SaveSearch from "../OtherComponents/SaveSearch.js";
+import { useLocation } from "react-router-dom";
 
 
 const Guestpost = () => {
+ 
   const { isDarkTheme } = useTheme();
   const { userData,localhosturl } = useContext(UserContext); 
   const userId = userData?._id;
  // console.log(userData,userId)
 
   const initialFormData = {
-    userId:userData?._id,
+    userId:userData?._id || "",
     mozDA: "1",
     DAto: "100",
     categories: "",
@@ -34,14 +36,56 @@ const Guestpost = () => {
   };
 
   const [formData, setFormData] = useState(initialFormData);
+ 
+
 
   const [users, setUsers] = useState([]);
+
+
+  const location = useLocation();
+  const [toastShown, setToastShown] = useState(false);
+  useEffect(() => {
+    if (location?.state?.formData) {
+      const formData = location.state.formData;
+     
+      const flattenedFormData = formData["0"] || formData; 
+      console.log("Flattened FormData", flattenedFormData);
+  
+      setFormData(prevState => ({
+        ...initialFormData,
+        ...flattenedFormData
+      }));
+      fetchUsers(formData)
+      location.state.formData = null; 
+    }
+  }, [location?.state?.formData]);
+  
+const fetchUsers=async(formData)=>{
+  try {
+    const response = await axios.post(
+      `${localhosturl}/form/getFilteredData`
+     
+      , formData);
+    console.log("Fetched data:", response.data);
+    setUsers(response.data);
+
+   
+    if (!toastShown) {
+      toast.success("Saved Data Fetch Successfully");
+      setToastShown(true); 
+    }
+   // toast.success("Saved Data Fetch Successfully");
+  } catch (error) {
+    console.log("Error fetching data:", error);
+    toast.error(error.message);
+  }
+}
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: value || "",
     });
   };
 
@@ -143,7 +187,7 @@ const Guestpost = () => {
     //localStorage.setItem("savedSearch", JSON.stringify(formData));
     toast.success("Search saved successfully!");
   };
-  
+  console.log("Checking FormData ",formData)
 
   return (
     <div className="p-4">
@@ -154,7 +198,7 @@ const Guestpost = () => {
         onSubmit={handleSubmit}
         className="bg-gray-200 shadow-xl p-4 relative"
       >
-        {/* 1st Row */}
+       
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <div className="flex flex-col">
             <label htmlFor="mozDA">Moz DA</label>
@@ -242,7 +286,7 @@ const Guestpost = () => {
           </div>
         </div>
 
-        {/* 2nd Row */}
+  
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 my-4">
           <div className="flex flex-col">
             <label htmlFor="ahrefsDR">Ahrefs DR</label>
@@ -321,7 +365,7 @@ const Guestpost = () => {
           </div>
         </div>
 
-        {/* 3rd Row */}
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-4">
           <div className="flex flex-col">
             <label htmlFor="price">Price</label>
@@ -422,7 +466,7 @@ const Guestpost = () => {
           </div>
         </div>
 
-        {/* Buttons */}
+       
         <div className="flex items-center justify-end space-x-2">
        {/* <button
             type="button"
@@ -441,9 +485,9 @@ const Guestpost = () => {
             Reset
           </button>
           <button
-           disabled={userData?.permissions?.guestPost?.filter !== undefined ? userData.permissions.guestPost.filter : true}
+           disabled={userData?.permissions?.guestPost?.filter !== undefined ? !userData.permissions.guestPost.filter : true}
 
-           title={userData?.permissions?.guestPost?.filter
+           title={!userData?.permissions?.guestPost?.filter
               ? "You are not allowed to access this feature":undefined
               // : ""
            }

@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 const EditSuperadmin = () => {
   const { isDarkTheme } = useTheme();
-  const { userData, localhosturl } = useContext(UserContext);
+  const { userData, localhosturl, setUserData } = useContext(UserContext);
   const userId = userData?._id;
   const {id}=useParams()
   const navigate = useNavigate();
@@ -24,7 +24,9 @@ const EditSuperadmin = () => {
         delete: false,
         bookmark: true,
         apply: true,
-        profile:true
+        profile:true,
+        showprofile: true, 
+        filter: true
       },
       youtube: {
         add: false,
@@ -32,7 +34,9 @@ const EditSuperadmin = () => {
         delete: false,
         bookmark: true,
         apply: true,
-        profile:true
+        profile:true,
+        showprofile: true, 
+        filter: true
       },
       contentWriter: {
         add: false,
@@ -40,7 +44,9 @@ const EditSuperadmin = () => {
         delete: false,
         bookmark: true,
         apply: true,
-        profile:true
+        profile:true,
+        showprofile: true, 
+        filter: true
       },
       guestPost: {
         add: false,
@@ -48,7 +54,9 @@ const EditSuperadmin = () => {
         delete: false,
         bookmark: true,
         apply: true,
-        profile:true
+        profile:true,
+        showprofile: true, 
+        filter: true
       }
     }
   }
@@ -90,6 +98,7 @@ const EditSuperadmin = () => {
       // Don't allow toggling permissions for User and Brand User
      // return;
   //  }
+  console.log(e.target.checked)
   if (formData.role === 'User' || formData.role === 'Brand User') {
     if (field === 'add' || field === 'edit' || field === 'delete') {
       // Disable toggling permissions for 'add', 'edit', 'delete' for User and Brand User
@@ -126,7 +135,7 @@ const EditSuperadmin = () => {
     fetchUsers();
   }, [id]);
 
-  useEffect(() => {
+  /*useEffect(() => {
   
     if (formData.role == 'Admin' || formData.role == 'Super Admin') {
       // Automatically check 'add', 'edit', 'delete' for Admin and Super Admin
@@ -152,7 +161,7 @@ const EditSuperadmin = () => {
       }));
     }
   }, [formData.role]);
-  
+  */
 
   const handleSubmit = async (e) => {
     console.log("formData ",formData)
@@ -160,6 +169,14 @@ const EditSuperadmin = () => {
     try {
      // e.preventDefault();
      const response= axios.put(`${localhosturl}/user/updateUser/${id}`, formData)
+    //// console.log("Response ",response.data)
+    // const responseuser=response.data
+    // console.log("responseuser?._id===userData?._id ",responseuser?._id===userData?._id)
+     
+
+     if(id==userData?._id){
+      setUserData(formData);
+     }
       //.then(response => {
         console.log("response ",response)
        // setUsers([...users, response.data.data]);

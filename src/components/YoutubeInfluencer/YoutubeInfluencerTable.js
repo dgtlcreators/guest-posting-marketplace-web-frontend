@@ -319,8 +319,8 @@ const handleToggleBookmark = async (influencer) => {
                   {/*<button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
                 ><Bookmark  section="YoutubeInfluencer" publisher={influencer}/></button>*/}
                  <button
-                 disabled={userData.permissions.youtube.bookmark}
-                 title={userData.permissions.youtube.bookmark
+                 disabled={!userData.permissions.youtube.bookmark}
+                 title={!userData.permissions.youtube.bookmark
                    ? "You are not allowed to access this feature"
                    : undefined  // : ""
                  }
@@ -334,8 +334,8 @@ const handleToggleBookmark = async (influencer) => {
                 </td>
                 <td className='border py-3 px-4'>
                 <Link
-                disabled={userData.permissions.youtube.profile}
-                title={userData.permissions.youtube.profile
+                disabled={!userData.permissions.youtube.profile}
+                title={!userData.permissions.youtube.profile
                   ? "You are not allowed to access this feature"
                   : undefined  // : ""
                 }

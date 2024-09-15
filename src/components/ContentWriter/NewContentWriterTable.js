@@ -201,10 +201,13 @@ const NewContentWriterTable = () => {
   };
   const handleToggleBookmark = async (influencer) => {
     const updatedBookmarkStatus = !influencer.isBookmarked;
+    console.log(`Updating bookmark status for ${influencer._id} to ${updatedBookmarkStatus}`);
+  
     try {
-        await axios.put(`${localhosturl}/contentwriters/updatecontentwriter/${influencer._id}`, {
-            isBookmarked: updatedBookmarkStatus,
-        });
+      const response = await axios.put(`${localhosturl}/contentwriters/updatecontentwriter/${influencer._id}`, {
+        isBookmarked: updatedBookmarkStatus,
+      });
+        console.log('Response from server:', response.data);
         if (updatedBookmarkStatus) {
           toast.success("Added to Bookmarks!");
         } else {
@@ -218,6 +221,8 @@ const NewContentWriterTable = () => {
         console.error('Error updating bookmark status', error);
     }
 };
+
+
 
 
   return (
@@ -355,8 +360,8 @@ const NewContentWriterTable = () => {
                     </ul>
                   </td>
                   <td className="border py-3 px-4">
-                  <Link disabled={userData.permissions.contentWriter.edit}
-                      title={userData.permissions.contentWriter.edit
+                  <Link disabled={!userData.permissions.contentWriter.edit}
+                      title={!userData.permissions.contentWriter.edit
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }
@@ -365,8 +370,8 @@ const NewContentWriterTable = () => {
                     >
                       EDIT
                     </Link>
-                    <button  disabled={userData.permissions.contentWriter.delete}
-                      title={userData.permissions.contentWriter.delete
+                    <button  disabled={!userData.permissions.contentWriter.delete}
+                      title={!userData.permissions.contentWriter.delete
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }
@@ -384,8 +389,8 @@ const NewContentWriterTable = () => {
                   <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {/*<button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
                     ><Bookmark section="ContenWriters" publisher={writer} /></button>*/}
-                     <button disabled={userData.permissions.contentWriter.bookmark}
-                      title={userData.permissions.contentWriter.bookmark
+                     <button disabled={!userData.permissions.contentWriter.bookmark}
+                      title={!userData.permissions.contentWriter.bookmark
                         ? "You are not allowed to access this feature"
                         : undefined  // : ""
                       }
@@ -398,8 +403,8 @@ const NewContentWriterTable = () => {
                       </button>
                   </td>
                   <td className="border py-3 px-4"> <button
-                  disabled={userData.permissions.contentWriter.profile}
-                  title={userData.permissions.contentWriter.profile
+                  disabled={!userData.permissions.contentWriter.profile}
+                  title={!userData.permissions.contentWriter.profile
                     ? "You are not allowed to access this feature"
                     : undefined  // : ""
                   }

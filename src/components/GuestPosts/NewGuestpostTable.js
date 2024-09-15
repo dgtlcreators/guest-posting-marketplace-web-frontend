@@ -11,7 +11,7 @@ import ApplyForm from "../OtherComponents/ApplyForm";
 import ShowApplyForm from "../OtherComponents/ShowApplyForm";
 import Bookmark from "../OtherComponents/Bookmark";
 import Pagination from "../OtherComponents/Pagination";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 
@@ -23,7 +23,8 @@ const NewGuestpostTable = () => {
     const [sortedField, setSortedField] = useState(null);
     const [sortDirection, setSortDirection] = useState("asc");
     const { userData, localhosturl } = useContext(UserContext);
-//console.log("userData.permissions.guestPost.bookmark ",userData.permissions.guestPost.bookmark)
+    const navigate=useNavigate()
+    //console.log("userData.permissions.guestPost.bookmark ",userData.permissions.guestPost.bookmark)
 
 
     useEffect(() => {
@@ -228,7 +229,9 @@ const NewGuestpostTable = () => {
             console.error('Error updating bookmark status', error);
         }
     };
-
+const handleClickEditLink=(id)=>{
+    navigate(`/editguestpostdata/${id}`)
+}
 
     return (
         <div className="container mx-auto p-4">
@@ -379,20 +382,31 @@ const NewGuestpostTable = () => {
                                     <td className="border px-4 py-2">{user.monthlyTraffic}</td>
                                     <td className="border px-4 py-2">{user.mozSpamScore}</td>
                                     <td className="border py-3 px-4">
-                                        <Link disabled={userData.permissions.guestPost.edit} 
-                                            title={userData.permissions.guestPost.edit
-                                               ? "You are not allowed to access this feature"
-                                             :undefined  // : ""
+                                    <button disabled={!userData.permissions.guestPost.edit}
+                                            title={!userData.permissions.guestPost.edit
+                                                ? "You are not allowed to access this feature"
+                                                : undefined  // : ""
+                                            }
+                                            onClick={()=>handleClickEditLink(user._id)}
+                                           // to={`/editguestpostdata/${user._id}`}
+                                            className="btn-dis border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                                        >
+                                            EDIT
+                                        </button>
+                                       {/* <Link disabled={!userData.permissions.guestPost.edit}
+                                            title={!userData.permissions.guestPost.edit
+                                                ? "You are not allowed to access this feature"
+                                                : undefined  // : ""
                                             }
                                             to={`/editguestpostdata/${user._id}`}
                                             className="btn-dis border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                                         >
                                             EDIT
-                                        </Link>
-                                        <button disabled={userData.permissions.guestPost.delete} 
-                                            title={userData.permissions.guestPost.delete
-                                               ? "You are not allowed to access this feature"
-                                            :undefined   // : ""
+                                        </Link>*/}
+                                        <button disabled={!userData.permissions.guestPost.delete}
+                                            title={!userData.permissions.guestPost.delete
+                                                ? "You are not allowed to access this feature"
+                                                : undefined   // : ""
                                             }
                                             onClick={() => deleteUser(user._id)}
                                             className="border bg-red-500 hover:bg-red-700 text-white py-1 px-4 rounded my-2 transition-transform transform hover:-translate-y-1"
@@ -407,14 +421,14 @@ const NewGuestpostTable = () => {
                                         <ShowApplyForm section="Guestpost" publisher={user} />
                                     </td>
                                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                                        <button disabled={userData.permissions.guestPost.bookmark} 
-                                            title={userData.permissions.guestPost.bookmark
-                                               ? "You are not allowed to access this feature":undefined
-                                               // : ""
+                                        <button disabled={!userData.permissions.guestPost.bookmark}
+                                            title={!userData.permissions.guestPost.bookmark
+                                                ? "You are not allowed to access this feature" : undefined
+                                                // : ""
                                             }
                                             onClick={() => handleToggleBookmark(user)}
                                             className={`btn-dis  text-gray-600 focus:outline-none transition-transform transform hover:-translate-y-1 ${user.isBookmarked ? 'text-yellow-500' : 'text-gray-400'
-                                                } ${userData.permissions.guestPost.bookmark && 'btn-enabled'}`}
+                                                } ${!userData.permissions.guestPost.bookmark && 'btn-enabled'}`}
                                         >
                                             <FaBookmark />
                                             {/*user.isBookmarked ? ' Bookmarked' : ' Bookmark'*/}
@@ -425,7 +439,23 @@ const NewGuestpostTable = () => {
                                         </button>*/}
                                     </td>
                                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                                        <Link  disabled={userData.permissions.guestPost.profile} 
+                                        {userData.permissions.guestPost.profile ? (
+                                            <Link
+                                                to={`/guestpostProfile/${user._id}`}
+                                                className="btn-dis border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
+                                            >
+                                                View Profile
+                                            </Link>
+                                        ) : (
+                                            <span
+                                                title="You are not allowed to access this feature"
+                                                className="btn-dis border bg-gray-500 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg cursor-not-allowed"
+                                            >
+                                                View Profile
+                                            </span>
+                                        )}
+
+                                        { /*<Link  disabled={!userData.permissions.guestPost.profile} 
                                             title={userData.permissions.guestPost.profile
                                                ? "You are not allowed to access this feature":undefined
                                                // : ""
@@ -434,7 +464,7 @@ const NewGuestpostTable = () => {
                                             className="btn-dis  border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                                         >
                                             View Profile
-                                        </Link>
+                                        </Link>*/}
                                     </td>
 
                                 </tr>

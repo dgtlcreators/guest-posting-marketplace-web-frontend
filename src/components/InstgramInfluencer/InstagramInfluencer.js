@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import InstagramInfluencerTable from "./InstagramInfluencerTable.js"; 
 import { toast } from "react-toastify";
 import { UserContext } from "../../context/userContext.js";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeProvider.js";
 import SaveSearch from "../OtherComponents/SaveSearch.js";
 
@@ -312,6 +312,53 @@ const InstagramInfluencer = () => {
     }
   }
 
+
+
+  const location = useLocation();
+  const [toastShown, setToastShown] = useState(false);
+  useEffect(() => {
+    if (location?.state?.formData) {
+      const formData = location.state.formData;
+     
+      const flattenedFormData = formData["0"] || formData; 
+      console.log("Flattened FormData", flattenedFormData);
+  
+      setFormData(prevState => ({
+        ...initialFormData,
+        ...flattenedFormData
+      }));
+      fetchUsers(formData)
+     
+      location.state.formData = null; 
+      if (location && location.state) {
+      //  location.state = null;
+      }
+    }
+  }, [location?.state?.formData]);
+  
+const fetchUsers=async(formData)=>{
+  try {
+    const formDataToSend = {
+      ...formData,
+      verifiedStatus:formData.verifiedStatus===""?"": formData.verifiedStatus === 'verified',
+    };
+    //console.log("formData  checling in fetchUser ",formData)
+    const response = await axios.post(`${localhosturl}/userbrand/filter`,formData);
+   // console.log("Fetched data saved:", response.data);
+    setInfluencers(response.data);
+//console.log("Influencers after ",influencers)
+   
+    if (!toastShown) {
+      toast.success("Saved Data Fetch Successfully");
+      setToastShown(true); 
+    }
+   // toast.success("Saved Data Fetch Successfully");
+  } catch (error) {
+    console.log("Error fetching data:", error);
+    toast.error(error.message);
+  }
+}
+
   return (
     <>
    
@@ -599,8 +646,8 @@ const InstagramInfluencer = () => {
             Reset
           </button>
           <button
-          disabled={userData.permissions.instagram.filter}
-          title={userData.permissions.instagram.filter
+          disabled={!userData.permissions.instagram.filter}
+          title={!userData.permissions.instagram.filter
             ? "You are not allowed to access this feature"
             : undefined  // : ""
           }
