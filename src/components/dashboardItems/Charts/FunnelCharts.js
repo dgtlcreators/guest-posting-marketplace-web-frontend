@@ -13,7 +13,6 @@ const FunnelCharts = ({ data }) => {
     setSelectedLanguage(event.target.value);
   };
 
-  // Count occurrences of each language
   const languageCounts = data.reduce((acc, item) => {
     if (selectedLanguage === 'allLanguage' || item.websiteLanguage === selectedLanguage) {
       acc[item.websiteLanguage] = (acc[item.websiteLanguage] || 0) + 1;
@@ -21,7 +20,7 @@ const FunnelCharts = ({ data }) => {
     return acc;
   }, {});
 
-  // Sort languages by count in descending order
+
   const sortedLanguages = Object.entries(languageCounts).sort((a, b) => b[1] - a[1]);
 
   const categories = sortedLanguages.map(([language]) => language);
@@ -55,7 +54,12 @@ const FunnelCharts = ({ data }) => {
     },
     title: {
       text: 'Website Language Distribution',
-      align: 'middle',
+     
+      align: 'left',
+      style: {
+        //fontSize: '24px',
+        color: isDarkTheme ? '#FFFFFF' : '#000000', 
+      },
     },
     xaxis: {
       categories: categories,

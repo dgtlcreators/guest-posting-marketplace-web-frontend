@@ -96,29 +96,29 @@ import { useTheme } from '../../../context/ThemeProvider';
 const Linecharts = ({data}) => {
   const { isDarkTheme } = useTheme();
 
-    const post = data.map(item => item.collaborationRates.post);
-    const story = data.map(item => item.collaborationRates.story);
-    const reel = data.map(item => item.collaborationRates.reel);
+    const sponsoredVideos = data.map(item => item.collaborationRates.sponsoredVideos);
+    const productReviews = data.map(item => item.collaborationRates.productReviews);
+    const shoutouts = data.map(item => item.collaborationRates.shoutouts);
 
     const labels = data.map((_, index) => {
         const date = new Date();
         date.setDate(date.getDate() - (data.length - index)); 
         return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }); 
     });
-
+    
     
     var options = {
         series: [{
-          name: "Post",
-          data: post
+          name: "SponsoredVideos",
+          data: sponsoredVideos
         },
         {
-          name: "Story",
-          data: story
+          name: "ProductReviews",
+          data: productReviews
         },
         {
-          name: 'Reel',
-          data: reel
+          name: 'Shoutouts',
+          data: shoutouts
         }
       ],
         chart: {
@@ -141,6 +141,7 @@ const Linecharts = ({data}) => {
       },
       title: {
         text: 'collaborationRates',
+       
         align: 'left',
         style: {
           //fontSize: '24px',
@@ -151,8 +152,7 @@ const Linecharts = ({data}) => {
         tooltipHoverFormatter: function(val, opts) {
           return val + ' - <strong>' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '</strong>'
         },
-       
-      labels: { colors: isDarkTheme ? '#FFFFFF' : '#000000' },
+        labels: { colors: isDarkTheme ? '#FFFFFF' : '#000000' },
       },
       markers: {
         size: 0,
@@ -179,11 +179,13 @@ const Linecharts = ({data}) => {
             color: isDarkTheme ? '#FFFFFF' : '#000000',
           },
         },
-        labels: {
-          style: {
-            colors: isDarkTheme ? '#FFFFFF' : '#000000',
+          labels: {
+            style: {
+              colors: isDarkTheme ? '#FFFFFF' : '#000000',
+            },
           },
-        },
+        
+        
       },
       tooltip: {
         y: [
@@ -222,15 +224,14 @@ const Linecharts = ({data}) => {
                 colors: isDarkTheme ? '#FFFFFF' : '#000000',
               },
             },
-          },
+          }
         ]
       },
       grid: {
         borderColor: '#f1f1f1',
       },
       legend: {
-        position: 'top',
-        horizontalAlign: 'right',
+       
         labels: {
           colors: isDarkTheme ? '#FFFFFF' : '#000000',
         }

@@ -322,6 +322,7 @@ const SavedFilterList = () => {
                                                 {user.status}
                                             </td>
                                             <td className=" border  py-3 px-2 md:px-6 text-center text-md font-semibold">
+                                            <pre className="whitespace-pre-wrap break-words">{JSON.stringify(user.formData, null, 2)}</pre>
                                                 {/*user.formData*/}
                                             </td>
                                             <td className=" border  py-3 px-2 md:px-6 text-center text-md font-semibold">

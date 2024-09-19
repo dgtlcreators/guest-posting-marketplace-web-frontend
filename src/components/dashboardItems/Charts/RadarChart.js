@@ -12,7 +12,7 @@ const RadarChart = ({ data }) => {
         setSelectedSpamScore(event.target.value);
     };
 
-    // Parse and count spam scores
+ 
     const spamScoreCounts = data.reduce((acc, item) => {
         const spamScore = item.mozSpamScore;
         if (selectedSpamScore === 'allMozSpamScore' || spamScore === selectedSpamScore) {
@@ -21,7 +21,7 @@ const RadarChart = ({ data }) => {
         return acc;
     }, {});
 //console.log(spamScoreCounts)
-    // Define categories and series data
+
     const categories = [
         'Spam Score <= 01',
         'Spam Score <= 02',
@@ -49,6 +49,11 @@ const RadarChart = ({ data }) => {
         },
         title: {
             text: 'Spam Score Distribution',
+            align: 'left',
+            style: {
+              //fontSize: '24px',
+              color: isDarkTheme ? '#FFFFFF' : '#000000', 
+            },
         },
         colors: colors,
         series: series,

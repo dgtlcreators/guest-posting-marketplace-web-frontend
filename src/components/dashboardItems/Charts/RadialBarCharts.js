@@ -20,6 +20,11 @@ const RadialBarCharts = ({ data }) => {
     },
     title: {
         text: 'average Likes and Comments',
+        align: 'left',
+        style: {
+          //fontSize: '24px',
+          color: isDarkTheme ? '#FFFFFF' : '#000000', 
+        },
       },
       fill: {
         type: 'gradient',
@@ -29,16 +34,23 @@ const RadialBarCharts = ({ data }) => {
         dataLabels: {
           name: {
             fontSize: '22px',
+            color: isDarkTheme ? '#FFFFFF' : '#000000',
           },
           value: {
             fontSize: '16px',
-            formatter: (val) => `${val}%`
+            formatter: (val) => `${val}%`,
+            color: isDarkTheme ? '#FFFFFF' : '#000000',
           },
           total: {
             show: true,
             label: 'Total',
+            color: isDarkTheme ? '#FFFFFF' : '#000000',
             formatter: function () {
               return '100%';
+            },
+            style: {
+              color: isDarkTheme ? '#FFFFFF' : '#000000', // Total label color
+             // fontSize: '20px', // Customize total label font size if needed
             },
           },
         },
@@ -54,6 +66,11 @@ const RadialBarCharts = ({ data }) => {
       },
     },
     labels: ['Likes', 'Comments'],
+    legend: {
+      labels: {
+        colors: isDarkTheme ? '#FFFFFF' : '#000000', 
+      },
+    },
   };
 
   const series = [likesPercentage, commentsPercentage];

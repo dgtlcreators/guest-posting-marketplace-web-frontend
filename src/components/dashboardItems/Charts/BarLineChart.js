@@ -27,6 +27,18 @@ const BarLineChart = ({ data }) => {
     },
     xaxis: {
       categories: languageLabels,
+      labels: {
+        style: {
+          colors: isDarkTheme ? '#FFFFFF' : '#000000',
+        },
+      },
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: isDarkTheme ? '#FFFFFF' : '#000000',
+        },
+      },
     },
     colors: [
         "#008FFB",
@@ -41,7 +53,11 @@ const BarLineChart = ({ data }) => {
         "#FF9800"
       ],
     dataLabels: {
-      enabled: true, 
+      //enabled: true, 
+      enabled: true,
+     style: {
+       colors: [isDarkTheme ? '#FFFFFF' : '#000000'],
+     },
     },
     stroke: {
       curve: 'smooth', 
@@ -49,8 +65,20 @@ const BarLineChart = ({ data }) => {
     fill: {
       type: 'gradient',
     },
+    legend: {
+     
+      position: 'right',
+      labels: {
+        colors: isDarkTheme ? '#FFFFFF' : '#000000', 
+      },
+    },
     title: {
       text: 'Instagram Influencer Languages',
+      align: 'left',
+      style: {
+        //fontSize: '24px',
+        color: isDarkTheme ? '#FFFFFF' : '#000000', 
+      },
     },
     responsive: [
       {

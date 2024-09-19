@@ -31,14 +31,20 @@ const PieChart = ({ data }) => {
       type: 'donut',
     },
     labels: categories,
+    
     plotOptions: {
       pie: {
         startAngle: -90,
         endAngle: 270,
       },
     },
+   
     dataLabels: {
-      enabled: false,
+     // enabled: false,
+     enabled: true,
+     style: {
+       colors: [isDarkTheme ? '#FFFFFF' : '#000000'],
+     },
     },
     fill: {
       type: 'gradient',
@@ -47,9 +53,18 @@ const PieChart = ({ data }) => {
       formatter: function(val, opts) {
         return val + " - " + opts.w.globals.series[opts.seriesIndex];
       },
+      position: 'right',
+      labels: {
+        colors: isDarkTheme ? '#FFFFFF' : '#000000', 
+      },
     },
     title: {
       text: 'Categories',
+      align: 'left',
+      style: {
+        //fontSize: '24px',
+        color: isDarkTheme ? '#FFFFFF' : '#000000', 
+      },
     },
     responsive: [
       {

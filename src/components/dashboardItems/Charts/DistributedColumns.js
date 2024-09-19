@@ -11,7 +11,7 @@ const DistributedColumns = ({ data }) => {
     setSelectedTraffic(event.target.value);
   };
 
-  // Parse and count monthly traffic
+
   const trafficCounts = data.reduce((acc, item) => {
     const traffic = parseInt(item.monthlyTraffic.replace(/[^0-9]/g, ''));
     if (selectedTraffic === 'allMonthlyTraffic' || traffic >= parseInt(selectedTraffic.replace(/[^0-9]/g, ''))) {
@@ -38,7 +38,7 @@ const DistributedColumns = ({ data }) => {
       type: 'bar',
       events: {
         click: function (chart, w, e) {
-          // handle chart click event
+       
         }
       }
     },
@@ -51,6 +51,11 @@ const DistributedColumns = ({ data }) => {
     },
     title: {
         text: 'Monthly Traffic',
+        align: 'left',
+        style: {
+          //fontSize: '24px',
+          color: isDarkTheme ? '#FFFFFF' : '#000000', 
+        },
       },
     dataLabels: {
       enabled: false

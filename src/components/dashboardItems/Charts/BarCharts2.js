@@ -6,7 +6,7 @@ import { useTheme } from '../../../context/ThemeProvider';
 const BarCharts = ({data}) => {
   const { isDarkTheme } = useTheme();
     const followersCount = data.map(item => item.followersCount);
-    const followingCount = data.map(item => item.followingCount);
+    const videosCount = data.map(item => item.videosCount);
     
 
     const labels = data.map((_, index) => {
@@ -18,24 +18,17 @@ const BarCharts = ({data}) => {
     var options = {
         series: [{
         name: 'followersCount',
-        data: followersCount,
-        color: isDarkTheme ? '#00FF00' : '#0000FF',      
+        data: followersCount
       }, {
-        name: 'followingCount',
-        data: followingCount,
-        color: isDarkTheme ? '#FF00FF' : '#FFA500', 
-       
+        name: 'videosCount',
+        data: videosCount
       },],
         chart: {
         type: 'bar',
         height: 350
       },
-      colors: [
-        isDarkTheme ?'#FFFFFF' : '#000000', 
-        isDarkTheme ? '#FFFFFF' : '#000000', 
-      ],
       title: {
-        text: 'Followers and Following count',
+        text: 'Followers and videos count',
         align: 'left',
         style: {
           //fontSize: '24px',
@@ -50,24 +43,27 @@ const BarCharts = ({data}) => {
         },
       },
       dataLabels: {
-       // enabled: false
-       enabled: true, 
-       
+        enabled: false
       },
       stroke: {
         show: true,
-        width: 5,
+        width: 3,
         colors: ['transparent']
       },
       labels: labels,
       xaxis: {
         type: 'datetime',
+        style: {
+          color: isDarkTheme ? '#FFFFFF' : '#000000',
+        },
         labels: {
           style: {
             colors: isDarkTheme ? '#FFFFFF' : '#000000',
           },
         },
       },
+     
+    
       yaxis: {
         title: {
           text: '$ (thousands)',
@@ -76,6 +72,7 @@ const BarCharts = ({data}) => {
             //fontSize: '24px',
             color: isDarkTheme ? '#FFFFFF' : '#000000', 
           },
+        
         },
         labels: {
           style: {
@@ -88,16 +85,31 @@ const BarCharts = ({data}) => {
       },
       tooltip: {
         y: {
+          title: {
           formatter: function (val) {
             return "$ " + val + " thousands"
           }
-        }
+          },
+          labels: {
+            style: {
+              colors: isDarkTheme ? '#FFFFFF' : '#000000',
+            },
+          },
+        },
+        
+      },
+      grid: {
+        borderColor: '#f1f1f1',
       },
       legend: {
+       
         labels: {
-          colors: isDarkTheme ? '#FFFFFF' : '#000000', // Change legend text color
-        },
+          colors: isDarkTheme ? '#FFFFFF' : '#000000',
+        }
       },
+      grid: {
+        borderColor: isDarkTheme ? '#555555' : '#E0E0E0' 
+      }
       };
 
   return (

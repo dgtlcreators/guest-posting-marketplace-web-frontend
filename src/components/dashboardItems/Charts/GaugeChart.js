@@ -6,6 +6,7 @@ import { useTheme } from '../../../context/ThemeProvider';
 const GaugeChart = ({ data }) => {
   const { isDarkTheme } = useTheme();
   const chartRef = useRef(null);
+ // console.log("isDarkTheme ",isDarkTheme)
 
  
   const engagementRates = data.map(item => item.engagementRate);
@@ -28,15 +29,28 @@ const GaugeChart = ({ data }) => {
           type: 'gauge',
           detail: {
             valueAnimation: true,
-            formatter: `{value}%`
+            formatter: `{value}%`,
+            textStyle: {
+              color: isDarkTheme ? '#FFFFFF' : '#000000', // Dynamic color for detail
+            }
           },
           title: {
             text: 'Average Engagement Rate',
+            align: 'left',
+            textStyle: {
+              color: isDarkTheme ? '#FFFFFF' : '#000000', // Dynamic color for title
+              fontSize: 24,
+            },
+            offsetCenter: [0, '90%'],
           },
           data: [
             {
               value: formattedAverageEngagementRate,
-              name: 'Rate'
+              name: 'Rate',//'Rate',
+              style: {
+                //fontSize: '24px',
+                color: isDarkTheme ? '#FFFFFF' : '#000000', 
+              },
             }
           ],
           axisLine: {
@@ -54,14 +68,14 @@ const GaugeChart = ({ data }) => {
 
     myChart.setOption(option);
 
-    // Resize chart on window resize
+
     const handleResize = () => myChart.resize();
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [formattedAverageEngagementRate]);
+  }, [formattedAverageEngagementRate,, isDarkTheme]);
 
   return (
     <div className='w-full max-w-md mx-auto p-4  rounded-lg shadow-lg calendar'

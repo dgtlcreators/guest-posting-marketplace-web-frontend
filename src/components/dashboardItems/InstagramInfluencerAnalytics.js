@@ -37,11 +37,11 @@ const InstagramInfluencerAnalytics = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+   // return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    //return <div>Error: {error.message}</div>;
   }
   return (
     <div className="mt-1 p-4  shadow-md rounded-lg">

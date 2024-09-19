@@ -12,7 +12,7 @@ const InstagramInfluencerOverview = () => {
   const [error, setError] = useState(null);
   const { userData ,localhosturl} = useContext(UserContext);
 
-  // State to hold the counts
+
   const [influencerCount, setInfluencerCount] = useState(0);
   const [totalFollowers, setTotalFollowers] = useState(0);
   const [averageEngagementRate, setAverageEngagementRate] = useState(0);
@@ -34,17 +34,17 @@ const InstagramInfluencerOverview = () => {
 
         
 
-        // Calculate total followers
+       
         const followersTotal = fetchedData.reduce((acc, item) => acc + (item.followersCount || 0), 0);
         setTotalFollowers(followersTotal);
 
-        // Calculate average engagement rate
+      
         const engagementRateTotal = fetchedData.reduce((acc, item) => acc + (item.engagementRate || 0), 0);
         setAverageEngagementRate(fetchedData.length ? (engagementRateTotal / fetchedData.length) : 0);
 
         setLoading(false);
 
-        // Initialize charts with the fetched data
+    
         initializeCharts(fetchedData, followersTotal, engagementRateTotal / fetchedData.length);
       } catch (err) {
         setError(err);
@@ -184,11 +184,11 @@ const InstagramInfluencerOverview = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+   // return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+  //  return <div>Error: {error.message}</div>;
   }
 
   return (
@@ -197,7 +197,7 @@ const InstagramInfluencerOverview = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="p-4 rounded-lg flex flex-col items-center shadow-md rounded-lg" ref={chartSpark3Ref}>
-        <h3 className="text-lg font-semibold bg-transparent">Total Influencers</h3>
+        <h3 className="text-lg font-semibold bg-transparent">Total Instagram Influencers</h3>
         <p className="text-2xl">{influencerCount}</p>
         </div>
         <div className="p-4 rounded-lg flex flex-col items-center shadow-md rounded-lg" ref={chartSpark1Ref}>
