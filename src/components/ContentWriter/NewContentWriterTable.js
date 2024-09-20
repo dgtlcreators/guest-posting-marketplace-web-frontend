@@ -167,6 +167,8 @@ const NewContentWriterTable = () => {
       Experience: user.experience,
       expertise: user.expertise,
       Location: user.location,
+      Gender:user?.gender || "",
+      WordCount:user?.wordCount || "",
 
       Language: user.language,
       Industry: `${user.industry}: ${user.industry.subCategories}`,
@@ -270,6 +272,8 @@ const NewContentWriterTable = () => {
               <th className="border px-4 py-2" onClick={() => handleSort("name")}>Name {renderSortIcon("name")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("email")}>Email {renderSortIcon("email")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("gender")}>Gender {renderSortIcon("gender")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("wordCount")}>WordCount {renderSortIcon("wordCount")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("experience")}>Experience {renderSortIcon("experience")}</th>
               
@@ -302,6 +306,8 @@ const NewContentWriterTable = () => {
                   <td className="border px-4 py-2">{writer.name}</td>
                   <td className="border px-4 py-2">{writer.bio}</td>
                   <td className="border px-4 py-2">{writer.email}</td>
+                  <td className="border px-4 py-2">{writer.gender}</td>
+                  <td className="border px-4 py-2">{writer.wordCount}</td>
                   <td className="border px-4 py-2">{writer.location}</td>
                   <td className="border px-4 py-2">{writer.experience}</td>
                  

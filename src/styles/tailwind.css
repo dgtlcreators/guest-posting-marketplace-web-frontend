@@ -83,6 +83,19 @@ body.dark form {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+body.light .showapply {
+  background-color: #f9f9f9;
+  color: #000000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+body.dark .showapply {
+  background-color: #424242;
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 input,
 select,
 textarea,

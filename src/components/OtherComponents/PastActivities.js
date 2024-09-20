@@ -173,6 +173,26 @@ const PastActivities = () => {
     }
   };
 
+  const handleClearAll = async() => {
+   // handleClearFilters();
+   // sortedActivities.map(each=>deletePastActivity(each._id))
+   // setActivities([]);
+    try {
+      
+      const deletePromises = sortedActivities.map(activity => 
+        axios.delete(`${localhosturl}/pastactivities/deletePastActivities/${activity._id}`)
+      );
+  
+      // Wait for all delete operations to complete
+      await Promise.all(deletePromises);
+      setActivities([]); 
+      toast.success("All past activities deleted successfully.");
+    } catch (error) {
+      toast.error("Error deleting past activities.");
+      console.error("Error deleting past activities:", error);
+    }
+  };
+
   return (
     <div className={`container mx-auto p-4 `}>
       <h1 className="text-2xl   p-2 my-2">Past Activities</h1>
@@ -253,6 +273,13 @@ const PastActivities = () => {
         >
           <FontAwesomeIcon icon={faFilter} />
           <span>Clear Filters</span>
+        </button>
+        <button
+          onClick={handleClearAll}
+          className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded flex items-center space-x-2 ml-2 mr-2"
+        >
+          <FontAwesomeIcon icon={faTimesCircle} />
+          <span>Clear All</span>
         </button>
       </div>
 

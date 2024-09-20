@@ -15,12 +15,13 @@ const NewContentWriter = () => {
   const { isDarkTheme } = useTheme();
   const { userData, localhosturl } = useContext(UserContext);
   const [formData, setFormData] = useState({
-    userId:userData?._id,
+    userId: userData?._id,
     name: "",
     bio: "",
     email: "",
     location: "",
-
+    wordCount: '',
+    gender: 'Prefer not to say',
     experience: 0,
     expertise: [{ type: "", other: "" }],
 
@@ -77,6 +78,35 @@ const NewContentWriter = () => {
     });
   };
 
+
+  const handleAddLanguage = (newExpertise) => {
+    setFormData((prev) => ({
+      ...prev,
+      languages: [...prev.languages, { name: "", other: "", proficiency: "" }],
+    }));
+
+  };
+
+  const handleRemoveLanguage = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      languages: prev.languages.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleAddExpertise = () => {
+    setFormData((prev) => ({
+      ...prev,
+      expertise: [...prev.expertise, { type: "", other: "" }],
+    }));
+  };
+
+  const handleRemoveExpertise = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      expertise: prev.expertise.filter((_, i) => i !== index),
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -189,35 +219,6 @@ const NewContentWriter = () => {
     }
   };
 
-  const handleAddLanguage = (newExpertise) => {
-    setFormData((prev) => ({
-      ...prev,
-      languages: [...prev.languages, { name: "", other: "", proficiency: "" }],
-    }));
-
-  };
-
-  const handleRemoveLanguage = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      languages: prev.languages.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleAddExpertise = () => {
-    setFormData((prev) => ({
-      ...prev,
-      expertise: [...prev.expertise, { type: "", other: "" }],
-    }));
-  };
-
-  const handleRemoveExpertise = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      expertise: prev.expertise.filter((_, i) => i !== index),
-    }));
-  };
-
   const validateFormData = () => {
     const errors = [];
     formData.languages.forEach((lang, index) => {
@@ -305,7 +306,7 @@ const NewContentWriter = () => {
       const response = await axios.post(
         `${localhosturl}/contentwriters/createcontentwriter`,
 
-        {...formData,userId:userData?._id,},
+        { ...formData, userId: userData?._id, },
         {
           headers: {
             "Content-Type": "application/json",
@@ -327,12 +328,12 @@ const NewContentWriter = () => {
       bio: "",
       email: "",
       location: "",
-  
+
       experience: 0,
       expertise: [{ type: "", other: "" }],
-  
+
       languages: [{ name: "", other: "", proficiency: "" }],
-  
+
       collaborationRates: { post: 0, story: 0, reel: 0 },
       industry: [{ type: '', other: '', subCategories: [{ type: '', other: '' }] }],
       // industry: [{ type: '', other: '',  }],
@@ -399,7 +400,38 @@ const NewContentWriter = () => {
               className="p-2 border border-gray-300 rounded w-full"
             />
           </div>
-         
+
+          {/**strat */}
+          <div className="block">
+  <label className="text-gray-700">Gender</label>
+  <select
+    name="gender"
+    value={formData.gender}
+    onChange={handleChange}
+    className="p-2 border border-gray-300 rounded w-full"
+  >
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    <option value="Other">Other</option>
+    <option value="Prefer not to say">Prefer not to say</option>
+  </select>
+</div>
+
+
+<div className="block">
+  <label className="text-gray-700">Word Count</label>
+  <input
+    type="number"
+    name="wordCount"
+    value={formData.wordCount}
+    onChange={handleChange}
+    className="p-2 border border-gray-300 rounded w-full"
+    required
+  />
+</div>
+
+          {/**end */}
+
 
           {/*
         <label className="block">
@@ -508,22 +540,22 @@ const NewContentWriter = () => {
                     className="p-2 border border-gray-300 rounded w-full"
                   />
                 )}
-                {/*<button
+                <button
                   type="button"
                   onClick={() => handleRemoveExpertise(idx)}
                   className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
                 >
                   Remove
-                </button>*/}
+                </button>
               </div>
             ))}
-           {/* <button
+            <button
               type="button"
               onClick={handleAddExpertise}
               className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
             >
               Add Expertise
-            </button>*/}
+            </button>
           </div>
           <div className="block col-span-2">
             <label className="text-gray-700">Languages</label>
@@ -566,22 +598,22 @@ const NewContentWriter = () => {
                   <option value="Advanced">Advanced</option>
                   <option value="Native">Native</option>
                 </select>
-                {/*<button
+                <button
                   type="button"
                   onClick={() => handleRemoveLanguage(idx)}
                   className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
                 >
                   Remove
-                </button>*/}
+                </button>
               </div>
             ))}
-            {/*<button
+            <button
               type="button"
               onClick={handleAddLanguage}
               className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
             >
               Add Language
-            </button>*/}
+            </button>
           </div>
           <div className="block">
             <label className="text-gray-700">Collaboration Rates (Post)</label>
@@ -696,15 +728,15 @@ const NewContentWriter = () => {
           >
             Reset
           </button>
-          <button  disabled={!userData.permissions.contentWriter.add}
-                      title={!userData.permissions.contentWriter.add
-                        ? "You are not allowed to access this feature"
-                        : undefined  // : ""
-                      }
+          <button disabled={!userData.permissions.contentWriter.add}
+            title={!userData.permissions.contentWriter.add
+              ? "You are not allowed to access this feature"
+              : undefined  // : ""
+            }
             type="submit"
             className="py-2 px-4 bg-blue-900 text-white rounded transition duration-300 ease-in-out transform hover:scale-105 hover:animate-submitColorChange"
           >
-          Submit
+            Submit
           </button>
         </div>
       </form>

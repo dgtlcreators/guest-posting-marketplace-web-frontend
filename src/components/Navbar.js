@@ -1,9 +1,10 @@
 
 
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { AppBar, Toolbar,  Typography, Badge, Avatar, Button, Popover, InputBase } from '@mui/material';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar,  Typography, Badge, Avatar, Button, Popover, InputBase, List, ListItem } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useTheme } from '../context/ThemeProvider';
 import NotificationDropdown from './Notifications/NotificationDropdown.js';
@@ -14,10 +15,13 @@ import { Brightness4, Brightness7 } from '@mui/icons-material';
 
 const Navbar = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [anchorElNotification, setAnchorElNotification] = useState(null);
   const [anchorElProfile, setAnchorElProfile] = useState(null);
   const [showAllNotifications, setShowAllNotifications] = useState(false);
   const { isDarkTheme, toggleTheme } = useTheme();
+
+  const navigate=useNavigate()
 
   const [notifications, setNotifications] = useState([
     { id: 1, text: "New Comment on your post", time: "5 mins ago", seen: false },
@@ -25,9 +29,38 @@ const Navbar = () => {
     { id: 3, text: "New Like on your post", time: "15 mins ago", seen: true },
   ]);
 
+
+  const itemsToSearch = [
+    { id: 1, title: "Guestpost",route:"guestpost" },
+    { id: 2, title: "Instagram Influencer",route:"instagram-influencer" },
+    { id: 3, title: "Youtube Influencer",route:"youtube-influencer" },
+    { id: 4, title: "Content Writers",route:"content-writers" },
+    { id: 5, title: "Past Activities",route:"past-activities" },
+    { id: 6, title: "My Lists",route:"my-lists" },
+    { id: 7, title: "Dashboard",route:"dashboard" },
+  ];
   
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
+    if (isSearchVisible) {
+      setSearchTerm(''); 
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && searchTerm) {
+      console.log(event.key,event.key === 'Enter' )
+      navigate(`/${searchTerm}`)
+      const selectedItem = itemsToSearch.find(item => 
+        item.title.toLowerCase() === searchTerm.toLowerCase()
+      );
+      if (selectedItem) {
+        //navigate(`/${selectedItem.route}`);
+        
+      //  setSearchTerm('');
+        //setIsSearchVisible(false); 
+      }
+    }
   };
 
   const handleNotificationClick = (event) => {
@@ -53,6 +86,11 @@ const Navbar = () => {
     setShowAllNotifications(true);
   };
 
+  const filteredItems = itemsToSearch.filter(item =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+
   return (
     <AppBar position="static"  className={`nav ${isDarkTheme ? 'dark' : 'light'}`}>
       <Toolbar >
@@ -69,18 +107,70 @@ const Navbar = () => {
           </div>
         </Typography>
         <div style={{ flexGrow: 1 }} />
-        {isSearchVisible && (
+
+        {isSearchVisible ? (
+        <div style={{ position: 'relative', marginLeft: 'auto' }}>
+        <InputBase
+          placeholder="Search..."
+          style={{
+            color: isDarkTheme ? '#fff' : '#000', 
+            backgroundColor: isDarkTheme ? '#333' : '#bfbfbf', 
+            borderRadius: 4,
+            padding: '5px 10px',
+            '&::placeholder': {
+              color: isDarkTheme ? '#bbb' : '#888', // Placeholder color for watermark effect
+            },
+          }}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={handleKeyDown} 
+        />
+        <IconButton onClick={toggleSearch} style={{ marginLeft: '4px', backgroundColor: isDarkTheme ? '#333' : '#bfbfbf' }}>
+          <CloseIcon style={{ color: isDarkTheme ? '#fff' : '#000' }} />
+        </IconButton>
+        {searchTerm && (
+          <List style={{ position: 'absolute', zIndex: 1, backgroundColor: isDarkTheme ? '#444' : '#fff', color: isDarkTheme ? '#fff' : '#000' }}>
+            {filteredItems.map(item => (
+              <ListItem button key={item.id} onClick={() => navigate(`/${item.route}`)}>
+                {item.title}
+              </ListItem>
+            ))}
+          </List>
+        )}
+      </div>
+      
+        ) : (
+          <IconButton color="inherit" onClick={toggleSearch}>
+            <SearchIcon />
+          </IconButton>
+        )}
+
+
+       { /*{isSearchVisible && (
           <div style={{ position: 'relative', marginLeft: 'auto' }}>
             <InputBase
               placeholder="Search..."
               startAdornment={<SearchIcon />}
               style={{ color: 'inherit' }}
+           //  style={{ color: 'inherit', backgroundColor: isDarkTheme ? '#333' : '#fff', borderRadius: 4, padding: '5px 10px' }}
+             value={searchTerm}
+             
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
+              {searchTerm && (
+              <List style={{ position: 'absolute', zIndex: 1, backgroundColor: isDarkTheme ? '#444' : '#fff' }}>
+                {filteredItems.map(item => (
+                  <ListItem button key={item.id} onClick={() => navigate(`/${item.route}`)}>
+                    {item.title}
+                  </ListItem>
+                ))}
+              </List>
+            )}
           </div>
         )}
         <IconButton color="inherit" onClick={toggleSearch}>
           <SearchIcon />
-        </IconButton>
+        </IconButton>*/}
 
         {/* Notification Dropdown */}
          <IconButton color="inherit" onClick={handleNotificationClick}>

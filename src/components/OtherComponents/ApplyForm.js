@@ -10,6 +10,7 @@ const ApplyForm = ({ section, publisher }) => {
   const userId = userData?._id;
   const publisherId = publisher?._id;
 
+
   const disableCheck = (section === "Guestpost" && !userData.permissions.guestPost.apply) ||
   (section === "InstagramInfluencer" && !userData.permissions.instagram.apply) ||
   (section === "YoutubeInfluencer" && !userData.permissions.youtube.apply) ||
@@ -95,6 +96,7 @@ const ApplyForm = ({ section, publisher }) => {
     e.preventDefault();
 
     try {
+      console.log("This is testing ",publisherId)
      const response = await axios.post(`${localhosturl}/applyroute/apply`, {
         userId,
         publisherId,
@@ -144,7 +146,7 @@ const ApplyForm = ({ section, publisher }) => {
           Apply
         </button>
       ) : (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           {/**<form 
           onSubmit={handleSubmit}
           className={`fixed inset-0 flex items-center justify-center  bg-opacity-50 ${isDarkTheme?" backdrop-blur-md" : "backdrop-blur-md"}`}

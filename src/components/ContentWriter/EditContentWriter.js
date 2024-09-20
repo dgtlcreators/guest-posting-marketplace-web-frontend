@@ -16,6 +16,8 @@ const EditContentWriter = () => {
     name: "",
     bio: "",
     experience: 0,
+    wordCount: '',
+    gender: 'Prefer not to say',
     location: "",
     expertise: [{ type: "", other: "" }],
     languages: [{ name: "", other: "", proficiency: "" }],
@@ -49,6 +51,8 @@ const EditContentWriter = () => {
           email: writer.email || '',
           bio: writer.bio || '',
           experience: writer.experience || 0,
+          gender:writer.gender || "Prefer not to say",
+          wordCount:writer.wordCount || "",
           location: writer.location || "",
           expertise: writer.expertise && Array.isArray(writer.expertise) ? writer.expertise : [{ type: "", other: "" }],
           languages: writer.languages && Array.isArray(writer.languages) ? writer.languages : [{ name: "", other: "", proficiency: "" }],
@@ -388,7 +392,7 @@ const generateShortDescription = (formData, users) => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-blue-600">Update Content Writer</h1>
+      <h1 className="text-2xl p-2">Update Content Writer</h1>
       <form onSubmit={handleSubmit} className="mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <label className="block">
@@ -441,8 +445,43 @@ const generateShortDescription = (formData, users) => {
               className="p-2 border border-gray-300 rounded w-full"
             />
           </label>
+
+           {/**strat */}
+           <div className="block">
+  <label className="text-gray-700">Gender</label>
+  <select
+    name="gender"
+    value={formData.gender}
+    onChange={handleChange}
+    className="p-2 border border-gray-300 rounded w-full"
+  >
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    <option value="Other">Other</option>
+    <option value="Prefer not to say">Prefer not to say</option>
+  </select>
+</div>
+
+
+<div className="block">
+  <label className="text-gray-700">Word Count</label>
+  <input
+    type="number"
+    name="wordCount"
+    value={formData.wordCount}
+    onChange={handleChange}
+    className="p-2 border border-gray-300 rounded w-full"
+    required
+  />
+</div>
+
+          {/**end */}
+
+
+
+
           <div className="block">
-          <h2 className="text-xl font-bold text-blue-600">Industry</h2>
+          <label className="">Industry</label>
           {formData?.industry?.map((item, outerIndex) => (
             <div key={outerIndex} className="border p-4 mb-4 rounded">
               <div className="flex items-center space-x-2 mb-2">
@@ -468,13 +507,13 @@ const generateShortDescription = (formData, users) => {
                     className="p-2 border border-gray-300 rounded w-2/3"
                   />
                 )}
-               {/* <button
+                <button
                   type="button"
                   onClick={() => handleRemoveIndustry(outerIndex)}
                   className="text-red-500 hover:text-red-700"
                 >
                   Remove Industry
-                </button>*/}
+                </button>
               </div>
               {item.type && industrySubCategories[item.type] && (
                 <div className="mb-4">
@@ -495,8 +534,8 @@ const generateShortDescription = (formData, users) => {
                     <span className="text-gray-700">{subCategory}</span>
                 </div>
             );
-        })}
-                 {/* <button
+        })}{/*
+                  <button
                     type="button"
                     onClick={() => handleAddSubCategory(outerIndex)}
                     className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
@@ -507,13 +546,13 @@ const generateShortDescription = (formData, users) => {
               )}
             </div>
           ))}
-          {/*<button
+          <button
             type="button"
             onClick={handleAddIndustry}
             className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
           >
             Add Industry
-          </button>*/}
+          </button>
         </div>
           <label className="block">
             <span className="text-gray-700">Expertise</span>
@@ -541,14 +580,15 @@ const generateShortDescription = (formData, users) => {
                     className="p-2 border border-gray-300 rounded w-full"
                   />
                 )}
-              { /* <button type="button" onClick={() => handleRemoveExpertise(idx)} 
-                className="ml-2 bg-red-500 text-white py-1 px-2 rounded">Remove</button>*/}
+               <button type="button" onClick={() => handleRemoveExpertise(idx)} 
+                className="ml-2 bg-red-500 text-white py-1 px-2 rounded">Remove</button>
               </div>
             ))}
-            {/*<button type="button" onClick={handleAddExpertise} 
+            <button type="button" onClick={handleAddExpertise} 
             className="mt-2 bg-green-500 text-white py-2 px-4 rounded">Add Expertise
-            </button>*/}
+            </button>
           </label>
+          
           <label className="block col-span-2">
             <span className="text-gray-700">Languages</span>
             {formData.languages.map((lang, idx) => (
@@ -587,12 +627,12 @@ const generateShortDescription = (formData, users) => {
                 <option value="Advanced">Advanced</option>
                 <option value="Native">Native</option>
               </select>
-               {/* <button type="button" onClick={() => handleRemoveLanguage(idx)} 
-                className="ml-2 bg-red-500 text-white py-1 px-2 rounded">Remove</button>*/}
+              <button type="button" onClick={() => handleRemoveLanguage(idx)} 
+                className="ml-2 bg-red-500 text-white py-1 px-2 rounded">Remove</button>
               </div>
             ))}
-           {/* <button type="button" onClick={handleAddLanguage}
-             className="ml-2 bg-blue-500 text-white py-1 px-2 rounded">Add Language</button>*/}
+          <button type="button" onClick={handleAddLanguage}
+             className="ml-2 bg-blue-500 text-white py-1 px-2 rounded">Add Language</button>
           </label>
           <label className="block">
             <span className="text-gray-700">Collaboration Rates (Post)</span>
