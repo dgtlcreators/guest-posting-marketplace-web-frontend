@@ -170,7 +170,8 @@ const ShowApplyForm = ({ section, publisher }) => {
           <tr>
             <th className="py-3 px-4 uppercase font-semibold text-sm">Apply Name</th>
             <th className="py-3 px-4 uppercase font-semibold text-sm">Apply Email</th>
-            <th className="py-3 px-4 uppercase font-semibold text-sm">Apply Message</th>
+            <th className="py-3 px-4 uppercase font-semibold text-sm">Apply Phone</th>
+            <th className="py-3 px-4 uppercase font-semibold text-sm">Apply Status</th>
             <th className="py-3 px-4 uppercase font-semibold text-sm">Apply Time</th>
           </tr>
         </thead>
@@ -189,7 +190,8 @@ const ShowApplyForm = ({ section, publisher }) => {
             <tr key={index} className="bg-gray-100 border-b border-gray-200">
               <td className="py-3 px-4">{apply.name}</td>
               <td className="py-3 px-4">{apply.email}</td>
-              <td className="py-3 px-4">{apply.message}</td>
+              <td className="py-3 px-4">{apply.phone}</td>
+              <td className="py-3 px-4">{apply.status}</td>
               <td className="py-3 px-4">{apply.createdAt}</td>
             </tr>
           ))}

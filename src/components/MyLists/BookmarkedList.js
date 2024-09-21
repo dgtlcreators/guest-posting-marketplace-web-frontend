@@ -236,21 +236,21 @@ const filteredUsers = applyList
 
     return (
         <div className='p-4'>
-            <h1 className="text-2xl  p-2 my-2"//text-white bg-blue-700
-            >Bookmarked List</h1>
+            <h2 className="text-2xl  p-2 my-2"//text-white bg-blue-700
+            >Bookmarked List</h2>
             <div>
                 <div className="table-container p-2">
-                <h1 className="text-2xl  p-2 my-2"//text-white bg-blue-700
-            >Guestpost List</h1>
+                <h3 className="text-2xl  p-2 my-2"//text-white bg-blue-700
+            >Guestpost List</h3>
                     <GuestpostTable users={guestPost} setUsers={setGuestPost}/>
-                    <h1 className="text-2xl  p-2 my-2"//text-white bg-blue-700
-            >Instagram Influencer List</h1>
+                    <h3 className="text-2xl  p-2 my-2"//text-white bg-blue-700
+            >Instagram Influencer List</h3>
                     <InstagramInfluencerTable influencers={instagramInfluencers} setInfluencers={setInstagramInfluencers}/>
-                    <h1 className="text-2xl  p-2 my-2"//text-white bg-blue-700
-            >Youtube Influencer List</h1>
+                    <h3 className="text-2xl  p-2 my-2"//text-white bg-blue-700
+            >Youtube Influencer List</h3>
                     <YoutubeInfluencerTable influencers={youtubeInfluencers} setInfluencers={setYoutubeInfluencers}/>
-                    <h1 className="text-2xl  p-2 my-2"//text-white bg-blue-700
-            >Content Writer List</h1>
+                    <h3 className="text-2xl  p-2 my-2"//text-white bg-blue-700
+            >Content Writer List</h3>
                     <ContentWriterTable contentWriters={contentWriters} setContentWriters={setContentWriters}/>
                        {/* <div className="flex flex-col items-center md:flex-row md:items-center justify-between space-y-2 md:space-y-0 md:space-x-2">
                         <p className="text-center  items-center md:text-left transition duration-300 ease-in-out transform hover:scale-105">

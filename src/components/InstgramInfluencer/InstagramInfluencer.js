@@ -364,7 +364,7 @@ const fetchUsers=async(formData)=>{
    
     <div className="p-4 max-w-6xl mx-auto overflow-x-auto">
      { /*<h1 className="text-2xl text-white bg-blue-700 p-2 my-2">Influencer Filter</h1>*/}
-     <h1 className="text-2xl   p-2 my-2">FAQ</h1>
+     <h3 className="text-2xl   p-2 my-2">FAQ</h3>
       <form onSubmit={handleSubmit} className="bg-gray-200 shadow-xl p-4 relative">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {/* Username 

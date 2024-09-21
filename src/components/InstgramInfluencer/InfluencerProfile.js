@@ -206,7 +206,7 @@ const generateShortDescription = (formData, users) => {
                     className="w-48 h-48 lg:w-64 lg:h-64 object-cover rounded-full border-4 border-white shadow-lg transition-transform transform hover:scale-105"
                   />
                 </Zoom>
-                <h1 className="mt-4 text-3xl lg:text-4xl font-bold text-900 p-2">{fullName || username}</h1>
+                <h4 className="mt-4 text-3xl lg:text-4xl font-bold text-900 p-2">{fullName || username}</h4>
               </div>
             </Fade>
 

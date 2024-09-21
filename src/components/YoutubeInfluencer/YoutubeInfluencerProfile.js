@@ -176,7 +176,7 @@ const generateShortDescription = (formData, users) => {
         style={{ width: '100px', height: '100px', borderRadius: '50%', marginRight: '20px', transition: 'transform 0.3s' }}
       />
       <div>
-        <h1 style={{ margin: '0' }}>{formData.fullname}</h1>
+        <h4 style={{ margin: '0' }}>{formData.fullname}</h4>
         <p>@{formData.username}</p>
       </div>
     </div>

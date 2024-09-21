@@ -195,7 +195,7 @@ const PastActivities = () => {
 
   return (
     <div className={`container mx-auto p-4 `}>
-      <h1 className="text-2xl   p-2 my-2">Past Activities</h1>
+      <h2 className="text-2xl   p-2 my-2">Past Activities</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
 
         <div className="flex flex-col">
@@ -283,7 +283,7 @@ const PastActivities = () => {
         </button>
       </div>
 
-      <h1 className="text-2xl   p-2 my-2">Past Activities List</h1>
+      <h3 className="text-2xl   p-2 my-2">Past Activities List</h3>
       <div className="grid grid-cols-1 gap-6">
         {sortedActivities.length===0?<p className='py-3 px-6 text-center text-lg font-semibold'>No Data Found</p>:sortedActivities.map((activity) => (
           <div key={activity._id} className={`shadow-lg rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:scale-105 `} //${isDarkTheme ? 'bg-gray-700' : 'bg-gray-100'}

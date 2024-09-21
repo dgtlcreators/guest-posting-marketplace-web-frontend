@@ -136,8 +136,8 @@ fetchData()
 
     return (
         <div className='p-4'>
-            <h1 className="text-2xl  p-2 my-2"//text-white bg-blue-700
-            >Apply List</h1>
+            <h4 className="text-2xl  p-2 my-2"//text-white bg-blue-700
+            >Apply List</h4>
             <div>
                 <div className="table-container">
                     <div className="flex flex-col items-center md:flex-row md:items-center justify-between space-y-2 md:space-y-0 md:space-x-2">
@@ -220,7 +220,7 @@ fetchData()
                                                 {user.createdAt}
                                             </td>
                                             <td className=" border  py-3 px-2 md:px-6 text-center text-md font-semibold">
-                                            <button disabled={!userData.permissions.guestPost.edit}
+                                            {/*<button disabled={!userData.permissions.guestPost.edit}
                                             title={!userData.permissions.guestPost.edit
                                                 ? "You are not allowed to access this feature"
                                                 : undefined  // : ""
@@ -230,7 +230,7 @@ fetchData()
                                             className="btn-dis border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                                         >
                                             EDIT
-                                        </button>
+                                        </button>*/}
                                         <button disabled={!userData.permissions.guestPost.delete}
                                             title={!userData.permissions.guestPost.delete
                                                 ? "You are not allowed to access this feature"

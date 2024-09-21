@@ -191,8 +191,8 @@ const fetchUsers=async(formData)=>{
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl  p-2 my-2"//text-white bg-blue-700
-      >FAQ</h1>
+      <h2 className="text-2xl  p-2 my-2"//text-white bg-blue-700
+      >FAQ</h2>
 
       <form
         onSubmit={handleSubmit}

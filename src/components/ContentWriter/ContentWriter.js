@@ -349,7 +349,7 @@ const fetchUsers=async(formData)=>{
   return (
     <div className="container mx-auto p-4">
       {/*<h1 className="text-2xl font-bold mb-6 text-blue-600">Filter Content Writers</h1>*/}
-      <h1 className="text-2xl   p-2 my-2">FAQ</h1>
+      <h2 className="text-2xl   p-2 my-2">FAQ</h2>
       <form onSubmit={handleSubmit} className="bg-gray-100 p-6 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           <div className="block">

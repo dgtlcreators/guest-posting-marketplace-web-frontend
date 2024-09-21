@@ -252,8 +252,8 @@ const SavedFilterList = () => {
     
     return (
         <div className='p-4'>
-            <h1 className="text-2xl  p-2 my-2"//text-white bg-blue-700
-            >Saved Filter List</h1>
+            <h2 className="text-2xl  p-2 my-2"//text-white bg-blue-700
+            >Saved Filter List</h2>
             <div>
                 <div className="table-container">
                     <div className="flex flex-col items-center md:flex-row md:items-center justify-between space-y-2 md:space-y-0 md:space-x-2">

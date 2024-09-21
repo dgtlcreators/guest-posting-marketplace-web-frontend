@@ -255,8 +255,8 @@ const fetchUsers=async(formData)=>{
 
   return (
     <div className='p-4 max-w-6xl mx-auto overflow-x-auto'>
-      <h1 className='text-2xl  p-2'// text-white bg-blue-700
-      >FAQ</h1>
+      <h2 className='text-2xl  p-2'// text-white bg-blue-700
+      >FAQ</h2>
       <form onSubmit={handleSubmit} className="bg-gray-200 shadow-xl p-4 relative">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/*<div className="flex flex-col">

@@ -305,7 +305,7 @@ setFormData(prev=>({
   }
   return (
     <div className='container mx-auto p-4'>
-      <h1 className='text-xl font-bold text-white bg-blue-700  p-3'>Update Youtube Influencers</h1>
+      <h2 className='text-xl font-bold text-white bg-blue-700  p-3'>Update Youtube Influencers</h2>
       <form onSubmit={handleSubmit} className='mb-4 p-4 bg-gray-100 rounded-lg shadow-md'>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
           <label className='block'>

@@ -17,9 +17,11 @@ const Layout = ({ children, isRegisterPage }) => {
               >
                 Guest-Posting
               </a>
-              <p className="opacity-75 mb-4">
+              {/*<p className=""//"opacity-75 mb-4"
+              >*/}
+              <br/>
                 Never Pay Until You’re 100% Satisfied - Increasing traffic, leads and sales.
-              </p>
+          {    /*</p>*/}
               <div className="mt-3 mb-4">
                 <p className="pt-3">
                   <span className='p-2'>{isRegisterPage ? 'Have an account?' : "Don't have an account?"}</span>

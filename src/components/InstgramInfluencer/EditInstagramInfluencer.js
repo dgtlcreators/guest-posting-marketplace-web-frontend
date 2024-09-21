@@ -177,7 +177,7 @@ const EditInstagramInfluencer = () => {
     
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-blue-600">Edit Instagram Influencers</h1>
+      <h3 className="text-2xl font-bold mb-4 text-blue-600">Edit Instagram Influencers</h3>
       <form onSubmit={handleSubmit} className="mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <label className="block">

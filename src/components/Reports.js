@@ -38,11 +38,11 @@ const Reports = () => {
   const handleGenerateReport = async () => {
     setLoading(true);
     try {
-      // Create a new workbook and a worksheet
+      
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet('Report');
 
-      // Define table columns
+      
       worksheet.columns = [
         { header: 'User ID', key: 'userId', width: 15 },
         { header: 'Publisher', key: 'publisher', width: 25 },
@@ -54,7 +54,7 @@ const Reports = () => {
         { header: 'Created At', key: 'createdAt', width: 20 },
       ];
 
-      // Add data to the worksheet
+  
       reports.forEach((report) => {
         worksheet.addRow({
           userId: report.userId,
@@ -68,12 +68,12 @@ const Reports = () => {
         });
       });
 
-      // Generate a chart using Chart.js
+     
       const chartCanvas = document.createElement('canvas');
       const ctx = chartCanvas.getContext('2d');
 
       new Chart(ctx, {
-        type: 'bar', // You can choose 'line', 'bar', 'pie', etc.
+        type: 'bar', 
         data: {
           labels: reports.map((report) => report.publisher),
           datasets: [{
@@ -94,17 +94,17 @@ const Reports = () => {
         }
       });
 
-      // Convert chart to image
+    
       const chartImage = chartCanvas.toDataURL('image/png');
 
-      // Add the chart image to the worksheet
+     
       const imageId = workbook.addImage({
         base64: chartImage,
         extension: 'png',
       });
-      worksheet.addImage(imageId, 'I2:M10'); // Position the image within cells
+      worksheet.addImage(imageId, 'I2:M10'); 
 
-      // Write the Excel file and trigger download
+     
       const buffer = await workbook.xlsx.writeBuffer();
       saveAs(new Blob([buffer]), 'report_with_chart.xlsx');
 
@@ -242,7 +242,7 @@ const Reports = () => {
   return (
     <div className={`p-8 transition duration-500  min-h-screen`}//${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}
     >
-      <h1 className="text-3xl  p-2">Reports</h1>
+      <h3 className="text-3xl  p-2">Reports</h3>
       {/*<div className="flex justify-between items-center mb-6">
        <h1 className="text-3xl font-bold">Reports</h1>
         <button

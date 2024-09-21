@@ -45,7 +45,7 @@ const GuestPostAnalytics = () => {
 
   return (
     <div className="mt-1 p-4  shadow-md rounded-lg">
-    <h1 className="text-xl font-bold mb-4 p-2">Guest Post Analytics</h1>
+    <h3 className="text-xl font-bold mb-4 p-2">Guest Post Analytics</h3>
     <div className="chart-container flex flex-wrap gap-4">
       <div className="chart-item flex-1 min-w-[300px]">
         <PieChart data={data} />

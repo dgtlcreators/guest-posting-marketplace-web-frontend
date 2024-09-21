@@ -124,10 +124,10 @@ const NewGuestpost = () => {
 
     return (
         <div className="p-4">
-            <h1 className="text-xl  mb-3  p-3"//text-white bg-blue-700 font-bold
+            <h2 className="text-xl  mb-3  p-3"//text-white bg-blue-700 font-bold
             >
                 Admin Page
-            </h1>
+            </h2>
             {/*<section className="mb-6">
         <h2 className="text-xl font-bold mb-3 flex items-center">
           <FontAwesomeIcon icon={FaChartBar} className="mr-2" />
