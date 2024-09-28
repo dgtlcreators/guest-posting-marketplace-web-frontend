@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 
 
-const SuperAdmin = () => {
+const NewSuperAdmin = () => {
   const { isDarkTheme } = useTheme();
   const { userData, localhosturl } = useContext(UserContext);
   const userId = userData?._id;
@@ -396,7 +396,7 @@ const SuperAdmin = () => {
   );
 };
 
-export default SuperAdmin;
+export default NewSuperAdmin;
 
 
 

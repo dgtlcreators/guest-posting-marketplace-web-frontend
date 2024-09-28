@@ -95,6 +95,12 @@ const ApplyForm = ({ section, publisher }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const phoneRegex = /^\d{10}$/; 
+  if (!phoneRegex.test(formData.phone)) {
+    toast.error('Mobile number must be exactly 10 digits.');
+    return;
+  }
+
     try {
       console.log("This is testing ",publisherId)
      const response = await axios.post(`${localhosturl}/applyroute/apply`, {
@@ -107,6 +113,25 @@ const ApplyForm = ({ section, publisher }) => {
       });
 
       if (response.status === 201) {
+
+        await axios.post(`${localhosturl}/notificationroute/createNotifications`, {
+          userId,
+          publisherId,
+          section,
+          status: 'pending',  
+          isBookmarked: false,
+          formData: [       
+            {
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+            },
+          ],
+          details: {
+            message: `New application submitted by ${formData.name}.`,
+          },
+        });
+  
         // const { remainingApplications } = response.data; 
         const users = response.data.data
         // console.log("users Inside ",users)

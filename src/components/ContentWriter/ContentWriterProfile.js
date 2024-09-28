@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeProvider';
 import { UserContext } from '../../context/userContext';
+import ReportModal from '../OtherComponents/ReportForm';
 
 
 
@@ -43,7 +44,48 @@ const ContentWriterProfile = () => {
       isMounted = false;
     };
   }, [id, localhosturl, toastShown]);
-  
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+const [selectedReportType, setSelectedReportType] = useState('');
+const [reason, setReason] = useState('');
+const [details, setDetails] = useState('');
+
+const handleReport = async () => {
+  console.log("Report Data:", {
+      userId: userData._id,
+      publisherId: contentWriter._id,
+      section: "Profile",
+      reportType: selectedReportType,
+      reason: reason,
+      details: details,
+  });
+
+  const reportData = {
+      userId: userData._id,
+      publisherId: contentWriter._id,
+      section: "Profile",
+      reportType: selectedReportType,
+      reason: reason,
+      details: details,
+  };
+
+  try {
+      const response = await axios.post(`${localhosturl}/reportroute/createreport`, reportData);
+      if (response.data.success) {
+          toast.success("Report submitted successfully!");
+          setSelectedReportType('');
+          setReason('');
+          setDetails('');
+          setIsModalOpen(false); 
+      }
+  } catch (error) {
+      console.error('Error submitting report:', error);
+      toast.error("Error submitting report. Please try again later.");
+  }
+};
+
+
+
 
   return (
     <div className="min-h-screen  flex items-center justify-center p-8">
@@ -122,6 +164,76 @@ const ContentWriterProfile = () => {
             </h3>
             <p className="text-lg text-600 mt-2">{contentWriter.email}</p>
           </div>
+          <ReportModal
+           // isOpen={isModalOpen}
+           // onClose={() => setIsModalOpen(false)}
+            userId={userData._id}
+            publisherId={id}
+            localhosturl={localhosturl} 
+          />
+
+         {/* <button 
+            onClick={() => setIsModalOpen(true)} 
+            className="bg-red-500 text-white px-4 py-2 rounded-lg mb-4"
+          >
+            Report
+          </button>
+          {isModalOpen && (
+            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+              <div className="bg-white rounded-lg p-6 w-80">
+                <h3 className="text-lg font-semibold mb-4">Submit a Report</h3>
+
+              
+                <select 
+    value={selectedReportType} 
+    onChange={(e) => setSelectedReportType(e.target.value)}
+    className="mb-2 p-2 border rounded w-full"
+>
+    <option value="">Select Report Type</option>
+    <option value="Spam">Spam</option>
+    <option value="Harassment">Harassment</option>
+    <option value="Inappropriate Content">Inappropriate Content</option>
+    <option value="Other">Other</option>
+</select>
+
+
+                
+                <input 
+                  type="text" 
+                  placeholder="Reason" 
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  className="mb-2 p-2 border rounded w-full"
+                  required
+                />
+
+                
+                <textarea 
+                  placeholder="Additional details" 
+                  value={details}
+                  onChange={(e) => setDetails(e.target.value)}
+                  className="mb-2 p-2 border rounded w-full"
+                ></textarea>
+
+              
+                <div className="flex justify-between">
+                  <button 
+                    onClick={() => setIsModalOpen(false)} 
+                    className="bg-gray-300 text-black px-4 py-2 rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={handleReport} 
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}*/}
+
         </motion.div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar,  Typography, Badge, Avatar, Button, Popover, InputBase, List, ListItem } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
@@ -12,8 +12,11 @@ import ViewAllNotifications from './Notifications/ViewAllNotifications.js';
 import ProfileDropdown from './ProfileDropdown.js';
 import IconButton from '@mui/material/IconButton';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
+import axios from 'axios'; 
+import { UserContext } from '../context/userContext.js';
 
 const Navbar = () => {
+  const { userData, localhosturl } = useContext(UserContext);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [anchorElNotification, setAnchorElNotification] = useState(null);
@@ -23,11 +26,26 @@ const Navbar = () => {
 
   const navigate=useNavigate()
 
-  const [notifications, setNotifications] = useState([
+  const [notifications, setNotifications] = useState([]);
+  /**[
     { id: 1, text: "New Comment on your post", time: "5 mins ago", seen: false },
     { id: 2, text: "New Follower", time: "10 mins ago", seen: false },
     { id: 3, text: "New Like on your post", time: "15 mins ago", seen: true },
-  ]);
+  ] */
+
+    useEffect(() => {
+      const fetchNotifications = async () => {
+        try {
+          const response = await axios.get(`${localhosturl}/notificationroute/getAllNotifications`); 
+          console.log("Notifications: ",response.data.data)
+          setNotifications(response.data.data); 
+        } catch (error) {
+          console.error('Failed to fetch notifications:', error);
+        }
+      };
+  
+      fetchNotifications();
+    }, []);
 
 
   const itemsToSearch = [
@@ -174,7 +192,7 @@ const Navbar = () => {
 
         {/* Notification Dropdown */}
          <IconButton color="inherit" onClick={handleNotificationClick}>
-          <Badge badgeContent={notifications.filter(item=>item.seen===false).length} color="error">
+          <Badge badgeContent={notifications.filter(item=>item.isSeen===false).length} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>

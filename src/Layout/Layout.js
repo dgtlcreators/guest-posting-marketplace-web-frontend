@@ -12,10 +12,10 @@ const Layout = ({ children, isRegisterPage }) => {
           <div className="md:w-1/2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-8 flex flex-col items-center justify-center">
             <div>
               <a
-                className="text-white text-4xl font-bold mb-4"
+                className="text-white text-4xl font-bold mb-4 text-decoration-none"
                 href="/"
               >
-                Guest-Posting
+                creatorsxchange
               </a>
               {/*<p className=""//"opacity-75 mb-4"
               >*/}

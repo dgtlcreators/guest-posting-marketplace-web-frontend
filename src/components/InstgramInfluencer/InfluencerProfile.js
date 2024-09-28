@@ -7,6 +7,7 @@ import Zoom from 'react-reveal/Zoom';
 import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeProvider';
 import { UserContext } from '../../context/userContext';
+import ReportModal from '../OtherComponents/ReportForm';
 
 
 const InfluencerProfile = () => {
@@ -27,6 +28,7 @@ const InfluencerProfile = () => {
     
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [reportSubmitted, setReportSubmitted] = useState(false);
 
   useEffect(() => {
     const fetchInfluencer = async () => {
@@ -173,6 +175,26 @@ const generateShortDescription = (formData, users) => {
     pastCollaborations,
     mediaKit
   } = instagramInfluencer;
+
+
+
+
+  const handleReport = async () => {
+    const reportData = {
+      reporterId: userData?._id,
+      influencerId: id,
+      reason: "Fake Profile", 
+    };
+
+    try {
+     // await axios.post(`${localhosturl}/report`, reportData);
+    //  setReportSubmitted(true);
+      toast.success("Profile reported successfully!");
+    } catch (error) {
+      toast.error("Error reporting profile");
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div className="relative w-full min-h-screen  bg-contain"//bg-gradient-to- from-blue-200 via-purple-300 to-pink-500 bg-cover
@@ -442,6 +464,31 @@ const generateShortDescription = (formData, users) => {
               )}
             </div>
           </Fade>
+
+
+            {/* Report Profile Section */}
+      <Fade bottom>
+      <ReportModal
+           // isOpen={isModalOpen}
+           // onClose={() => setIsModalOpen(false)}
+            userId={userData._id}
+            publisherId={id}
+            localhosturl={localhosturl} 
+          />
+        {/*<div className="mt-8 p-6 rounded-lg shadow-lg">
+          <h2 className="text-2xl font-semibold mb-4">Report Profile</h2>
+          {reportSubmitted ? (
+            <div className="text-green-600 text-lg font-semibold">Profile reported successfully!</div>
+          ) : (
+            <button
+              onClick={handleReport}
+              className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition"
+            >
+              Report This Profile
+            </button>
+          )}
+        </div>*/}
+      </Fade>
         </div>
       </div>
     </div>

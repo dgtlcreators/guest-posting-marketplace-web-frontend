@@ -414,6 +414,7 @@ const generateShortDescription = (formData, users) => {
               value={formData.email}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
+              required
             />
           </label>
           <label className="block">
@@ -423,6 +424,7 @@ const generateShortDescription = (formData, users) => {
               value={formData.bio}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
+              required
             />
           </label>
           <label className="block">
@@ -433,6 +435,7 @@ const generateShortDescription = (formData, users) => {
               value={formData.location}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
+              required
             />
           </label>
           <label className="block">

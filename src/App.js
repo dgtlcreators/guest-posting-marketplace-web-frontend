@@ -10,7 +10,7 @@ import { ToastContainer } from 'react-toastify';
 
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
-import NotificationList from './components/Notifications/NotificationList.js';
+import NotificationsPage from './components/Notifications/NotificationsPage.js';
 
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
@@ -50,6 +50,7 @@ import PathNotFound from './components/PathNotFound';
 import PastActivities from './components/OtherComponents/PastActivities';
 import CheckoutForm from './CheckoutForm';
 import MyLists from './components/MyLists/MyLists.js';
+import ProfileSettings from './components/ProfileSettings.js';
 
 
 
@@ -139,9 +140,11 @@ function AppContent() {
             <Route path="/application" element={<ApplicationForm />} />
             <Route path='/reports' element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}>
             <Reports /></ProtectedRoute>} />
-            <Route path="/notifications" element={<NotificationList />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="*" element={<PathNotFound />} />
+
+            <Route path="/profile-settings" element={<ProfileSettings />} />
 
             <Route path="/my-lists" element={<MyLists />} />
 

@@ -22,6 +22,7 @@ import {
     faMoneyBill
   } from '@fortawesome/free-solid-svg-icons';
   import { motion } from 'framer-motion';
+import ReportModal from '../OtherComponents/ReportForm';
   
   const iconMap = {
     publisherURL: faGlobe,
@@ -40,6 +41,8 @@ import {
 
 const GuestPostProfile = () => {
     const { isDarkTheme } = useTheme();
+    const [toastShown, setToastShown] = useState(false);
+ // const [isModalOpen, setIsModalOpen] = useState(false);
    
     const { userData,localhosturl } = useContext(UserContext);
     const { id } = useParams();
@@ -167,6 +170,13 @@ const GuestPostProfile = () => {
             )
           ))}
         </div>
+        <ReportModal
+           // isOpen={isModalOpen}
+           // onClose={() => setIsModalOpen(false)}
+            userId={userData._id}
+            publisherId={id}
+            localhosturl={localhosturl} 
+          />
       </motion.div>
     </div>
   )

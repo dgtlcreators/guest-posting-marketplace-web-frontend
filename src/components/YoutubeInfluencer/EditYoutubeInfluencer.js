@@ -342,7 +342,7 @@ setFormData(prev=>({
           </label>
           <label className='block'>
             <span className='text-gray-700'>Bio</span>
-            <textarea name='bio' placeholder='Bio' value={formData.bio} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' />
+            <textarea name='bio' placeholder='Bio' value={formData.bio} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' required/>
           </label>
           <label className='block'>
             <span className='text-gray-700'>Followers Count</span>
@@ -391,7 +391,7 @@ setFormData(prev=>({
             <span className='text-gray-700'>Location</span>
             <input type='text' name='location' placeholder='Search Location'  value={locationQuery}
               onChange={handleLocationChange} 
-            className='p-2 border border-gray-300 rounded w-full'/>
+            className='p-2 border border-gray-300 rounded w-full' required/>
             {locationResults.length > 0 && (
               <ul className="mt-2 border border-gray-300 rounded w-full bg-white max-h-40 overflow-auto">
                 {locationResults.map((location) => (

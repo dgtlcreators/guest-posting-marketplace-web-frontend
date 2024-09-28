@@ -201,6 +201,7 @@ const EditInstagramInfluencer = () => {
               value={formData.fullName}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
+              required
             />
           </label>
           <label className="block">
@@ -255,6 +256,7 @@ const EditInstagramInfluencer = () => {
               value={formData.bio}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
+              required
             />
           </label>
           <label className="block">
@@ -361,6 +363,7 @@ const EditInstagramInfluencer = () => {
               value={formData.location}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
+              required
             />
           </label>
           <label className="block">

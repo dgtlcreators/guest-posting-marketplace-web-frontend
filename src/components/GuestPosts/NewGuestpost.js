@@ -126,7 +126,7 @@ const NewGuestpost = () => {
         <div className="p-4">
             <h2 className="text-xl  mb-3  p-3"//text-white bg-blue-700 font-bold
             >
-                Admin Page
+                Guestpost Page
             </h2>
             {/*<section className="mb-6">
         <h2 className="text-xl font-bold mb-3 flex items-center">

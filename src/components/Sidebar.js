@@ -72,14 +72,14 @@ export default function Sidebar() {
           {isSuperAdmin && (
             <>
               <ListItem button onClick={handleSuperAdminClick} sx={{ pl: expanded ? 2 : 0 }}>
-                <ListItemIcon><FaUsersCog /></ListItemIcon> {/* Updated icon */}
-                {expanded && <ListItemText primary="Super Admin Section" />} {/* Updated title */}
+                <ListItemIcon><FaUsersCog /></ListItemIcon> 
+                {expanded && <ListItemText primary="Admin Management" />} {/* Super Admin Section,Admin Management Section */}
                 {superAdminOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
               <Collapse in={superAdminOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  <SidebarItem icon={<FaUsers />} text="User Management" to="/superadmin" nested />
-                  <SidebarItem icon={<FaUserPlus />} text="Add Super Admin" to="/addSuperadmin" nested /> {/* Updated icon and title */}
+                  <SidebarItem icon={<FaUsers />} text="Manage Admins" to="/superadmin" nested />{/** User Management*/}
+                  <SidebarItem icon={<FaUserPlus />} text="Assign Admin Roles" to="/addSuperadmin" nested /> {/*Add Admin,Manage User Roles */}
                 </List>
               </Collapse>
             </>

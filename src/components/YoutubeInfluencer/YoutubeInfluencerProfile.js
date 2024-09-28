@@ -8,6 +8,7 @@ import { IoMdStats } from 'react-icons/io';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faMapMarkerAlt, faLanguage, faTags, faUsers, faVideo, faChartLine, faEye, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import Lottie from 'react-lottie';
+import ReportModal from '../OtherComponents/ReportForm';
 //import animationData from '../animations/profileAnimation.json';
 //const animationData="https://cdnl.iconscout.com/lottie/premium/preview-watermark/user-profile-girl-animated-icon-download-in-lottie-json-gif-static-svg-file-formats--pretty-logo-beautiful-avatar-pack-people-icons-6633090.mp4"
 
@@ -217,6 +218,13 @@ const generateShortDescription = (formData, users) => {
         View Media Kit
       </a>
     )}
+     <ReportModal
+           // isOpen={isModalOpen}
+           // onClose={() => setIsModalOpen(false)}
+            userId={userData._id}
+            publisherId={id}
+            localhosturl={localhosturl} 
+          />
     {/*<div style={{ marginTop: '20px', textAlign: 'center' }}>
         <Lottie options={defaultOptions} height={200} width={200} />
       </div>*/}

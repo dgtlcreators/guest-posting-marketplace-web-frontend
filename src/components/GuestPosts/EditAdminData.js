@@ -130,7 +130,7 @@ const EditAdminForm = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Edit Admin Data</h2>
+      <h2 className="text-2xl font-bold mb-4">Edit Guestpost</h2>
       <form onSubmit={handleSubmit} className=" shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="mb-4">
           <label className="block text-700 text-sm font-bold mb-2" htmlFor="publisherName">
@@ -142,7 +142,8 @@ const EditAdminForm = () => {
             value={adminData.publisherName}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
+            required
+         />
         </div>
         <div className="flex flex-col">
             <label htmlFor="categories" className="block text-700 text-sm font-bold mb-2">
@@ -192,6 +193,7 @@ const EditAdminForm = () => {
             value={adminData.publisherEmail}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
           />
         </div>
         <div className="mb-4">
@@ -383,32 +385,3 @@ const EditAdminForm = () => {
 };
 
 export default EditAdminForm;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*import { Navigate } from "react-router-dom";
-import { useContext } from "react";
-import { UserContext } from "../context/userContext";
-
-const AdminRoute = ({ children }) => {
-  const { userData } = useContext(UserContext);
-
-  if (!userData || userData.role !== "Admin") {
-    return <Navigate to="/login" />;
-  }
-console.log(userData)
-  return children;
-};
-
-export default AdminRoute;*/

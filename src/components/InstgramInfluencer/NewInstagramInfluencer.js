@@ -312,6 +312,7 @@ const NewInstagramInfluencer = () => {
               value={formData.fullName}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
+              required
             />
           </div>
           <div className="block">
@@ -366,6 +367,7 @@ const NewInstagramInfluencer = () => {
               value={formData.bio}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
+              required
             />
           </div>
           <div className="block">
@@ -483,6 +485,7 @@ const NewInstagramInfluencer = () => {
               value={locationQuery}
               onChange={handleLocationChange}
               className="p-2 border border-gray-300 rounded w-full"
+              required
             />
             {locationResults.length > 0 && (
               <ul className="mt-2 border border-gray-300 rounded w-full bg-white max-h-40 overflow-auto">
