@@ -44,7 +44,7 @@ import NewContentWriter from "./components/ContentWriter/NewContentWriter.js"
 import EditContentWriter from "./components/ContentWriter/EditContentWriter.js"
 import ContentWriterProfile from "./components/ContentWriter/ContentWriterProfile.js"
 
-import Reports from './components/Reports.js';
+import ReportAndApplications from './components/ReportAndApplications';
 import Dashboard from './components/dashboardItems/Dashboard';
 import PathNotFound from './components/PathNotFound';
 import PastActivities from './components/OtherComponents/PastActivities';
@@ -138,8 +138,8 @@ function AppContent() {
             {/**Other Routes */}
             <Route path="/past-activities" element={<PastActivities />} />
             <Route path="/application" element={<ApplicationForm />} />
-            <Route path='/reports' element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}>
-            <Reports /></ProtectedRoute>} />
+            <Route path='/reports-applications' element={<ProtectedRoute requiredRoles={["Super Admin", "Admin"]}>
+            <ReportAndApplications /></ProtectedRoute>} />
             <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="*" element={<PathNotFound />} />

@@ -171,6 +171,7 @@ const GuestPostProfile = () => {
           ))}
         </div>
         <ReportModal
+        section="Guestpost"
            // isOpen={isModalOpen}
            // onClose={() => setIsModalOpen(false)}
             userId={userData._id}

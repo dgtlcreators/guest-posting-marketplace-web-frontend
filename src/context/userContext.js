@@ -32,6 +32,7 @@
 
 
 
+import axios from "axios";
 import { createContext, useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 
@@ -79,7 +80,7 @@ const [loading, setLoading] = useState(true);
   useEffect(() => {
     
     
-    // Synchronize localStorage whenever userData changes
+   
     if (userData !== null) {
       localStorage.setItem("user", JSON.stringify(userData));
     } else {
@@ -112,8 +113,33 @@ const [loading, setLoading] = useState(true);
     }
   }, [userData, updateUserData, localhosturl]);*/
 
+  const [notifications, setNotifications] = useState([]);
+
+ // const fetchNotifications = async (localhosturl) => {
+  const fetchNotifications = async () => {
+    try {
+      const response = await axios.get(`${localhosturl}/notificationroute/getAllNotifications`); 
+          //console.log("response.data ",response.data)
+         // console.log("response.data.data ",response.data.data)
+     // const response = await axios.get(`${localhosturl}/notificationroute/getAllNotifications`);
+      //console.log(response.data.data)
+      setNotifications(response.data.data);
+    } catch (error) {
+      console.error('Failed to fetch notifications:', error);
+    }
+  };
+
+  const addNotification = (notification) => {
+    setNotifications((prev) => [...prev, notification]);
+  };
+  useEffect(() => {
+    fetchNotifications()
+   // fetchNotifications(localhosturl);
+  }, [fetchNotifications, localhosturl]);
+
+//console.log("Use conrext bnotificatinsn ",notifications)
   return (
-    <UserContext.Provider value={{ userData, setUserData: updateUserData ,signOut,localhosturl}}>
+    <UserContext.Provider value={{ userData, setUserData: updateUserData ,signOut,localhosturl,notifications, fetchNotifications, addNotification ,setNotifications}}>
       {children}
     </UserContext.Provider>
   );

@@ -219,6 +219,7 @@ const generateShortDescription = (formData, users) => {
       </a>
     )}
      <ReportModal
+     section="YoutubeInfluencer"
            // isOpen={isModalOpen}
            // onClose={() => setIsModalOpen(false)}
             userId={userData._id}

@@ -94,8 +94,9 @@ export default function Sidebar() {
           </ListItem>
           <Collapse in={newAddedOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-            <SidebarItem icon={<FaRegFileAlt />} text="Reports" to="/reports" nested/>
-              
+          { /* <SidebarItem icon={<FaRegFileAlt />} text="Reports" to="/reports" nested/>*/}
+          <SidebarItem icon={<FaRegFileAlt />} text="Reports and Applications" to="/reports-applications" nested />
+
                <SidebarItem icon={<FaPen />} text="Guest Post Add" to="/addGuestpost" //to="/admin" 
               nested />
               <SidebarItem icon={<FaInstagram />} text="Instagram Influencer Add" to="/addInstagramInfluencer" //to="/instagramInfluencer" 

@@ -25,19 +25,19 @@ const ProtectedRoute = ({  children, requiredRoles }) => {
     return <Navigate to="/login" />;
   }
   return  children;*/
-  console.log("User Data:", userData);
-  console.log("Required Roles:", requiredRoles);
+ // console.log("User Data:", userData);
+ // console.log("Required Roles:", requiredRoles);
 
   if (!userData) {
-    console.log("User is not logged in");
+   // console.log("User is not logged in");
     return <Navigate to="/login" />;
   }
 
   const hasRequiredRole = requiredRoles ? requiredRoles.includes(userData.role) : true;
-  console.log('Has Required Role:', hasRequiredRole);
+ // console.log('Has Required Role:', hasRequiredRole);
 
   if (!hasRequiredRole) {
-    console.log("User does not have the required role");
+   // console.log("User does not have the required role");
     return <Navigate to="/login" />;
   }
 

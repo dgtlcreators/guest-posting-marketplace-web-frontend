@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const ReportModal = ({ userId, publisherId, localhosturl }) => {
+const ReportModal = ({ section,userId, publisherId, localhosturl }) => {
   console.log(publisherId)
   const [selectedReportType, setSelectedReportType] = useState('');
   const [reason, setReason] = useState('');
@@ -20,7 +20,8 @@ const ReportModal = ({ userId, publisherId, localhosturl }) => {
     const reportData = {
       userId: userId,
       publisherId: publisherId,
-      section: "Profile",
+      section,
+      //section: "Profile",
       reportType: selectedReportType,
       reason: reason,
       details: details,

@@ -16,7 +16,7 @@ import axios from 'axios';
 import { UserContext } from '../context/userContext.js';
 
 const Navbar = () => {
-  const { userData, localhosturl } = useContext(UserContext);
+  const { userData, localhosturl,setNotifications,notifications, fetchNotifications  } = useContext(UserContext);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [anchorElNotification, setAnchorElNotification] = useState(null);
@@ -26,7 +26,7 @@ const Navbar = () => {
 
   const navigate=useNavigate()
 
-  const [notifications, setNotifications] = useState([]);
+ // const [notifications, setNotifications] = useState([]);
   /**[
     { id: 1, text: "New Comment on your post", time: "5 mins ago", seen: false },
     { id: 2, text: "New Follower", time: "10 mins ago", seen: false },
@@ -37,14 +37,14 @@ const Navbar = () => {
       const fetchNotifications = async () => {
         try {
           const response = await axios.get(`${localhosturl}/notificationroute/getAllNotifications`); 
-          console.log("Notifications: ",response.data.data)
+   
           setNotifications(response.data.data); 
         } catch (error) {
           console.error('Failed to fetch notifications:', error);
         }
       };
   
-      fetchNotifications();
+    //  fetchNotifications();
     }, []);
 
 
@@ -67,7 +67,7 @@ const Navbar = () => {
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' && searchTerm) {
-      console.log(event.key,event.key === 'Enter' )
+  
       navigate(`/${searchTerm}`)
       const selectedItem = itemsToSearch.find(item => 
         item.title.toLowerCase() === searchTerm.toLowerCase()
@@ -108,6 +108,12 @@ const Navbar = () => {
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  useEffect(() => {
+    //fetchNotifications(localhosturl);
+  }, [fetchNotifications, localhosturl]);
+
+
+  
 
   return (
     <AppBar position="static"  className={`nav ${isDarkTheme ? 'dark' : 'light'}`}>
@@ -136,7 +142,7 @@ const Navbar = () => {
             borderRadius: 4,
             padding: '5px 10px',
             '&::placeholder': {
-              color: isDarkTheme ? '#bbb' : '#888', // Placeholder color for watermark effect
+              color: isDarkTheme ? '#bbb' : '#888',
             },
           }}
           value={searchTerm}
@@ -190,6 +196,7 @@ const Navbar = () => {
           <SearchIcon />
         </IconButton>*/}
 
+
         {/* Notification Dropdown */}
          <IconButton color="inherit" onClick={handleNotificationClick}>
           <Badge badgeContent={notifications.filter(item=>item.isSeen===false).length} color="error">
@@ -215,7 +222,7 @@ const Navbar = () => {
               onClose={handleNotificationClose}
             />
           ) : (
-            <NotificationDropdown notifications={notifications} onViewAllClick={handleViewAllClick} />
+            <NotificationDropdown onClose={handleNotificationClose} notifications={notifications} onViewAllClick={handleViewAllClick} />
           )}
         </Popover>
         {/*<IconButton color="inherit" onClick={handleNotificationClick}>

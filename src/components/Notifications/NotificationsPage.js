@@ -4,14 +4,16 @@ import axios from 'axios';
 import { List, ListItem, Button, Typography } from '@mui/material';
 
 const NotificationsPage = () => {
-  const { localhosturl } = useContext(UserContext);
+  const { localhosturl, isDarkTheme } = useContext(UserContext);
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         const response = await axios.get(`${localhosturl}/notificationroute/getAllNotifications`);
-        setNotifications(response.data.data);
+       // setNotifications(response.data.data);
+       const sortedNotifications = response.data.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+       setNotifications(sortedNotifications);
       } catch (error) {
         console.error('Failed to fetch notifications:', error);
       }
@@ -33,6 +35,19 @@ const NotificationsPage = () => {
     }
   };
 
+  const handleMarkAsUnread = async (id) => {
+    try {
+      await axios.put(`${localhosturl}/notificationroute/updateNotifications/${id}`, {
+        isSeen: false 
+      });
+      setNotifications(notifications.map(notification => 
+        notification._id === id ? { ...notification, isSeen: false } : notification
+      ));
+    } catch (error) {
+      console.error('Failed to mark notification as unread:', error);
+    }
+  };
+
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${localhosturl}/notificationroute/deleteNotifications/${id}`);
@@ -44,27 +59,48 @@ const NotificationsPage = () => {
 
   return (
     <div>
-      <h1>Notifications</h1>
+      <h2 className="text-xl font-semibold mb-2 p-2">Notifications</h2>
       <List>
         {notifications.map(notification => (
           <ListItem
             key={notification._id}
             style={{
-              backgroundColor: notification.isSeen ? '#f0f0f0' : '#d1e7dd', 
+              backgroundColor: notification.isSeen ? (isDarkTheme ? '#444' : '#f0f0f0') : (isDarkTheme ? '#d1e7dd' : '#d1e7dd'),
+              color: isDarkTheme ? '#fff' : '#000',
+             // backgroundColor: notification.isSeen ? '#f0f0f0' : '#d1e7dd', 
               margin: '10px 0',
               borderRadius: '4px',
               transition: 'background-color 0.3s ease',
               padding: '10px',
-              display: 'flex', // Use flex for better alignment
-              justifyContent: 'space-between', // Space between message and buttons
-              alignItems: 'center', // Center items vertically
+              display: 'flex',
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
             }}
           >
             <div style={{ flexGrow: 1 }} onClick={() => !notification.isSeen && handleMarkAsSeen(notification._id)}>
               <Typography variant="body1">{notification.details.message}</Typography>
             </div>
             <div>
-              {!notification.isSeen && (
+              {/*!notification.isSeen && (
+                <Button 
+                  onClick={() => handleMarkAsSeen(notification._id)} 
+                  variant="contained" 
+                  color="primary" 
+                  style={{ marginRight: '10px' }}
+                >
+                  Mark as Read
+                </Button>
+              )*/}
+               {notification.isSeen ? (
+                <Button 
+                  onClick={() => handleMarkAsUnread(notification._id)} 
+                  variant="outlined" 
+                  color="secondary" 
+                  style={{ marginRight: '10px' }}
+                >
+                  Mark as Unread
+                </Button>
+              ) : (
                 <Button 
                   onClick={() => handleMarkAsSeen(notification._id)} 
                   variant="contained" 

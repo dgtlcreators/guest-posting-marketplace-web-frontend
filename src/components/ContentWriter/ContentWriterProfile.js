@@ -165,6 +165,7 @@ const handleReport = async () => {
             <p className="text-lg text-600 mt-2">{contentWriter.email}</p>
           </div>
           <ReportModal
+          section="ContenWriters" 
            // isOpen={isModalOpen}
            // onClose={() => setIsModalOpen(false)}
             userId={userData._id}

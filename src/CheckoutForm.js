@@ -27,7 +27,7 @@ const CheckoutForm = () => {
    // const cardExpiryElement = elements.getElement(CardExpiryElement);
    // const cardCvcElement = elements.getElement(CardCvcElement);
 
-    try {
+  /*  try {
       const {data }= await axios.post(
         
         "https://guest-posting-marketplace-web-backend.onrender.com/create-payment-intent",
@@ -59,7 +59,7 @@ const CheckoutForm = () => {
       setError("Payment failed. Please try again.");
     } finally {
       setProcessing(false);
-    }
+    }*/
   };
 
   return (

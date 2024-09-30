@@ -469,6 +469,7 @@ const generateShortDescription = (formData, users) => {
             {/* Report Profile Section */}
       <Fade bottom>
       <ReportModal
+      section="InstagramInfluencer"
            // isOpen={isModalOpen}
            // onClose={() => setIsModalOpen(false)}
             userId={userData._id}
