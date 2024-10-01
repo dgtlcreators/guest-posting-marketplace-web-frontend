@@ -14,10 +14,13 @@
     color: #ffffff; 
   }*/
 
-/* index.css */
 
-/* Default light mode styles */
 body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px; 
+  font-weight: 400;
+  font-style: normal;
+  
   background-color: #ffffff;
   color: #000000;
   transition: background-color 0.3s, color 0.3s;
@@ -126,6 +129,17 @@ body.dark label {
   color: #ffffff;
 }
 
+h1 {
+  font-size: 18px; 
+  font-weight: 700;
+  font-style: bold;
+}
+
+h2, h3, h4 {
+  font-size: 16px; 
+  font-weight: 400;
+  font-style: normal;
+}
 
 h1,
 h2,
@@ -203,9 +217,7 @@ body.dark td {
   border: 1px solid #555555;
 }
 
-/* index.css */
 
-/* Fade-in animation for table rows */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -218,7 +230,7 @@ body.dark td {
   }
 }
 
-/* Hover effect animation */
+
 @keyframes hoverEffect {
   from {
     transform: scale(1);
@@ -228,8 +240,15 @@ body.dark td {
     transform: scale(1.02);
   }
 }
+table thead{
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px; 
+  font-weight: 400;
+  font-style: normal;
+}
 
-/* Apply the fade-in animation to table rows */
+
+
 table tbody tr {
   animation: fadeIn 0.5s ease-in-out;
   transition: transform 0.3s ease-in-out;
@@ -237,18 +256,18 @@ table tbody tr {
 
 
 
-/* Light Mode Table Row Hover Effect */
+
 body.light table tbody tr:hover {
-  /* animation: hoverEffect 0.3s ease-in-out;*/
+ 
   background-color: rgba(0, 0, 0, 0.2);
-  /* Light mode hover color */
+
 }
 
-/* Dark Mode Table Row Hover Effect */
+
 body.dark table tbody tr:hover {
-  /*animation: hoverEffect 0.3s ease-in-out;*/
+
   background-color: rgba(255, 255, 255, 0.3);
-  /* Dark mode hover color */
+ 
 }
 
 
@@ -258,23 +277,19 @@ table tbody tr {
 
 @keyframes submitColorChange {
   0% {
-    background-color: #1e3a8a;
-    /* Dark Blue */
+    background-color: #1e3a8a;   
   }
 
   33% {
     background-color: #60a5fa;
-    /* Light Blue */
   }
 
   66% {
     background-color: #2563eb;
-    /* Medium Blue */
   }
 
   100% {
     background-color: #1e3a8a;
-    /* Dark Blue */
   }
 }
 
@@ -285,22 +300,18 @@ table tbody tr {
 @keyframes resetColorChange {
   0% {
     background-color: #1f2937;
-    /* Dark Gray */
   }
 
   33% {
     background-color: #9ca3af;
-    /* Light Gray */
   }
 
   66% {
     background-color: #6b7280;
-    /* Medium Gray */
   }
 
   100% {
     background-color: #1f2937;
-    /* Dark Gray */
   }
 }
 
@@ -322,27 +333,23 @@ input[type="checkbox"]:disabled {
   position: relative;
 }
 
-/* Optional Tooltip Style */
+
 button:disabled:hover::after,
 .btn-dis:disabled:hover::after,
 input[type="checkbox"]:disabled:hover::after {
-  /* content: attr(title);  Get content from the title attribute */
+  /* content: attr(title); 
   background-color: #333;
-  /* Tooltip background */
   color: #fff;
-  /* Tooltip text color */
+ */
   padding: 5px 10px;
   border-radius: 5px;
   position: absolute;
   bottom: 100%;
-  /* Position above the button */
   left: 50%;
-  /* Center align */
+
   transform: translateX(-50%);
   white-space: nowrap;
-  /* Ensure the text stays in one line */
   opacity: 0.9;
-  /* Slight transparency */
   font-size: 12px;
   pointer-events: none;
 }
