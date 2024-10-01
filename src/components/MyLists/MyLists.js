@@ -2,6 +2,7 @@ import React from 'react'
 import SavedFilterList  from "./SavedFilterList.js"
 import BookmarkedList  from "./BookmarkedList.js"
 import ApplyList  from "./ApplyList.js"
+import ReportList from "./ReportList.js"
 
 const MyLists = () => {
   return (
@@ -11,6 +12,7 @@ const MyLists = () => {
       <SavedFilterList/>
       <BookmarkedList/>
       <ApplyList/>
+      <ReportList/>
     </div>
   )
 }

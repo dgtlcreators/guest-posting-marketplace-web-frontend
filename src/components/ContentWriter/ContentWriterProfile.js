@@ -39,7 +39,7 @@ const ContentWriterProfile = () => {
   
     fetchContentWriter();
   
-    // Cleanup function to handle component unmount
+ 
     return () => {
       isMounted = false;
     };

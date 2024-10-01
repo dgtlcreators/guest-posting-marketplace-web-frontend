@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const ReportModal = ({ section,userId, publisherId, localhosturl }) => {
-  console.log(publisherId)
+ // console.log(publisherId)
   const [selectedReportType, setSelectedReportType] = useState('');
   const [reason, setReason] = useState('');
   const [details, setDetails] = useState('');
-  const [isFormVisible, setIsFormVisible] = useState(false); 
+  const [isFormVisible, setIsFormVisible] = useState(false);
+   const [hasReported, setHasReported] = useState(false); 
 
   const handleSubmit = async () => {
     const reportData1 = {
@@ -27,7 +28,7 @@ const ReportModal = ({ section,userId, publisherId, localhosturl }) => {
       details: details,
   };
   
-    console.log("Submitting report data:", reportData); 
+    //console.log("Submitting report data:", reportData); 
     if (!userId || !publisherId || !reportData.section || !reportData.reportType || !reason) {
       toast.error('Please provide all required fields.');
       return; 
@@ -40,11 +41,54 @@ const ReportModal = ({ section,userId, publisherId, localhosturl }) => {
         toast.success("Report submitted successfully!");
         resetForm();
       }
+      if (response.status === 201) {
+
+        await axios.post(`${localhosturl}/notificationroute/createNotifications`, {
+          userId,
+          publisherId,
+          section,
+          status: 'pending',  
+          isBookmarked: false,
+          formData: {
+            reportType: selectedReportType,
+            reason: reason,
+            details: details,
+        },     
+           
+          details: {
+          //  message: `New report submitted ${reportType}.`,
+           message: `New report submitted: ${selectedReportType}. Reason: ${reason}. Additional details: ${details || 'None provided.'}`
+          },
+        });
+  
+        // const { remainingApplications } = response.data; 
+        const users = response.data.data  
+        toast.success('Application applied successfully!');
+        setIsFormVisible(false);
+
+      }
     } catch (error) {
       console.error('Error submitting report:', error.response.data); 
       toast.error("Error submitting report. Please try again later.");
     }
   };
+
+  useEffect(() => {
+    const checkReportStatus = async () => {
+      try {
+        const response = await axios.get(`${localhosturl}/reportroute/checkReport`, {
+          params: { userId, publisherId },
+        });
+        setHasReported(response.data.hasReported); 
+      } catch (error) {
+        console.error('Error checking report status:', error);
+      }
+    };
+
+    if (userId && publisherId) {
+      checkReportStatus();
+    }
+  }, [userId, publisherId, localhosturl]);
   
 
   const resetForm = () => {
@@ -56,13 +100,28 @@ const ReportModal = ({ section,userId, publisherId, localhosturl }) => {
 
   return (
     <div>
-      <button 
+       {hasReported ? (
+        <button 
+          className="bg-gray-500 text-white px-4 py-2 rounded-lg mb-4"
+          disabled
+        >
+          You have already reported this publisher
+        </button>
+      ) : (
+        <button 
+          onClick={() => setIsFormVisible(true)}
+          className="bg-red-500 text-white px-4 py-2 rounded-lg mb-4"
+        >
+          Report
+        </button>
+      )}
+      {/*<button 
     onClick={() => setIsFormVisible(true)}
     className="bg-red-500 text-white px-4 py-2 rounded-lg mb-4"
   >
     Report
-  </button>
-  {isFormVisible &&  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+  </button>*/}
+  {isFormVisible &&  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 h-100">
       <div className="bg-white rounded-lg p-6 w-80">
         
           <>

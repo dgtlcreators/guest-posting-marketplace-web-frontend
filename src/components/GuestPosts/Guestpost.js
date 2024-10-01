@@ -49,7 +49,7 @@ const Guestpost = () => {
       const formData = location.state.formData;
      
       const flattenedFormData = formData["0"] || formData; 
-      console.log("Flattened FormData", flattenedFormData);
+    //  console.log("Flattened FormData", flattenedFormData);
   
       setFormData(prevState => ({
         ...initialFormData,
@@ -66,7 +66,7 @@ const fetchUsers=async(formData)=>{
       `${localhosturl}/form/getFilteredData`
      
       , formData);
-    console.log("Fetched data:", response.data);
+  //  console.log("Fetched data:", response.data);
     setUsers(response.data);
 
    
@@ -169,7 +169,7 @@ const fetchUsers=async(formData)=>{
         `${localhosturl}/form/getFilteredData`
        
         , formData);
-      console.log("Fetched data:", response.data);
+      //console.log("Fetched data:", response.data);
       setUsers(response.data);
   
       // Call pastactivitiesAdd without await since handleSubmit is already async
@@ -187,7 +187,7 @@ const fetchUsers=async(formData)=>{
     //localStorage.setItem("savedSearch", JSON.stringify(formData));
     toast.success("Search saved successfully!");
   };
-  console.log("Checking FormData ",formData)
+ // console.log("Checking FormData ",formData)
 
   return (
     <div className="p-4">

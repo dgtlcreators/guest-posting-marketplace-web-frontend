@@ -76,7 +76,7 @@ const GuestPostProfile = () => {
         try {
           setFormData(response.data);
          // console.log(formData)
-          await pastactivitiesAdd(formData)
+        //  await pastactivitiesAdd(formData)
         } catch (error) {
           console.error("Error fetching influencers", error);
         }
@@ -109,6 +109,13 @@ const GuestPostProfile = () => {
       const shortElements = elements.slice(0, 2);
       return `You viewed a Guestpost ${shortElements.length>0?"with":""} ${shortElements.join(' and ')} successfully.`;
     };
+
+    useEffect(() => {
+      if (formData.publisherURL) { 
+          pastactivitiesAdd(formData);
+      }
+  }, [formData]); 
+
     
       const pastactivitiesAdd=async(users)=>{
         const description = createDescriptionElements(formData, users);
