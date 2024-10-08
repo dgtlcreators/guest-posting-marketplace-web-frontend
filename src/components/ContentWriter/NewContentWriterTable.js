@@ -284,7 +284,7 @@ const NewContentWriterTable = () => {
               <th className="border px-4 py-2" onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("industry")}>Industries {renderSortIcon("industry")}</th>
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Actions</th>
-              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>
+             {/* <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>*/}
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Bookmark</th>
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Profile</th>
             </tr>
@@ -388,10 +388,10 @@ const NewContentWriterTable = () => {
                     </button>
                 
                   </td>
-                  <td className="border px-4 py-2 text-center">
+                  {/*<td className="border px-4 py-2 text-center">
                     <ApplyForm section="ContenWriters" publisher={writer} />
                     <ShowApplyForm  section="ContenWriters" publisher={writer} />
-                    </td>
+                    </td>*/}
                   <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     {/*<button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
                     ><Bookmark section="ContenWriters" publisher={writer} /></button>*/}

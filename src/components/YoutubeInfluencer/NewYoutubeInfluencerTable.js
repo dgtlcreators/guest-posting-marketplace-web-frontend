@@ -383,7 +383,7 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
               <th className='px-4 py-2' onClick={() => handleSort("audienceDemographics")}>Audience Demographics {renderSortIcon("audienceDemographics")}</th>
               <th className='px-4 py-2' onClick={() => handleSort("mediaKit")}>mediaKit  {renderSortIcon("mediaKit")}</th>
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Actions</th>
-              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>
+           { /*  <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>*/}
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Bookmark</th>
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Profile</th>
 
@@ -474,10 +474,10 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
                      DELETE
                   </button>
                 </td>
-                <td className='border py-3 px-4'>
+                {/*<td className='border py-3 px-4'>
                   <ApplyForm section="YoutubeInfluencer" publisher={influencer}/>
                   <ShowApplyForm section="YoutubeInfluencer" publisher={influencer} />
-                  </td>
+                  </td>*/}
                <td  className="border py-3 px-2 md:px-6 text-center text-md font-semibold"> 
                  {/* <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
                 ><Bookmark  section="YoutubeInfluencer" publisher={influencer}/></button>*/}

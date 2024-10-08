@@ -150,7 +150,9 @@ const ApplyForm = ({ section, publisher }) => {
 
     } catch (error) {
       console.error('Failed to submit application:', error);
-      toast.error('Failed to submit application. You may have reached the application limit for today.');
+      console.log(error,error.response)
+      //toast.error('Failed to submit application. You may have reached the application limit for today.');
+      toast.error(`${error.response.data.error}`)
     }
   };
 

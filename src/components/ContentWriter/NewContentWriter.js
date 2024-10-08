@@ -377,6 +377,7 @@ const NewContentWriter = () => {
               value={formData.email}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
+              required
             />
           </div>
           <div className="block">

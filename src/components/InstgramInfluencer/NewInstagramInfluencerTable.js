@@ -18,7 +18,7 @@ import Pagination from "../OtherComponents/Pagination";
 
 
 
-const NewInstagramInfluencerTable = () => {
+const NewInstagramInfluencerTable = ({addInfluencer}) => {
   const { isDarkTheme } = useTheme();
   const { userData, localhosturl } = useContext(UserContext);
   const userId = userData?._id;
@@ -86,36 +86,36 @@ const NewInstagramInfluencerTable = () => {
 
   const createDescriptionElements = (formData, users) => {
     const elements = [
-      { key: 'Username', value: formData.username },
-      { key: 'Full Name', value: formData.fullname },
-      { key: 'Profile Picture', value: formData.profilePicture },
-      { key: 'Bio', value: formData.bio },
-      { key: 'Followers Count', value: formData.followersCount },
-      { key: 'Videos Count', value: formData.videosCount },
-      { key: 'Engagement Rate', value: `${formData.engagementRate}%` },
-      { key: 'Average Views', value: formData.averageViews },
-      { key: 'Category', value: formData.category },
-      { key: 'Location', value: formData.location },
-      { key: 'Language', value: formData.language },
-      { key: 'Collaboration Rates (Sponsored Videos)', value: formData.collaborationRates.sponsoredVideos },
-      { key: 'Collaboration Rates (Product Reviews)', value: formData.collaborationRates.productReviews },
-      { key: 'Collaboration Rates (Shoutouts)', value: formData.collaborationRates.shoutouts },
-      { key: 'Past Collaborations', value: formData.pastCollaborations.join(', ') },
-      { key: 'Audience Demographics (Age)', value: formData.audienceDemographics.age.join(', ') },
-      { key: 'Audience Demographics (Gender)', value: formData.audienceDemographics.gender.join(', ') },
-      { key: 'Audience Demographics (Geographic Distribution)', value: formData.audienceDemographics.geographicDistribution.join(', ') },
+      { key: 'Username', value: formData?.username },
+      { key: 'Full Name', value: formData?.fullname },
+      { key: 'Profile Picture', value: formData?.profilePicture },
+      { key: 'Bio', value: formData?.bio },
+      { key: 'Followers Count', value: formData?.followersCount },
+      { key: 'Videos Count', value: formData?.videosCount },
+      { key: 'Engagement Rate', value: `${formData?.engagementRate}%` },
+      { key: 'Average Views', value: formData?.averageViews },
+      { key: 'Category', value: formData?.category },
+      { key: 'Location', value: formData?.location },
+      { key: 'Language', value: formData?.language },
+      { key: 'Collaboration Rates (Sponsored Videos)', value: formData?.collaborationRates?.sponsoredVideos },
+      { key: 'Collaboration Rates (Product Reviews)', value: formData?.collaborationRates?.productReviews },
+      { key: 'Collaboration Rates (Shoutouts)', value: formData?.collaborationRates?.shoutouts },
+      { key: 'Past Collaborations', value: Array.isArray(formData?.pastCollaborations) ? formData?.pastCollaborations.join(', ') : 'N/A' },
+      { key: 'Audience Demographics (Age)', value: Array.isArray(formData?.audienceDemographics?.age) ? formData?.audienceDemographics?.age.join(', ') : 'N/A' },
+      { key: 'Audience Demographics (Gender)', value: Array.isArray(formData?.audienceDemographics?.gender) ? formData?.audienceDemographics?.gender.join(', ') : 'N/A' },
+      { key: 'Audience Demographics (Geographic Distribution)', value: Array.isArray(formData?.audienceDemographics?.geographicDistribution) ? formData?.audienceDemographics?.geographicDistribution.join(', ') : 'N/A' },
       { key: 'Media Kit', value: formData.mediaKit },
       { key: 'Total results', value: users?.length }
     ];
-
-
 
     const formattedElements = elements
       .filter(element => element.value)
       .map(element => `${element.key}: ${element.value}`)
       .join(', ');
+      
     return `${formattedElements}`;
-  };
+};
+
   const generateShortDescription = (formData, users) => {
     const elements = createDescriptionElements(formData, users).split(', ');
 
@@ -153,8 +153,33 @@ const NewInstagramInfluencerTable = () => {
 
     }
   }
-
   const deleteInstagramInfluencer = async (id) => {
+    try {
+  console.log("Id ",id)
+        await axios.delete(`${localhosturl}/instagraminfluencers/deleteInstagraminfluencer/${id}`);
+
+  
+        const user = influencers.find((influencer) => influencer._id === id);
+        console.log("User ",user)
+       
+        if (user) {
+          console.log("Before past ")
+            await pastactivitiesAdd(user);
+            console.log("After past ")
+            toast.success("Instagram Influencer Deleted Successfully");
+            console.log("Before Toast ")
+            setInfluencers(influencers.filter((influencer) => influencer._id !== id));
+            console.log("After past ")
+        } else {
+            toast.error("Instagram Influencer not found in the local state");
+        }
+    } catch (error) {
+        toast.error("Error deleting Instagram Influencer");
+        console.error("Error deleting Instagram Influencer:", error);
+    }
+};
+
+  const deleteInstagramInfluencer1 = async (id) => {
     try {
       await axios.delete(
 
@@ -307,7 +332,7 @@ const NewInstagramInfluencerTable = () => {
               <th className="border px-4 py-2" onClick={() => handleSort("pastCollaborations")}>Past Collaborations {renderSortIcon("pastCollaborations")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("mediaKit")}>Media Kit {renderSortIcon("mediaKit")}</th>
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Actions</th>
-              <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>
+             {/* <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>*/}
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Bookmark</th>
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Profile</th>
             </tr>
@@ -403,10 +428,10 @@ const NewInstagramInfluencerTable = () => {
 
 
                   </td>
-                  <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
+                 {/* <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     <ApplyForm section="InstagramInfluencer" publisher={influencer} />
                     <ShowApplyForm section="InstagramInfluencer" publisher={influencer} />
-                  </td>
+                  </td>*/}
                   {/*<td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
                     ><Bookmark section="InstagramInfluencer" publisher={influencer} /></button>

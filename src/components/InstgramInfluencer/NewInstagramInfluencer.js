@@ -178,6 +178,63 @@ const NewInstagramInfluencer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("formdata: ", formData);
+    
+    const formDataToSend = new FormData();
+    formDataToSend.append("username", formData.username);
+    formDataToSend.append("fullName", formData.fullName);
+    formDataToSend.append("bio", formData.bio);
+    formDataToSend.append("followersCount", formData.followersCount);
+    formDataToSend.append("followingCount", formData.followingCount);
+    formDataToSend.append("postsCount", formData.postsCount);
+    formDataToSend.append("engagementRate", formData.engagementRate);
+    formDataToSend.append("averageLikes", formData.averageLikes);
+    formDataToSend.append("averageComments", formData.averageComments);
+    formDataToSend.append("category", formData.category);
+    formDataToSend.append("location", formData.location);
+    formDataToSend.append("language", formData.language);
+    formDataToSend.append("verifiedStatus", formData.verifiedStatus);
+    
+    // Send collaborationRates as a JSON string
+    if (formData?.collaborationRates) {
+        formDataToSend.append("collaborationRates", JSON.stringify(formData.collaborationRates));
+    } else {
+        console.error("collaborationRates is undefined");
+    }
+
+    formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
+
+    if (profileUrlOption === "system" && formData.profilePicture) {
+        formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
+    } else {
+        formDataToSend.append("profilePicture", formData.profilePicture);
+    }
+
+    if (mediaKitOption === "system" && formData.mediaKit) {
+        formDataToSend.append("mediaKit", document.querySelector('input[name="mediaKit"]').files[0]);
+    } else {
+        formDataToSend.append("mediaKit", formData.mediaKit);
+    }
+
+    try {
+        const response = await axios.post(`${localhosturl}/instagraminfluencers/addInstagraminfluencer`, formDataToSend, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        setAddInfluencer((prev) => [...prev, response.data.instagramInfluencer]);
+        toast.success("Influencer added Successfully");
+        pastactivitiesAdd(formDataToSend);
+        handleReset();
+    } catch (error) {
+        toast.error(`Error adding influencer ${error}`);
+        console.error("Error adding influencer", error);
+    }
+};
+
+
+  const handleSubmit1 = async (e) => {
+    e.preventDefault();
     console.log("formdata: ", formData)
     console.log("collaborationRates.post", formData.collaborationRates.post)
     const formDataToSend = new FormData();
@@ -194,13 +251,21 @@ const NewInstagramInfluencer = () => {
     formDataToSend.append("location", formData.location);
     formDataToSend.append("language", formData.language);
     formDataToSend.append("verifiedStatus", formData.verifiedStatus);
-    formDataToSend.append("collaborationRates[post]", formData.collaborationRates.post);
-    formDataToSend.append("collaborationRates[story]", formData.collaborationRates.story);
-    formDataToSend.append("collaborationRates[reel]", formData.collaborationRates.reel);
+
+    //formDataToSend.append("collaborationRates[post]", formData.collaborationRates.post);
+    //formDataToSend.append("collaborationRates[story]", formData.collaborationRates.story);
+   // formDataToSend.append("collaborationRates[reel]", formData.collaborationRates.reel);
     // formDataToSend.append("collaborationRates", JSON.stringify(formData.collaborationRates));
 
     formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
-
+    if (formData?.collaborationRates) {
+      formDataToSend.append("collaborationRates[post]", formData?.collaborationRates?.post);
+      formDataToSend.append("collaborationRates[story]", formData?.collaborationRates?.story);
+      formDataToSend.append("collaborationRates[reel]", formData?.collaborationRates?.reel);
+  } else {
+      console.error("collaborationRates is undefined");
+  }
+  
 
     if (profileUrlOption === "system" && formData.profilePicture) {
       formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
@@ -655,7 +720,7 @@ const NewInstagramInfluencer = () => {
       >
         Instagram Influencer List
       </h2>
-      <NewInstagramInfluencerTable key={refreshKey} />
+      <NewInstagramInfluencerTable key={refreshKey} addInfluencer={addInfluencer}/>
     </div>
   );
 };

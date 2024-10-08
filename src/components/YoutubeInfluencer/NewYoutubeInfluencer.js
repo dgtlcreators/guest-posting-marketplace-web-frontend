@@ -38,7 +38,7 @@ const NewYoutubeInfluencer = () => {
 
   const [profileUrlOption, setProfileUrlOption] = useState("manual");
   const [mediaKitOption, setMediaKitOption] = useState("manual");
-  const [addYotubeInfluencer, setAddYotubeInfluencer] = useState([]);
+  const [addYoutubeInfluencer, setAddYoutubeInfluencer] = useState([]);
 
   const [locationQuery, setLocationQuery] = useState("");
   const [locationResults, setLocationResults] = useState([]);
@@ -178,10 +178,90 @@ const generateShortDescription = (formData, users) => {
     
    }
   }
+  const handleSubmit = async (e) => { 
+    e.preventDefault();
+    const formDataToSend = new FormData();
 
-  const handleSubmit = async(e) => { 
+    // Ensure username is included
+    if (!formData.username) {
+        console.error("Username is required");
+        return; // Early return if username is missing
+    }
+
+    // Adjusted field names to match what the server expects
+    const generalFields = [
+      "username", "fullname", "bio", "followersCount", "videosCount",
+      "engagementRate", "averageViews", "category", "location", "language"
+    ];
+  
+    generalFields.forEach(field => {
+      if (formData[field] !== undefined) {
+        formDataToSend.append(field, formData[field]); // Make sure to match 'fullname'
+      }
+    });
+
+    if (formData.collaborationRates) {
+        Object.keys(formData.collaborationRates).forEach(type => {
+            if (formData.collaborationRates[type] !== undefined) {
+                formDataToSend.append(`collaborationRates[${type}]`, formData.collaborationRates[type]);
+            }
+        });
+    }
+  
+    // Audience Demographics mapping
+    if (formData.audienceDemographics) {
+        Object.keys(formData.audienceDemographics).forEach(type => {
+            if (formData.audienceDemographics[type] !== undefined) {
+                formDataToSend.append(`audienceDemographics[${type}]`, JSON.stringify(formData.audienceDemographics[type]));
+            }
+        });
+    }
+  
+    // Past Collaborations
+    if (formData.pastCollaborations && formData.pastCollaborations.length > 0) {
+        formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
+    }
+  
+    // Profile picture and media kit files
+    if (profileUrlOption === "system" && formData.profilePicture) {
+        formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
+    } else if (formData.profilePicture) {
+        formDataToSend.append("profilePicture", formData.profilePicture);
+    }
+  
+    if (mediaKitOption === "system" && formData.mediaKit) {
+        formDataToSend.append("mediaKit", document.querySelector('input[name="mediaKit"]').files[0]);
+    } else if (formData.mediaKit) {
+        formDataToSend.append("mediaKit", formData.mediaKit);
+    }
+
+    try {
+        const response = await axios.post(
+            `${localhosturl}/youtubeinfluencers/addYoutubeInfluencer`,
+            formDataToSend, // Use formDataToSend directly without spreading
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            }
+        );
+        setAddYoutubeInfluencer((prev) => [...prev, response.data.data]);
+        pastactivitiesAdd(formDataToSend);
+        toast.success("Influencer added Successfully");
+
+    } catch (error) {
+        console.log("Error adding influencer", error);
+        toast.error(`Error adding influencer ${error}`);
+    }
+};
+
+  const handleSubmit1 = async(e) => { 
     e.preventDefault()
     const formDataToSend=new FormData()
+    if (!formData.username) {
+      console.error("Username is required");
+      return; // Early return if username is missing
+  }
 
     const generalFields = [
       "username", "fullName", "bio", "followersCount", "videosCount",
@@ -240,7 +320,7 @@ const generateShortDescription = (formData, users) => {
           },
         }
       );
-      setAddYotubeInfluencer((prev) => [...prev, response.data.data]);
+      setAddYoutubeInfluencer((prev) => [...prev, response.data.data]);
       console.log(formDataToSend)
       pastactivitiesAdd(formDataToSend);
       toast.success("Influencer added Successfully");

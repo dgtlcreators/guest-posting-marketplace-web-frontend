@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from '@mui/icons-ma
 import { FaHome, FaPen, FaInstagram, FaYoutube, FaEdit, FaHistory, FaPlus, FaSignOutAlt, FaUserShield, FaRegFileAlt, FaUsersCog, FaUserPlus, FaUsers, FaList } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeProvider';
 import { UserContext } from "../context/userContext.js";
+import { colors } from './config/colors.js';
 
 const SidebarContext = createContext();
 
@@ -48,6 +49,7 @@ export default function Sidebar() {
             backgroundColor: isDarkTheme ? '#333' : '#fff',
             position: 'relative',
             height: '100%', 
+            transition: 'width 0.9s', 
           },
         }}
       >
@@ -154,7 +156,18 @@ export function SidebarItem({ icon, text, to, nested }) {
         button
         component={NavLink}
         to={to}
-        sx={{ pl: nested ? (expanded ? 4 : 2) : (expanded ? 2 : 0) }}
+        sx={{ pl: nested ? (expanded ? 4 : 2) : (expanded ? 2 : 0) 
+          , '&:hover': {
+            backgroundColor: colors.secondaryBackground,
+           // backgroundColor: 'rgba(0, 0, 0, 0.08)', 
+           transform: 'scale(1.05)', 
+           transition: 'background-color 0.3s, transform 0.3s',
+          },
+          '&.active': {
+            backgroundColor: colors.activeBackground, 
+          },
+          transition: 'background-color 0.3s, transform 0.3s',
+        }}
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
       >

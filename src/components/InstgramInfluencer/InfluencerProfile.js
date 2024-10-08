@@ -344,7 +344,7 @@ const generateShortDescription = (formData, users) => {
             </div>
           </Fade>
 
-          {/* Application Form */}
+          {/* Application Form
           <Fade bottom>
             <div className="mt-8  p-6 rounded-lg shadow-lg  p-6 rounded-lg">
               <h2 className="text-2xl font-semibold mb-4 p-2">Apply for Collaboration</h2>
@@ -464,7 +464,7 @@ const generateShortDescription = (formData, users) => {
               )}
             </div>
           </Fade>
-
+ */}
 
             {/* Report Profile Section */}
       <Fade bottom>

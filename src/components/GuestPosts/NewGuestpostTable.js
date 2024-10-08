@@ -350,7 +350,7 @@ const handleClickEditLink=(id)=>{
                                 Moz Spam Score {renderSortIcon("mozSpamScore")}
                             </th>
                             <th className="border py-3 px-2 md:px-6 text-left uppercase ">Actions</th>
-                            <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>
+                           {/* <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>*/}
                             <th className="border py-3 px-2 md:px-6 text-left uppercase ">Bookmark</th>
                             <th className="border py-3 px-2 md:px-6 text-left uppercase ">Profile</th>
                         </tr>
@@ -416,10 +416,10 @@ const handleClickEditLink=(id)=>{
 
 
                                     </td>
-                                    <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
+                                   { /*<td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                                         <ApplyForm section="Guestpost" publisher={user} />
                                         <ShowApplyForm section="Guestpost" publisher={user} />
-                                    </td>
+                                    </td>*/}
                                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                                         <button disabled={!userData.permissions.guestPost.bookmark}
                                             title={!userData.permissions.guestPost.bookmark
