@@ -88,7 +88,8 @@ const handleReport = async () => {
 
 
   return (
-    <div className="min-h-screen  flex items-center justify-center p-8">
+    <div className=""//"min-h-screen  flex flex-column items-center justify-center p-8 max-w-2xl"
+    >
       <div className=" rounded-xl shadow-xl overflow-hidden transform transition-transform hover:scale-105 hover:shadow-2xl duration-300 ease-in-out">
         <motion.div
           className="p-8"
@@ -104,7 +105,7 @@ const handleReport = async () => {
               transition={{ duration: 0.4 }}
             >
               <img
-                src="https://via.placeholder.com/150"
+                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"//"https://via.placeholder.com/150"
                 alt="Profile"
                 className="rounded-full w-32 h-32 object-cover border-4 border-gray-400"
               />
@@ -157,21 +158,14 @@ const handleReport = async () => {
             <p className="text-lg text-600">Reel: ${contentWriter?.collaborationRates?.reel}</p>
           </div>
 
-          {/* Contact Section */}
+          {/* Contact Section 
           <div className="mb-6 p-4  rounded-lg shadow-md transform transition-transform hover:scale-105 duration-300 ease-in-out">
             <h3 className="text-xl font-semibold text-800 flex items-center p-2">
               <FaEnvelope className="text-600 mr-2" /> Contact
             </h3>
             <p className="text-lg text-600 mt-2">{contentWriter.email}</p>
-          </div>
-          <ReportModal
-          section="ContenWriters" 
-           // isOpen={isModalOpen}
-           // onClose={() => setIsModalOpen(false)}
-            userId={userData._id}
-            publisherId={id}
-            localhosturl={localhosturl} 
-          />
+          </div>*/}
+         
 
          {/* <button 
             onClick={() => setIsModalOpen(true)} 
@@ -237,6 +231,14 @@ const handleReport = async () => {
 
         </motion.div>
       </div>
+      <ReportModal
+          section="ContenWriters" 
+           // isOpen={isModalOpen}
+           // onClose={() => setIsModalOpen(false)}
+            userId={userData._id}
+            publisherId={id}
+            localhosturl={localhosturl} 
+          />
     </div>
   );
 };

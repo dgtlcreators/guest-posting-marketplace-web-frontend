@@ -33,7 +33,7 @@ const Navbar = () => {
     { id: 3, text: "New Like on your post", time: "15 mins ago", seen: true },
   ] */
 
-    useEffect(() => {
+    /*useEffect(() => {
       const fetchNotifications = async () => {
         try {
           const response = await axios.get(`${localhosturl}/notificationroute/getAllNotifications`); 
@@ -46,6 +46,22 @@ const Navbar = () => {
   
     //  fetchNotifications();
     }, []);
+    */
+useEffect(() => {
+  const fetchNotifications = async () => {
+    try {
+      const response = await axios.get(`${localhosturl}/notificationroute/getAllNotifications`);
+      const userNotifications = response.data.data.filter(notification => 
+        notification.userStatus.some(status => status.userId === userData._id)
+      );
+      setNotifications(userNotifications);
+    } catch (error) {
+      console.error('Failed to fetch notifications:', error);
+    }
+  };
+
+  fetchNotifications();
+}, [localhosturl, userData._id]);
 
 
   const itemsToSearch = [
@@ -111,6 +127,12 @@ const Navbar = () => {
   useEffect(() => {
     //fetchNotifications(localhosturl);
   }, [fetchNotifications, localhosturl]);
+
+  const unseenCount = notifications.filter(notification => 
+    notification.userStatus.some(status => 
+      status.userId.toString() === userData._id.toString() && !status.isSeen
+    )
+  ).length;
 
 
   
@@ -199,7 +221,9 @@ const Navbar = () => {
 
         {/* Notification Dropdown */}
          <IconButton color="inherit" onClick={handleNotificationClick}>
-          <Badge badgeContent={notifications.filter(item=>item.isSeen===false).length} color="error">
+          <Badge badgeContent={unseenCount} 
+          //badgeContent={notifications.filter(item=>item.isSeen===false).length} 
+          color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>

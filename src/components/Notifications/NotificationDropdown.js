@@ -1,16 +1,27 @@
 
 // NotificationDropdown.js
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { List, ListItem, ListItemText, Divider, Button, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeProvider';
+import { UserContext } from '../../context/userContext';
 
 const NotificationDropdown = ({notifications,onViewAllClick,onClose}) => {
   const navigate = useNavigate();
+  const { userData, localhosturl } = useContext(UserContext);
+  const { isDarkTheme } = useTheme();
 
-  const sortedNotifications = [...notifications].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+ // const sortedNotifications = [...notifications].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-  const unseenNotifications = sortedNotifications.filter(n => !n.isSeen);
-  const seenNotifications = sortedNotifications.filter(n => n.isSeen);
+ // const unseenNotifications = sortedNotifications.filter(n => !n.isSeen);
+ // const seenNotifications = sortedNotifications.filter(n => n.isSeen);
+
+  const sortedNotifications = [...notifications]
+  .filter(notification => notification.userStatus.some(status => status.userId === userData._id))
+  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+const unseenNotifications = sortedNotifications.filter(n => !n.userStatus.find(status => status.userId === userData._id && status.isSeen));
+
   const handleViewAllClick = () => {
    
     navigate('/notifications'); 
@@ -19,13 +30,26 @@ const NotificationDropdown = ({notifications,onViewAllClick,onClose}) => {
     onClose()
   };
 
+  const getMessageText = (notification) => {
+   // console.log("userData._id===notification.userId ",userData._id,notification.userId,notification,userData._id===notification.userId)
+    if (userData?.role === 'Brand User' || userData?.role === 'User' || userData._id===notification.userId) {
+      return notification.details.text1
+     // return `User Brand notification: ${notification.details.message}`;
+    } else if (userData?.role === 'Admin' || userData?.role === 'Super Admin') {
+      return notification.details.text2
+      //return `Admin notification: ${notification.details.message}`;
+    }
+    return notification.details.message; 
+  };
+
 
   return (
     <div>
       <List>
         {unseenNotifications.map(notification => (
           <ListItem button key={notification.id}>
-            <ListItemText primary={notification.details.message} secondary={`${new Date(notification.createdAt).toLocaleString()}`} />
+            <ListItemText primary={getMessageText(notification)}//{/*notification.details.message*/}
+             secondary={`${new Date(notification.createdAt).toLocaleString()}`} />
           </ListItem>
         ))}
         {/*seenNotifications.map(notification => (

@@ -367,7 +367,8 @@ const handleClickEditLink=(id)=>{
                             </tr>
                         ) : (
                             paginatedUsers.map((user, index) => (
-                                <tr key={user._id} className="border-b hover:bg-gray-50">
+                                <tr key={user._id} className="border-b hover:bg-gray-50"
+                                >
                                     <td className="border px-4 py-2">{index + 1}</td>
                                     <td className="border px-4 py-2">{user.publisherName}</td>
                                     <td className="border px-4 py-2">{user.publisherEmail}</td>

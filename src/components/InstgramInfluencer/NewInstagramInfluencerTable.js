@@ -312,10 +312,11 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
       <div className="overflow-x-auto  p-4 rounded-lg shadow-md">
         <table className="min-w-full  text-sm">
           <thead>
-            <tr className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base">
+            <tr className="text-base"//bg-gradient-to-r from-purple-500 to-pink-500 text-white 
+            >
               <th className="border px-4 py-2" >S.No </th>
-              <th className="border px-4 py-2" onClick={() => handleSort("username")}>Username {renderSortIcon("username")}</th>
-              <th className="border px-4 py-2" onClick={() => handleSort("fullName")}>Full Name {renderSortIcon("fullName")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("username")}>Name {renderSortIcon("username")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("fullName")}>Last Name {renderSortIcon("fullName")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("profilePicture")}>Profile Picture {renderSortIcon("profilePicture")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("followersCount")}>Followers {renderSortIcon("followersCount")}</th>

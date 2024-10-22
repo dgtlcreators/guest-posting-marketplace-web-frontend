@@ -186,95 +186,6 @@ body.dark button:hover {
 }
 
 
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th {
-  background-color: #e0e0e0;
-  color: #000000;
-  border: 1px solid #cccccc;
-}
-
-body.dark th {
-  background-color: #444444;
-  color: #ffffff;
-  border: 1px solid #555555;
-}
-
-td {
-  background-color: #ffffff;
-  color: #000000;
-  border: 1px solid #cccccc;
-
-}
-
-body.dark td {
-  background-color: #333333;
-  color: #ffffff;
-  border: 1px solid #555555;
-}
-
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-@keyframes hoverEffect {
-  from {
-    transform: scale(1);
-  }
-
-  to {
-    transform: scale(1.02);
-  }
-}
-table thead{
-  font-family: 'Open Sans', sans-serif;
-  font-size: 14px; 
-  font-weight: 400;
-  font-style: normal;
-}
-
-
-
-table tbody tr {
-  animation: fadeIn 0.5s ease-in-out;
-  transition: transform 0.3s ease-in-out;
-}
-
-
-
-
-body.light table tbody tr:hover {
- 
-  background-color: rgba(0, 0, 0, 0.2);
-
-}
-
-
-body.dark table tbody tr:hover {
-
-  background-color: rgba(255, 255, 255, 0.3);
- 
-}
-
-
-table tbody tr {
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
 @keyframes submitColorChange {
   0% {
     background-color: #1e3a8a;   
@@ -365,3 +276,179 @@ input[type="checkbox"]:disabled:hover::after {
   background-color: transparent !important;
    cursor: not-allowed;
 }
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+@keyframes hoverEffect {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.02);
+  }
+}
+
+
+
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  background-color: #e0e0e0;
+  color: #000000;
+  border: 1px solid #cccccc;
+}
+
+body.dark th {
+  background-color: #444444;
+  color: #ffffff;
+  border: 1px solid #555555;
+}
+
+td {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #cccccc;
+
+}
+
+body.dark td {
+  background-color: #333333;
+  color: #ffffff;
+  border: 1px solid #555555;
+}
+
+
+
+table thead{
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px; 
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+
+table tbody tr {
+  animation: fadeIn 0.5s ease-in-out;
+  transition: transform 0.3s ease-in-out;
+}
+
+table tbody tr {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+
+body.light table tbody tr:hover{
+  background-color: rgba(0, 0, 0, 0.2);
+
+}
+
+
+body.dark table tbody tr:hover,body.dark table tbody td:hover,body.dark table tbody th:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+
+
+
+
+/*
+body.light table tbody th:hover{
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  background-color: #3a1616 !important;
+  border: #2563eb 4px solid;
+}
+
+
+body.dark table tbody th:hover{
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  background-color: #2563eb !important;
+  border: #3a1616 4px solid;
+}
+*/
+/*
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #cccccc;
+  transition: background-color 0.3s, color 0.3s; 
+}
+
+
+body.light th {
+  background-color: #e0e0e0;
+  color: #000000;
+}
+
+body.light td {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+
+body.dark th {
+  background-color: #444444;
+  color: #ffffff;
+}
+
+body.dark td {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+
+body.light table tbody tr {
+  transition: background-color 0.3s ease; 
+}
+
+body.light table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+body.dark table tbody tr {
+  transition: background-color 0.3s ease; 
+}
+
+body.dark table tbody tr:hover {
+  background-color: rgba(147, 223, 26, 0.1);
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+table tbody tr {
+  animation: fadeIn 0.5s ease forwards; 
+}
+*/

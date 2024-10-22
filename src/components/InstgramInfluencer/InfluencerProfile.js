@@ -1,22 +1,35 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { FaUser, FaUsers, FaHeart, FaLocationArrow, FaLanguage, FaCheckCircle, FaDollarSign, FaTag, FaComment, FaFilePdf } from 'react-icons/fa';
+import { FaArrowLeft, FaUser, FaUsers, FaHeart, FaLocationArrow, FaLanguage, FaCheckCircle, FaDollarSign, FaTag, FaComment, FaFilePdf } from 'react-icons/fa';
 import Fade from 'react-reveal/Fade';
 import Zoom from 'react-reveal/Zoom';
 import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeProvider';
 import { UserContext } from '../../context/userContext';
 import ReportModal from '../OtherComponents/ReportForm';
+import { faUser, faMapMarkerAlt, faLanguage, faTags, faUsers, faVideo, faChartLine, faEye, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+
+
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
 
 
 const InfluencerProfile = () => {
+
+
+
   const { isDarkTheme } = useTheme();
-  const { userData,localhosturl } = useContext(UserContext);
+  const { userData, localhosturl } = useContext(UserContext);
   const { id } = useParams();
+  const navigate = useNavigate();
   const [influencer, setInfluencer] = useState(null);
   const [form, setForm] = useState({
-    userId:userData?._id,
+    userId: userData?._id,
     brandName: '',
     contactPerson: '',
     email: '',
@@ -25,7 +38,7 @@ const InfluencerProfile = () => {
     collaborationType: '',
     budget: '',
     notes: ''
-    
+
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [reportSubmitted, setReportSubmitted] = useState(false);
@@ -33,7 +46,7 @@ const InfluencerProfile = () => {
   useEffect(() => {
     const fetchInfluencer = async () => {
       try {
-        
+
         const response = await axios.get(`${localhosturl}/instagraminfluencers/getInstagraminfluencerById/${id}`);
         setInfluencer(response.data);
         pastactivitiesAdd(response.data.instagramInfluencer);
@@ -52,7 +65,7 @@ const InfluencerProfile = () => {
 
 
   const createDescriptionElements = (formData, users) => {
-    
+
     const elements = [
       { key: 'Username', value: users?.username },
       { key: 'Full Name', value: users?.fullName },
@@ -74,54 +87,54 @@ const InfluencerProfile = () => {
       { key: 'Past Collaborations', value: users?.pastCollaborations?.join(', ') },
       { key: 'Media Kit', value: users?.mediaKit },
       { key: 'Total results', value: users?.length }
-  ];
-  
+    ];
 
-  const formattedElements = elements
-        .filter(element => element.value)
-        .map(element => `${element.key}: ${element.value}`)
-        .join(', ');
-  return `${formattedElements}`;
-};
-const generateShortDescription = (formData, users) => {
- 
-  const elements = createDescriptionElements(formData, users).split(', ');
-  
- 
-  const shortElements = elements.slice(0, 2);
 
-  return `You viewed a Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
-};
+    const formattedElements = elements
+      .filter(element => element.value)
+      .map(element => `${element.key}: ${element.value}`)
+      .join(', ');
+    return `${formattedElements}`;
+  };
+  const generateShortDescription = (formData, users) => {
 
-  const pastactivitiesAdd=async(users)=>{
-    const formData={}
-    
+    const elements = createDescriptionElements(formData, users).split(', ');
+
+
+    const shortElements = elements.slice(0, 2);
+
+    return `You viewed a Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
+  };
+
+  const pastactivitiesAdd = async (users) => {
+    const formData = {}
+
     const description = createDescriptionElements(formData, users);
     const shortDescription = generateShortDescription(formData, users);
-  
-   try {
-    const activityData={
-      userId:userData?._id,
-      action:"Viewed a Instagram Influencer",
-      section:"Instagram Influencer",
-      role:userData?.role,
-      timestamp:new Date(),
-      details:{
-        type:"view",
-        filter:{formData,total:users.length},
-        description,
-        shortDescription
-        
 
+    try {
+      const activityData = {
+        userId: userData?._id,
+        action: "Viewed a Instagram Influencer",
+        section: "Instagram Influencer",
+        role: userData?.role,
+        timestamp: new Date(),
+        details: {
+          type: "view",
+          filter: { formData, total: users.length },
+          description,
+          shortDescription
+
+
+        }
       }
+
+
+      axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
+    } catch (error) {
+      console.log(error);
+
     }
-   
-    
-    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
-   } catch (error) {
-    console.log(error);
-    
-   }
   }
 
   const handleSubmit = async (e) => {
@@ -132,7 +145,7 @@ const generateShortDescription = (formData, users) => {
     };
 
     try {
-    
+
       await axios.post(`${localhosturl}/userbrand/addapplications`, applicationData);
       setFormSubmitted(true);
       setForm({
@@ -145,10 +158,10 @@ const generateShortDescription = (formData, users) => {
         budget: '',
         notes: ''
       });
-      
+
       toast.success("Sent Application successfully")
     } catch (error) {
-        toast.error(`Error submitting application:', ${error}`)
+      toast.error(`Error submitting application:', ${error}`)
       console.error('Error submitting application:', error);
     }
   };
@@ -183,12 +196,12 @@ const generateShortDescription = (formData, users) => {
     const reportData = {
       reporterId: userData?._id,
       influencerId: id,
-      reason: "Fake Profile", 
+      reason: "Fake Profile",
     };
 
     try {
-     // await axios.post(`${localhosturl}/report`, reportData);
-    //  setReportSubmitted(true);
+      // await axios.post(`${localhosturl}/report`, reportData);
+      //  setReportSubmitted(true);
       toast.success("Profile reported successfully!");
     } catch (error) {
       toast.error("Error reporting profile");
@@ -196,22 +209,42 @@ const generateShortDescription = (formData, users) => {
     }
   };
 
-  return (
-    <div className="relative w-full min-h-screen  bg-contain"//bg-gradient-to- from-blue-200 via-purple-300 to-pink-500 bg-cover
-    >
-      <div className="absolute top-0 left-0 right-0 h-48 bg-no-repeat bg-top bg-contain" style={{ backgroundImage: 'url("https://example.com/top-flowers.png")' }}></div>
 
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-50"
-        style={{ backgroundImage: 'url("https://source.unsplash.com/random/1600x900")' }}
+  const handleDownload = async () => {
+    const pdf = new jsPDF();
+    const imgData = await html2canvas(document.getElementById('image-to-download')).then(canvas => canvas.toDataURL('image/png'));
+
+    pdf.addImage(imgData, 'PNG', 0, 0);
+    pdf.save('MediaKit.pdf');
+  };
+
+  return (
+    <div className=""//"relative w-full min-h-screen  bg-contain"//bg-gradient-to- from-blue-200 via-purple-300 to-pink-500 bg-cover
+    >
+     
+      <button
+        style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+        //onClick={() => history.goBack()}
+        onClick={() => navigate(-1)}
       >
-        <div className="absolute inset-0  opacity-0 bg-cover"//bg-gradient-to- from-black to-transparent
+        <FontAwesomeIcon icon={faArrowLeft} style={{ marginRight: '10px' }} />
+        Back
+      </button>
+      {/*<div className="absolute top-0 left-0 right-0 h-48 bg-no-repeat bg-top bg-contain" style={{ backgroundImage: 'url("https://example.com/top-flowers.png")' }}></div>
+*/}
+      <div
+        className=""//"absolute inset-0 bg-cover bg-center opacity-50"
+        //style={{ backgroundImage: 'url("https://source.unsplash.com/random/1600x900")' }}
+      >
+        <div className=""//"absolute inset-0  opacity-0 bg-cover"//bg-gradient-to- from-black to-transparent
         ></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto p-6 lg:p-12 bg-cover">
-        <div className=" bg-opacity-90 rounded-lg shadow-lg overflow-auto p-6 lg:p-12">
-          <div className="flex flex-col lg:flex-row gap-8  p-6 rounded-lg"//bg-gradient-to-r from-yellow-300 via-pink-300 to-red-300
+      <div className=""//"relative z-10 max-w-7xl mx-auto p-6 lg:p-12 bg-cover"
+      >
+        <div className=""//" bg-opacity-90 rounded-lg shadow-lg overflow-auto p-6 lg:p-12"
+        >
+          <div className=""//"flex flex-col lg:flex-row gap-8  p-6 rounded-lg"//bg-gradient-to-r from-yellow-300 via-pink-300 to-red-300
           >
             {/* Profile Image & Name */}
             <Fade left>
@@ -221,7 +254,7 @@ const generateShortDescription = (formData, users) => {
                     src={
                       profilePicture?.startsWith('https')
                         ? profilePicture
-                       // : `https://guest-posting-marketplace-web-backend.onrender.com${profilePicture}`
+                        // : `https://guest-posting-marketplace-web-backend.onrender.com${profilePicture}`
                         : `${localhosturl}${profilePicture}`
                     }
                     alt={username}
@@ -317,8 +350,54 @@ const generateShortDescription = (formData, users) => {
             </div>
           </Fade>
 
+
+
+
           {/* Media Kit & Past Collaborations */}
           <Fade bottom>
+            <div className="mt-8 bg-100 p-6 rounded-lg shadow-lg">
+              <h2 className="text-2xl font-semibold mb-4 p-2">Media Kit & Past Collaborations</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {mediaKit && (
+                  <div className="bg-200 p-4 rounded-lg shadow-md flex flex-col items-center">
+                    <h3 className="text-xl font-semibold mb-2 p-2">Media Kit</h3>
+
+                    {/* Image Preview */}
+                    <img
+                      id="image-to-download"
+                      src={
+                        mediaKit.startsWith('https')
+                          ? mediaKit
+                          : `${localhosturl}${mediaKit}`
+                      }
+                      alt="Media Kit Preview"
+                      className="mb-4 w-48 h-auto rounded"
+                    />
+
+                    {/* Download Button 
+          <button
+            onClick={handleDownload}
+            className="flex items-center text-blue-600 hover:text-blue-800"
+          >
+            <FaFilePdf className="mr-2 text-2xl" />
+            <span>Download as PDF</span>
+          </button>*/}
+                  </div>
+                )}
+                {pastCollaborations && (
+                  <div className="bg-200 p-4 rounded-lg shadow-md">
+                    <h3 className="text-xl font-semibold mb-2 p-2">Past Collaborations</h3>
+                    <p>{pastCollaborations}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </Fade>
+
+
+
+
+          { /*<Fade bottom>
             <div className="mt-8 bg-100 p-6 rounded-lg shadow-lg  p-6 rounded-lg"//bg-gradient-to-r from-yellow-300 via-pink-300 to-red-300
             >
               <h2 className="text-2xl font-semibold mb-4 p-2">Media Kit & Past Collaborations</h2>
@@ -342,7 +421,7 @@ const generateShortDescription = (formData, users) => {
                 )}
               </div>
             </div>
-          </Fade>
+          </Fade>*/}
 
           {/* Application Form
           <Fade bottom>
@@ -466,8 +545,11 @@ const generateShortDescription = (formData, users) => {
           </Fade>
  */}
 
-            {/* Report Profile Section */}
-      <Fade bottom>
+          {/* Report Profile Section */}
+
+        </div>
+      </div>
+        <div>
       <ReportModal
       section="InstagramInfluencer"
            // isOpen={isModalOpen}
@@ -489,8 +571,6 @@ const generateShortDescription = (formData, users) => {
             </button>
           )}
         </div>*/}
-      </Fade>
-        </div>
       </div>
     </div>
   );

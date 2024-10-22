@@ -357,11 +357,11 @@ const NewInstagramInfluencer = () => {
       <form onSubmit={handleSubmit} className="mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="block">
-            <label className="text-gray-700">Username</label>
+            <label className="text-gray-700">Name</label>
             <input
               type="text"
               name="username"
-              placeholder="Username"
+              placeholder="Name"
               value={formData.username}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
@@ -369,11 +369,11 @@ const NewInstagramInfluencer = () => {
             />
           </div>
           <div className="block">
-            <label className="text-gray-700">Full Name</label>
+            <label className="text-gray-700">Last Name</label>
             <input
               type="text"
               name="fullName"
-              placeholder="Full Name"
+              placeholder="Last Name"
               value={formData.fullName}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"

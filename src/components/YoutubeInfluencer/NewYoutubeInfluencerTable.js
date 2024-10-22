@@ -367,8 +367,8 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
           <thead>
             <tr className='bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base'>
               <th className='px-4 py-2'>S.No </th>
-              <th className='px-4 py-2' onClick={() => handleSort("username")}>Username {renderSortIcon("username")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("fullname")}>Full Name {renderSortIcon("fullname")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("username")}>Name {renderSortIcon("username")}</th>
+              <th className='px-4 py-2' onClick={() => handleSort("fullname")}>Last Name {renderSortIcon("fullname")}</th>
               <th className='px-4 py-2' onClick={() => handleSort("profilePicture")}>Profile Picture {renderSortIcon("profilePicture")}</th>
               <th className='px-4 py-2' onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>
               <th className='px-4 py-2' onClick={() => handleSort("followersCount")}>Followers {renderSortIcon("followersCount")}</th>

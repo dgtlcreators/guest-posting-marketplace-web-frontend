@@ -301,7 +301,8 @@ const NewContentWriterTable = () => {
               </tr>
             ) : (
               paginatedUsers.map((writer, index) => (
-                <tr key={writer._id} className="hover:bg-gray-100 transition-colors">
+                <tr key={writer._id} className="hover:bg-gray-100 transition-colors"
+                >
                   <td className="border px-4 py-2">{index + 1}</td>
                   <td className="border px-4 py-2">{writer.name}</td>
                   <td className="border px-4 py-2">{writer.bio}</td>

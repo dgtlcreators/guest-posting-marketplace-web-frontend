@@ -1,6 +1,6 @@
 // src/components/Sidebar.js
 // src/components/Sidebar.js
-import React, { useState, useContext, createContext } from 'react';
+import React, { useState, useContext, createContext,useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Divider, Avatar, Typography, Collapse, Popover } from '@mui/material';
 import { ChevronLeft, ChevronRight, ExpandLess, ExpandMore } from '@mui/icons-material';
@@ -34,6 +34,18 @@ export default function Sidebar() {
   const handleSuperAdminClick = () => {
     setSuperAdminOpen(prev => !prev);
   };
+
+
+  useEffect(() => {
+    if (isAdmin) {
+      document.title = "CreatorsXchange - Admin";
+    } else if (isSuperAdmin) {
+      document.title = "CreatorsXchange - SuperAdmin";
+    } else {
+      document.title = "CreatorsXchange - User"; 
+    }
+  }, [isAdmin, isSuperAdmin]);
+  
 
   return (
     <SidebarContext.Provider value={{ expanded }}>
@@ -118,7 +130,7 @@ export default function Sidebar() {
         
         </List>
         <Divider />
-        <div className="flex items-center p-2">
+       {/* <div className="flex items-center p-2">
           <Avatar src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&name=${userData?.name || 'User'}`} />
           {expanded && userData && (
             <div className="ml-2">
@@ -129,7 +141,7 @@ export default function Sidebar() {
               <Typography variant="body2">{userData.email || 'user@example.com'}</Typography>
             </div>
           )}
-        </div>
+        </div>*/}
       </Drawer>
     </SidebarContext.Provider>
   );

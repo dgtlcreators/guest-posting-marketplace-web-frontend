@@ -103,6 +103,30 @@ const ApplyForm = ({ section, publisher }) => {
 
     try {
       console.log("This is testing ",publisherId)
+      /**
+       * const message = userData.role === 'User Brand' 
+    ? `You applied to ${publisherId} with the name ${formData.name}.`
+    : `New application submitted by ${formData.name}.`;
+
+       *  const text2 = userRole === 'Brand Representative'
+    ? `Brand Representative ${formData.name} has submitted an application.`
+    : `Application submitted by ${formData.name}.`;
+       *  details: {
+            message: userRole === 'User Brand'
+              ? `User Brand ${formData.name} submitted an application.`
+              : `New application submitted by ${formData.name}.`,
+          }, */
+
+         
+       // const text2=`New application submitted by ${formData.name}`
+//const text2=`Brand User ${formData.name} has submitted an application for section: ${section}.`
+  //const text1=`You reported for section: ${section}.`
+  //const text1 = `${userData.username} applied using the name ${formData.name} for section: ${section}.`;
+
+  const text1 = `You, ${userData.name} applied using the name ${formData.name},  for section: ${section}`;
+const text2 = `New application submitted by ${userData.name}, with the name ${formData.name}, for section: ${section}.`;
+
+
      const response = await axios.post(`${localhosturl}/applyroute/apply`, {
         userId,
         publisherId,
@@ -113,8 +137,32 @@ const ApplyForm = ({ section, publisher }) => {
       });
 
       if (response.status === 201) {
-
-        await axios.post(`${localhosturl}/notificationroute/createNotifications`, {
+        console.log('Posting notification with body1:', {
+          userId,
+          publisherId,
+          section,
+          status: 'pending',  
+          isBookmarked: false,
+          formData: [{       
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+          }],
+          details: {
+              message: `New application submitted by ${formData.name}.`,
+              text1,
+              text2
+          },
+          userStatus: [
+              {
+                  userId, 
+                  isSeen: false,
+                  isBookmarked: false,
+              }
+          ],
+      });
+      
+      const response2=  await axios.post(`${localhosturl}/notificationroute/createNotifications`, {
           userId,
           publisherId,
           section,
@@ -129,12 +177,23 @@ const ApplyForm = ({ section, publisher }) => {
           ],
           details: {
             message: `New application submitted by ${formData.name}.`,
+            text1,text2
           },
+          userStatus: [
+            {
+                userId, 
+                isSeen: false,
+                isBookmarked: false,
+            }
+        ],
         });
+        console.log("Apply response ",response2.data)
+        
+      
   
         // const { remainingApplications } = response.data; 
         const users = response.data.data
-        // console.log("users Inside ",users)
+       //  console.log("users Inside ",users)
         //console.log("formData ",formData)
         pastactivitiesAdd(users)
         //toast.success(`Application applied successfully! You have ${remainingApplications} applications remaining today.`);

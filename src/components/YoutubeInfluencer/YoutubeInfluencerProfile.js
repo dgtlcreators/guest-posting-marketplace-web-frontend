@@ -136,7 +136,8 @@ const generateShortDescription = (formData, users) => {
     }
   };*/
   return (
-    <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', backgroundColor: '#f9f9f9', borderRadius: '10px', perspective: '1000px' }}>
+    <div //style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', backgroundColor: '#f9f9f9', borderRadius: '10px', perspective: '1000px' }}
+    >
     <button 
       style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
       //onClick={() => history.goBack()}
@@ -218,7 +219,12 @@ const generateShortDescription = (formData, users) => {
         View Media Kit
       </a>
     )}
-     <ReportModal
+    
+    {/*<div style={{ marginTop: '20px', textAlign: 'center' }}>
+        <Lottie options={defaultOptions} height={200} width={200} />
+      </div>*/}
+      <div style={{ marginTop: '20px', animation: 'fadeInUp 1s ease-in-out' }}>
+      <ReportModal
      section="YoutubeInfluencer"
            // isOpen={isModalOpen}
            // onClose={() => setIsModalOpen(false)}
@@ -226,9 +232,7 @@ const generateShortDescription = (formData, users) => {
             publisherId={id}
             localhosturl={localhosturl} 
           />
-    {/*<div style={{ marginTop: '20px', textAlign: 'center' }}>
-        <Lottie options={defaultOptions} height={200} width={200} />
-      </div>*/}
+      </div>
   </div>
 );
   

@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { UserContext } from '../../context/userContext';
+import { useTheme } from '../../context/ThemeProvider';
 
 const ReportModal = ({ section,userId, publisherId, localhosturl }) => {
  // console.log(publisherId)
+ const { userData } = useContext(UserContext);
+ const { isDarkTheme } = useTheme();
   const [selectedReportType, setSelectedReportType] = useState('');
   const [reason, setReason] = useState('');
   const [details, setDetails] = useState('');
@@ -38,12 +42,31 @@ const ReportModal = ({ section,userId, publisherId, localhosturl }) => {
     try {
       const response = await axios.post(`${localhosturl}/reportroute/createreport`, reportData);
       if (response.data.success) {
-        toast.success("Report submitted successfully!");
+       // toast.success("Report submitted successfully!");
         resetForm();
       }
       if (response.status === 201) {
+        /**
+         *  const message = userData.role === 'User Brand' 
+    ? `You reported ${publisherId} for ${selectedReportType}.`
+    : `New report submitted: ${selectedReportType}. Reason: ${reason}.`;
 
-        await axios.post(`${localhosturl}/notificationroute/createNotifications`, {
+         *  const text1 = userRole === 'Brand User'
+    ? `A report has been submitted by a Brand Usere: ${selectedReportType}. Reason: ${reason}.`
+    : `A report has been submitted: ${selectedReportType}. Reason: ${reason}.`;
+
+         * details: {
+          message: userRole === 'User Brand' 
+            ? `User Brand has reported: ${selectedReportType}. Reason: ${reason}.` 
+            : `New report submitted: ${selectedReportType}. Reason: ${reason}.`,
+        }, */
+        //const text1=`You reported for section: ${section}. Report Type: ${selectedReportType}. Reason: ${reason}.`
+        //const text2=`A report has been submitted: ${selectedReportType}. Reason: ${reason}.`
+        const text1 = `You, ${userData.name}, reported for section: ${section}. Report Type: ${selectedReportType}. Reason: ${reason}. Additional details: ${details || 'None provided.'}`;
+        const text2=`New report submitted by ${userData.name} for section: ${section}. Report Type: ${selectedReportType}. Reason: ${reason}. Additional details: ${details || 'None provided.'}`
+
+        
+       const response2= await axios.post(`${localhosturl}/notificationroute/createNotifications`, {
           userId,
           publisherId,
           section,
@@ -53,17 +76,30 @@ const ReportModal = ({ section,userId, publisherId, localhosturl }) => {
             reportType: selectedReportType,
             reason: reason,
             details: details,
-        },     
+        },   
+        details: {
+          text1,text2,
+          message: `New report submitted: ${selectedReportType}. Reason: ${reason}. Additional details: ${details || 'None provided.'}`
+        }  ,
+        userStatus: [
+          {
+              userId, 
+              isSeen: false,
+              isBookmarked: false,
+          }
+      ],
            
-          details: {
-          //  message: `New report submitted ${reportType}.`,
+         /* details: {
+          / message: `New report submitted ${reportType}.`,
            message: `New report submitted: ${selectedReportType}. Reason: ${reason}. Additional details: ${details || 'None provided.'}`
-          },
+          },*/
         });
+        console.log("Resport response ",response2.data)
   
         // const { remainingApplications } = response.data; 
         const users = response.data.data  
-        toast.success('Application applied successfully!');
+        toast.success("Report submitted successfully!");
+      //  toast.success('Application applied successfully!');
         setIsFormVisible(false);
 
       }
@@ -102,7 +138,7 @@ const ReportModal = ({ section,userId, publisherId, localhosturl }) => {
     <div>
        {hasReported ? (
         <button 
-          className="bg-gray-500 text-white px-4 py-2 rounded-lg mb-4"
+          className="bg-gray-500 text-white px-4 py-2 rounded-lg mb-4 mt-4"
           disabled
         >
           You have already reported this publisher
@@ -110,7 +146,7 @@ const ReportModal = ({ section,userId, publisherId, localhosturl }) => {
       ) : (
         <button 
           onClick={() => setIsFormVisible(true)}
-          className="bg-red-500 text-white px-4 py-2 rounded-lg mb-4"
+          className="bg-red-500 text-white px-4 py-2 rounded-lg mb-4 mt-4"
         >
           Report
         </button>
@@ -121,8 +157,9 @@ const ReportModal = ({ section,userId, publisherId, localhosturl }) => {
   >
     Report
   </button>*/}
-  {isFormVisible &&  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 h-100">
-      <div className="bg-white rounded-lg p-6 w-80">
+  {isFormVisible &&  <div className="h-100 w-100 fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"//"fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 h-100"
+  >
+      <div className={`${!isDarkTheme?"bg-white":"bg-black"} rounded-lg p-6 `}>
         
           <>
             <h3 className="text-lg font-semibold mb-4">Submit a Report</h3>
