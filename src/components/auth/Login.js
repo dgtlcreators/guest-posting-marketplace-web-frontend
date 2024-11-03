@@ -26,6 +26,12 @@ function Login() {
       .post(`${localhosturl}/user/login`, { email, password })
      
       .then((response) => {
+        const user = response.data.user;
+
+        if (!user.isVerified) {
+          toast.error("Please verify your email to log in.");
+          return;
+        }
         toast.success("Logged in successfully");
         console.log("response.data.user Login ",response.data.user);
         setUserData(response.data.user);

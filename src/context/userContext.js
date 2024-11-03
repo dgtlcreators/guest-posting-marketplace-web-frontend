@@ -39,20 +39,44 @@ import { toast } from "react-toastify";
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
+
   const [userData, setUserData] = useState(() => {
-    // Retrieve user data from localStorage if available
+   
     const storedUser = localStorage.getItem("user");
    
-    return storedUser ? JSON.parse(storedUser) : null;
+    if (storedUser) {
+      try {
+        return JSON.parse(storedUser);
+      } catch (error) {
+        console.error("Failed to parse user data from localStorage", error);
+        return null; 
+      }
+    }
+    return null; 
   });
+ /* const [userData, setUserData] = useState(() => {
+    
+    const storedUser = localStorage.getItem("user");
+console.log("storedUser ",storedUser)
+try {
+  return storedUser ? JSON.parse(storedUser) : null;
+} catch (error) {
+  console.error("Failed to parse user data from localStorage", error);
+  return null;
+}
+   
+   // return storedUser ? JSON.parse(storedUser) : null;
+  });*/
 
 
- //const localhosturl="http://localhost:5000"
+// const localhosturl="http://localhost:5000"
 //const localhosturl="https://guest-posting-marketplace-web-backend.onrender.com"
 const localhosturl="https://guest-posting-marketplace-web-backend-1.onrender.com"
 
 
 const [loading, setLoading] = useState(true);
+
+
   const updateUserData = useCallback(
     (data) => {
       
@@ -88,8 +112,10 @@ const [loading, setLoading] = useState(true);
     }
   }, [userData]);
 
-  const userId = userData?.id;
+  
 
+  const userId = userData?.id;
+  
 
  /* useEffect(() => {
     console.log("checking userData 6 ",userData)
@@ -124,6 +150,11 @@ const [loading, setLoading] = useState(true);
      // const response = await axios.get(`${localhosturl}/notificationroute/getAllNotifications`);
       //console.log(response.data.data)
       setNotifications(response.data.data);
+  //  const userNotifications = response.data.data.filter(notification =>
+   //   notification.userStatus.some(status => status.userId === userData?._id)
+  //  );
+   
+    //setNotifications(userNotifications);
     } catch (error) {
       console.error('Failed to fetch notifications:', error);
     }

@@ -25,7 +25,8 @@ function Signup() {
      .post(`${localhosturl}/user/signup`, { name, email, password })
      
       .then((response) => {
-        toast.success("Signed up successfully")
+        toast.success("Signed up successfully. Please check your email to verify your account.")
+        console.log("signup User ",response.data.user)
         setUserData(response.data.user);
         navigate("/guestpost");
       })

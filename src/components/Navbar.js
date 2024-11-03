@@ -52,7 +52,7 @@ useEffect(() => {
     try {
       const response = await axios.get(`${localhosturl}/notificationroute/getAllNotifications`);
       const userNotifications = response.data.data.filter(notification => 
-        notification.userStatus.some(status => status.userId === userData._id)
+        notification.userStatus.some(status => status.userId === userData?._id)
       );
       setNotifications(userNotifications);
     } catch (error) {
@@ -61,7 +61,7 @@ useEffect(() => {
   };
 
   fetchNotifications();
-}, [localhosturl, userData._id]);
+}, [localhosturl, userData?._id]);
 
 
   const itemsToSearch = [
@@ -117,7 +117,7 @@ useEffect(() => {
   const openProfile = Boolean(anchorElProfile);
 
   const handleViewAllClick = () => {
-    setShowAllNotifications(true);
+    //setShowAllNotifications(true);
   };
 
   const filteredItems = itemsToSearch.filter(item =>
@@ -128,13 +128,31 @@ useEffect(() => {
     //fetchNotifications(localhosturl);
   }, [fetchNotifications, localhosturl]);
 
-  const unseenCount = notifications.filter(notification => 
-    notification.userStatus.some(status => 
-      status.userId.toString() === userData._id.toString() && !status.isSeen
+ 
+
+  const unseenCount1 = notifications.filter(notification =>
+    notification?.userStatus.some(status =>
+        status?.userId.toString() === userData?._id.toString() && !status?.isSeen
     )
-  ).length;
+).length;
 
 
+const unseenCount = notifications.reduce((count, notification) => {
+  const unseenUserStatus = notification?.userStatus.filter(status => 
+      status?.userId.toString() === userData?._id.toString() && !status?.isSeen
+  );
+  
+  return count + unseenUserStatus.length;
+}, 0);
+notifications.forEach(notification => {
+  const userEntries = notification?.userStatus.filter(status => status?.userId=== userData?._id);
+ // console.log("User Entries for Notification: ", userEntries);
+});
+
+
+  
+
+  
   
 
   return (
@@ -244,6 +262,7 @@ useEffect(() => {
             <ViewAllNotifications
               notifications={notifications}
               onClose={handleNotificationClose}
+              isNotificationPage={true}
             />
           ) : (
             <NotificationDropdown onClose={handleNotificationClose} notifications={notifications} onViewAllClick={handleViewAllClick} />

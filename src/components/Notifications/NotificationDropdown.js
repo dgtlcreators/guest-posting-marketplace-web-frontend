@@ -30,9 +30,20 @@ const unseenNotifications = sortedNotifications.filter(n => !n.userStatus.find(s
     onClose()
   };
 
-  const getMessageText = (notification) => {
+  const getMessageText1 = (notification) => {
+    if (!userData || !notification) return '';
+
+
+    const userIdString = userData._id.toString();
+
+   
+   // const isUserInStatus = notification.userStatus.some(status => status.userId.toString() === userIdString);
+
+
+   const userStatus = notification.userStatus.find(status => status.userId === userData._id);
+
    // console.log("userData._id===notification.userId ",userData._id,notification.userId,notification,userData._id===notification.userId)
-    if (userData?.role === 'Brand User' || userData?.role === 'User' || userData._id===notification.userId) {
+    if (userData?.role === 'Brand User' || userData?.role === 'User' || isUserInStatus) {
       return notification.details.text1
      // return `User Brand notification: ${notification.details.message}`;
     } else if (userData?.role === 'Admin' || userData?.role === 'Super Admin') {
@@ -41,7 +52,18 @@ const unseenNotifications = sortedNotifications.filter(n => !n.userStatus.find(s
     }
     return notification.details.message; 
   };
-
+  const getMessageText = (notification) => {
+    const userStatus = notification.userStatus.find(status => status.userId === userData._id);
+    
+    if (userStatus) {
+      if (userData?.role === 'Brand User' || userData?.role === 'User' || userData._id === notification.userId) {
+        return notification.details.text1;
+      } else if (userData?.role === 'Admin' || userData?.role === 'Super Admin') {
+        return notification.details.text2;
+      }
+    }
+    return notification.details.message;
+  };
 
   return (
     <div>
