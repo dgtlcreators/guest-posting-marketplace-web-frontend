@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import NewContentWriterTable from "./NewContentWriterTable";
 import { useTheme } from "../../context/ThemeProvider";
 import { UserContext } from "../../context/userContext";
+import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 
 const NewContentWriter = () => {
@@ -19,7 +20,12 @@ const NewContentWriter = () => {
     name: "",
     bio: "",
     email: "",
-    location: "",
+   // location: "",
+   location: {
+    country: "",
+    state: "",
+    city: ""
+  },
     wordCount: '',
     gender: 'Prefer not to say',
     experience: 0,
@@ -327,7 +333,12 @@ const NewContentWriter = () => {
       name: "",
       bio: "",
       email: "",
-      location: "",
+     // location: "",
+     location: {
+      country: "",
+      state: "",
+      city: ""
+    },
 
       experience: 0,
       expertise: [{ type: "", other: "" }],
@@ -341,6 +352,11 @@ const NewContentWriter = () => {
     });
 
   }
+
+
+  const handleLocationSelect = (location) => {
+    setFormData((prev) => ({ ...prev, location }));
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -380,7 +396,8 @@ const NewContentWriter = () => {
               required
             />
           </div>
-          <div className="block">
+          <LocationSelector onSelectLocation={handleLocationSelect} />
+         {/* <div className="block">
             <label className="text-gray-700">Location</label>
             <input
               type="text"
@@ -391,7 +408,7 @@ const NewContentWriter = () => {
               required
 
             />
-          </div>
+          </div>*/}
 
           <div className="block">
             <label className="text-gray-700">Experience</label>

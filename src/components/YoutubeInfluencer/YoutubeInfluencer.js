@@ -6,14 +6,15 @@ import { toast } from 'react-toastify';
 import YoutubeInfluencerTable from "./YoutubeInfluencerTable"
 import SaveSearch from "../OtherComponents/SaveSearch.js";
 import { useLocation } from 'react-router-dom';
+import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 const YoutubeInfluencer = () => {
   const { isDarkTheme } = useTheme();
-  const { userData,localhosturl } = useContext(UserContext);
+  const { userData, localhosturl } = useContext(UserContext);
   const userId = userData?._id;
   const initialFormData = {
     username: "",
-    fullname:"",
+    fullname: "",
     followersCountFrom: "",
     followersCountTo: "",
     videosCountFrom: "",
@@ -23,7 +24,12 @@ const YoutubeInfluencer = () => {
     averageViewsFrom: "",
     averageViewsTo: "",
     category: "",
-    location: "",
+    // location: "",
+    location: {
+      country: "",
+      state: "",
+      city: ""
+    },
     language: "",
     collaborationRates: {
       sponsoredVideosFrom: "",
@@ -50,14 +56,14 @@ const YoutubeInfluencer = () => {
   useEffect(() => {
     fetchInfluencers();
   })
-  
+
   const fetchInfluencers = async () => {
     try {
-      
+
       const response = await axios.get(`${localhosturl}/youtubeinfluencers/getAllYoutubeInfluencer`);
-     
-  
-    //  setInfluencers(response.data.data);
+
+
+      //  setInfluencers(response.data.data);
     } catch (error) {
       console.error("Error fetching influencers", error);
     }
@@ -84,7 +90,7 @@ const YoutubeInfluencer = () => {
       setLocationResults([]);
     }
   };
-  const handleLocationSelect = (location) => {
+  const handleLocationSelect1 = (location) => {
     setFormData((prev) => ({
       ...prev,
       location: location.display_name,
@@ -96,7 +102,7 @@ const YoutubeInfluencer = () => {
   const handleReset = () => {
     setFormData(initialFormData);
   };
-  const handleChange=(e)=>{
+  const handleChange = (e) => {
     const { name, value } = e.target;
     const nameArray = name.split('.');
 
@@ -125,9 +131,9 @@ const YoutubeInfluencer = () => {
       },
     }));
   };
-  
 
-  const pastactivitiesAdd=async(users)=>{
+
+  const pastactivitiesAdd = async (users) => {
     const description = [
       formData.username ? `Username: ${formData.username}` : '',
       formData.fullname ? `Fullname: ${formData.fullname}` : '',
@@ -147,52 +153,52 @@ const YoutubeInfluencer = () => {
       formData.audienceDemographics.geographicDistribution ? `Geographic Distribution: ${formData.audienceDemographics.geographicDistribution}` : '',
       `Total results: ${users.length}`
     ]
-    .filter(Boolean)
-    .join(', ');
-  
-   // const shortDescription = `You searched Followers Count from ${formData.followersCountFrom || 'N/A'} to ${formData.followersCountTo || 'N/A'}, Engagement Rate from ${formData.engagementRateFrom || 'N/A'} to ${formData.engagementRateTo || 'N/A'}, Average Views from ${formData.averageViewsFrom || 'N/A'} to ${formData.averageViewsTo || 'N/A'}, and got ${users.length} results`;
-   const shortDescription=`You searched ${formData.followersCountFrom ? 'Followers Count' : 'Engagement Rate'} from ${formData.followersCountFrom || formData.engagementRateFrom} to ${formData.followersCountTo || formData.engagementRateTo} and got ${users.length} results`;
-   try {
-    const activityData={
-      userId:userData?._id,
-      action:"Performed a search for YouTube Influencer",//"Searched for Instagram Influencers",
-      section:"YouTube Influencer",
-      role:userData?.role,
-      timestamp:new Date(),
-      details:{
-        type:"filter",
-        filter:{formData,total:users.length},
-        description,
-        shortDescription
-        
+      .filter(Boolean)
+      .join(', ');
 
+    // const shortDescription = `You searched Followers Count from ${formData.followersCountFrom || 'N/A'} to ${formData.followersCountTo || 'N/A'}, Engagement Rate from ${formData.engagementRateFrom || 'N/A'} to ${formData.engagementRateTo || 'N/A'}, Average Views from ${formData.averageViewsFrom || 'N/A'} to ${formData.averageViewsTo || 'N/A'}, and got ${users.length} results`;
+    const shortDescription = `You searched ${formData.followersCountFrom ? 'Followers Count' : 'Engagement Rate'} from ${formData.followersCountFrom || formData.engagementRateFrom} to ${formData.followersCountTo || formData.engagementRateTo} and got ${users.length} results`;
+    try {
+      const activityData = {
+        userId: userData?._id,
+        action: "Performed a search for YouTube Influencer",//"Searched for Instagram Influencers",
+        section: "YouTube Influencer",
+        role: userData?.role,
+        timestamp: new Date(),
+        details: {
+          type: "filter",
+          filter: { formData, total: users.length },
+          description,
+          shortDescription
+
+
+        }
       }
+
+
+      axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
+    } catch (error) {
+      console.log(error);
+
     }
-    
-   
-    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
-   } catch (error) {
-    console.log(error);
-    
-   }
   }
 
   axios.defaults.withCredentials = true;
 
-  const handleSubmit =async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await  axios
-       //.post("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/youtubeInfluencesFilter", formData)
+      const response = await axios
+        //.post("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/youtubeInfluencesFilter", formData)
         .post(`${localhosturl}/youtubeinfluencers/youtubeInfluencesFilter`, formData)
-        // console.log(response.data.data);
-        console.log(response.data.data)
-        setInfluencers(response.data.data);
-        pastactivitiesAdd(response.data.data);
-        toast.success("Data Fetch Successfully");
+      // console.log(response.data.data);
+      console.log(response.data.data)
+      setInfluencers(response.data.data);
+      pastactivitiesAdd(response.data.data);
+      toast.success("Data Fetch Successfully");
     } catch (error) {
       console.log(error);
-        toast.error(error.message);
+      toast.error(error.message);
     }
   }
 
@@ -219,47 +225,52 @@ const YoutubeInfluencer = () => {
   useEffect(() => {
     if (location?.state?.formData) {
       const formData = location.state.formData;
-     
-      const flattenedFormData = formData["0"] || formData; 
+
+      const flattenedFormData = formData["0"] || formData;
       console.log("Flattened FormData", flattenedFormData);
-  
+
       setFormData(prevState => ({
         ...initialFormData,
         ...flattenedFormData
       }));
       fetchUsers(formData)
-      location.state.formData = null; 
+      location.state.formData = null;
     }
   }, [location?.state?.formData]);
-  
-const fetchUsers=async(formData)=>{
-  try {
-    const response = await axios.post(
-      `${localhosturl}/youtubeinfluencers/youtubeInfluencesFilter`
-     
-      , formData);
-    console.log("Fetched data:", response.data.data);
-    setInfluencers(response.data.data);
 
-   
-    if (!toastShown) {
-      toast.success("Saved Data Fetch Successfully");
-      setToastShown(true); 
+  const fetchUsers = async (formData) => {
+    try {
+      const response = await axios.post(
+        `${localhosturl}/youtubeinfluencers/youtubeInfluencesFilter`
+
+        , formData);
+      console.log("Fetched data:", response.data.data);
+      setInfluencers(response.data.data);
+
+
+      if (!toastShown) {
+        toast.success("Saved Data Fetch Successfully");
+        setToastShown(true);
+      }
+      // toast.success("Saved Data Fetch Successfully");
+    } catch (error) {
+      console.log("Error fetching data:", error);
+      toast.error(error.message);
     }
-   // toast.success("Saved Data Fetch Successfully");
-  } catch (error) {
-    console.log("Error fetching data:", error);
-    toast.error(error.message);
   }
-}
+
+  const handleLocationSelect = (location) => {
+    setFormData((prev) => ({ ...prev, location }));
+  };
+
 
   return (
     <div className='p-4 max-w-6xl mx-auto overflow-x-auto'>
       <h2 className='text-2xl  p-2'// text-white bg-blue-700
       >FAQ</h2>
       <form onSubmit={handleSubmit} className="bg-gray-200 shadow-xl p-4 relative">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {/*<div className="flex flex-col">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {/*<div className="flex flex-col">
           <label htmlFor="username">Username</label>
           <input
             type="text"
@@ -270,107 +281,107 @@ const fetchUsers=async(formData)=>{
             className="focus:outline focus:outline-blue-400 p-2"
           />
         </div>*/}
-        <div className="flex flex-col">
-          <label htmlFor="fullname">Fullname</label>
-          <input
-            type="text"
-            id="fullname"
-            name="fullname"
-            value={formData.fullname}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="followersCountFrom">Followers Count From</label>
-          <input
-            type="number"
-            id="followersCountFrom"
-            name="followersCountFrom"
-            value={formData.followersCountFrom}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="followersCountTo">Followers Count To</label>
-          <input
-            type="number"
-            id="followersCountTo"
-            name="followersCountTo"
-            value={formData.followersCountTo}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="videosCountFrom">Videos Count From</label>
-          <input
-            type="number"
-            id="videosCountFrom"
-            name="videosCountFrom"
-            value={formData.videosCountFrom}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="videosCountTo">Videos Count To</label>
-          <input
-            type="number"
-            id="videosCountTo"
-            name="videosCountTo"
-            value={formData.videosCountTo}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="engagementRateFrom">Engagement Rate From</label>
-          <input
-            type="number"
-            id="engagementRateFrom"
-            name="engagementRateFrom"
-            value={formData.engagementRateFrom}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="engagementRateTo">Engagement Rate To</label>
-          <input
-            type="number"
-            id="engagementRateTo"
-            name="engagementRateTo"
-            value={formData.engagementRateTo}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="averageViewsFrom">Average Views From</label>
-          <input
-            type="number"
-            id="averageViewsFrom"
-            name="averageViewsFrom"
-            value={formData.averageViewsFrom}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="averageViewsTo">Average Views To</label>
-          <input
-            type="number"
-            id="averageViewsTo"
-            name="averageViewsTo"
-            value={formData.averageViewsTo}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="category">Category</label>
+          <div className="flex flex-col">
+            <label htmlFor="fullname">Fullname</label>
+            <input
+              type="text"
+              id="fullname"
+              name="fullname"
+              value={formData.fullname}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="followersCountFrom">Followers Count From</label>
+            <input
+              type="number"
+              id="followersCountFrom"
+              name="followersCountFrom"
+              value={formData.followersCountFrom}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="followersCountTo">Followers Count To</label>
+            <input
+              type="number"
+              id="followersCountTo"
+              name="followersCountTo"
+              value={formData.followersCountTo}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="videosCountFrom">Videos Count From</label>
+            <input
+              type="number"
+              id="videosCountFrom"
+              name="videosCountFrom"
+              value={formData.videosCountFrom}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="videosCountTo">Videos Count To</label>
+            <input
+              type="number"
+              id="videosCountTo"
+              name="videosCountTo"
+              value={formData.videosCountTo}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="engagementRateFrom">Engagement Rate From</label>
+            <input
+              type="number"
+              id="engagementRateFrom"
+              name="engagementRateFrom"
+              value={formData.engagementRateFrom}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="engagementRateTo">Engagement Rate To</label>
+            <input
+              type="number"
+              id="engagementRateTo"
+              name="engagementRateTo"
+              value={formData.engagementRateTo}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="averageViewsFrom">Average Views From</label>
+            <input
+              type="number"
+              id="averageViewsFrom"
+              name="averageViewsFrom"
+              value={formData.averageViewsFrom}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="averageViewsTo">Average Views To</label>
+            <input
+              type="number"
+              id="averageViewsTo"
+              name="averageViewsTo"
+              value={formData.averageViewsTo}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="category">Category</label>
             <select
               id="category"
               name="category"
@@ -379,31 +390,32 @@ const fetchUsers=async(formData)=>{
               className="focus:outline focus:outline-blue-400 cursor-pointer p-2"
             >
               <option value="All">All</option>
-             <option value="Technology">Technology</option>
-               <option value="Beauty and Fashion">Beauty and Fashion</option>
-               <option value="Gaming">Gaming</option>
-               <option value="Health and Fitness">Health and Fitness</option>
-               <option value="Food and Cooking">Food and Cooking</option>
-               <option value="Travel and Adventure">Travel and Adventure</option>
-               <option value="Lifestyle">Lifestyle</option>
-               <option value="Education">Education</option>
-               <option value="Entertainment and Comedy">Entertainment and Comedy</option>
-               <option value="Music and Dance">Music and Dance</option>
-               <option value="Parenting and Family">Parenting and Family</option>
-               <option value="Finance and Business">Finance and Business</option>
-               <option value="DIY and Crafting">DIY and Crafting</option>
-               <option value="Sports and Outdoors">Sports and Outdoors</option>
-               <option value="Automotive">Automotive</option>
-               <option value="Pet Care and Animals">Pet Care and Animals</option>
-               <option value="Photography and Videography">Photography and Videography</option>
-               <option value="Home and Garden">Home and Garden</option>
-               <option value="Art and Design">Art and Design</option>
-               <option value="Books and Literature">Books and Literature</option>
-               <option value="Mental Health and Self-Care">Mental Health and Self-Care</option>
-               <option value="History and Culture">History and Culture</option>
+              <option value="Technology">Technology</option>
+              <option value="Beauty and Fashion">Beauty and Fashion</option>
+              <option value="Gaming">Gaming</option>
+              <option value="Health and Fitness">Health and Fitness</option>
+              <option value="Food and Cooking">Food and Cooking</option>
+              <option value="Travel and Adventure">Travel and Adventure</option>
+              <option value="Lifestyle">Lifestyle</option>
+              <option value="Education">Education</option>
+              <option value="Entertainment and Comedy">Entertainment and Comedy</option>
+              <option value="Music and Dance">Music and Dance</option>
+              <option value="Parenting and Family">Parenting and Family</option>
+              <option value="Finance and Business">Finance and Business</option>
+              <option value="DIY and Crafting">DIY and Crafting</option>
+              <option value="Sports and Outdoors">Sports and Outdoors</option>
+              <option value="Automotive">Automotive</option>
+              <option value="Pet Care and Animals">Pet Care and Animals</option>
+              <option value="Photography and Videography">Photography and Videography</option>
+              <option value="Home and Garden">Home and Garden</option>
+              <option value="Art and Design">Art and Design</option>
+              <option value="Books and Literature">Books and Literature</option>
+              <option value="Mental Health and Self-Care">Mental Health and Self-Care</option>
+              <option value="History and Culture">History and Culture</option>
             </select>
-        </div>
-        <div className="flex flex-col">
+          </div>
+          <LocationSelector onSelectLocation={handleLocationSelect} />
+          {/* <div className="flex flex-col">
             <label htmlFor="location">Location</label>
             <input
               type="text"
@@ -413,7 +425,7 @@ const fetchUsers=async(formData)=>{
               onChange={handleLocationChange}
               className="focus:outline focus:outline-blue-400 p-2"
             />
-             {locationResults.length > 0 && (
+            {locationResults.length > 0 && (
               <ul className="mt-2 border border-gray-300 rounded w-full bg-white max-h-40 overflow-auto">
                 {locationResults.map((location) => (
                   <li
@@ -426,9 +438,9 @@ const fetchUsers=async(formData)=>{
                 ))}
               </ul>
             )}
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="language">Language</label>
+          </div>*/}
+          <div className="flex flex-col">
+            <label htmlFor="language">Language</label>
             <select
               id="language"
               name="language"
@@ -436,7 +448,7 @@ const fetchUsers=async(formData)=>{
               onChange={handleChange}
               className="focus:outline focus:outline-blue-400 cursor-pointer p-2"
             >
-               <option value="All">All</option>
+              <option value="All">All</option>
               <option value="English">English</option>
               <option value="Hindi">Hindi</option>
               <option value="Punjabi">Punjabi</option>
@@ -450,74 +462,74 @@ const fetchUsers=async(formData)=>{
               <option value="Kannada">Kannada</option>
               <option value="Other">Other</option>
             </select>
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="collaborationRates.sponsoredVideosFrom">Collaboration Rates for sponsored Videos (From)</label>
-          <input
-            type="number"
-            id="collaborationRates.sponsoredVideosFrom"
-            name="collaborationRates.sponsoredVideosFrom"
-            value={formData.collaborationRates.sponsoredVideosFrom}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="collaborationRates.sponsoredVideosTo">Collaboration Rates for sponsored Videos (To)</label>
-          <input
-            type="number"
-            id="collaborationRates.sponsoredVideosTo"
-            name="collaborationRates.sponsoredVideosTo"
-            value={formData.collaborationRates.sponsoredVideosTo}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="collaborationRates.productReviewsFrom">Collaboration Rates for product Reviews (From)</label>
-          <input
-            type="number"
-            id="collaborationRates.productReviewsFrom"
-            name="collaborationRates.productReviewsFrom"
-            value={formData.collaborationRates.productReviewsFrom}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="collaborationRates.productReviewsTo">Collaboration Rates for product Reviews (To)</label>
-          <input
-            type="number"
-            id="collaborationRates.productReviewsTo"
-            name="collaborationRates.productReviewsTo"
-            value={formData.collaborationRates.productReviewsTo}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="collaborationRates.shoutoutsFrom">Collaboration Rates for shoutouts (From)</label>
-          <input
-            type="number"
-            id="collaborationRates.shoutoutsFrom"
-            name="collaborationRates.shoutoutsFrom"
-            value={formData.collaborationRates.shoutoutsFrom}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="collaborationRates.shoutoutsTo">Collaboration Rates for shoutouts (To)</label>
-          <input
-            type="number"
-            id="collaborationRates.shoutoutsTo"
-            name="collaborationRates.shoutoutsTo"
-            value={formData.collaborationRates.shoutoutsTo}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        {/*<div className="flex flex-col">
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRates.sponsoredVideosFrom">Collaboration Rates for sponsored Videos (From)</label>
+            <input
+              type="number"
+              id="collaborationRates.sponsoredVideosFrom"
+              name="collaborationRates.sponsoredVideosFrom"
+              value={formData.collaborationRates.sponsoredVideosFrom}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRates.sponsoredVideosTo">Collaboration Rates for sponsored Videos (To)</label>
+            <input
+              type="number"
+              id="collaborationRates.sponsoredVideosTo"
+              name="collaborationRates.sponsoredVideosTo"
+              value={formData.collaborationRates.sponsoredVideosTo}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRates.productReviewsFrom">Collaboration Rates for product Reviews (From)</label>
+            <input
+              type="number"
+              id="collaborationRates.productReviewsFrom"
+              name="collaborationRates.productReviewsFrom"
+              value={formData.collaborationRates.productReviewsFrom}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRates.productReviewsTo">Collaboration Rates for product Reviews (To)</label>
+            <input
+              type="number"
+              id="collaborationRates.productReviewsTo"
+              name="collaborationRates.productReviewsTo"
+              value={formData.collaborationRates.productReviewsTo}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRates.shoutoutsFrom">Collaboration Rates for shoutouts (From)</label>
+            <input
+              type="number"
+              id="collaborationRates.shoutoutsFrom"
+              name="collaborationRates.shoutoutsFrom"
+              value={formData.collaborationRates.shoutoutsFrom}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="collaborationRates.shoutoutsTo">Collaboration Rates for shoutouts (To)</label>
+            <input
+              type="number"
+              id="collaborationRates.shoutoutsTo"
+              name="collaborationRates.shoutoutsTo"
+              value={formData.collaborationRates.shoutoutsTo}
+              onChange={handleChange}
+              className="focus:outline focus:outline-blue-400 p-2"
+            />
+          </div>
+          {/*<div className="flex flex-col">
           <label htmlFor="pastCollaborations">Past Collaborations</label>
           <textarea
             
@@ -561,9 +573,9 @@ const fetchUsers=async(formData)=>{
             className="focus:outline focus:outline-blue-400 p-2"
           />
         </div>*/}
-      </div>
-      <div className="flex items-center justify-end space-x-2 mt-3">       
-           <SaveSearch section="YoutubeInfluencer"formDataList={formData}/>
+        </div>
+        <div className="flex items-center justify-end space-x-2 mt-3">
+          <SaveSearch section="YoutubeInfluencer" formDataList={formData} />
           <button
             type="reset"
             onClick={handleReset}
@@ -572,11 +584,11 @@ const fetchUsers=async(formData)=>{
             Reset
           </button>
           <button
-           disabled={!userData.permissions.youtube.filter}
-           title={!userData.permissions.youtube.filter
-             ? "You are not allowed to access this feature"
-             : undefined  // : ""
-           }
+            disabled={!userData.permissions.youtube.filter}
+            title={!userData.permissions.youtube.filter
+              ? "You are not allowed to access this feature"
+              : undefined  // : ""
+            }
             type="submit"
             className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
           >
@@ -584,18 +596,18 @@ const fetchUsers=async(formData)=>{
           </button>
         </div>
       </form>
-     
-        <div className="mt-4">
-          <h2 className="text-xl p-2 my-2"// text-white bg-blue-700 
-          >
+
+      <div className="mt-4">
+        <h2 className="text-xl p-2 my-2"// text-white bg-blue-700 
+        >
           Influencer List
-          </h2>
-          
-          <YoutubeInfluencerTable influencers={influencers} setInfluencers={setInfluencers} />
-        
-        </div>
-        
-      
+        </h2>
+
+        <YoutubeInfluencerTable influencers={influencers} setInfluencers={setInfluencers} />
+
+      </div>
+
+
     </div>
 
   )

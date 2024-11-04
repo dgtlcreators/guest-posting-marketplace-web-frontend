@@ -6,6 +6,7 @@ import { UserContext } from "../../context/userContext.js";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeProvider.js";
 import SaveSearch from "../OtherComponents/SaveSearch.js";
+import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 
 
@@ -24,7 +25,12 @@ const InstagramInfluencer = () => {
     engagementRateFrom: "",
     engagementRateTo: "",
     category: "",
-    location: "",
+   // location: "",
+   location: {
+    country: "",
+    state: "",
+    city: ""
+  },
     language: "",
     verifiedStatus: "",
     collaborationRates: {
@@ -48,6 +54,7 @@ const InstagramInfluencer = () => {
 
   const [locationQuery, setLocationQuery] = useState("");
   const [locationResults, setLocationResults] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState('');
 
 
   const handleChange = (e) => {
@@ -92,7 +99,7 @@ const InstagramInfluencer = () => {
       setLocationResults([]);
     }
   };
-  const handleLocationSelect = (location) => {
+  const handleLocationSelect1 = (location) => {
     setFormData((prev) => ({
       ...prev,
       location: location.display_name,
@@ -110,6 +117,15 @@ const InstagramInfluencer = () => {
    // fetchBookmarkedInfluencers();
    // fetchRecentActivities();
   }, []);
+
+ /* const handleLocationSelect = (location) => {
+    setSelectedLocation(location);
+    console.log("Selected Location:", location);
+  };*/
+
+  const handleLocationSelect = (location) => {
+    setFormData((prev) => ({ ...prev, location }));
+  };
 
   const fetchInfluencers = async () => {
     try {
@@ -484,7 +500,9 @@ const fetchUsers=async(formData)=>{
             </select>
           </div>
 
-          {/* Location */}
+          <LocationSelector onSelectLocation={handleLocationSelect} />
+
+          {/* Location 
           <div className="flex flex-col">
            {/* <label htmlFor="location">Location</label>
             <input
@@ -494,7 +512,7 @@ const fetchUsers=async(formData)=>{
               value={formData.location}
               onChange={handleChange}
               className="focus:outline focus:outline-blue-400 p-2"
-            />*/}
+            />
             <label htmlFor="location">Location</label>
            
             <input
@@ -518,7 +536,7 @@ const fetchUsers=async(formData)=>{
                 ))}
               </ul>
             )}
-          </div>
+          </div>*/}
 
           {/* Language */}
           <div className="flex flex-col">
@@ -847,7 +865,7 @@ const fetchUsers=async(formData)=>{
         >
           Instagram Influencer List
           </h2>
-          <InstagramInfluencerTable influencers={influencers} setInfluencers={setInfluencers} />
+         <InstagramInfluencerTable influencers={influencers} setInfluencers={setInfluencers} />
         </div>
       //)
       }

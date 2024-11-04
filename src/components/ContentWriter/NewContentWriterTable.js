@@ -80,7 +80,7 @@ const NewContentWriterTable = () => {
       { key: 'Bio', value: users?.bio },
       { key: 'Experience', value: users?.experience },
       { key: 'Expertise', value: users?.expertise.map(exp => `${exp.type} ${exp.other ? ' (Other: ' + exp.other + ')' : ''}`).join(', ') },
-      { key: 'Location', value: users?.location },
+      { key: 'Location', value: JSON.stringify(users?.location) },
       { key: 'Languages', value: users?.languages.map(lang => `${lang.name} ${lang.other ? ' (Other: ' + lang.other + ')' : ''} - Proficiency: ${lang.proficiency}`).join(', ') },
       { key: 'Collaboration Rates (Post)', value: users?.collaborationRates.post },
       { key: 'Collaboration Rates (Story)', value: users?.collaborationRates.story },
@@ -166,7 +166,7 @@ const NewContentWriterTable = () => {
       Email: user.email,
       Experience: user.experience,
       expertise: user.expertise,
-      Location: user.location,
+      Location: JSON.stringify(user.location),
       Gender:user?.gender || "",
       WordCount:user?.wordCount || "",
 
@@ -309,7 +309,7 @@ const NewContentWriterTable = () => {
                   <td className="border px-4 py-2">{writer.email}</td>
                   <td className="border px-4 py-2">{writer.gender}</td>
                   <td className="border px-4 py-2">{writer.wordCount}</td>
-                  <td className="border px-4 py-2">{writer.location}</td>
+                  <td className="border px-4 py-2">{JSON.stringify(writer.location)}</td>
                   <td className="border px-4 py-2">{writer.experience}</td>
                  
                   <td className="border px-4 py-2">

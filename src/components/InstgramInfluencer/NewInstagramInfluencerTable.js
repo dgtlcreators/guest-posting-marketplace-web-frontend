@@ -95,7 +95,7 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
       { key: 'Engagement Rate', value: `${formData?.engagementRate}%` },
       { key: 'Average Views', value: formData?.averageViews },
       { key: 'Category', value: formData?.category },
-      { key: 'Location', value: formData?.location },
+      { key: 'Location', value: JSON.stringify(formData?.location) },
       { key: 'Language', value: formData?.language },
       { key: 'Collaboration Rates (Sponsored Videos)', value: formData?.collaborationRates?.sponsoredVideos },
       { key: 'Collaboration Rates (Product Reviews)', value: formData?.collaborationRates?.productReviews },
@@ -217,7 +217,7 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
       AverageLikes: user.averageLikes,
       AverageComments: user.averageComments,
       Category: user.category,
-      Location: user.location,
+      Location: JSON.stringify(user.location),
       Language: user.language,
       VerifiedStatus: user.verifiedStatus,
       CollaborationRates: `Post: ${user.collaborationRates.post || 0}, Story: ${user.collaborationRates.story || 0}, Reel: ${user.collaborationRates.reel || 0}`,
@@ -375,7 +375,7 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
                   <td className="border px-4 py-2">{influencer.averageLikes}</td>
                   <td className="border px-4 py-2">{influencer.averageComments}</td>
                   <td className="border px-4 py-2">{influencer.category}</td>
-                  <td className="border px-4 py-2">{influencer.location}</td>
+                  <td className="border px-4 py-2">{JSON.stringify(influencer.location)}</td>
                   <td className="border px-4 py-2">{influencer.language}</td>
                   <td className="border px-4 py-2">{influencer.verifiedStatus ? 'Verified' : 'Not Verified'}</td>
 

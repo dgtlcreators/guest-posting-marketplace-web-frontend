@@ -118,7 +118,7 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
       Email: user.email,
       Experience: user.experience,
       
-      Location: user.location,
+      Location: JSON.stringify(user.location),
       Industry: user.industry,
       Expertise: user.expertise,
       Language: user.language,
@@ -240,7 +240,7 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
                   <td className="border px-4 py-2">{writer.experience}</td>
                   <td className="border px-4 py-2">{writer.email}</td>
                   {/* <td className="border px-4 py-2">{writer.bio}</td>*/}
-                  <td className="border px-4 py-2">{writer.location}</td>
+                  <td className="border px-4 py-2">{JSON.stringify(writer.location)}</td>
                   <td className="border px-4 py-2">
                     <ul className="list-disc pl-5">
                       {writer.industry.map((industries, idx) => (

@@ -255,12 +255,12 @@ const SuperAdminTable = ({users,setUsers}) => {
                     >
                         Clear Filter
                     </button>
-                    <button
+                    {/*<button
                         onClick={exportDataToCSV}
                         className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105"
                     >
                         Export Data
-                    </button>
+                    </button>*/}
                 </div>
             </div>
             <div className="overflow-x-auto  p-4 rounded-lg shadow-md">

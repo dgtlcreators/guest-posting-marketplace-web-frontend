@@ -4,6 +4,7 @@ import NewInstagramInfluencerTable from "./NewInstagramInfluencerTable";
 import { toast } from "react-toastify";
 import { useTheme } from "../../context/ThemeProvider";
 import { UserContext } from "../../context/userContext";
+import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 
 const NewInstagramInfluencer = () => {
@@ -22,7 +23,12 @@ const NewInstagramInfluencer = () => {
     averageLikes: 0,
     averageComments: 0,
     category: "",
-    location: "",
+    //location: "",
+     location: {
+    country: "",
+    state: "",
+    city: ""
+  },
     language: "",
     verifiedStatus: false,
     collaborationRates: { post: 0, story: 0, reel: 0 },
@@ -87,7 +93,7 @@ const NewInstagramInfluencer = () => {
       setLocationResults([]);
     }
   };
-  const handleLocationSelect = (location) => {
+  const handleLocationSelect1 = (location) => {
     setFormData((prev) => ({
       ...prev,
       location: location.display_name,
@@ -340,7 +346,12 @@ const NewInstagramInfluencer = () => {
       averageLikes: 0,
       averageComments: 0,
       category: "",
-      location: "",
+     // location: "",
+     location: {
+      country: "",
+      state: "",
+      city: ""
+    },
       language: "",
       verifiedStatus: false,
       collaborationRates: { post: 0, story: 0, reel: 0 },
@@ -349,6 +360,10 @@ const NewInstagramInfluencer = () => {
     });
     setLocationQuery("")
   }
+
+  const handleLocationSelect = (location) => {
+    setFormData((prev) => ({ ...prev, location }));
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -541,7 +556,8 @@ const NewInstagramInfluencer = () => {
               className="p-2 border border-gray-300 rounded w-full"
             />
           </label>*/}
-          <div className="block">
+           {/*  <LocationSelector onSelectLocation={handleLocationSelect} />
+        <div className="block">
             <label className="text-gray-700">Location</label>
             <input
               type="text"
@@ -565,7 +581,7 @@ const NewInstagramInfluencer = () => {
                 ))}
               </ul>
             )}
-          </div>
+          </div>*/}
           <div className="block">
             <label className="text-gray-700">Language</label>
             <select
@@ -720,7 +736,7 @@ const NewInstagramInfluencer = () => {
       >
         Instagram Influencer List
       </h2>
-      <NewInstagramInfluencerTable key={refreshKey} addInfluencer={addInfluencer}/>
+    <NewInstagramInfluencerTable key={refreshKey} addInfluencer={addInfluencer}/>
     </div>
   );
 };

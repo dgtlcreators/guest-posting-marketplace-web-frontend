@@ -28,7 +28,7 @@ function Login() {
       .then((response) => {
         const user = response.data.user;
 
-        if (!user.isVerified) {
+       if (!user.isVerified) {
           toast.error("Please verify your email to log in.");
           return;
         }

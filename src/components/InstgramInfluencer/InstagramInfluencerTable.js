@@ -78,7 +78,7 @@ const InstagramInfluencerTable = ({ influencers, setInfluencers }) => {
       FollowersCount: user.followersCount,
       EngagementRate: user.engagementRate,
       Category: user.category,
-      Location: user.location,
+      Location: JSON.stringify(user.location),
       Language: user.language,
       VerifiedStatus: user.verifiedStatus,
       CollaborationRates: `Post: ${user.collaborationRates.post || 0}, Story: ${user.collaborationRates.story || 0}, Reel: ${user.collaborationRates.reel || 0}`,
@@ -234,7 +234,7 @@ const InstagramInfluencerTable = ({ influencers, setInfluencers }) => {
                     {/*<td className="border px-4 py-2">{influencer.averageLikes}</td>
                 <td className="border px-4 py-2">{influencer.averageComments}</td>*/}
                     <td className="border px-4 py-2">{influencer.category}</td>
-                    <td className="border px-4 py-2">{influencer.location}</td>
+                    <td className="border px-4 py-2">{JSON.stringify(influencer.location)}</td>
                     <td className="border px-4 py-2">{influencer.language}</td>
                     <td className="border px-4 py-2">{influencer.verifiedStatus ? 'Verified' : 'Not Verified'}</td>
 

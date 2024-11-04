@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeProvider';
 import { UserContext } from '../../context/userContext';
+import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 
 const EditContentWriter = () => {
@@ -18,7 +19,12 @@ const EditContentWriter = () => {
     experience: 0,
     wordCount: '',
     gender: 'Prefer not to say',
-    location: "",
+    //location: "",
+    location: {
+      country: "",
+      state: "",
+      city: ""
+    },
     expertise: [{ type: "", other: "" }],
     languages: [{ name: "", other: "", proficiency: "" }],
     collaborationRates: { post: 0, story: 0, reel: 0 },
@@ -390,6 +396,10 @@ const generateShortDescription = (formData, users) => {
     }
   };
 
+  const handleLocationSelect = (location) => {
+    setFormData((prev) => ({ ...prev, location }));
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl p-2">Update Content Writer</h1>
@@ -406,7 +416,8 @@ const generateShortDescription = (formData, users) => {
               required
             />
           </label>
-          <label className="block">
+          <LocationSelector onSelectLocation={handleLocationSelect} />
+          {/*<label className="block">
             <span className="text-gray-700">Email</span>
             <input
               type="email"
@@ -416,7 +427,7 @@ const generateShortDescription = (formData, users) => {
               className="p-2 border border-gray-300 rounded w-full"
               required
             />
-          </label>
+          </label>*/}
           <label className="block">
             <span className="text-gray-700">Bio</span>
             <textarea

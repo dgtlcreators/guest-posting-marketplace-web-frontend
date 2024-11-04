@@ -177,7 +177,7 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
       { key: 'Average Likes', value: users.averageLikes },
       { key: 'Average Comments', value: users.averageComments },
       { key: 'Category', value: users.category },
-      { key: 'Location', value: users.location },
+      { key: 'Location', value: JSON.stringify(users.location) },
       { key: 'Language', value: users.language },
       { key: 'Verified Status', value: users.verifiedStatus ? 'Verified' : 'Not Verified' },
       { key: 'Collaboration Rates (Post)', value: users.collaborationRates.post },
@@ -272,7 +272,7 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
   EngagementRate: user.engagementRate,
   AverageViews:user.averageViews,
   Category:user.category,
-  Location:user.location,
+  Location:JSON.stringify(user.location),
   Language:user.language,
  
   CollaborationRates:  `Sponsored Videos: ${user.collaborationRates.sponsoredVideos || 0}, Product Reviews: ${user.collaborationRates.productReviews || 0}, Shoutouts: ${user.collaborationRates.shoutouts || 0}`,//user.collaborationRates,
@@ -423,7 +423,7 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
                 <td className='border px-4 py-2'>{influencer.engagementRate}</td>
                 <td className='border px-4 py-2'>{influencer.averageViews}</td>
                 <td className='border px-4 py-2'>{influencer.category}</td>
-                <td className='border px-4 py-2'>{influencer.location}</td>
+                <td className='border px-4 py-2'>{JSON.stringify(influencer.location)}</td>
                 <td className='border px-4 py-2'>{influencer.language}</td>
                 <td className='border px-4 py-2'>{influencer.collaborationRates ? (
                   <div>

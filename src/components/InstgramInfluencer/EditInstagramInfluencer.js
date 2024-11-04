@@ -4,6 +4,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { UserContext } from '../../context/userContext';
 import { useTheme } from '../../context/ThemeProvider';
+import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 
 const EditInstagramInfluencer = () => {
@@ -26,7 +27,12 @@ const EditInstagramInfluencer = () => {
         averageLikes: 0,
         averageComments: 0,
         category: "",
-        location: "",
+       // location: "",
+       location: {
+        country: "",
+        state: "",
+        city: ""
+      },
         language: "",
         verifiedStatus: false,
         collaborationRates: { post: 0, story: 0, reel: 0 },
@@ -173,6 +179,10 @@ const EditInstagramInfluencer = () => {
       //if (!userData || userData.role !== "Admin" ) {
       //  return <Navigate to="/login" />;
      // }
+
+     const handleLocationSelect = (location) => {
+      setFormData((prev) => ({ ...prev, location }));
+    };
     
     
   return (
@@ -354,7 +364,8 @@ const EditInstagramInfluencer = () => {
               <option value="App Development">App Development</option>
             </select>
           </label>
-          <label className="block">
+          <LocationSelector onSelectLocation={handleLocationSelect} />
+         { /*<label className="block">
             <span className="text-gray-700">Location</span>
             <input
               type="text"
@@ -365,7 +376,7 @@ const EditInstagramInfluencer = () => {
               className="p-2 border border-gray-300 rounded w-full"
               required
             />
-          </label>
+          </label>*/}
           <label className="block">
             <span className="text-gray-700">Language</span>
             <select

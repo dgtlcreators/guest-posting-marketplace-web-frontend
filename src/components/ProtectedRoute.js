@@ -2,6 +2,7 @@
 import { Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext";
+import { toast } from "react-toastify";
 
 const ProtectedRoute = ({  children, requiredRoles }) => {
   const { userData } = useContext(UserContext);
@@ -32,6 +33,11 @@ const ProtectedRoute = ({  children, requiredRoles }) => {
 
   if (!userData) {
     console.log("User is not logged in");
+    return <Navigate to="/login" />;
+  }
+
+  if (!userData.isVerified) {
+   // toast.error("Please verify your email to log in.");
     return <Navigate to="/login" />;
   }
 

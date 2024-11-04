@@ -6,6 +6,7 @@ import { useTheme } from '../../context/ThemeProvider';
 import { UserContext } from '../../context/userContext';
 import SaveSearch from "../OtherComponents/SaveSearch.js";
 import { useLocation } from 'react-router-dom';
+import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 
 const ContentWriter = () => {
@@ -21,7 +22,12 @@ const ContentWriter = () => {
     email: '',
     expertise: [{ type: '', other: '' }],
     languages: [{ name: '', other: '', proficiency: '' }],
-    location: "",
+   // location: "",
+   location: {
+    country: "",
+    state: "",
+    city: ""
+  },
     collaborationRates: {
       postFrom: '',
       postTo: '',
@@ -345,6 +351,10 @@ const fetchUsers=async(formData)=>{
   }
 }
 
+const handleLocationSelect = (location) => {
+  setFormData((prev) => ({ ...prev, location }));
+};
+
 
   return (
     <div className="container mx-auto p-4">
@@ -403,7 +413,8 @@ const fetchUsers=async(formData)=>{
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
-          <div className="block">
+          <LocationSelector onSelectLocation={handleLocationSelect} />
+         {/* <div className="block">
             <label className="text-gray-700">Location</label>
             <input
               type="text"
@@ -412,7 +423,7 @@ const fetchUsers=async(formData)=>{
               onChange={handleChange}
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
-          </div>
+          </div>*/}
           <div className="block">
           <label //className="text-xl font-bold text-blue-600"
           >Industry</label>
