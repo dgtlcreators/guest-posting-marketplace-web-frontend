@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
 import NewInstagramInfluencerTable from "./NewInstagramInfluencerTable";
 import { toast } from "react-toastify";
@@ -361,6 +361,10 @@ const NewInstagramInfluencer = () => {
     setLocationQuery("")
   }
 
+  /*const handleLocationSelect = useCallback((location) => {
+    setFormData((prev) => ({ ...prev, location }));
+  }, []);*/
+
   const handleLocationSelect = (location) => {
     setFormData((prev) => ({ ...prev, location }));
   };
@@ -556,8 +560,8 @@ const NewInstagramInfluencer = () => {
               className="p-2 border border-gray-300 rounded w-full"
             />
           </label>*/}
-           {/*  <LocationSelector onSelectLocation={handleLocationSelect} />
-        <div className="block">
+             <LocationSelector onSelectLocation={handleLocationSelect} />
+       {/* <div className="block">
             <label className="text-gray-700">Location</label>
             <input
               type="text"
