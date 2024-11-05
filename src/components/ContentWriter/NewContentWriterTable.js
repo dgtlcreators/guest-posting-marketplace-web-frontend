@@ -265,15 +265,17 @@ const NewContentWriterTable = () => {
         </div>
       </div>
       <div className="overflow-x-auto  p-4 rounded-lg shadow-md">
-        <table className="min-w-full bg-white text-sm">
+        <table className="min-w-full  text-sm"//bg-white
+        >
           <thead>
-            <tr className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base">
+            <tr className=" text-base"//bg-gradient-to-r from-purple-500 to-pink-500 text-white
+            >
               <th className="border px-4 py-2">S.No</th>
               <th className="border px-4 py-2" onClick={() => handleSort("name")}>Name {renderSortIcon("name")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("email")}>Email {renderSortIcon("email")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("gender")}>Gender {renderSortIcon("gender")}</th>
-              <th className="border px-4 py-2" onClick={() => handleSort("wordCount")}>WordCount {renderSortIcon("wordCount")}</th>
+              <th className="bo-=-=]rder px-4 py-2" onClick={() => handleSort("wordCount")}>WordCount {renderSortIcon("wordCount")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("experience")}>Experience {renderSortIcon("experience")}</th>
               

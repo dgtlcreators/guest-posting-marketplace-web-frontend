@@ -340,6 +340,8 @@ const NewGuestpost = () => {
                         <label htmlFor="price" className="font-medium">
                             Price
                         </label>
+                        <div className="flex items-center border border-gray-300 rounded-md">
+                        <span className="p-2 text-xl">₹</span>
                         <input
                             type="number"
                             id="price"
@@ -352,6 +354,7 @@ const NewGuestpost = () => {
                             onChange={handleChange}
                             className="form-input border rounded p-2"
                         />
+                        </div>
                     </div>
                     <div className="flex flex-col">
                         <label htmlFor="monthlyTraffic" className="font-medium">

@@ -11,14 +11,14 @@ import { useLocation } from "react-router-dom";
 
 
 const Guestpost = () => {
- 
+
   const { isDarkTheme } = useTheme();
-  const { userData,localhosturl } = useContext(UserContext); 
+  const { userData, localhosturl } = useContext(UserContext);
   const userId = userData?._id;
- // console.log(userData,userId)
+  // console.log(userData,userId)
 
   const initialFormData = {
-    userId:userData?._id || "",
+    userId: userData?._id || "",
     mozDA: "1",
     DAto: "100",
     categories: "",
@@ -32,11 +32,11 @@ const Guestpost = () => {
     mozSpamScore: "",
     publisherURL: "",
     publisherName: "",
-    userId:userId
+    userId: userId
   };
 
   const [formData, setFormData] = useState(initialFormData);
- 
+
 
 
   const [users, setUsers] = useState([]);
@@ -47,39 +47,39 @@ const Guestpost = () => {
   useEffect(() => {
     if (location?.state?.formData) {
       const formData = location.state.formData;
-     
-      const flattenedFormData = formData["0"] || formData; 
-    //  console.log("Flattened FormData", flattenedFormData);
-  
+
+      const flattenedFormData = formData["0"] || formData;
+      //  console.log("Flattened FormData", flattenedFormData);
+
       setFormData(prevState => ({
         ...initialFormData,
         ...flattenedFormData
       }));
       fetchUsers(formData)
-      location.state.formData = null; 
+      location.state.formData = null;
     }
   }, [location?.state?.formData]);
-  
-const fetchUsers=async(formData)=>{
-  try {
-    const response = await axios.post(
-      `${localhosturl}/form/getFilteredData`
-     
-      , formData);
-  //  console.log("Fetched data:", response.data);
-    setUsers(response.data);
 
-   
-    if (!toastShown) {
-      toast.success("Saved Data Fetch Successfully");
-      setToastShown(true); 
+  const fetchUsers = async (formData) => {
+    try {
+      const response = await axios.post(
+        `${localhosturl}/form/getFilteredData`
+
+        , formData);
+      //  console.log("Fetched data:", response.data);
+      setUsers(response.data);
+
+
+      if (!toastShown) {
+        toast.success("Saved Data Fetch Successfully");
+        setToastShown(true);
+      }
+      // toast.success("Saved Data Fetch Successfully");
+    } catch (error) {
+      console.log("Error fetching data:", error);
+      toast.error(error.message);
     }
-   // toast.success("Saved Data Fetch Successfully");
-  } catch (error) {
-    console.log("Error fetching data:", error);
-    toast.error(error.message);
   }
-}
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -89,92 +89,92 @@ const fetchUsers=async(formData)=>{
     });
   };
 
-  
+
 
   const handleReset = () => {
     setFormData(initialFormData)
   }
-  const pastactivitiesAdd=async(users)=>{
+  const pastactivitiesAdd = async (users) => {
     const description = [
       formData.mozDA ? `Moz DA from ${formData.mozDA}` : '',
-    formData.DAto ? `to ${formData.DAto}` : '',
-    formData.ahrefsDR ? `Ahrefs DR from ${formData.ahrefsDR}` : '',
-    formData.DRto ? `to ${formData.DRto}` : '',
-    formData.price ? `Price from ${formData.price}` : '',
-    formData.priceTo ? `to ${formData.priceTo}` : '',
-    formData.categories ? `Categories: ${formData.categories}` : '',
-    formData.websiteLanguage ? `Website Language: ${formData.websiteLanguage}` : '',
-    formData.linkType ? `Link Type: ${formData.linkType}` : '',
-    formData.monthlyTraffic ? `Monthly Traffic: ${formData.monthlyTraffic}` : '',
-    formData.mozSpamScore ? `Moz Spam Score: ${formData.mozSpamScore}` : '',
-    formData.publisherURL ? `Publisher URL: ${formData.publisherURL}` : '',
-    formData.publisherName ? `Publisher Name: ${formData.publisherName}` : '',
-     
-      
+      formData.DAto ? `to ${formData.DAto}` : '',
+      formData.ahrefsDR ? `Ahrefs DR from ${formData.ahrefsDR}` : '',
+      formData.DRto ? `to ${formData.DRto}` : '',
+      formData.price ? `Price from ${formData.price}` : '',
+      formData.priceTo ? `to ${formData.priceTo}` : '',
+      formData.categories ? `Categories: ${formData.categories}` : '',
+      formData.websiteLanguage ? `Website Language: ${formData.websiteLanguage}` : '',
+      formData.linkType ? `Link Type: ${formData.linkType}` : '',
+      formData.monthlyTraffic ? `Monthly Traffic: ${formData.monthlyTraffic}` : '',
+      formData.mozSpamScore ? `Moz Spam Score: ${formData.mozSpamScore}` : '',
+      formData.publisherURL ? `Publisher URL: ${formData.publisherURL}` : '',
+      formData.publisherName ? `Publisher Name: ${formData.publisherName}` : '',
+
+
       `Total results: ${users.length}`
     ]
-    .filter(Boolean)
-    .join(', ');
+      .filter(Boolean)
+      .join(', ');
     const shortDescription = `You searched ${formData.mozDA ? 'Moz DA' : 'Ahrefs DR'} from ${formData.mozDA || formData.ahrefsDR} to ${formData.DAto || formData.DRto} and got ${users.length} results`;
 
-   try {
-    const activityData={
-      userId:userData?._id,
-      action:"Performed a search for guest posts",//"Searched for guest posts",
-      section:"Guest Post",
-      role:userData?.role,
-      timestamp:new Date(),
-      details:{
-        type:"filter",
-        filter:{formData,total:users.length},
-        description,
-        shortDescription
-        
+    try {
+      const activityData = {
+        userId: userData?._id,
+        action: "Performed a search for guest posts",//"Searched for guest posts",
+        section: "Guest Post",
+        role: userData?.role,
+        timestamp: new Date(),
+        details: {
+          type: "filter",
+          filter: { formData, total: users.length },
+          description,
+          shortDescription
 
+
+        }
       }
+
+
+      axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
+    } catch (error) {
+      console.log(error);
+
     }
-    
-   
-    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
-   } catch (error) {
-    console.log(error);
-    
-   }
   }
 
   axios.defaults.withCredentials = true;
 
-  
-    /*const handleSubmit = async(e) => {
-    e.preventDefault();
-   const response =  await axios
-      .post("http://localhost:5000/form/getFilteredData", formData)
-    //.post("https://guest-posting-marketplace-web-backend.onrender.com/form/getFilteredData", formData)
-      .then((response) => {
-        console.log(response.data);
-        setUsers(response.data);
-         pastactivitiesAdd(response.data)
-        toast.success("Data Fetch Successfully");
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error(error.message);
-      });
-  };*/
+
+  /*const handleSubmit = async(e) => {
+  e.preventDefault();
+ const response =  await axios
+    .post("http://localhost:5000/form/getFilteredData", formData)
+  //.post("https://guest-posting-marketplace-web-backend.onrender.com/form/getFilteredData", formData)
+    .then((response) => {
+      console.log(response.data);
+      setUsers(response.data);
+       pastactivitiesAdd(response.data)
+      toast.success("Data Fetch Successfully");
+    })
+    .catch((error) => {
+      console.log(error);
+      toast.error(error.message);
+    });
+};*/
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await axios.post(
         `${localhosturl}/form/getFilteredData`
-       
+
         , formData);
       //console.log("Fetched data:", response.data);
       setUsers(response.data);
-  
+
       // Call pastactivitiesAdd without await since handleSubmit is already async
       pastactivitiesAdd(response.data);
-  
+
       toast.success("Data Fetch Successfully");
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -187,7 +187,7 @@ const fetchUsers=async(formData)=>{
     //localStorage.setItem("savedSearch", JSON.stringify(formData));
     toast.success("Search saved successfully!");
   };
- // console.log("Checking FormData ",formData)
+  // console.log("Checking FormData ",formData)
 
   return (
     <div className="p-4">
@@ -198,7 +198,7 @@ const fetchUsers=async(formData)=>{
         onSubmit={handleSubmit}
         className="bg-gray-200 shadow-xl p-4 relative"
       >
-       
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <div className="flex flex-col">
             <label htmlFor="mozDA">Moz DA</label>
@@ -286,7 +286,7 @@ const fetchUsers=async(formData)=>{
           </div>
         </div>
 
-  
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 my-4">
           <div className="flex flex-col">
             <label htmlFor="ahrefsDR">Ahrefs DR</label>
@@ -328,7 +328,7 @@ const fetchUsers=async(formData)=>{
               <option value="No Follow">No Follow</option>
             </select>
           </div>
-          
+
           <div className="flex flex-col">
             <label htmlFor="publisherURL" //className="font-medium"
             >
@@ -349,13 +349,13 @@ const fetchUsers=async(formData)=>{
           <div className="flex flex-col">
             <label htmlFor="publisherName" //className="font-medium"
             >
-            Publisher Name
+              Publisher Name
             </label>
             <input
               type="text"
               id="publisherName"
               name="publisherName"
-             // title="Please ensure to provide proper format of the name"
+              // title="Please ensure to provide proper format of the name"
               //pattern="https?://.*"
               placeholder="Publisher Name"
               value={formData.publisherName}
@@ -365,32 +365,38 @@ const fetchUsers=async(formData)=>{
           </div>
         </div>
 
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-4">
           <div className="flex flex-col">
             <label htmlFor="price">Price</label>
-            <input
-              type="number"
-              id="price"
-              name="price"
-              min="1"
-              value={formData.price}
-              onChange={handleChange}
-              className="focus:outline focus:outline-blue-400 p-2"
-            />
+            <div className="flex items-center border border-gray-300 rounded-md">
+              <span className="p-2 text-xl">₹</span>
+              <input
+                type="number"
+                id="price"
+                name="price"
+                min="1"
+                value={formData.price}
+                onChange={handleChange}
+                className="focus:outline focus:outline-blue-400 p-2"
+              />
+            </div>
           </div>
           <div className="flex flex-col">
             <label htmlFor="priceTo">To</label>
-            <input
-              type="number"
-              id="priceTo"
-              name="priceTo"
-              min="1"
-              max="100000"
-              value={formData.priceTo}
-              onChange={handleChange}
-              className="focus:outline focus:outline-blue-400 p-2"
-            />
+            <div className="flex items-center border border-gray-300 rounded-md">
+              <span className="p-2 text-xl">₹</span>
+              <input
+                type="number"
+                id="priceTo"
+                name="priceTo"
+                min="1"
+                max="100000"
+                value={formData.priceTo}
+                onChange={handleChange}
+                className="focus:outline focus:outline-blue-400 p-2"
+              />
+            </div>
           </div>
           <div className="flex flex-col">
             <label htmlFor="monthlyTraffic">Monthly Traffic</label>
@@ -466,18 +472,18 @@ const fetchUsers=async(formData)=>{
           </div>
         </div>
 
-       
+
         <div className="flex items-center justify-end space-x-2">
-       {/* <button
+          {/* <button
             type="button"
             onClick={handleSaveSearch}
             className="py-2 px-4 bg-green-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-green-500 hover:scale-105"
           >
             Save Search
           </button>*/}
-           <SaveSearch section="Guestpost" formDataList={formData}/>
+          <SaveSearch section="Guestpost" formDataList={formData} />
           <button
-          
+
             type="reset"
             onClick={handleReset}
             className="py-2 px-4 bg-gray-900 text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-700 hover:scale-105"
@@ -485,12 +491,12 @@ const fetchUsers=async(formData)=>{
             Reset
           </button>
           <button
-           disabled={userData?.permissions?.guestPost?.filter !== undefined ? !userData.permissions.guestPost.filter : true}
+            disabled={userData?.permissions?.guestPost?.filter !== undefined ? !userData.permissions.guestPost.filter : true}
 
-           title={!userData?.permissions?.guestPost?.filter
-              ? "You are not allowed to access this feature":undefined
+            title={!userData?.permissions?.guestPost?.filter
+              ? "You are not allowed to access this feature" : undefined
               // : ""
-           }
+            }
             type="submit"
             className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
           >
@@ -501,11 +507,11 @@ const fetchUsers=async(formData)=>{
 
       {/* Display User Fetched Data */}
       <div className="mt-4">
-          <h2 className="text-xl   p-2 my-2"// text-white bg-blue-700 
+        <h2 className="text-xl   p-2 my-2"// text-white bg-blue-700 
         >
           Guestpost List
-          </h2>
-      <GuestpostTable users={users} setUsers={setUsers} />
+        </h2>
+        <GuestpostTable users={users} setUsers={setUsers} />
       </div>
     </div>
   );

@@ -115,7 +115,7 @@ const NewInstagramInfluencer = () => {
       { key: 'Average Likes', value: formData.averageLikes },
       { key: 'Average Comments', value: formData.averageComments },
       { key: 'Category', value: formData.category },
-      { key: 'Location', value: formData.location },
+      { key: 'Location', value: JSON.stringify(formData.location) },
       { key: 'Language', value: formData.language },
       { key: 'Verified Status', value: formData.verifiedStatus ? 'Verified' : 'Not Verified' },
       { key: 'Collaboration Rates (Post)', value: formData.collaborationRates.post },
@@ -197,7 +197,7 @@ const NewInstagramInfluencer = () => {
     formDataToSend.append("averageLikes", formData.averageLikes);
     formDataToSend.append("averageComments", formData.averageComments);
     formDataToSend.append("category", formData.category);
-    formDataToSend.append("location", formData.location);
+    formDataToSend.append("location", JSON.stringify(formData.location));
     formDataToSend.append("language", formData.language);
     formDataToSend.append("verifiedStatus", formData.verifiedStatus);
     
@@ -254,7 +254,7 @@ const NewInstagramInfluencer = () => {
     formDataToSend.append("averageLikes", formData.averageLikes);
     formDataToSend.append("averageComments", formData.averageComments);
     formDataToSend.append("category", formData.category);
-    formDataToSend.append("location", formData.location);
+    //formDataToSend.append("location", formData.location);
     formDataToSend.append("language", formData.language);
     formDataToSend.append("verifiedStatus", formData.verifiedStatus);
 

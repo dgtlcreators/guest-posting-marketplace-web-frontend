@@ -166,7 +166,8 @@ const InstagramInfluencerTable = ({ influencers, setInfluencers }) => {
         <div className="overflow-x-auto p-2  shadow-lg rounded-lg">
 
           <table className="min-w-full ">
-            <thead className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base">
+            <thead className="text-base"//bg-gradient-to-r from-purple-500 to-pink-500 text-white 
+            >
               <tr>
                 <th className="border px-4 py-2" >S.No </th>
                 {/*<th className="border px-4 py-2" onClick={() => handleSort("username")}>Username {renderSortIcon("username")}</th>*/}
@@ -204,7 +205,8 @@ const InstagramInfluencerTable = ({ influencers, setInfluencers }) => {
                 </tr>
               ) : (
                 paginatedUsers.map((influencer, index) => (
-                  <tr key={influencer._id} className="hover:bg-gray-100">
+                  <tr key={influencer._id} className=""//"hover:bg-gray-100"
+                  >
                     <td className="border px-4 py-2">{index + 1}</td>
                     {/*<td className="border px-4 py-2">{influencer.username}</td>*/}
                     <td className="border px-4 py-2">{influencer.fullName}</td>

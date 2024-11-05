@@ -201,9 +201,11 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
       </div>
 
       <div className="overflow-x-auto  p-4 rounded-lg shadow-md">
-        <table className="min-w-full bg-white text-sm">
+        <table className="min-w-full  text-sm"//bg-white
+        >
           <thead>
-            <tr className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base">
+            <tr className=" text-base"//bg-gradient-to-r from-purple-500 to-pink-500 text-white
+            >
               <th className="border px-4 py-2">S.No</th>
               <th className="border px-4 py-2" onClick={() => handleSort("name")}>Name {renderSortIcon("name")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("experience")}>Experience {renderSortIcon("experience")}</th>
@@ -234,7 +236,8 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
               </tr>
             ) : (
               paginatedUsers.map((writer, index) => (
-                <tr key={writer._id} className="hover:bg-gray-100 transition-colors">
+                <tr key={writer._id} className="transition-colors"//hover:bg-gray-100 
+                >
                   <td className="border px-4 py-2">{index + 1}</td>
                   <td className="border px-4 py-2">{writer.name}</td>
                   <td className="border px-4 py-2">{writer.experience}</td>

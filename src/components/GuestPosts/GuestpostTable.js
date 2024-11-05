@@ -552,7 +552,7 @@ const GuestpostTable = ({ users, setUsers }) => {
                       {user.publisherName}
                     </td>
                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                      {user.price}
+                  ₹ {user.price}
                     </td>
                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                       {user.monthlyTraffic}

@@ -272,9 +272,12 @@ const handleClickEditLink=(id)=>{
             </div>
 
             <div className="overflow-x-auto">
-                <table className="min-w-full bg-white border border-gray-200">
+                
+                <table className="min-w-full border"// bg-white border border-gray-200
+                >
                     <thead>
-                        <tr className="border bg-gray-100 border-b">
+                        <tr className="border border-b"// bg-gray-100 
+                        >
                             <th className="border px-4 py-2">S.No.</th>
                             <th
                                 className="border px-4 py-2 cursor-pointer"
@@ -360,14 +363,14 @@ const handleClickEditLink=(id)=>{
                             <tr>
                                 <td
                                     colSpan="10"
-                                    className="py-3 px-6 text-center text-lg font-semibold"
+                                    className=""//py-3 px-6 text-center text-lg font-semibold
                                 >
                                     No Data Found
                                 </td>
                             </tr>
                         ) : (
                             paginatedUsers.map((user, index) => (
-                                <tr key={user._id} className="border-b hover:bg-gray-50"
+                                <tr key={user._id} className="border-b "// hover:bg-gray-50
                                 >
                                     <td className="border px-4 py-2">{index + 1}</td>
                                     <td className="border px-4 py-2">{user.publisherName}</td>
@@ -379,7 +382,7 @@ const handleClickEditLink=(id)=>{
                                     <td className="border px-4 py-2">{user.websiteLanguage}</td>
                                     <td className="border px-4 py-2">{user.ahrefsDR}</td>
                                     <td className="border px-4 py-2">{user.linkType}</td>
-                                    <td className="border px-4 py-2">{user.price}</td>
+                                    <td className="border px-4 py-2">₹ {user.price}</td>
                                     <td className="border px-4 py-2">{user.monthlyTraffic}</td>
                                     <td className="border px-4 py-2">{user.mozSpamScore}</td>
                                     <td className="border py-3 px-4">

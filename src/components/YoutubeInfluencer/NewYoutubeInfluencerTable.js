@@ -363,25 +363,27 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
         </div>
       </div>
       <div className='overflow-x-auto  p-4 rounded-lg shadow-md'>
-        <table className='min-w-full bg-white text-sm'>
+        <table className='min-w-full  text-sm'//bg-white
+        >
           <thead>
-            <tr className='bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base'>
-              <th className='px-4 py-2'>S.No </th>
-              <th className='px-4 py-2' onClick={() => handleSort("username")}>Name {renderSortIcon("username")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("fullname")}>Last Name {renderSortIcon("fullname")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("profilePicture")}>Profile Picture {renderSortIcon("profilePicture")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("followersCount")}>Followers {renderSortIcon("followersCount")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("videosCount")}>videos Count {renderSortIcon("videosCount")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("engagementRate")}>Engagement Rate {renderSortIcon("engagementRate")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("averageViews")}>Average Views {renderSortIcon("averageViews")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("category")}>Category {renderSortIcon("category")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("language")}>Language {renderSortIcon("language")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("pastCollaborations")}>Past Collaborations {renderSortIcon("pastCollaborations")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("audienceDemographics")}>Audience Demographics {renderSortIcon("audienceDemographics")}</th>
-              <th className='px-4 py-2' onClick={() => handleSort("mediaKit")}>mediaKit  {renderSortIcon("mediaKit")}</th>
+            <tr className='border text-base'//bg-gradient-to-r from-purple-500 to-pink-500 text-white 
+            >
+              <th className='border px-4 py-2'>S.No </th>
+              <th className='border px-4 py-2' onClick={() => handleSort("username")}>Name {renderSortIcon("username")}</th>
+              <th className='border px-4 py-2' onClick={() => handleSort("fullname")}>Last Name {renderSortIcon("fullname")}</th>
+              <th className='border px-4 py-2' onClick={() => handleSort("profilePicture")}>Profile Picture {renderSortIcon("profilePicture")}</th>
+              <th className='border px-4 py-2' onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>
+              <th className='border px-4 py-2' onClick={() => handleSort("followersCount")}>Followers {renderSortIcon("followersCount")}</th>
+              <th className='border px-4 py-2' onClick={() => handleSort("videosCount")}>videos Count {renderSortIcon("videosCount")}</th>
+              <th className='border px-4 py-2' onClick={() => handleSort("engagementRate")}>Engagement Rate {renderSortIcon("engagementRate")}</th>
+              <th className='border px-4 py-2' onClick={() => handleSort("averageViews")}>Average Views {renderSortIcon("averageViews")}</th>
+              <th className='border px-4 py-2' onClick={() => handleSort("category")}>Category {renderSortIcon("category")}</th>
+              <th className='border px-4 py-2' onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
+              <th className='border px-4 py-2' onClick={() => handleSort("language")}>Language {renderSortIcon("language")}</th>
+              <th className='border px-4 py-2' onClick={() => handleSort("collaborationRates")}>Collaboration Rates {renderSortIcon("collaborationRates")}</th>
+              <th className='border px-4 py-2' onClick={() => handleSort("pastCollaborations")}>Past Collaborations {renderSortIcon("pastCollaborations")}</th>
+              <th className='border px-4 py-2' onClick={() => handleSort("audienceDemographics")}>Audience Demographics {renderSortIcon("audienceDemographics")}</th>
+              <th className='border  px-4 py-2' onClick={() => handleSort("mediaKit")}>mediaKit  {renderSortIcon("mediaKit")}</th>
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Actions</th>
            { /*  <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>*/}
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Bookmark</th>

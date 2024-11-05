@@ -308,7 +308,7 @@ table {
   border-collapse: collapse;
   width: 100%;
 }
-
+/*
 th {
   background-color: #e0e0e0;
   color: #000000;
@@ -366,7 +366,7 @@ body.dark table tbody tr:hover,body.dark table tbody td:hover,body.dark table tb
 }
 
 
-
+*/
 
 
 /*
@@ -452,3 +452,38 @@ table tbody tr {
   animation: fadeIn 0.5s ease forwards; 
 }
 */
+
+body.light table thead th:hover,table thead th:hover {
+  background-color: rgba(0, 0, 0, 0.1); 
+}
+
+
+body.dark table thead th:hover {
+  background-color: rgba(255, 255, 255, 0.1); 
+}
+
+
+body.light table tbody tr:hover,table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.1); 
+}
+
+
+body.dark table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.1); 
+}
+
+
+body.dark table tbody td:hover,
+body.light table tbody td:hover,table tbody td:hover {
+  background-color: inherit; 
+}
+
+
+body.light table thead th:hover,table thead th:hover {
+  background-color: rgba(0, 0, 0, 0.1); 
+}
+
+
+body.dark table thead th:hover {
+  background-color: rgba(255, 255, 255, 0.1); 
+}
