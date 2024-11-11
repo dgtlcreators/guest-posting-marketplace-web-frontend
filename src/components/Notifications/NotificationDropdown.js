@@ -37,7 +37,7 @@ const unseenNotifications = sortedNotifications.filter(n => !n.userStatus.find(s
     const userIdString = userData._id.toString();
 
    
-   // const isUserInStatus = notification.userStatus.some(status => status.userId.toString() === userIdString);
+    const isUserInStatus = notification.userStatus.some(status => status.userId.toString() === userIdString);
 
 
    const userStatus = notification.userStatus.find(status => status.userId === userData._id);
