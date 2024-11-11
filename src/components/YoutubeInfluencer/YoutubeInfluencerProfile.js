@@ -27,7 +27,11 @@ const YoutubeInfluencerProfile = () => {
     engagementRate: 0,
     averageViews: 0,
     category: "",
-    location: "",
+    location: {
+      country: "",
+      state: "",
+      city: ""
+    },
     language: "",
     collaborationRates: {
       sponsoredVideos: 0,
@@ -61,7 +65,7 @@ const YoutubeInfluencerProfile = () => {
       { key: 'Average Likes', value: formData.averageLikes },
       { key: 'Average Comments', value: formData.averageComments },
       { key: 'Category', value: formData.category },
-      { key: 'Location', value: formData.location },
+      { key: 'Location', value: JSON.stringify(formData.location) },
       { key: 'Language', value: formData.language },
       { key: 'Verified Status', value: formData.verifiedStatus ? 'Verified' : 'Not Verified' },
       { key: 'Collaboration Rates (Post)', value: formData.collaborationRates.post },
@@ -139,7 +143,8 @@ const generateShortDescription = (formData, users) => {
     <div //style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', backgroundColor: '#f9f9f9', borderRadius: '10px', perspective: '1000px' }}
     >
     <button 
-      style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+     className="mb-4 px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded hover:bg-blue-600 transition-all"
+      //style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
       //onClick={() => history.goBack()}
       onClick={() => navigate(-1)}
     >
@@ -186,7 +191,7 @@ const generateShortDescription = (formData, users) => {
     <p style={{ marginTop: '20px', animation: 'fadeIn 1s ease-in-out' }}>{formData.bio}</p>
 
     <div style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', animation: 'fadeInUp 1s ease-in-out' }}>
-      <div><FontAwesomeIcon icon={faMapMarkerAlt} /> Location: {formData.location}</div>
+      <div><FontAwesomeIcon icon={faMapMarkerAlt} /> Location: {formData.location.country===""?"":","} {formData.location.state===""?"":","}, {formData.location.city}</div>
       <div><FontAwesomeIcon icon={faLanguage} /> Language: {formData.language}</div>
       <div><FontAwesomeIcon icon={faTags} /> Category: {formData.category}</div>
       <div><FontAwesomeIcon icon={faUsers} /> Followers: {formData.followersCount}</div>

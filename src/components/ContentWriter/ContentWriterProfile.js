@@ -1,18 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaUser, FaLanguage, FaBook, FaDollarSign, FaEnvelope } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeProvider';
 import { UserContext } from '../../context/userContext';
 import ReportModal from '../OtherComponents/ReportForm';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 
 
 
 const ContentWriterProfile = () => {
   const { isDarkTheme } = useTheme();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [contentWriter,setContentWriter]=useState("")
   const { userData,localhosturl } = useContext(UserContext);
@@ -90,6 +93,15 @@ const handleReport = async () => {
   return (
     <div className=""//"min-h-screen  flex flex-column items-center justify-center p-8 max-w-2xl"
     >
+        <button
+         className="mb-4 px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded hover:bg-blue-600 transition-all"
+       // style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+        //onClick={() => history.goBack()}
+        onClick={() => navigate(-1)}
+      >
+        <FontAwesomeIcon icon={faArrowLeft} style={{ marginRight: '10px' }} />
+        Back
+      </button>
       <div className=" rounded-xl shadow-xl overflow-hidden transform transition-transform hover:scale-105 hover:shadow-2xl duration-300 ease-in-out">
         <motion.div
           className="p-8"

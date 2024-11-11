@@ -78,7 +78,7 @@ const InfluencerProfile = () => {
       { key: 'Average Likes', value: users?.averageLikes },
       { key: 'Average Comments', value: users?.averageComments },
       { key: 'Category', value: users?.category },
-      { key: 'Location', value: users?.location },
+      { key: 'Location', value: JSON.stringify(users?.location) },
       { key: 'Language', value: users?.language },
       { key: 'Verified Status', value: users?.verifiedStatus ? 'Verified' : 'Not Verified' },
       { key: 'Collaboration Rates (Post)', value: users?.collaborationRates?.post },
@@ -223,7 +223,8 @@ const InfluencerProfile = () => {
     >
      
       <button
-        style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+       className="mb-4 px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded hover:bg-blue-600 transition-all"
+       // style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
         //onClick={() => history.goBack()}
         onClick={() => navigate(-1)}
       >
@@ -328,7 +329,7 @@ const InfluencerProfile = () => {
                 </div>
                 <div className="flex items-center bg-200 p-4 rounded-lg shadow-md">
                   <FaLocationArrow className="mr-2 text-indigo-600 text-xl" />
-                  <span><strong>Location:</strong> {location}</span>
+                  <span><strong>Location:</strong> {`${location.country===""?"":","} ${location.state===""?"":","} ${location.city}`}</span>
                 </div>
                 <div className="flex items-center bg-200 p-4 rounded-lg shadow-md">
                   <FaLanguage className="mr-2 text-indigo-600 text-xl" />
