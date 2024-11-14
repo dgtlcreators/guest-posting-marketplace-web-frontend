@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useTheme } from "../context/ThemeProvider";
-import { UserContext } from "../context/userContext";
+import { useTheme } from "../context/ThemeProvider.js";
+import { UserContext } from "../context/userContext.js";
 
 
 const ContactForm = ({ publisher, onClose ,url}) => {

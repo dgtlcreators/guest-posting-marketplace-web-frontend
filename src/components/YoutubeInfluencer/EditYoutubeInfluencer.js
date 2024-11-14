@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useTheme } from '../../context/ThemeProvider';
+import { useTheme } from '../../context/ThemeProvider.js';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../context/userContext.js';
 import { useNavigate, useParams } from 'react-router-dom';
 import LocationSelector from '../OtherComponents/LocationSelector.js';
 

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import ApexCharts from 'react-apexcharts';
-import { useTheme } from '../../../context/ThemeProvider';
+import { useTheme } from '../../../context/ThemeProvider.js';
 
 const BarLineChart = ({ data }) => {
   const { isDarkTheme, toggleTheme } = useTheme();

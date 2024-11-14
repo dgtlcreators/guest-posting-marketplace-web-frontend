@@ -6,7 +6,7 @@
 
 import React from 'react';
 import ApexCharts from 'react-apexcharts';
-import { useTheme } from '../../../context/ThemeProvider';
+import { useTheme } from '../../../context/ThemeProvider.js';
 
 const PieChart = ({ data }) => {
   const { isDarkTheme } = useTheme();

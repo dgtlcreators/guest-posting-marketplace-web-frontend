@@ -113,15 +113,15 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSort, FaSortUp, FaSortDown, FaBookmark } from "react-icons/fa";
 
-import { useTheme } from "../../context/ThemeProvider";
-import { UserContext } from "../../context/userContext";
+import { useTheme } from "../../context/ThemeProvider.js";
+import { UserContext } from "../../context/userContext.js";
 
 import { saveAs } from "file-saver";
 import { CSVLink } from "react-csv";
 import Papa from "papaparse";
-import ApplyForm from "../OtherComponents/ApplyForm";
-import Bookmark from "../OtherComponents/Bookmark";
-import Pagination from "../OtherComponents/Pagination";
+import ApplyForm from "../OtherComponents/ApplyForm.js";
+import Bookmark from "../OtherComponents/Bookmark.js";
+import Pagination from "../OtherComponents/Pagination.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useTheme } from '../../context/ThemeProvider';
+import { useTheme } from '../../context/ThemeProvider.js';
 
 const FilterModal = ({ isOpen, onClose, onApply }) => {
   const { isDarkTheme } = useTheme();

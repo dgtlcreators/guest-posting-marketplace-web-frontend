@@ -5,7 +5,7 @@ import { useTheme } from '../../context/ThemeProvider.js';
 import { UserContext } from '../../context/userContext.js';
 import Linecharts from './Charts/LineCharts2.js';
 import BarCharts from './Charts/BarCharts2.js';
-import RadialBarCharts from './Charts/RadialBarCharts';
+import RadialBarCharts from './Charts/RadialBarCharts.js';
 import FullChart from './Charts/FullChart.js';
 import BarLineChart from './Charts/BarLineChart.js';
 import GaugeChart from './Charts/GaugeChart.js';

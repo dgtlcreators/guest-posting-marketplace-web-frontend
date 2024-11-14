@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
-import NewInstagramInfluencerTable from "./NewInstagramInfluencerTable";
+import NewInstagramInfluencerTable from "./NewInstagramInfluencerTable.js";
 import { toast } from "react-toastify";
-import { useTheme } from "../../context/ThemeProvider";
-import { UserContext } from "../../context/userContext";
+import { useTheme } from "../../context/ThemeProvider.js";
+import { UserContext } from "../../context/userContext.js";
 import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 

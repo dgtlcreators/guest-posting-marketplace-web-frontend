@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { ResponsiveTreeMap } from '@nivo/treemap';
-import { useTheme } from '../../../context/ThemeProvider';
+import { useTheme } from '../../../context/ThemeProvider.js';
 
 const Treemap = ({ data }) => {
     const { isDarkTheme } = useTheme();

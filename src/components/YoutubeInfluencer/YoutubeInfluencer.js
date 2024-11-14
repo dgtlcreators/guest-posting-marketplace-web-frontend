@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useTheme } from '../../context/ThemeProvider';
-import { UserContext } from '../../context/userContext';
+import { useTheme } from '../../context/ThemeProvider.js';
+import { UserContext } from '../../context/userContext.js';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import YoutubeInfluencerTable from "./YoutubeInfluencerTable"
+import YoutubeInfluencerTable from "./YoutubeInfluencerTable.js"
 import SaveSearch from "../OtherComponents/SaveSearch.js";
 import { useLocation } from 'react-router-dom';
 import LocationSelector from '../OtherComponents/LocationSelector.js';

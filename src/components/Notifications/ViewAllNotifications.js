@@ -1,7 +1,7 @@
 
 import React,{useContext} from 'react';
 import { List, ListItem, ListItemText, Divider } from '@mui/material';
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../context/userContext.js';
 import { useNavigate } from 'react-router-dom';
 
 const ViewAllNotifications = ({ notifications, onClose, isNotificationPage  }) => {

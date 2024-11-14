@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { useTheme } from '../../../context/ThemeProvider';
+import { useTheme } from '../../../context/ThemeProvider.js';
 
 const DistributedColumns = ({ data }) => {
   const { isDarkTheme, toggleTheme } = useTheme();

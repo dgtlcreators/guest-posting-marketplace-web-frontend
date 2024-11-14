@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResponsiveRadar } from '@nivo/radar';
-import { useTheme } from '../../../context/ThemeProvider';
+import { useTheme } from '../../../context/ThemeProvider.js';
 
 const RadarChart3 = ({ data }) => {
     const { isDarkTheme } = useTheme(); 

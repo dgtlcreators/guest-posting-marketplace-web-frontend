@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../context/userContext.js';
 import axios from 'axios';
-import { useTheme } from '../../context/ThemeProvider';
+import { useTheme } from '../../context/ThemeProvider.js';
 import { toast } from 'react-toastify';
 
 const SaveSearch = ({ section, formDataList }) => {

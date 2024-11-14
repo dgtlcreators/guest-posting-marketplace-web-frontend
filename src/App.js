@@ -8,15 +8,15 @@ import { ToastContainer } from 'react-toastify';
 
 
 
-import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
+import Navbar from "./components/Navbar.js";
+import Sidebar from "./components/Sidebar.js";
 import NotificationsPage from './components/Notifications/NotificationsPage.js';
 
-import Login from './components/auth/Login';
-import Signup from './components/auth/Signup';
+import Login from './components/auth/Login.js';
+import Signup from './components/auth/Signup.js';
 
-import { UserProvider } from './context/userContext';
-import ProtectedRoute from './components/ProtectedRoute';
+import { UserProvider } from './context/userContext.js';
+import ProtectedRoute from './components/ProtectedRoute.js';
 
 import Guestpost from './components/GuestPosts/Guestpost.js';
 import EditGuestpostData from './components/GuestPosts/EditAdminData.js';
@@ -30,9 +30,9 @@ import SuperadminProfile from './components/SuperAdmin/SuperadminProfile.js';
 
 import InstagramInfluencer from './components/InstgramInfluencer/InstagramInfluencer.js';
 import NewInstagramInfluencer from './components/InstgramInfluencer/NewInstagramInfluencer.js';
-import EditInstagramInfluencer from "./components/InstgramInfluencer/EditInstagramInfluencer";
-import InfluencerProfile from './components/InstgramInfluencer/InfluencerProfile';
-import ApplicationForm from './components/InstgramInfluencer/ApplicationForm';
+import EditInstagramInfluencer from "./components/InstgramInfluencer/EditInstagramInfluencer.js";
+import InfluencerProfile from './components/InstgramInfluencer/InfluencerProfile.js';
+import ApplicationForm from './components/InstgramInfluencer/ApplicationForm.js';
 
 import YoutubeInfluencer from './components/YoutubeInfluencer/YoutubeInfluencer.js';
 import NewYoutubeInfluencer from './components/YoutubeInfluencer/NewYoutubeInfluencer.js';
@@ -44,11 +44,11 @@ import NewContentWriter from "./components/ContentWriter/NewContentWriter.js"
 import EditContentWriter from "./components/ContentWriter/EditContentWriter.js"
 import ContentWriterProfile from "./components/ContentWriter/ContentWriterProfile.js"
 
-import ReportAndApplications from './components/ReportAndApplications';
-import Dashboard from './components/dashboardItems/Dashboard';
-import PathNotFound from './components/PathNotFound';
-import PastActivities from './components/OtherComponents/PastActivities';
-import CheckoutForm from './CheckoutForm';
+import ReportAndApplications from './components/ReportAndApplications.js';
+import Dashboard from './components/dashboardItems/Dashboard.js';
+import PathNotFound from './components/PathNotFound.js';
+import PastActivities from './components/OtherComponents/PastActivities.js';
+import CheckoutForm from './CheckoutForm.js';
 import MyLists from './components/MyLists/MyLists.js';
 import ProfileSettings from './components/ProfileSettings.js';
 

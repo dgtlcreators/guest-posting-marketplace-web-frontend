@@ -3,8 +3,8 @@
 import React, { useContext, useState } from 'react';
 import { List, ListItem, ListItemText, Divider, Button, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { useTheme } from '../../context/ThemeProvider';
-import { UserContext } from '../../context/userContext';
+import { useTheme } from '../../context/ThemeProvider.js';
+import { UserContext } from '../../context/userContext.js';
 
 const NotificationDropdown = ({notifications,onViewAllClick,onClose}) => {
   const navigate = useNavigate();

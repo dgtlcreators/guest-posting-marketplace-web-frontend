@@ -2,14 +2,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { FaArrowLeft, FaUser, FaUsers, FaHeart, FaLocationArrow, FaLanguage, FaCheckCircle, FaDollarSign, FaTag, FaComment, FaFilePdf } from 'react-icons/fa';
-import Fade from 'react-reveal/Fade';
-import Zoom from 'react-reveal/Zoom';
-import { toast } from 'react-toastify';
-import { useTheme } from '../../context/ThemeProvider';
-import { UserContext } from '../../context/userContext';
-import ReportModal from '../OtherComponents/ReportForm';
-import { faUser, faMapMarkerAlt, faLanguage, faTags, faUsers, faVideo, faChartLine, faEye, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
+import { toast } from 'react-toastify';
+import { useTheme } from '../../context/ThemeProvider.js';
+import { UserContext } from '../../context/userContext.js';
+import ReportModal from '../OtherComponents/ReportForm.js';
+import { faUser, faMapMarkerAlt, faLanguage, faTags, faUsers, faVideo, faChartLine, faEye, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { motion } from 'framer-motion';
 
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -248,9 +247,17 @@ const InfluencerProfile = () => {
           <div className=""//"flex flex-col lg:flex-row gap-8  p-6 rounded-lg"//bg-gradient-to-r from-yellow-300 via-pink-300 to-red-300
           >
             {/* Profile Image & Name */}
-            <Fade left>
+            <motion.div
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 1 }}
+>
               <div className="flex-1 flex flex-col items-center lg:items-start">
-                <Zoom>
+              <motion.div
+  initial={{ scale: 0 }}
+  animate={{ scale: 1 }}
+  transition={{ duration: 0.5 }}
+>
                   <img
                     src={
                       profilePicture?.startsWith('https')
@@ -261,13 +268,17 @@ const InfluencerProfile = () => {
                     alt={username}
                     className="w-48 h-48 lg:w-64 lg:h-64 object-cover rounded-full border-4 border-white shadow-lg transition-transform transform hover:scale-105"
                   />
-                </Zoom>
+               </motion.div>
                 <h4 className="mt-4 text-3xl lg:text-4xl font-bold text-900 p-2">{fullName || username}</h4>
               </div>
-            </Fade>
+              </motion.div>
 
             {/* Followers & Following */}
-            <Fade right>
+            <motion.div
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 1 }}
+>
               <div className="flex-1 ">
                 <div className="grid grid-cols-1 gap-4 text-700">
                   <div className="flex items-center bg-100 p-4 rounded-lg shadow-md">
@@ -280,20 +291,29 @@ const InfluencerProfile = () => {
                   </div>
                 </div>
               </div>
-            </Fade>
+              </motion.div>
           </div>
 
           {/* Bio */}
-          <Fade bottom>
+          <motion.div
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 1 }}
+>
             <div className="mt-8 bg-100 p-6 rounded-lg shadow-lg  p-6 rounded-lg"//bg-gradient-to-r from-yellow-300 via-pink-300 to-red-300
             >
               <h2 className="text-2xl font-semibold mb-4 p-2">Bio</h2>
               <p className="text-800">{bio}</p>
             </div>
-          </Fade>
+            </motion.div>
 
           {/* Collaboration Details */}
-          <Fade bottom>
+          <motion.div
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 1 }}
+>
+
             <div className="mt-8  p-6 rounded-lg shadow-lg"//bg-gradient-to-r from-yellow-300 via-pink-300 to-red-300
             >
               <h2 className="text-2xl font-semibold mb-4 p-2">Collaboration Details</h2>
@@ -312,10 +332,15 @@ const InfluencerProfile = () => {
                 </div>
               </div>
             </div>
-          </Fade>
+            </motion.div>
 
           {/* Additional Metrics */}
-          <Fade top>
+          <motion.div
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 1 }}
+>
+
             <div className="mt-8 bg-100 p-6 rounded-lg shadow-lg  p-6 rounded-lg">
               <h2 className="text-2xl font-semibold mb-4 p-2">Additional Metrics</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-700">
@@ -349,13 +374,17 @@ const InfluencerProfile = () => {
                 </div>
               </div>
             </div>
-          </Fade>
+            </motion.div>
 
 
 
 
-          {/* Media Kit & Past Collaborations */}
-          <Fade bottom>
+       
+          <motion.div
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 1 }}
+>
             <div className="mt-8 bg-100 p-6 rounded-lg shadow-lg">
               <h2 className="text-2xl font-semibold mb-4 p-2">Media Kit & Past Collaborations</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -393,7 +422,7 @@ const InfluencerProfile = () => {
                 )}
               </div>
             </div>
-          </Fade>
+            </motion.div>
 
 
 

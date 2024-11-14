@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../context/userContext.js';
 import { useTheme } from '@emotion/react';
 import { toast } from 'react-toastify';
-import NewSuperAdminTable from "./NewSuperAdminTable"
+import NewSuperAdminTable from "./NewSuperAdminTable.js"
 
 const Superadmin = () => {
   const { isDarkTheme } = useTheme();

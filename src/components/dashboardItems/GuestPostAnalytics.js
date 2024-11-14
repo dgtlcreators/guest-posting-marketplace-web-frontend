@@ -3,13 +3,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
-import PieChart from './Charts/PieChart';
-import FunnelCharts from './Charts/FunnelCharts';
-import DistributedColumns from './Charts/DistributedColumns';
-import RadarChart from './Charts/RadarChart';
-import MixedChart from './Charts/MixedChart';
-import { useTheme } from '../../context/ThemeProvider';
-import { UserContext } from '../../context/userContext';
+import PieChart from './Charts/PieChart.js';
+import FunnelCharts from './Charts/FunnelCharts.js';
+import DistributedColumns from './Charts/DistributedColumns.js';
+import RadarChart from './Charts/RadarChart.js';
+import MixedChart from './Charts/MixedChart.js';
+import { useTheme } from '../../context/ThemeProvider.js';
+import { UserContext } from '../../context/userContext.js';
 
 
 const GuestPostAnalytics = () => {

@@ -2,13 +2,13 @@ import React, { useEffect, useState, useMemo, useContext } from 'react'
 import { saveAs } from "file-saver";
 import { CSVLink } from "react-csv";
 import Papa from "papaparse";
-import ApplyForm from "../OtherComponents/ApplyForm";
-import Bookmark from "../OtherComponents/Bookmark";
-import Pagination from "../OtherComponents/Pagination";
+import ApplyForm from "../OtherComponents/ApplyForm.js";
+import Bookmark from "../OtherComponents/Bookmark.js";
+import Pagination from "../OtherComponents/Pagination.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../context/userContext.js';
 import { useTheme } from '@emotion/react';
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
 

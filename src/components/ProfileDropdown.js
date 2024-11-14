@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { List, ListItem, ListItemText, Divider, Button, Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../context/userContext';
+import { UserContext } from '../context/userContext.js';
 
 const ProfileDropdown = () => {
     

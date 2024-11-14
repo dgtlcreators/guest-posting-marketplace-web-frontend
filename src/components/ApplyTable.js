@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react';
 import React, { useContext } from 'react';
-import { UserContext } from '../context/userContext';
+import { UserContext } from '../context/userContext.js';
 
 const ApplyTable = ({ section, apply = [] ,reports=[]}) => {
   console.log("Reports ",reports)

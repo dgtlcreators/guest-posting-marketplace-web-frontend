@@ -1,6 +1,6 @@
 
 import React from "react";
-import { useTheme } from "../context/ThemeProvider";
+import { useTheme } from "../context/ThemeProvider.js";
 
 const TableComponent = ({ headers, data }) => {
   const { isDarkTheme } = useTheme();

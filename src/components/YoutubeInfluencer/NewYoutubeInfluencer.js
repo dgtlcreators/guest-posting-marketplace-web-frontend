@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react'
-import { useTheme } from '../../context/ThemeProvider';
+import { useTheme } from '../../context/ThemeProvider.js';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import NewYoutubeInfluencerTable from './NewYoutubeInfluencerTable';
-import { UserContext } from '../../context/userContext';
+import NewYoutubeInfluencerTable from './NewYoutubeInfluencerTable.js';
+import { UserContext } from '../../context/userContext.js';
 import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 const NewYoutubeInfluencer = () => {

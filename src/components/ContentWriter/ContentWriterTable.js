@@ -5,17 +5,17 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { FaSort, FaSortUp, FaSortDown, FaBookmark } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import ContactForm from '../ContactForm';
-import { useTheme } from '../../context/ThemeProvider';
+import ContactForm from '../ContactForm.js';
+import { useTheme } from '../../context/ThemeProvider.js';
 
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../context/userContext.js';
 
 import { saveAs } from "file-saver";
 import { CSVLink } from "react-csv";
 import Papa from "papaparse";
-import ApplyForm from "../OtherComponents/ApplyForm";
-import Bookmark from "../OtherComponents/Bookmark";
-import Pagination from "../OtherComponents/Pagination";
+import ApplyForm from "../OtherComponents/ApplyForm.js";
+import Bookmark from "../OtherComponents/Bookmark.js";
+import Pagination from "../OtherComponents/Pagination.js";
 
 
 const ContentWriterTable = ({ contentWriters, setContentWriters }) => {

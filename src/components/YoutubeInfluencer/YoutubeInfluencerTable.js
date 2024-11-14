@@ -1,18 +1,18 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { useTheme } from '../../context/ThemeProvider';
+import { useTheme } from '../../context/ThemeProvider.js';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FaBookmark, FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
-import ContactForm from '../ContactForm';
-import { UserContext } from '../../context/userContext';
+import ContactForm from '../ContactForm.js';
+import { UserContext } from '../../context/userContext.js';
 
 import { saveAs } from "file-saver";
 import { CSVLink } from "react-csv";
 import Papa from "papaparse";
-import ApplyForm from "../OtherComponents/ApplyForm";
-import Bookmark from "../OtherComponents/Bookmark";
-import Pagination from "../OtherComponents/Pagination";
+import ApplyForm from "../OtherComponents/ApplyForm.js";
+import Bookmark from "../OtherComponents/Bookmark.js";
+import Pagination from "../OtherComponents/Pagination.js";
 
 const YoutubeInfluencerTable = ({influencers, setInfluencers}) => {
   const { isDarkTheme } = useTheme();

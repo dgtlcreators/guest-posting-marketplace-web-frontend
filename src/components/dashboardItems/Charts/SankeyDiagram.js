@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ResponsiveSankey } from '@nivo/sankey';
-import { useTheme } from '../../../context/ThemeProvider';
+import { useTheme } from '../../../context/ThemeProvider.js';
 
 const SankeyDiagram = ({ data }) => {
     const { isDarkTheme } = useTheme();

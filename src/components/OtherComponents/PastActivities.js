@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useTheme } from '@emotion/react';
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../context/userContext.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSearch,
@@ -14,7 +14,7 @@ import {
   faCheckSquare,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import { ThemeContext } from '../../context/ThemeProvider';
+import { ThemeContext } from '../../context/ThemeProvider.js';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 

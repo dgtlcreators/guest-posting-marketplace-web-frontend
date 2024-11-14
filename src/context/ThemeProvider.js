@@ -41,6 +41,7 @@ export const ThemeProvider = ({ children }) => {
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
+import { makeStyles } from '@mui/material/styles';
 
 const ThemeContext = createContext();
 

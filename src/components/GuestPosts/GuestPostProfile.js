@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useTheme } from '../../context/ThemeProvider';
-import { UserContext } from '../../context/userContext';
+import { useTheme } from '../../context/ThemeProvider.js';
+import { UserContext } from '../../context/userContext.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -22,7 +22,7 @@ import {
     faMoneyBill
   } from '@fortawesome/free-solid-svg-icons';
   import { motion } from 'framer-motion';
-import ReportModal from '../OtherComponents/ReportForm';
+import ReportModal from '../OtherComponents/ReportForm.js';
   
   const iconMap = {
     publisherURL: faGlobe,

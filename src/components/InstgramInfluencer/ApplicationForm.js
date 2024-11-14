@@ -3,9 +3,9 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faEnvelope, faPhone, faDollarSign, faClipboard, faStickyNote, faHandshake, faUser } from '@fortawesome/free-solid-svg-icons';
 import 'tailwindcss/tailwind.css';
-import ApplicationsList from "./ApplicationsList"
-import { useTheme } from '../../context/ThemeProvider';
-import { UserContext } from '../../context/userContext';
+import ApplicationsList from "./ApplicationsList.js"
+import { useTheme } from '../../context/ThemeProvider.js';
+import { UserContext } from '../../context/userContext.js';
 
 
 const ApplicationForm = () => {

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Navigate } from "react-router-dom";
 import { useContext } from "react";
-import { UserContext } from "../context/userContext";
+import { UserContext } from "../context/userContext.js";
 import { toast } from "react-toastify";
 
 const ProtectedRoute = ({  children, requiredRoles }) => {

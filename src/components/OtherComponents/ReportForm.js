@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { UserContext } from '../../context/userContext';
-import { useTheme } from '../../context/ThemeProvider';
+import { UserContext } from '../../context/userContext.js';
+import { useTheme } from '../../context/ThemeProvider.js';
 
 const ReportModal = ({ section,userId, publisherId, localhosturl }) => {
  // console.log(publisherId)

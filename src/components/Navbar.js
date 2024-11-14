@@ -6,7 +6,7 @@ import { AppBar, Toolbar,  Typography, Badge, Avatar, Button, Popover, InputBase
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useTheme } from '../context/ThemeProvider';
+import { useTheme } from '../context/ThemeProvider.js';
 import NotificationDropdown from './Notifications/NotificationDropdown.js';
 import ViewAllNotifications from './Notifications/ViewAllNotifications.js';
 import ProfileDropdown from './ProfileDropdown.js';

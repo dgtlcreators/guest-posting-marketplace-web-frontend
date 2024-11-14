@@ -6,9 +6,9 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import NewContentWriterTable from "./NewContentWriterTable";
-import { useTheme } from "../../context/ThemeProvider";
-import { UserContext } from "../../context/userContext";
+import NewContentWriterTable from "./NewContentWriterTable.js";
+import { useTheme } from "../../context/ThemeProvider.js";
+import { UserContext } from "../../context/userContext.js";
 import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 

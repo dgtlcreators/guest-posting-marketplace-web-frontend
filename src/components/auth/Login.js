@@ -2,10 +2,10 @@
 import axios from "axios";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/userContext.js";
 import { toast } from "react-toastify";
-import Layout from "../../Layout/Layout";
-import { useTheme } from "../../context/ThemeProvider";
+import Layout from "../../Layout/Layout.js";
+import { useTheme } from "../../context/ThemeProvider.js";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 

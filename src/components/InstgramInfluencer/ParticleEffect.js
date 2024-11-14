@@ -1,7 +1,7 @@
 
 import React from "react";
 import Particles from "react-particles-js";
-import { useTheme } from "../../context/ThemeProvider";
+import { useTheme } from "../../context/ThemeProvider.js";
 
 const ParticleEffect = () => {
   const { isDarkTheme } = useTheme();

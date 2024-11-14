@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import GuestPostOverview from './GuestPostOverview';
-import GuestPostAnalytics from './GuestPostAnalytics';
-import InstagramInfluencerOverview from './InstagramInfluencerOverview';
-import InstagramInfluencerAnalytics from './InstagramInfluencerAnalytics';
+import GuestPostOverview from './GuestPostOverview.js';
+import GuestPostAnalytics from './GuestPostAnalytics.js';
+import InstagramInfluencerOverview from './InstagramInfluencerOverview.js';
+import InstagramInfluencerAnalytics from './InstagramInfluencerAnalytics.js';
 import YoutubeInfluencerOverview from './YoutubeInfluencerOverview.js';
 import YoutubeInfluencerAnalytics from './YoutubeInfluencerAnalytics.js';
 import ContentWriterOverview from './ContentWriterOverview.js';

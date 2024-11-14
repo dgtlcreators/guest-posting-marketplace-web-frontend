@@ -4,9 +4,9 @@ import { FaUser, FaLanguage, FaBook, FaDollarSign, FaEnvelope } from 'react-icon
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useTheme } from '../../context/ThemeProvider';
-import { UserContext } from '../../context/userContext';
-import ReportModal from '../OtherComponents/ReportForm';
+import { useTheme } from '../../context/ThemeProvider.js';
+import { UserContext } from '../../context/userContext.js';
+import ReportModal from '../OtherComponents/ReportForm.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 

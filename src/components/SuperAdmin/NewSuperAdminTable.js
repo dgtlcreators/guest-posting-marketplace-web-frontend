@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../context/userContext.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
 import axios from 'axios';
@@ -8,7 +8,7 @@ import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
 import { saveAs } from "file-saver";
 import { CSVLink } from "react-csv";
 import Papa from "papaparse";
-import Pagination from "../OtherComponents/Pagination";
+import Pagination from "../OtherComponents/Pagination.js";
 import { toast } from 'react-toastify';
 
 

@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { useTheme } from '../../../context/ThemeProvider';
+import { useTheme } from '../../../context/ThemeProvider.js';
 
 const FunnelCharts = ({ data }) => {
   const { isDarkTheme } = useTheme();

@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import { toast } from 'react-toastify';
-import { useTheme } from '../../context/ThemeProvider';
-import { UserContext } from '../../context/userContext';
+import { useTheme } from '../../context/ThemeProvider.js';
+import { UserContext } from '../../context/userContext.js';
 
 
 import { Box, Typography, Avatar, Paper, Switch, Grid, Divider, FormControlLabel } from '@mui/material';

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import Linecharts from './Charts/Linecharts';
+import Linecharts from './Charts/Linecharts.js';
 import RadarChart3 from './Charts/RadarChart3.js';
-import RadialBarCharts from './Charts/RadialBarCharts';
+import RadialBarCharts from './Charts/RadialBarCharts.js';
 import FullChart from './Charts/FullChart.js';
 import BarLineChart from './Charts/BarLineChart.js';
 import GaugeChart from './Charts/GaugeChart.js';

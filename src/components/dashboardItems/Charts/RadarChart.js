@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ApexCharts from 'react-apexcharts';
-import { useTheme } from '../../../context/ThemeProvider';
+import { useTheme } from '../../../context/ThemeProvider.js';
 
 const RadarChart = ({ data }) => {
   const { isDarkTheme } = useTheme();

@@ -91,7 +91,7 @@ export default Linecharts3D;*/
 
 import React from 'react'
 import ApexCharts from 'react-apexcharts';
-import { useTheme } from '../../../context/ThemeProvider';
+import { useTheme } from '../../../context/ThemeProvider.js';
 
 const Linecharts = ({data}) => {
   const { isDarkTheme } = useTheme();

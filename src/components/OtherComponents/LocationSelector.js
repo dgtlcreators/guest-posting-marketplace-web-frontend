@@ -1,6 +1,6 @@
 
 import React, { useContext, useState, useEffect } from "react";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/userContext.js";
 
 const LocationSelector = ({ onSelectLocation }) => {
   const { userData, localhosturl } = useContext(UserContext);

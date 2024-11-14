@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import ContentWriterTable from './ContentWriterTable';
+import ContentWriterTable from './ContentWriterTable.js';
 import { toast } from 'react-toastify';
-import { useTheme } from '../../context/ThemeProvider';
-import { UserContext } from '../../context/userContext';
+import { useTheme } from '../../context/ThemeProvider.js';
+import { UserContext } from '../../context/userContext.js';
 import SaveSearch from "../OtherComponents/SaveSearch.js";
 import { useLocation } from 'react-router-dom';
 import LocationSelector from '../OtherComponents/LocationSelector.js';

@@ -4,17 +4,17 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { FaSort, FaSortUp, FaSortDown, FaBookmark } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useTheme } from '../../context/ThemeProvider';
-import { UserContext } from '../../context/userContext';
+import { useTheme } from '../../context/ThemeProvider.js';
+import { UserContext } from '../../context/userContext.js';
 
 
 import { saveAs } from "file-saver";
 import { CSVLink } from "react-csv";
 import Papa from "papaparse";
-import ApplyForm from "../OtherComponents/ApplyForm";
-import ShowApplyForm from "../OtherComponents/ShowApplyForm";
-import Bookmark from "../OtherComponents/Bookmark";
-import Pagination from "../OtherComponents/Pagination";
+import ApplyForm from "../OtherComponents/ApplyForm.js";
+import ShowApplyForm from "../OtherComponents/ShowApplyForm.js";
+import Bookmark from "../OtherComponents/Bookmark.js";
+import Pagination from "../OtherComponents/Pagination.js";
 
 
 
