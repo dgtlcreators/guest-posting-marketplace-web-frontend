@@ -154,7 +154,6 @@ const GuestpostTable = ({ users, setUsers }) => {
   const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
-  // Initialize Stripe promise once
   if (!stripePromise) {
     setStripePromise(loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY));
   }
@@ -172,7 +171,7 @@ const GuestpostTable = ({ users, setUsers }) => {
   const sortedUsers = React.useMemo(() => {
     let sortedData = [...users];
 
-    // Filter data based on filters
+
     Object.keys(filters).forEach((key) => {
       if (filters[key]) {
         sortedData = sortedData.filter(
@@ -181,7 +180,7 @@ const GuestpostTable = ({ users, setUsers }) => {
       }
     });
 
-    // Sort data based on sortConfig
+
     if (sortConfig.key) {
       sortedData.sort((a, b) => {
         if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -216,7 +215,7 @@ const GuestpostTable = ({ users, setUsers }) => {
   const filteredUsers = useMemo(() => {
     let sortedData = [...users];
 
-    // Apply filters
+
     Object.keys(filters).forEach((key) => {
       if (filters[key]) {
         sortedData = sortedData.filter(
@@ -225,14 +224,14 @@ const GuestpostTable = ({ users, setUsers }) => {
       }
     });
 
-    // Apply search term
+
     if (searchTerm.trim() !== "") {
       sortedData = sortedData.filter((user) =>
         user.categories.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    // Apply sorting
+ 
     if (sortedField) {
       sortedData.sort((a, b) => {
         if (a[sortedField] < b[sortedField]) {
@@ -488,7 +487,7 @@ const GuestpostTable = ({ users, setUsers }) => {
               
               <th className="py-2 px-4 border-b border-gray-200">Actions</th>
             </tr>*/}
-              <tr className="bg-200 text-gray-600 uppercase text-sm leading-normal border">
+              <tr className="bg-200  uppercase text-sm leading-normal border">
                 <th className="border py-3 px-2 md:px-6 text-left">S.No.</th>
                 <th className="border py-3 px-2 md:px-6 text-left" onClick={() => handleSort("mozDA")}>mozDA {renderSortIcon("mozDA")}</th>
                 <th className="border py-3 px-2 md:px-6 text-left" onClick={() => handleSort("categories")}>Categories {renderSortIcon("categories")}</th>
@@ -509,12 +508,12 @@ const GuestpostTable = ({ users, setUsers }) => {
                 {/*<th className="border py-3 px-2 md:px-6 text-left uppercase ">Actions</th>*/}
               </tr>
             </thead>
-            <tbody className="text-gray-600 text-sm font-light">
+            <tbody className=" text-sm font-light">
               {paginatedUsers.length === 0 ? (
                 <tr>
                   <td
                     colSpan="10"
-                    className="py-3 px-6 text-center text-lg font-semibold"
+                    className={`py-3 px-6 text-center text-lg font-semibold`}
                   >
                     No Data Fetched
                   </td>

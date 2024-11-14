@@ -71,6 +71,30 @@ const DistributedColumns = ({ data }) => {
           fontSize: '12px'
         }
       }
+    },
+    tooltip: {
+      enabled: true,
+      theme: isDarkTheme ? 'dark' : 'light', // Set tooltip theme based on the current theme
+      style: {
+        fontSize: '12px',
+        fontFamily: 'Arial, sans-serif',
+      },
+      // Customize tooltip content
+      y: {
+        formatter: function (value) {
+          return `Count: ${value}`;
+        }
+      },
+      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+        const label = w.globals.labels[dataPointIndex]; // Traffic range (e.g., >= 10000)
+        const value = series[seriesIndex][dataPointIndex]; // The count value
+        return `
+          <div style="padding: 8px 12px; background-color: ${isDarkTheme ? '#333' : '#fff'}; color: ${isDarkTheme ? '#fff' : '#333'}; border-radius: 4px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
+            <strong>${label}</strong><br>
+            Count: ${value}
+          </div>
+        `;
+      },
     }
   };
 

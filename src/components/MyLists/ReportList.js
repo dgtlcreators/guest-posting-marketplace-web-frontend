@@ -187,7 +187,7 @@ fetchData()
                                 <th className="border py-3 px-2 md:px-6 text-left" onClick={() => handleSort("createdAt")}>CreatedAt {renderSortIcon("createdAt")}</th>
                                 <th className="border py-3 px-2 md:px-6 text-left uppercase ">Action</th>
                             </thead>
-                            <tbody className="text-gray-600 text-sm font-light">
+                            <tbody className=" text-sm font-light">
                                 {paginatedUsers.length === 0 ? (
                                     <tr>
                                         <td colSpan="10" className="py-3 px-6 text-center text-lg font-semibold">No Data Fetched</td>

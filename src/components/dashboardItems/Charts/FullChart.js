@@ -8,7 +8,7 @@ const FullChart = ({ data }) => {
   const { isDarkTheme } = useTheme();
   const categoryCounts = {};
 
-  // Count occurrences of each category
+  
   data.forEach(item => {
     if (item.category) {
       categoryCounts[item.category] = (categoryCounts[item.category] || 0) + 1;
@@ -18,7 +18,7 @@ const FullChart = ({ data }) => {
   const categories = Object.keys(categoryCounts);
   const series = Object.values(categoryCounts);
 
-  // Create options object outside of the render method
+  
   const options = {
     chart: {
       type: 'bar',
@@ -72,6 +72,32 @@ const FullChart = ({ data }) => {
       style: {
         colors: [isDarkTheme ? '#FFFFFF' : '#000000'],
       },
+    },
+    tooltip: {
+      enabled: true,
+      theme: isDarkTheme ? 'dark' : 'light', // Set the tooltip theme
+      custom: function({ seriesIndex, dataPointIndex, w }) {
+        // Custom content for the tooltip
+        const category = categories[dataPointIndex];
+        const count = w.globals.series[seriesIndex][dataPointIndex];
+        
+        // Tooltip content customization based on the theme
+        const headerClass = isDarkTheme ? 'tooltip-header-dark' : 'tooltip-header-light';
+        const contentClass = isDarkTheme ? 'tooltip-content-dark' : 'tooltip-content-light';
+
+        return `
+          <div class="${headerClass}">
+            ${category}: ${count}
+          </div>
+          <div class="${contentClass}">
+            Count: ${count}
+          </div>
+        `;
+      },
+      marker: {
+        show: true,
+      },
+      fillSeriesColor: true,
     },
   };
 

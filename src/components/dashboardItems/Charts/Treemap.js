@@ -1,8 +1,10 @@
 
 import React from 'react';
 import { ResponsiveTreeMap } from '@nivo/treemap';
+import { useTheme } from '../../../context/ThemeProvider';
 
 const Treemap = ({ data }) => {
+    const { isDarkTheme } = useTheme();
 
     if (!data || !Array.isArray(data)) {
         return <div>No data available.</div>;
@@ -41,6 +43,33 @@ const Treemap = ({ data }) => {
         })).filter(industry => industry.children.length > 0),
     };
 
+    const customTheme = {
+        tooltip: {
+            container: {
+                background: isDarkTheme ? '#333' : '#fff',    // Dark or light background
+                color: isDarkTheme ? '#fff' : '#333',          // Dark or light text color
+                padding: '12px',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                maxWidth: '200px',
+                textAlign: 'center',
+            }
+        },
+        labels: {
+            text: {
+                fontSize: '14px',
+                fontWeight: 'bold',
+                color: isDarkTheme ? '#fff' : '#333', 
+            }
+        },
+       
+        borderColor: isDarkTheme ? '#fff' : '#333',  
+        colors: { scheme: isDarkTheme ? 'dark2' : 'nivo' }, 
+    };
+
+
     return (
         <div// style={{ height: '500px', border: '2px solid #ccc', padding: '20px', borderRadius: '8px' }}>
         style={{ 
@@ -65,7 +94,8 @@ const Treemap = ({ data }) => {
                 labelSkipSize={12}
                 colors={{ scheme: 'nivo' }}
                 borderColor={{ from: 'color', modifiers: [['darker', 0.6]] }}
-            />
+                theme={customTheme} 
+           />
             </div>
         </div>
     );

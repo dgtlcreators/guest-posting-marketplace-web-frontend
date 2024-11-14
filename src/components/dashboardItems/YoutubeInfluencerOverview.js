@@ -54,8 +54,26 @@ const YoutubeInfluencerOverview = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (data.length) {
+      initializeCharts(data, totalFollowers, averageEngagementRate);
+    }
+  }, [isDarkTheme, data, totalFollowers, averageEngagementRate]);
+
   const initializeCharts = (fetchedData, followersTotal, avgEngagementRate) => {
+    const textColor = isDarkTheme ? '#FFFFFF' : '#000000';
     const sparklineData = fetchedData.map(item => item.engagementRate || 0);
+
+    if (chartSpark1Ref.current) {
+      chartSpark1Ref.current.innerHTML = '';
+    }
+    if (chartSpark2Ref.current) {
+      chartSpark2Ref.current.innerHTML = '';
+    }
+    if (chartSpark3Ref.current) {
+      chartSpark3Ref.current.innerHTML = '';
+    }
+
 
     var optionsSpark1 = {
       series: [{
@@ -83,6 +101,7 @@ const YoutubeInfluencerOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '24px',
+          color: textColor 
         }
       },
       subtitle: {
@@ -90,6 +109,7 @@ const YoutubeInfluencerOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '14px',
+          color: textColor 
         }
       }
     };
@@ -124,6 +144,7 @@ const YoutubeInfluencerOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '24px',
+          color: textColor 
         }
       },
       subtitle: {
@@ -131,6 +152,7 @@ const YoutubeInfluencerOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '14px',
+          color: textColor 
         }
       }
     };
@@ -166,6 +188,7 @@ const YoutubeInfluencerOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '24px',
+          color: textColor 
         }
       },
       subtitle: {
@@ -173,6 +196,7 @@ const YoutubeInfluencerOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '14px',
+             color: textColor 
         }
       }
     };

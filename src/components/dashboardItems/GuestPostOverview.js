@@ -16,7 +16,7 @@ const GuestPostOverview = () => {
   const chartSpark2Ref = useRef(null);
   const chartSpark3Ref = useRef(null);
 
-  // State to hold the counts
+
   const [publisherCount, setPublisherCount] = useState(0);
   const [totalMonthlyTraffic, setTotalMonthlyTraffic] = useState(0);
   const [distinctCategories, setDistinctCategories] = useState(new Set());
@@ -53,12 +53,34 @@ const GuestPostOverview = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (data.length > 0) {
+    
+      initializeCharts(data, totalMonthlyTraffic, distinctCategories.size, publisherCount);
+    }
+  }, [isDarkTheme, data, totalMonthlyTraffic, distinctCategories.size, publisherCount]);
+
+
   const initializeCharts = (fetchedData, totalMonthlyTraffic, categoriesCount, publisherCount) => {
+    const textColor = isDarkTheme ? '#FFFFFF' : '#000000'; 
+    console.log("Text color ",textColor)
     console.log("GuestPostOverview fetchedData, totalMonthlyTraffic, categoriesCount, publisherCount ",fetchedData.length, totalMonthlyTraffic, categoriesCount, publisherCount)
     const sparklineData = fetchedData.map(item => {
       const match = item.monthlyTraffic.match(/\d+/);
       return match ? parseInt(match[0], 10) : 0;
     });
+
+
+    if (chartSpark1Ref.current) {
+      chartSpark1Ref.current.innerHTML = '';
+    }
+    if (chartSpark2Ref.current) {
+      chartSpark2Ref.current.innerHTML = '';
+    }
+    if (chartSpark3Ref.current) {
+      chartSpark3Ref.current.innerHTML = '';
+    }
+
 
     var optionsSpark1 = {
       series: [{
@@ -86,6 +108,7 @@ const GuestPostOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '24px',
+          color: textColor 
         }
       },
       subtitle: {
@@ -93,6 +116,7 @@ const GuestPostOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '14px',
+          color: textColor 
         }
       }
     };
@@ -127,6 +151,7 @@ const GuestPostOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '24px',
+          color: textColor 
         }
       },
       subtitle: {
@@ -134,6 +159,7 @@ const GuestPostOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '14px',
+          color: textColor 
         }
       }
     };
@@ -168,6 +194,7 @@ const GuestPostOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '24px',
+          color: textColor 
         }
       },
       subtitle: {
@@ -175,6 +202,7 @@ const GuestPostOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '14px',
+          color: textColor 
         }
       }
     };

@@ -129,7 +129,28 @@ const MixedChart = ({ data }) => {
     },
     grid: {
       borderColor: isDarkTheme ? '#555555' : '#E0E0E0' 
-    }
+    },
+    tooltip: {
+      enabled: true,
+      custom: function({ seriesIndex, dataPointIndex, w }) {
+        // Tooltip header customization
+        const headerClass = isDarkTheme ? 'custom-tooltip-header dark' : 'custom-tooltip-header light';
+        const contentClass = isDarkTheme ? 'custom-tooltip-content dark' : 'custom-tooltip-content light';
+
+        return `
+          <div class="${headerClass}">
+            Spam Score: ${w.globals.labels[dataPointIndex]} 
+          </div>
+          <div class="${contentClass}">
+            Count: ${w.globals.series[seriesIndex][dataPointIndex]}
+          </div>
+        `;
+      },
+      marker: {
+        show: true,
+      },
+      fillSeriesColor: true,
+    },
   };
 
   return (

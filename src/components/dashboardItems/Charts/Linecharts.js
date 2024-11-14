@@ -237,7 +237,31 @@ const Linecharts = ({data}) => {
       },
       grid: {
         borderColor: isDarkTheme ? '#555555' : '#E0E0E0' 
-      }
+      },
+      tooltip: {
+        enabled: true,
+        custom: function({ seriesIndex, dataPointIndex, w }) {
+          const headerClass = isDarkTheme ? 'tooltip-header-dark' : 'tooltip-header-light';
+          const contentClass = isDarkTheme ? 'tooltip-content-dark' : 'tooltip-content-light';
+  
+          // Tooltip content customization
+          return `
+            <div class="${headerClass}">
+              Date: ${w.globals.labels[dataPointIndex]} 
+            </div>
+            <div class="${contentClass}">
+              <strong>${w.config.series[seriesIndex].name}:</strong> ${w.globals.series[seriesIndex][dataPointIndex]} 
+            </div>
+          `;
+        },
+        marker: {
+          show: true,
+        },
+        fillSeriesColor: true,
+      },
+      grid: {
+        borderColor: isDarkTheme ? '#555555' : '#E0E0E0',
+      },
       };
     
 

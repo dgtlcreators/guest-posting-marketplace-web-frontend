@@ -15,7 +15,7 @@ const ContentWriterOverview = () => {
   const MAX_LANGUAGES = 3; 
   const MAX_EXPERIENCE = 5;
 
-  // State to hold the counts
+
   const [contentwriterCount, setContentwriterCount] = useState(0);
   const [totalExperience, setTotalExperiences] = useState(0);
   const [averageEngagementRate, setAverageEngagementRate] = useState(0);
@@ -45,7 +45,7 @@ const ContentWriterOverview = () => {
         setTotalExperiences(experienceTotal);
 
 
-        setExperienceLevelPercentage(Math.min((experienceTotal / MAX_EXPERIENCE) * 100, 100)); // Cap at 100%
+        setExperienceLevelPercentage(Math.min((experienceTotal / MAX_EXPERIENCE) * 100, 100));
 
       
         const engagementRateTotal = fetchedData.reduce((acc, item) => acc + (item.engagementRate || 0), 0);
@@ -64,7 +64,7 @@ const ContentWriterOverview = () => {
           return acc + filledCount;
         }, 0);
 
-        setProfileCompletenessPercentage(Math.min((filledFields / (fetchedData.length * totalFields)) * 100, 100)); // Cap at 100%
+        setProfileCompletenessPercentage(Math.min((filledFields / (fetchedData.length * totalFields)) * 100, 100));
 
    
         const uniqueLanguages = new Set();
@@ -74,22 +74,22 @@ const ContentWriterOverview = () => {
           }
         });
 
-        setLanguageProficiencyPercentage(Math.min((uniqueLanguages.size / MAX_LANGUAGES) * 100, 100)); // Cap at 100%
+        setLanguageProficiencyPercentage(Math.min((uniqueLanguages.size / MAX_LANGUAGES) * 100, 100)); 
 
 
         const languageCount = fetchedData.reduce((acc, item) => {
           if (item.languages && Array.isArray(item.languages)) {
-            return acc + item.languages.length; // Sum up all languages
+            return acc + item.languages.length; 
           }
           return acc;
         }, 0);
         
        
         
-        // Calculate language proficiency percentage based on unique languages
-        setLanguageProficiencyPercentage(Math.min((uniqueLanguages.size / MAX_LANGUAGES) * 100, 100)); // Cap at 100%
+
+        setLanguageProficiencyPercentage(Math.min((uniqueLanguages.size / MAX_LANGUAGES) * 100, 100));
         
-        // Alternatively, you can set a language proficiency based on total languages
+ 
         const totalLanguagesPercentage = Math.min((languageCount / (fetchedData.length * MAX_LANGUAGES)) * 100, 100);
         setLanguageProficiencyPercentage(totalLanguagesPercentage);
         
@@ -105,8 +105,26 @@ const ContentWriterOverview = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (data.length) {
+      initializeCharts(data, totalExperience, languageProficiencyPercentage);
+    }
+  }, [isDarkTheme, data, totalExperience, languageProficiencyPercentage]);
+
   const initializeCharts = (fetchedData, totalExperience, languageProficiencyPercentage) => {
+    const textColor = isDarkTheme ? '#FFFFFF' : '#000000'; 
     const sparklineData = fetchedData.map(item => item.engagementRate || 0);
+
+    if (chartSpark1Ref.current) {
+      chartSpark1Ref.current.innerHTML = '';
+    }
+    if (chartSpark2Ref.current) {
+      chartSpark2Ref.current.innerHTML = '';
+    }
+    if (chartSpark3Ref.current) {
+      chartSpark3Ref.current.innerHTML = '';
+    }
+
 
     var optionsSpark1 = {
       series: [{
@@ -134,6 +152,7 @@ const ContentWriterOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '24px',
+          color: textColor 
         }
       },
       subtitle: {
@@ -141,6 +160,7 @@ const ContentWriterOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '14px',
+          color: textColor 
         }
       }
     };
@@ -175,6 +195,7 @@ const ContentWriterOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '24px',
+          color: textColor 
         }
       },
       subtitle: {
@@ -182,6 +203,7 @@ const ContentWriterOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '14px',
+          color: textColor 
         }
       }
     };
@@ -217,6 +239,7 @@ const ContentWriterOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '24px',
+          color: textColor 
         }
       },
       subtitle: {
@@ -224,6 +247,7 @@ const ContentWriterOverview = () => {
         offsetX: 0,
         style: {
           fontSize: '14px',
+          color: textColor 
         }
       }
     };

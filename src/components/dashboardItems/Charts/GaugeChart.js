@@ -21,7 +21,13 @@ const GaugeChart = ({ data }) => {
 
     const option = {
       tooltip: {
-        formatter: '{a} <br/>{b} : {c}%'
+        formatter: '{a} <br/>{b} : {c}%',
+        backgroundColor: isDarkTheme ? '#333' : '#fff',
+        borderColor: isDarkTheme ? '#666' : '#ccc', 
+        borderWidth: 1,
+        textStyle: {
+          color: isDarkTheme ? '#FFFFFF' : '#000000',
+        }
       },
       series: [
         {

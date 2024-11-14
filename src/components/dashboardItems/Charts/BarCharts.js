@@ -95,8 +95,38 @@ const BarCharts = ({data}) => {
       },
       legend: {
         labels: {
-          colors: isDarkTheme ? '#FFFFFF' : '#000000', // Change legend text color
+          colors: isDarkTheme ? '#FFFFFF' : '#000000',
         },
+      },
+      tooltip: {
+        enabled: true,
+        custom: function({ seriesIndex, dataPointIndex, w }) {
+         
+          const headerClass = isDarkTheme ? 'tooltip-header-dark' : 'tooltip-header-light';
+          const contentClass = isDarkTheme ? 'tooltip-content-dark' : 'tooltip-content-light';
+  
+         
+          return `
+            <div class="${headerClass}">
+              Date: ${w.globals.labels[dataPointIndex]}
+            </div>
+            <div class="${contentClass}">
+              <strong>${w.config.series[seriesIndex].name}:</strong> ${w.globals.series[seriesIndex][dataPointIndex]}
+            </div>
+          `;
+        },
+        marker: {
+          show: true,
+        },
+        fillSeriesColor: true,
+      },
+      legend: {
+        labels: {
+          colors: isDarkTheme ? '#FFFFFF' : '#000000',
+        },
+      },
+      grid: {
+        borderColor: isDarkTheme ? '#555555' : '#E0E0E0',
       },
       };
 

@@ -308,6 +308,203 @@ table {
   border-collapse: collapse;
   width: 100%;
 }
+
+
+
+
+
+.apexcharts-toolbar {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.apexcharts-toolbar .apexcharts-menu {
+  background-color: transparent !important;
+}
+
+.apexcharts-toolbar .apexcharts-button {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin: 0 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+
+.dark .apexcharts-toolbar .apexcharts-button {
+  background-color: #333 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+
+.dark .apexcharts-toolbar .apexcharts-button:hover {
+  background-color: #444 !important;
+  color: #fff !important;
+}
+
+
+.light .apexcharts-toolbar .apexcharts-button {
+  background-color: #fff !important;
+  color: #333 !important;
+  border: 1px solid #ccc !important;
+}
+
+.light .apexcharts-toolbar .apexcharts-button:hover {
+  background-color: #f1f1f1 !important;
+  color: #333 !important;
+}
+
+
+
+.apexcharts-tooltip {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+
+.dark .apexcharts-tooltip {
+  background-color: #333 !important; 
+  color: #fff !important;           
+  border: 1px solid #444 !important; 
+}
+
+
+.light .apexcharts-tooltip {
+  background-color: #fff !important; 
+  color: #333 !important;            
+  border: 1px solid #ccc !important; 
+}
+
+.dark .apexcharts-tooltip.custom-tooltip {
+  background-color: #444 !important;  
+  color: #fff !important;             
+  padding: 5px;
+  font-weight: bold;
+}
+
+.light .apexcharts-tooltip.custom-tooltip {
+  background-color: #f1f1f1 !important; 
+  color: #000 !important;              
+  padding: 5px;
+  font-weight: bold;
+}
+
+
+body.light .apexcharts-tooltip {
+  background-color: #fff !important;  
+  color: #333 !important;             
+  border: 1px solid #ccc !important; 
+}
+
+
+body.dark .apexcharts-tooltip {
+  background-color: #333 !important; 
+  color: #fff !important;             
+  border: 1px solid #444 !important;  
+}
+
+
+body.light .apexcharts-tooltip .custom-tooltip-header {
+  background-color: #f1f1f1 !important;  
+  color: #000 !important;                
+  font-weight: bold !important;
+  padding: 5px !important;
+}
+
+body.dark .apexcharts-tooltip .custom-tooltip-header {
+  background-color: #444 !important;  
+  color: #fff !important;           
+  font-weight: bold !important;
+  padding: 5px !important;
+}
+
+
+body.light .apexcharts-tooltip .custom-tooltip-content,body.light .apexcharts-tooltip-title {
+  background-color: #fff !important; 
+  color: #333 !important;             
+  padding: 5px !important;
+}
+
+body.dark .apexcharts-tooltip .custom-tooltip-content,body.dark .apexcharts-tooltip-title {
+  background-color: #333 !important; 
+  color: #fff !important;             
+  padding: 5px !important;
+}
+
+
+.tooltip-header-dark {
+  background-color: #333 !important; 
+  color: #fff !important;
+  padding: 5px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.tooltip-content-dark {
+  background-color: #444 !important;
+  color: #fff !important;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+
+.tooltip-header-light,.apexcharts-tooltip-title {
+  background-color: #f1f1f1 !important;
+  color: #333 !important;
+  padding: 5px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.tooltip-content-light {
+  background-color: #fff !important;
+  color: #333 !important;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+/* Global CSS file (styles.css) */
+
+/* Styling for the Nivo TreeMap tooltip */
+.nivo-tooltip {
+  background-color: #333 !important; /* Dark background */
+  color: #fff !important;            /* White text */
+  border-radius: 4px !important;     /* Rounded corners */
+  padding: 8px 12px !important;      /* Padding around the text */
+  font-size: 14px !important;        /* Font size */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important; /* Light shadow */
+  font-family: Arial, sans-serif;    /* Font family */
+}
+
+.nivo-tooltip .name {
+  font-weight: bold !important;      /* Bold the name */
+}
+
+.nivo-tooltip .value {
+  color: #f39c12 !important;         /* Orange color for the value */
+}
+/* In your global styles.css file */
+.nivo-tooltip {
+  background-color: #333 !important;
+  color: #fff !important;
+  padding: 10px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+  font-size: 14px !important;
+  font-family: Arial, sans-serif !important;
+}
+
+.nivo-tooltip .nivo-tooltip__name {
+  font-weight: bold !important;
+}
+
+.nivo-tooltip .nivo-tooltip__value {
+  color: #f39c12 !important;
+}
+
+
+
+
 /*
 th {
   background-color: #e0e0e0;

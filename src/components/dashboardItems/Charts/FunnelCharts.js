@@ -67,6 +67,35 @@ const FunnelCharts = ({ data }) => {
     legend: {
       show: false,
     },
+    tooltip: {
+      enabled: true,
+      style: {
+        fontSize: '12px',
+        fontFamily: 'Arial, sans-serif',
+      },
+      theme: isDarkTheme ? 'dark' : 'light', // Tooltip theme
+      x: {
+        show: false, // Hide x-axis value in tooltip
+      },
+      y: {
+        formatter: (value) => `Count: ${value}`, // Format tooltip y-axis value
+      },
+      marker: {
+        show: false, // Hide marker in tooltip
+      },
+      fillSeriesColor: true, // Use series color for tooltip
+      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+        // Custom tooltip styling
+        const label = w.globals.labels[dataPointIndex];
+        const value = series[seriesIndex][dataPointIndex];
+        return `
+          <div style="padding: 8px 12px; background-color: ${isDarkTheme ? '#333' : '#fff'}; color: ${isDarkTheme ? '#fff' : '#333'}; border-radius: 4px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
+            <strong>${label}</strong><br>
+            Count: ${value}
+          </div>
+        `;
+      },
+    },
   };
 
   return (

@@ -6,7 +6,7 @@ import { UserContext } from "../../context/userContext";
 import { toast } from "react-toastify";
 import Layout from "../../Layout/Layout.js";
 import { useTheme } from "../../context/ThemeProvider.js";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Signup() {
   const { isDarkTheme } = useTheme();
@@ -14,15 +14,25 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setUserData ,localhosturl} = useContext(UserContext);
+  const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+
 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match. Please check and try again.");
+      return; 
+    }
+
     axios
     
-     .post(`${localhosturl}/user/signup`, { name, email, password })
+     .post(`${localhosturl}/user/signup`, { name, email, password,confirmPassword })
      
       .then((response) => {
         toast.success("Signed up successfully. Please check your email to verify your account.")
@@ -38,9 +48,9 @@ function Signup() {
 
   return (
     <Layout isRegisterPage={true}>
-      <div className="w-full max-w-md mx-auto bg-gray-100 p-8 rounded-lg shadow-2xl space-y-8">
+      <div className={`w-full max-w-md mx-auto  p-8 rounded-lg shadow-2xl space-y-8${isDarkTheme ? "bg-gray-800" : "bg-gray-100"}`}>
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className={`mt-6 text-center text-3xl font-bold  ${isDarkTheme ? "text-white" : "text-gray-900"}`}>
             Sign up for an account
           </h2>
         </div>
@@ -82,17 +92,54 @@ function Signup() {
               <label htmlFor="password" className="sr-only">
                 Password
               </label>
-              <input
+             <div className="relative" >
+             <input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
+               // type="password"
                 autoComplete="new-password"
                 required
-                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className={`appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 ${isDarkTheme ? "border-gray-600 text-gray-100" : "border-gray-300 text-gray-900"} text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500  sm:text-sm`}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+                <button
+                type="button"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+             </div>
+            </div>
+
+            <div>
+              <label htmlFor="password" className="sr-only">
+              Confirm Password
+              </label>
+             <div className="relative" >
+             <input
+               id="confirm-password"
+                name="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+               // type="password"
+                autoComplete="new-password"
+                required
+                className={`appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 ${isDarkTheme ? "border-gray-600 text-gray-100" : "border-gray-300 text-gray-900"} text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500  sm:text-sm`}
+                 placeholder="Re-enter Password"
+                 value={confirmPassword}
+                 onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+                <button
+                type="button"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
+                onClick={() => setShowConfirmPassword((prev) => !prev)}
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+             </div>
             </div>
           </div>
 

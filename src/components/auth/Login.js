@@ -6,6 +6,7 @@ import { UserContext } from "../../context/userContext";
 import { toast } from "react-toastify";
 import Layout from "../../Layout/Layout";
 import { useTheme } from "../../context/ThemeProvider";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 
 function Login() {
@@ -13,6 +14,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setUserData,localhosturl } = useContext(UserContext);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -76,17 +78,27 @@ function Login() {
               <label htmlFor="password" className="sr-only">
                 Password
               </label>
-              <input
+             <div className="relative">
+             <input
                 id="password"
                 name="password"
-                type="password"
+               // type="password"
+               type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className={`appearance-none rounded-md relative block w-full px-3 py-2 border  ${isDarkTheme ? "border-gray-600 text-gray-100" : "border-gray-300 text-gray-900"} placeholder-gray-500  focus:outline-none focus:border-indigo-500 sm:text-sm`}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+                <button
+                type="button"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+             </div>
             </div>
           </div>
 

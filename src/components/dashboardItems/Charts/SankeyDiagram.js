@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { ResponsiveSankey } from '@nivo/sankey';
+import { useTheme } from '../../../context/ThemeProvider';
 
 const SankeyDiagram = ({ data }) => {
+    const { isDarkTheme } = useTheme();
     const [hoveredNode, setHoveredNode] = useState(null);
     
     const languages = data.flatMap(each => each.languages).filter(lang => lang);
@@ -48,6 +50,33 @@ const SankeyDiagram = ({ data }) => {
         return node.color || '#000'; 
     };
 
+    const customTheme = {
+        tooltip: {
+            container: {
+                background: isDarkTheme ? '#333' : '#fff',    // Dark or light background
+                color: isDarkTheme ? '#fff' : '#333',          // Dark or light text color
+                padding: '12px',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                maxWidth: '200px',
+                textAlign: 'center',
+            }
+        },
+        labels: {
+            text: {
+                fontSize: '14px',
+                fontWeight: 'bold',
+                color: isDarkTheme ? '#fff' : '#333',  
+            }
+        },
+      
+        borderColor: isDarkTheme ? '#fff' : '#333', 
+        colors: { scheme: isDarkTheme ? 'dark2' : 'nivo' },  
+    };
+
+
     return (
         <div style={{textAlign: 'center',border: '2px solid #ccc',boxShadow:"#bfbfbf", padding: '20px', borderRadius: '8px', width: '100%' }}
         >
@@ -67,6 +96,7 @@ const SankeyDiagram = ({ data }) => {
                  //   onMouseEnter={(node) => setHoveredNode(node.id)} 
                   //  onMouseLeave={() => setHoveredNode(null)}
                     onClick={(node) => alert(`Clicked: ${node.id}`)}
+                    theme={customTheme} 
                 />
             </div>
         </div>
