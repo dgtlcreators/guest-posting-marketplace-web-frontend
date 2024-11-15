@@ -113,11 +113,17 @@ function Login() {
           <div className="flex justify-around">
             <span>Don't have an account?</span>
             <Link
+              onClick={() => window.open("https://creatorsxchange.com/contactus", "_blank")}
+              className="no-underline group relative flex justify-center py-1 px-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+            Contact Us
+            </Link>
+            {/*<Link
               to="/signup"
               className="group relative flex justify-center py-1 px-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Sign Up
-            </Link>
+            </Link>*/}
           </div>
         </form>
       </div>

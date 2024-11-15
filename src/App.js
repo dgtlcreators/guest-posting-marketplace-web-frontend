@@ -58,7 +58,7 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const useShowNavbarAndSidebar = () => {
   const location = useLocation();
-  return !(location.pathname === "/login" || location.pathname === "/Signup" || location.pathname === "/notfound");
+  return !(location.pathname === "/login" || location.pathname === "/Signup101010" || location.pathname === "/notfound");
 };
 
 function App() {
@@ -87,7 +87,7 @@ function AppContent() {
             <Routes>
               {/* Authentication */}
               <Route path="/login" element={<Login />} />
-              <Route path="/Signup" element={<Signup />} />
+              <Route path="/Signup101010" element={<Signup />} />
 
               {/* Dashboard */}
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
