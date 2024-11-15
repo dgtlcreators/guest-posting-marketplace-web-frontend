@@ -17,7 +17,7 @@ import Sidebar from "./components/Sidebar.js";
 import ProtectedRoute from './components/ProtectedRoute.js';
 
 // Lazy-loaded Components
-const Login = () => import('./components/auth/Login.js');
+const Login = lazy(() => import('./components/auth/Login.js'));
 const Signup = lazy(() => import('./components/auth/Signup.js'));
 const Dashboard = lazy(() => import('./components/dashboardItems/Dashboard.js'));
 const Guestpost = lazy(() => import('./components/GuestPosts/Guestpost.js'));
