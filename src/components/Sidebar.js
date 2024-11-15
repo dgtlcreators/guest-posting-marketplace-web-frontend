@@ -20,6 +20,8 @@ export default function Sidebar() {
   const navigate = useNavigate();
   const isSuperAdmin = userData?.role === 'Super Admin';
   const isAdmin = userData?.role === 'Admin';
+  const isUser = userData?.role === 'User' || userData?.role === 'Brand User';
+
 
   const handleSignOut = () => {
     console.log("logout clicked")
@@ -40,9 +42,10 @@ export default function Sidebar() {
       document.title = "CreatorsXchange - Admin";
     } else if (isSuperAdmin) {
       document.title = "CreatorsXchange - SuperAdmin";
-    } else {
+    } else if(isUser) {
       document.title = "CreatorsXchange - User"; 
     }
+    document.title = "CreatorsXchange"; 
   }, [isAdmin, isSuperAdmin]);
   
 
