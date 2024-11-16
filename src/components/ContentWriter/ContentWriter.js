@@ -10,9 +10,8 @@ import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 
 const ContentWriter = () => {
-  const { isDarkTheme } = useTheme();
   const { userData,localhosturl } = useContext(UserContext);
-  const userId = userData?._id;
+
   const initialFormData={
     userId:userData?._id,
     name: '',
@@ -22,7 +21,6 @@ const ContentWriter = () => {
     email: '',
     expertise: [{ type: '', other: '' }],
     languages: [{ name: '', other: '', proficiency: '' }],
-   // location: "",
    location: {
     country: "",
     state: "",
@@ -38,8 +36,7 @@ const ContentWriter = () => {
     },
     languageProficiency: '',
     industry: [{ type: '', other: '', subCategories: [{ type: '', other: '' }] }],
-    //industry: [{ type: '', other: '' }],
-    //subCategories: [{ type: '', other: '' }]
+  
   }
   const [formData, setFormData] = useState(initialFormData);
   
@@ -106,7 +103,7 @@ const ContentWriter = () => {
             const parts = name.split('.').slice(1);
     const index = parseInt(parts[0], 10);
     const subIndex = parseInt(parts[2], 10);
-    const fieldKey = parts[3]; 
+  
     updatedIndustry[index].subCategories = updatedIndustry[index].subCategories || [];
 
     const updatedSubCategories = [...updatedIndustry[index].subCategories];
@@ -145,33 +142,7 @@ const ContentWriter = () => {
     }
   };
 
-  const handleAddExpertise = () => {
-    setFormData({
-      ...formData,
-      expertise: [...formData.expertise, { type: '', other: '' }]
-    });
-  };
-
-  const handleRemoveExpertise = (index) => {
-    setFormData({
-      ...formData,
-      expertise: formData.expertise.filter((_, idx) => idx !== index)
-    });
-  };
-
-  const handleAddLanguage = () => {
-    setFormData({
-      ...formData,
-      languages: [...formData.languages, { name: '', other: '', proficiency: '' }]
-    });
-  };
-
-  const handleRemoveLanguage = (index) => {
-    setFormData({
-      ...formData,
-      languages: formData.languages.filter((_, idx) => idx !== index)
-    });
-  };
+  
 
   const pastactivitiesAdd=async(users)=>{
     const description = [
