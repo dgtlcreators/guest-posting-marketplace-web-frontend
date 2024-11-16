@@ -16,6 +16,10 @@ import Navbar from "./components/Navbar.js";
 import Sidebar from "./components/Sidebar.js";
 import ProtectedRoute from './components/ProtectedRoute.js';
 
+
+//verification page
+const Verification = lazy(() => import('./components/auth/VerificationSuccess.js'));
+
 // Lazy-loaded Components
 const Login = lazy(() => import('./components/auth/Login.js'));
 const Signup = lazy(() => import('./components/auth/Signup.js'));
@@ -58,9 +62,8 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const useShowNavbarAndSidebar = () => {
   const location = useLocation();
-  return !(location.pathname === "/login" || location.pathname === "/Signup101010" || location.pathname === "/notfound");
-};
-
+  return !(location.pathname === "/login" || location.pathname === "/Signup101010" || location.pathname === "/notfound" || location.pathname === "/verification-success")
+}
 function App() {
   return (
     <>
@@ -85,6 +88,9 @@ function AppContent() {
         <main className="flex-1 overflow-y-auto p-4">
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
+              {/* Verification */}
+              <Route path="/verification-success" element={<Verification />} />
+
               {/* Authentication */}
               <Route path="/login" element={<Login />} />
               <Route path="/Signup101010" element={<Signup />} />
