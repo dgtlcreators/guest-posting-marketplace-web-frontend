@@ -2,25 +2,20 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import Linecharts from './Charts/Linecharts.js';
 import RadarChart3 from './Charts/RadarChart3.js';
-import RadialBarCharts from './Charts/RadialBarCharts.js';
-import FullChart from './Charts/FullChart.js';
-import BarLineChart from './Charts/BarLineChart.js';
-import GaugeChart from './Charts/GaugeChart.js';
-import Waterfall from "./Charts/Waterfall.js"
 import Treemap from "./Charts/Treemap.js"
 import SankeyDiagram from './Charts/SankeyDiagram.js';
-import { useTheme } from '../../context/ThemeProvider.js';
+//import { useTheme } from '../../context/ThemeProvider.js';
 import { UserContext } from '../../context/userContext.js';
 
 
 
 
 const ContentWriterAnalytics = () => {
-  const { isDarkTheme } = useTheme();
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { userData ,localhosturl} = useContext(UserContext);
+  const { localhosturl} = useContext(UserContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,33 +65,7 @@ const ContentWriterAnalytics = () => {
       <div className="chart-item flex-1 min-w-[300px]"></div>
       </div>
      
-    {/*  <div className="chart-container flex flex-wrap gap-4">
-      <div className="chart-item flex-1 min-w-[300px]">
-      <Linecharts data={data}/>
-      </div>
-      <div className="chart-item flex-1 min-w-[300px]">
-      <BarCharts data={data}/>
-      </div>
-      <div className="chart-item flex-1 min-w-[300px]">
-        <RadialBarCharts data={data} />
-      </div>
-      <div className="chart-item flex-1 min-w-[300px]">
-        <FullChart data={data} />
-      </div>
-      <div className="chart-item flex-1 min-w-[300px]">
-        <BarLineChart data={data} />
-      </div>
-      <div className="chart-item flex-1 min-w-[300px]">
-        <GaugeChart data={data} />
-      </div>
-     { /*<div className="chart-item flex-1 min-w-[300px]">
-        <MapChart data={data} />
-      </div>/}//end
-    
-    
-    
-    </div>
-   */}
+   
     
     </div>
   );

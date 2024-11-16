@@ -2,18 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/*body {
-    background-color: #ffffff; 
-    color: #000000; 
-    transition: background-color 0.3s, color 0.3s; 
-  }
-  
-
-  body.dark {
-    background-color: #333333; 
-    color: #ffffff; 
-  }*/
-
 
 body {
   font-family: 'Open Sans', sans-serif;
@@ -163,8 +151,7 @@ body.dark h6 {
 }
 
 button {
-  /* background-color: #007bff;
-    color: #ffffff; */
+
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
@@ -172,18 +159,7 @@ button {
   transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
-button:hover {
-  /*background-color: #0056b3; */
-}
 
-body.dark button {
-  /*background-color: #0056b3; 
-    color: #ffffff; */
-}
-
-body.dark button:hover {
-  /*background-color: #003d80; */
-}
 
 
 @keyframes submitColorChange {
@@ -248,10 +224,7 @@ input[type="checkbox"]:disabled {
 button:disabled:hover::after,
 .btn-dis:disabled:hover::after,
 input[type="checkbox"]:disabled:hover::after {
-  /* content: attr(title); 
-  background-color: #333;
-  color: #fff;
- */
+ 
   padding: 5px 10px;
   border-radius: 5px;
   position: absolute;
@@ -463,27 +436,25 @@ body.dark .apexcharts-tooltip .custom-tooltip-content,body.dark .apexcharts-tool
   border-radius: 5px;
 }
 
-/* Global CSS file (styles.css) */
 
-/* Styling for the Nivo TreeMap tooltip */
 .nivo-tooltip {
-  background-color: #333 !important; /* Dark background */
-  color: #fff !important;            /* White text */
-  border-radius: 4px !important;     /* Rounded corners */
-  padding: 8px 12px !important;      /* Padding around the text */
-  font-size: 14px !important;        /* Font size */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important; /* Light shadow */
-  font-family: Arial, sans-serif;    /* Font family */
+  background-color: #333 !important;
+  color: #fff !important;           
+  border-radius: 4px !important;   
+  padding: 8px 12px !important;     
+  font-size: 14px !important;        
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important; 
+  font-family: Arial, sans-serif;   
 }
 
 .nivo-tooltip .name {
-  font-weight: bold !important;      /* Bold the name */
+  font-weight: bold !important;     
 }
 
 .nivo-tooltip .value {
-  color: #f39c12 !important;         /* Orange color for the value */
+  color: #f39c12 !important;         
 }
-/* In your global styles.css file */
+
 .nivo-tooltip {
   background-color: #333 !important;
   color: #fff !important;
@@ -502,153 +473,6 @@ body.dark .apexcharts-tooltip .custom-tooltip-content,body.dark .apexcharts-tool
   color: #f39c12 !important;
 }
 
-
-
-
-/*
-th {
-  background-color: #e0e0e0;
-  color: #000000;
-  border: 1px solid #cccccc;
-}
-
-body.dark th {
-  background-color: #444444;
-  color: #ffffff;
-  border: 1px solid #555555;
-}
-
-td {
-  background-color: #ffffff;
-  color: #000000;
-  border: 1px solid #cccccc;
-
-}
-
-body.dark td {
-  background-color: #333333;
-  color: #ffffff;
-  border: 1px solid #555555;
-}
-
-
-
-table thead{
-  font-family: 'Open Sans', sans-serif;
-  font-size: 14px; 
-  font-weight: 400;
-  font-style: normal;
-}
-
-
-
-table tbody tr {
-  animation: fadeIn 0.5s ease-in-out;
-  transition: transform 0.3s ease-in-out;
-}
-
-table tbody tr {
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-
-body.light table tbody tr:hover{
-  background-color: rgba(0, 0, 0, 0.2);
-
-}
-
-
-body.dark table tbody tr:hover,body.dark table tbody td:hover,body.dark table tbody th:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-
-*/
-
-
-/*
-body.light table tbody th:hover{
-  background-color: rgba(0, 0, 0, 0.2) !important;
-  background-color: #3a1616 !important;
-  border: #2563eb 4px solid;
-}
-
-
-body.dark table tbody th:hover{
-  background-color: rgba(255, 255, 255, 0.3) !important;
-  background-color: #2563eb !important;
-  border: #3a1616 4px solid;
-}
-*/
-/*
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th, td {
-  padding: 10px;
-  text-align: left;
-  border: 1px solid #cccccc;
-  transition: background-color 0.3s, color 0.3s; 
-}
-
-
-body.light th {
-  background-color: #e0e0e0;
-  color: #000000;
-}
-
-body.light td {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-
-body.dark th {
-  background-color: #444444;
-  color: #ffffff;
-}
-
-body.dark td {
-  background-color: #333333;
-  color: #ffffff;
-}
-
-
-body.light table tbody tr {
-  transition: background-color 0.3s ease; 
-}
-
-body.light table tbody tr:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-body.dark table tbody tr {
-  transition: background-color 0.3s ease; 
-}
-
-body.dark table tbody tr:hover {
-  background-color: rgba(147, 223, 26, 0.1);
-}
-
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-table tbody tr {
-  animation: fadeIn 0.5s ease forwards; 
-}
-*/
 
 body.light table thead th:hover,table thead th:hover {
   background-color: rgba(0, 0, 0, 0.1); 

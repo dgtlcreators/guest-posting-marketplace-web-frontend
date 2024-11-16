@@ -20,12 +20,12 @@ const NewContentWriter = () => {
     name: "",
     bio: "",
     email: "",
-   // location: "",
-   location: {
-    country: "",
-    state: "",
-    city: ""
-  },
+
+    location: {
+      country: "",
+      state: "",
+      city: ""
+    },
     wordCount: '',
     gender: 'Prefer not to say',
     experience: 0,
@@ -35,8 +35,7 @@ const NewContentWriter = () => {
 
     collaborationRates: { post: 0, story: 0, reel: 0 },
     industry: [{ type: '', other: '', subCategories: [{ type: '', other: '' }] }],
-    // industry: [{ type: '', other: '',  }],
-    //subCategories: [{ type: '', other: '' }]
+
   });
 
   const [addContenwriter, setAddContenwriter] = useState([])
@@ -134,7 +133,7 @@ const NewContentWriter = () => {
         const updatedLanguages = [...prev.languages];
 
         if (key === 'name') {
-          // Ensure unique language names
+
           if (value === "Other" || !updatedLanguages.some((lang, idx) => idx !== index && lang.name === value)) {
             updatedLanguages[index][key] = value;
 
@@ -142,7 +141,7 @@ const NewContentWriter = () => {
         } else {
           updatedLanguages[index][key] = value;
         }
-        // updatedLanguages[index][key] = value;
+
         console.log(updatedLanguages);
         return { ...prev, languages: updatedLanguages };
       });
@@ -151,9 +150,9 @@ const NewContentWriter = () => {
 
       setFormData((prev) => {
         const updatedExpertise = [...prev.expertise];
-        // updatedExpertise[index][key] = value;
+
         if (key === 'type') {
-          // Ensure type is unique
+
           if (value === "Other" || !updatedExpertise.some((exp, idx) => idx !== index && exp.type === value)) {
             updatedExpertise[index][key] = value;
           }
@@ -169,7 +168,7 @@ const NewContentWriter = () => {
       const [outerIndex, key] = name.split('.').slice(1);
       setFormData((prev) => {
         const updatedIndustry = [...prev.industry];
-        //console.log("key: ",key)
+
         if (key === 'type') {
           updatedIndustry[outerIndex] = {
             ...updatedIndustry[outerIndex],
@@ -212,7 +211,7 @@ const NewContentWriter = () => {
 
           updatedIndustry[index].subCategories = uniqueSubCategories;
 
-          //updatedIndustry[index].subCategories = updatedSubCategories;
+
         }
         return { ...prev, industry: updatedIndustry };
       });
@@ -231,7 +230,7 @@ const NewContentWriter = () => {
       if (!lang.name) errors.push(`Language ${index + 1} name is required.`);
       if (!lang.proficiency) errors.push(`Language ${index + 1} proficiency is required.`);
     });
-    // return
+
     return errors;
   };
 
@@ -333,12 +332,12 @@ const NewContentWriter = () => {
       name: "",
       bio: "",
       email: "",
-     // location: "",
-     location: {
-      country: "",
-      state: "",
-      city: ""
-    },
+
+      location: {
+        country: "",
+        state: "",
+        city: ""
+      },
 
       experience: 0,
       expertise: [{ type: "", other: "" }],
@@ -347,8 +346,7 @@ const NewContentWriter = () => {
 
       collaborationRates: { post: 0, story: 0, reel: 0 },
       industry: [{ type: '', other: '', subCategories: [{ type: '', other: '' }] }],
-      // industry: [{ type: '', other: '',  }],
-      //subCategories: [{ type: '', other: '' }]
+
     });
 
   }
@@ -360,7 +358,7 @@ const NewContentWriter = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl p-2 "//font-bold mb-4 text-blue-600
+      <h2 className="text-2xl p-2 "
       >Add New Content Writer</h2>
       <form onSubmit={handleSubmit} className="mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -397,18 +395,7 @@ const NewContentWriter = () => {
             />
           </div>
           <LocationSelector onSelectLocation={handleLocationSelect} />
-         {/* <div className="block">
-            <label className="text-gray-700">Location</label>
-            <input
-              type="text"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-              required
 
-            />
-          </div>*/}
 
           <div className="block">
             <label className="text-gray-700">Experience</label>
@@ -421,118 +408,34 @@ const NewContentWriter = () => {
             />
           </div>
 
-          {/**strat */}
+
           <div className="block">
-  <label className="text-gray-700">Gender</label>
-  <select
-    name="gender"
-    value={formData.gender}
-    onChange={handleChange}
-    className="p-2 border border-gray-300 rounded w-full"
-  >
-    <option value="Male">Male</option>
-    <option value="Female">Female</option>
-    <option value="Other">Other</option>
-    <option value="Prefer not to say">Prefer not to say</option>
-  </select>
-</div>
-
-
-<div className="block">
-  <label className="text-gray-700">Word Count</label>
-  <input
-    type="number"
-    name="wordCount"
-    value={formData.wordCount}
-    onChange={handleChange}
-    className="p-2 border border-gray-300 rounded w-full"
-    required
-  />
-</div>
-
-          {/**end */}
-
-
-          {/*
-        <label className="block">
-            <span className="text-gray-700">Industry</span>
-            {formData.industry.map((ind, outerIdx) => (
-              <div key={outerIdx} className="flex flex-col mb-2">
-                <select
-                  name={`industry.${outerIdx}.type`}
-                  value={ind.type}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded w-full mb-2"
-                >
-                  <option value="">Select Industry</option>
-                  {Object.keys(industrySubCategories).map((key) => (
-                    <option key={key} value={key}>{key}</option>
-                  ))}
-                </select>
-                <input
-                  type="text"
-                  name={`industry.${outerIdx}.other`}
-                  value={ind.other}
-                  onChange={handleChange}
-                  placeholder="Other Industry"
-                  className="p-2 border border-gray-300 rounded w-full mb-2"
-                />
-                <div>
-                  {ind.subCategories.map((sub, innerIdx) => (
-                    <div key={innerIdx} className="flex items-center mb-2">
-                      <select
-                        name={`industry.${outerIdx}.subCategories.${innerIdx}.type`}
-                        value={sub.type}
-                        onChange={handleChange}
-                        className="p-2 border border-gray-300 rounded w-full mr-2"
-                      >
-                        <option value="">Select Subcategory</option>
-                        {ind.type && industrySubCategories[ind.type]?.map((subCat) => (
-                          <option key={subCat} value={subCat}>{subCat}</option>
-                        ))}
-                      </select>
-                      <input
-                        type="text"
-                        name={`industry.${outerIdx}.subCategories.${innerIdx}.other`}
-                        value={sub.other}
-                        onChange={handleChange}
-                        placeholder="Other Subcategory"
-                        className="p-2 border border-gray-300 rounded w-full"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveSubCategory(outerIdx, innerIdx)}
-                        className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => handleAddSubCategory(outerIdx)}
-                    className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
-                  >
-                    Add Subcategory
-                  </button>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveIndustry(outerIdx)}
-                  className="mt-2 bg-red-500 text-white py-2 px-4 rounded"
-                >
-                  Remove Industry
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={handleAddIndustry}
-              className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
+            <label className="text-gray-700">Gender</label>
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 rounded w-full"
             >
-              Add Industry
-            </button>
-          </label>*/}
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+              <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+          </div>
+
+
+          <div className="block">
+            <label className="text-gray-700">Word Count</label>
+            <input
+              type="number"
+              name="wordCount"
+              value={formData.wordCount}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 rounded w-full"
+              required
+            />
+          </div>
 
           <div className="block">
             <label className="text-gray-700">Expertise</label>
@@ -692,13 +595,7 @@ const NewContentWriter = () => {
                       className="p-2 border border-gray-300 rounded w-2/3"
                     />
                   )}
-                  {/*<button
-                    type="button"
-                    onClick={() => handleRemoveIndustry(outerIndex)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    Remove Industry
-                  </button>*/}
+
                 </div>
                 {item.type && industrySubCategories[item.type] && (
                   <div className="mb-4">
@@ -719,24 +616,12 @@ const NewContentWriter = () => {
                         </div>
                       );
                     })}
-                    {/* <button
-                    type="button"
-                    onClick={() => handleAddSubCategory(outerIndex)}
-                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-                  >
-                    Add Sub Category
-                  </button>*/}
+
                   </div>
                 )}
               </div>
             ))}
-            {/*<button
-              type="button"
-              onClick={handleAddIndustry}
-              className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-            >
-              Add Industry
-            </button>*/}
+
           </div>
         </div>
 
@@ -751,7 +636,7 @@ const NewContentWriter = () => {
           <button disabled={!userData.permissions.contentWriter.add}
             title={!userData.permissions.contentWriter.add
               ? "You are not allowed to access this feature"
-              : undefined  // : ""
+              : undefined
             }
             type="submit"
             className="py-2 px-4 bg-blue-900 text-white rounded transition duration-300 ease-in-out transform hover:scale-105 hover:animate-submitColorChange"
@@ -766,600 +651,3 @@ const NewContentWriter = () => {
 };
 
 export default NewContentWriter;
-
-
-
-/*import React, { useState } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-
-const NewContentWriter = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    bio: "",
-    experience: 0,
-    expertise: [""],
-    languages: [{ name: "", proficiency: "" }],
-    collaborationRates: { post: 0, story: 0, reel: 0 },
-    email: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value, type } = e.target;
-
-    if (name.startsWith('collaborationRates')) {
-      const key = name.split('.')[1];
-      setFormData((prev) => ({
-        ...prev,
-        collaborationRates: {
-          ...prev.collaborationRates,
-          [key]: type === 'number' ? parseFloat(value) : value,
-        },
-      }));
-    } else if (name.startsWith('languages')) {
-      const [index, key] = name.split('.').slice(1);
-      setFormData((prev) => {
-        const updatedLanguages = [...prev.languages];
-        updatedLanguages[index][key] = value;
-        return { ...prev, languages: updatedLanguages };
-      });
-    } else if (name.startsWith('expertise')) {
-      const index = parseInt(name.match(/\d+/)[0], 10);
-      setFormData((prev) => {
-        const updatedExpertise = [...prev.expertise];
-        updatedExpertise[index] = value;
-        return { ...prev, expertise: updatedExpertise };
-      });
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: type === 'number' ? parseFloat(value) : value,
-      }));
-    }
-  };
-
-  const handleLanguageChange = (index, key, value) => {
-    setFormData((prev) => {
-      const updatedLanguages = [...prev.languages];
-      updatedLanguages[index][key] = value;
-      return { ...prev, languages: updatedLanguages };
-    });
-  };
-
-  const handleExpertiseChange = (index, value) => {
-    setFormData((prev) => {
-      const updatedExpertise = [...prev.expertise];
-      updatedExpertise[index] = value;
-      return { ...prev, expertise: updatedExpertise };
-    });
-  };
-
-  const handleAddLanguage = () => {
-    setFormData((prev) => ({
-      ...prev,
-      languages: [...prev.languages, { name: "", proficiency: "" }],
-    }));
-  };
-
-  const handleRemoveLanguage = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      languages: prev.languages.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleAddExpertise = () => {
-    setFormData((prev) => ({
-      ...prev,
-      expertise: [...prev.expertise, ""],
-    }));
-  };
-
-  const handleRemoveExpertise = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      expertise: prev.expertise.filter((_, i) => i !== index),
-    }));
-  };
-
-  const validateFormData = () => {
-    const errors = [];
-   // if (!formData.bio) errors.push("Bio is required.");
-    formData.languages.forEach((lang, index) => {
-     if (!lang.name) errors.push(`Language ${index + 1} name is required.`);
-      if (!lang.proficiency) errors.push(`Language ${index + 1} proficiency is required.`);
-    });
-    return errors;
-   // return 
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const validationErrors = validateFormData();if (validationErrors.length > 0) {
-     validationErrors.forEach(error => toast.error(error));
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/contentwriters/createcontentwriter",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      toast.success("Content writer added successfully");
-    } catch (error) {
-      toast.error(`Error adding content writer: ${error.response ? error.response.data.message : error.message}`);
-      console.error("Error:", error.response ? error.response.data : error.message);
-    }
-  };
-
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-blue-600">Add New Content Writer</h1>
-      <form onSubmit={handleSubmit} className="mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <label className="block">
-            <span className="text-gray-700">Name</span>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-              required
-            />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Email</span>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Bio</span>
-            <textarea
-              name="bio"
-              value={formData.bio}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Experience</span>
-            <input
-              type="number"
-              name="experience"
-              value={formData.experience}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Expertise</span>
-            {formData.expertise.map((exp, idx) => (
-              <div key={idx} className="flex items-center mb-2">
-                <select
-                  name={`expertise[${idx}]`}
-                  value={exp}
-                  onChange={(e) => handleExpertiseChange(idx, e.target.value)}
-                  className="p-2 border border-gray-300 rounded w-full mr-2"
-                >
-                  <option value="">Select Expertise</option>
-                  <option value="SEO">SEO</option>
-                  <option value="Content Marketing">Content Marketing</option>
-                  <option value="Technical Writing">Technical Writing</option>
-                  <option value="Other">Other</option>
-                </select>
-                {exp === "Other" && (
-                  <input
-                    type="text"
-                    name={`expertiseOther[${idx}]`}
-                    value={formData.expertiseOther?.[idx] || ""}
-                    onChange={(e) => handleExpertiseChange(idx, e.target.value)}
-                    placeholder="Enter expertise manually"
-                    className="p-2 border border-gray-300 rounded w-full"
-                  />
-                )}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveExpertise(idx)}
-                  className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={handleAddExpertise}
-              className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
-            >
-              Add Expertise
-            </button>
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Languages</span>
-            {formData.languages.map((lang, idx) => (
-              <div key={idx} className="flex items-center mb-2">
-                <select
-                  name={`languages.${idx}.name`}
-                  value={lang.name}
-                  onChange={(e) => handleLanguageChange(idx, 'name', e.target.value)}
-                  className="p-2 border border-gray-300 rounded w-full mr-2"
-                >
-                  <option value="">Select Language</option>
-                  <option value="English">English</option>
-                  <option value="Hindi">Hindi</option>
-                  <option value="Punjabi">Punjabi</option>
-                  <option value="Marathi">Marathi</option>
-                  <option value="Gujarati">Gujarati</option>
-                  <option value="Urdu">Urdu</option>
-                  <option value="Other">Other</option>
-                </select>
-                {lang.name === "Other" && (
-                  <input
-                    type="text"
-                    name={`languages.${idx}.other`}
-                    value={lang.other || ""}
-                    onChange={(e) => handleLanguageChange(idx, 'other', e.target.value)}
-                    placeholder="Enter language manually"
-                    className="p-2 border border-gray-300 rounded w-full"
-                  />
-                )}
-                <select
-                  name={`languages.${idx}.proficiency`}
-                  value={lang.proficiency}
-                  onChange={(e) => handleLanguageChange(idx, 'proficiency', e.target.value)}
-                  className="p-2 border border-gray-300 rounded w-full ml-2"
-                >
-                  <option value="">Select Proficiency</option>
-                  <option value="Beginner">Beginner</option>
-                  <option value="Intermediate">Intermediate</option>
-                  <option value="Advanced">Advanced</option>
-                  <option value="Native">Native</option>
-                </select>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveLanguage(idx)}
-                  className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={handleAddLanguage}
-              className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
-            >
-              Add Language
-            </button>
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Collaboration Rates</span>
-            <input
-              type="number"
-              name="collaborationRates.post"
-              value={formData.collaborationRates.post}
-              onChange={handleChange}
-              placeholder="Post Rate"
-              className="p-2 border border-gray-300 rounded w-full mb-2"
-            />
-            <input
-              type="number"
-              name="collaborationRates.story"
-              value={formData.collaborationRates.story}
-              onChange={handleChange}
-              placeholder="Story Rate"
-              className="p-2 border border-gray-300 rounded w-full mb-2"
-            />
-            <input
-              type="number"
-              name="collaborationRates.reel"
-              value={formData.collaborationRates.reel}
-              onChange={handleChange}
-              placeholder="Reel Rate"
-              className="p-2 border border-gray-300 rounded w-full mb-2"
-            />
-          </label>
-        </div>
-        <button
-          type="submit"
-          className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Submit
-        </button>
-      </form>
-    </div>
-  );
-};
-
-export default NewContentWriter;*/
-
-
-
-
-
-
-
-
-
-/*import React, { useState } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-
-const NewContentWriter = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    bio: "",
-    experience: 0,
-    expertise: [""],
-    languages: [{ name: "", proficiency: "" }],
-    collaborationRates: { post: 0, story: 0, reel: 0 },
-    email: "",
-  });
-
-  // Update form data based on input changes
-  const handleChange = (e) => {
-    const { name, value, type } = e.target;
-
-    if (name.startsWith('collaborationRates')) {
-      const key = name.split('.')[1];
-      setFormData((prev) => ({
-        ...prev,
-        collaborationRates: {
-          ...prev.collaborationRates,
-          [key]: type === 'number' ? parseFloat(value) : value,
-        },
-      }));
-    } else if (name.startsWith('languages')) {
-      const [index, key] = name.split('.').slice(1);
-      setFormData((prev) => {
-        const updatedLanguages = [...prev.languages];
-        updatedLanguages[index][key] = value;
-        return { ...prev, languages: updatedLanguages };
-      });
-    } else if (name.startsWith('expertise')) {
-      const index = parseInt(name.match(/\d+/)[0], 10);
-      setFormData((prev) => {
-        const updatedExpertise = [...prev.expertise];
-        updatedExpertise[index] = value;
-        return { ...prev, expertise: updatedExpertise };
-      });
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: type === 'number' ? parseFloat(value) : value,
-      }));
-    }
-  };
-
-  // Validate form data before submission
-  const validateFormData = () => {
-    const errors = [];
-    if (!formData.bio) errors.push("Bio is required.");
-    formData.languages.forEach((lang, index) => {
-      if (!lang.name) errors.push(`Language ${index + 1} name is required.`);
-      if (!lang.proficiency) errors.push(`Language ${index + 1} proficiency is required.`);
-    });
-    return errors;
-  };
-
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    const validationErrors = validateFormData();
-    if (validationErrors.length > 0) {
-      validationErrors.forEach(error => toast.error(error));
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/contentwriters/createcontentwriter",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      toast.success("Content writer added successfully");
-    } catch (error) {
-      toast.error(`Error adding content writer: ${error.response ? error.response.data.message : error.message}`);
-      console.error("Error:", error.response ? error.response.data : error.message);
-    }
-  };
-
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-blue-600">Add New Content Writer</h1>
-      <form onSubmit={handleSubmit} className="mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <label className="block">
-            <span className="text-gray-700">Name</span>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-              required
-            />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Email</span>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Bio</span>
-            <textarea
-              name="bio"
-              value={formData.bio}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Experience</span>
-            <input
-              type="number"
-              name="experience"
-              value={formData.experience}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Expertise</span>
-            {formData.expertise.map((exp, idx) => (
-              <input
-                key={idx}
-                type="text"
-                name={`expertise[${idx}]`}
-                value={exp}
-                onChange={handleChange}
-                placeholder="Expertise"
-                className="p-2 border border-gray-300 rounded w-full mb-2"
-              />
-            ))}
-            <button
-              type="button"
-              onClick={() => setFormData(prev => ({
-                ...prev,
-                expertise: [...prev.expertise, ""]
-              }))}
-              className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
-            >
-              Add Expertise
-            </button>
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Languages</span>
-            {formData.languages.map((lang, idx) => (
-              <div key={idx} className="mb-2">
-                <select
-                  name={`languages.${idx}.name`}
-                  value={lang.name}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded w-full mb-1"
-                >
-                  <option value="">Select Language</option>
-                  <option value="English">English</option>
-                  <option value="Hindi">Hindi</option>
-                  <option value="Punjabi">Punjabi</option>
-                  <option value="Marathi">Marathi</option>
-                  <option value="Gujarati">Gujarati</option>
-                  <option value="Urdu">Urdu</option>
-                  <option value="Odia">Odia</option>
-                  <option value="Tamil">Tamil</option>
-                  <option value="Telugu">Telugu</option>
-                  <option value="Bengali">Bengali</option>
-                  <option value="Kannada">Kannada</option>
-                  <option value="Other">Other</option>
-                </select>
-                {lang.name === "Other" && (
-                  <input
-                    type="text"
-                    name={`languages.${idx}.name`}
-                    value={lang.name}
-                    onChange={handleChange}
-                    placeholder="Enter language manually"
-                    className="p-2 border border-gray-300 rounded w-full"
-                  />
-                )}
-                <select
-                  name={`languages.${idx}.proficiency`}
-                  value={lang.proficiency}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded w-full"
-                >
-                  <option value="">Select Proficiency</option>
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
-                  <option value="native">Native</option>
-                </select>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => setFormData(prev => ({
-                ...prev,
-                languages: [...prev.languages, { name: "", proficiency: "" }]
-              }))}
-              className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
-            >
-              Add Language
-            </button>
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Collaboration Rates (Post)</span>
-            <input
-              type="number"
-              name="collaborationRates.post"
-              value={formData.collaborationRates.post}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Collaboration Rates (Story)</span>
-            <input
-              type="number"
-              name="collaborationRates.story"
-              value={formData.collaborationRates.story}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">Collaboration Rates (Reel)</span>
-            <input
-              type="number"
-              name="collaborationRates.reel"
-              value={formData.collaborationRates.reel}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </label>
-        </div>
-        <button
-          type="submit"
-          className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Submit
-        </button>
-      </form>
-    </div>
-  );
-};
-
-export default NewContentWriter;*/
-
-
-
-
-
-
-
-
-

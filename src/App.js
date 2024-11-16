@@ -16,6 +16,8 @@ import Navbar from "./components/Navbar.js";
 import Sidebar from "./components/Sidebar.js";
 import ProtectedRoute from './components/ProtectedRoute.js';
 
+const Verification = lazy(() => import('./components/auth/VerificationSuccess.js'));
+
 // Lazy-loaded Components
 const Login = lazy(() => import('./components/auth/Login.js'));
 const Signup = lazy(() => import('./components/auth/Signup.js'));
@@ -58,7 +60,8 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const useShowNavbarAndSidebar = () => {
   const location = useLocation();
-  return !(location.pathname === "/login" || location.pathname === "/Signup101010" || location.pathname === "/notfound");
+  return !(location.pathname === "/login" || location.pathname === "/Signup101010" || location.pathname === "/notfound" || location.pathname === "/verification-success")
+
 };
 
 function App() {
@@ -130,6 +133,8 @@ function AppContent() {
               <Route path="/profile-settings" element={<ProtectedRoute><ProfileSettings /></ProtectedRoute>} />
               <Route path="/my-lists" element={<ProtectedRoute><MyLists /></ProtectedRoute>} />
 
+
+              <Route path="/verification-success" element={<Verification />} />
               {/* Stripe Checkout */}
               <Route path="/checkout" element={<ProtectedRoute><Elements stripe={stripePromise}><CheckoutForm /></Elements></ProtectedRoute>} />
 

@@ -1,20 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { FaArrowLeft, FaUser, FaUsers, FaHeart, FaLocationArrow, FaLanguage, FaCheckCircle, FaDollarSign, FaTag, FaComment, FaFilePdf } from 'react-icons/fa';
+import { FaUser, FaUsers, FaHeart, FaLocationArrow, FaLanguage, FaCheckCircle, FaDollarSign, FaTag, FaComment, FaFilePdf } from 'react-icons/fa';
 
-import { toast } from 'react-toastify';
-import { useTheme } from '../../context/ThemeProvider.js';
+
 import { UserContext } from '../../context/userContext.js';
 import ReportModal from '../OtherComponents/ReportForm.js';
-import { faUser, faMapMarkerAlt, faLanguage, faTags, faUsers, faVideo, faChartLine, faEye, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { motion } from 'framer-motion';
 
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+
 
 
 
@@ -22,25 +20,13 @@ const InfluencerProfile = () => {
 
 
 
-  const { isDarkTheme } = useTheme();
+
   const { userData, localhosturl } = useContext(UserContext);
   const { id } = useParams();
   const navigate = useNavigate();
   const [influencer, setInfluencer] = useState(null);
-  const [form, setForm] = useState({
-    userId: userData?._id,
-    brandName: '',
-    contactPerson: '',
-    email: '',
-    phone: '',
-    campaignDetails: '',
-    collaborationType: '',
-    budget: '',
-    notes: ''
 
-  });
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [reportSubmitted, setReportSubmitted] = useState(false);
+
 
   useEffect(() => {
     const fetchInfluencer = async () => {
@@ -56,11 +42,6 @@ const InfluencerProfile = () => {
 
     fetchInfluencer();
   }, [id]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-  };
 
 
   const createDescriptionElements = (formData, users) => {
@@ -136,34 +117,7 @@ const InfluencerProfile = () => {
     }
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const applicationData = {
-      ...form,
-      influencerId: id // Include influencerId in the application data
-    };
 
-    try {
-
-      await axios.post(`${localhosturl}/userbrand/addapplications`, applicationData);
-      setFormSubmitted(true);
-      setForm({
-        brandName: '',
-        contactPerson: '',
-        email: '',
-        phone: '',
-        campaignDetails: '',
-        collaborationType: '',
-        budget: '',
-        notes: ''
-      });
-
-      toast.success("Sent Application successfully")
-    } catch (error) {
-      toast.error(`Error submitting application:', ${error}`)
-      console.error('Error submitting application:', error);
-    }
-  };
 
   if (!influencer) return <div className="text-center text-xl font-semibold">Loading...</div>;
 
@@ -183,81 +137,52 @@ const InfluencerProfile = () => {
     averageLikes,
     averageComments,
     category,
-    verifiedStatus,
+
     pastCollaborations,
     mediaKit
   } = instagramInfluencer;
 
 
 
-
-  const handleReport = async () => {
-    const reportData = {
-      reporterId: userData?._id,
-      influencerId: id,
-      reason: "Fake Profile",
-    };
-
-    try {
-      // await axios.post(`${localhosturl}/report`, reportData);
-      //  setReportSubmitted(true);
-      toast.success("Profile reported successfully!");
-    } catch (error) {
-      toast.error("Error reporting profile");
-      console.error("Error:", error);
-    }
-  };
-
-
-  const handleDownload = async () => {
-    const pdf = new jsPDF();
-    const imgData = await html2canvas(document.getElementById('image-to-download')).then(canvas => canvas.toDataURL('image/png'));
-
-    pdf.addImage(imgData, 'PNG', 0, 0);
-    pdf.save('MediaKit.pdf');
-  };
-
   return (
-    <div className=""//"relative w-full min-h-screen  bg-contain"//bg-gradient-to- from-blue-200 via-purple-300 to-pink-500 bg-cover
+    <div
     >
-     
+
       <button
-       className="mb-4 px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded hover:bg-blue-600 transition-all"
-       // style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-        //onClick={() => history.goBack()}
+        className="mb-4 px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded hover:bg-blue-600 transition-all"
+
         onClick={() => navigate(-1)}
       >
         <FontAwesomeIcon icon={faArrowLeft} style={{ marginRight: '10px' }} />
         Back
       </button>
-      {/*<div className="absolute top-0 left-0 right-0 h-48 bg-no-repeat bg-top bg-contain" style={{ backgroundImage: 'url("https://example.com/top-flowers.png")' }}></div>
-*/}
+
       <div
-        className=""//"absolute inset-0 bg-cover bg-center opacity-50"
-        //style={{ backgroundImage: 'url("https://source.unsplash.com/random/1600x900")' }}
+
+
       >
-        <div className=""//"absolute inset-0  opacity-0 bg-cover"//bg-gradient-to- from-black to-transparent
+        <div
         ></div>
       </div>
 
-      <div className=""//"relative z-10 max-w-7xl mx-auto p-6 lg:p-12 bg-cover"
+      <div
       >
-        <div className=""//" bg-opacity-90 rounded-lg shadow-lg overflow-auto p-6 lg:p-12"
+        <div
         >
           <div className=""//"flex flex-col lg:flex-row gap-8  p-6 rounded-lg"//bg-gradient-to-r from-yellow-300 via-pink-300 to-red-300
           >
-            {/* Profile Image & Name */}
+
             <motion.div
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ duration: 1 }}
->
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1 }}
+            >
               <div className="flex-1 flex flex-col items-center lg:items-start">
-              <motion.div
-  initial={{ scale: 0 }}
-  animate={{ scale: 1 }}
-  transition={{ duration: 0.5 }}
->
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
                   <img
                     src={
                       profilePicture?.startsWith('https')
@@ -268,17 +193,17 @@ const InfluencerProfile = () => {
                     alt={username}
                     className="w-48 h-48 lg:w-64 lg:h-64 object-cover rounded-full border-4 border-white shadow-lg transition-transform transform hover:scale-105"
                   />
-               </motion.div>
+                </motion.div>
                 <h4 className="mt-4 text-3xl lg:text-4xl font-bold text-900 p-2">{fullName || username}</h4>
               </div>
-              </motion.div>
+            </motion.div>
 
-            {/* Followers & Following */}
+
             <motion.div
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ duration: 1 }}
->
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1 }}
+            >
               <div className="flex-1 ">
                 <div className="grid grid-cols-1 gap-4 text-700">
                   <div className="flex items-center bg-100 p-4 rounded-lg shadow-md">
@@ -291,28 +216,28 @@ const InfluencerProfile = () => {
                   </div>
                 </div>
               </div>
-              </motion.div>
+            </motion.div>
           </div>
 
-          {/* Bio */}
+
           <motion.div
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ duration: 1 }}
->
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
             <div className="mt-8 bg-100 p-6 rounded-lg shadow-lg  p-6 rounded-lg"//bg-gradient-to-r from-yellow-300 via-pink-300 to-red-300
             >
               <h2 className="text-2xl font-semibold mb-4 p-2">Bio</h2>
               <p className="text-800">{bio}</p>
             </div>
-            </motion.div>
+          </motion.div>
 
-          {/* Collaboration Details */}
+
           <motion.div
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ duration: 1 }}
->
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
 
             <div className="mt-8  p-6 rounded-lg shadow-lg"//bg-gradient-to-r from-yellow-300 via-pink-300 to-red-300
             >
@@ -332,14 +257,14 @@ const InfluencerProfile = () => {
                 </div>
               </div>
             </div>
-            </motion.div>
+          </motion.div>
 
-          {/* Additional Metrics */}
+
           <motion.div
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ duration: 1 }}
->
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
 
             <div className="mt-8 bg-100 p-6 rounded-lg shadow-lg  p-6 rounded-lg">
               <h2 className="text-2xl font-semibold mb-4 p-2">Additional Metrics</h2>
@@ -354,7 +279,7 @@ const InfluencerProfile = () => {
                 </div>
                 <div className="flex items-center bg-200 p-4 rounded-lg shadow-md">
                   <FaLocationArrow className="mr-2 text-indigo-600 text-xl" />
-                  <span><strong>Location:</strong> {`${location.country===""?"":","} ${location.state===""?"":","} ${location.city}`}</span>
+                  <span><strong>Location:</strong> {`${location.country === "" ? "" : ","} ${location.state === "" ? "" : ","} ${location.city}`}</span>
                 </div>
                 <div className="flex items-center bg-200 p-4 rounded-lg shadow-md">
                   <FaLanguage className="mr-2 text-indigo-600 text-xl" />
@@ -374,17 +299,17 @@ const InfluencerProfile = () => {
                 </div>
               </div>
             </div>
-            </motion.div>
+          </motion.div>
 
 
 
 
-       
+
           <motion.div
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ duration: 1 }}
->
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
             <div className="mt-8 bg-100 p-6 rounded-lg shadow-lg">
               <h2 className="text-2xl font-semibold mb-4 p-2">Media Kit & Past Collaborations</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -392,7 +317,7 @@ const InfluencerProfile = () => {
                   <div className="bg-200 p-4 rounded-lg shadow-md flex flex-col items-center">
                     <h3 className="text-xl font-semibold mb-2 p-2">Media Kit</h3>
 
-                    {/* Image Preview */}
+
                     <img
                       id="image-to-download"
                       src={
@@ -404,14 +329,7 @@ const InfluencerProfile = () => {
                       className="mb-4 w-48 h-auto rounded"
                     />
 
-                    {/* Download Button 
-          <button
-            onClick={handleDownload}
-            className="flex items-center text-blue-600 hover:text-blue-800"
-          >
-            <FaFilePdf className="mr-2 text-2xl" />
-            <span>Download as PDF</span>
-          </button>*/}
+
                   </div>
                 )}
                 {pastCollaborations && (
@@ -422,7 +340,7 @@ const InfluencerProfile = () => {
                 )}
               </div>
             </div>
-            </motion.div>
+          </motion.div>
 
 
 
@@ -575,32 +493,20 @@ const InfluencerProfile = () => {
           </Fade>
  */}
 
-          {/* Report Profile Section */}
+
 
         </div>
       </div>
-        <div>
-      <ReportModal
-      section="InstagramInfluencer"
-           // isOpen={isModalOpen}
-           // onClose={() => setIsModalOpen(false)}
-            userId={userData._id}
-            publisherId={id}
-            localhosturl={localhosturl} 
-          />
-        {/*<div className="mt-8 p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold mb-4">Report Profile</h2>
-          {reportSubmitted ? (
-            <div className="text-green-600 text-lg font-semibold">Profile reported successfully!</div>
-          ) : (
-            <button
-              onClick={handleReport}
-              className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition"
-            >
-              Report This Profile
-            </button>
-          )}
-        </div>*/}
+      <div>
+        <ReportModal
+          section="InstagramInfluencer"
+          // isOpen={isModalOpen}
+          // onClose={() => setIsModalOpen(false)}
+          userId={userData._id}
+          publisherId={id}
+          localhosturl={localhosturl}
+        />
+
       </div>
     </div>
   );

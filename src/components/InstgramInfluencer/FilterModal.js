@@ -40,7 +40,7 @@ const FilterModal = ({ isOpen, onClose, onApply }) => {
         <h2 className="text-xl font-bold mb-4">Filter Influencers</h2>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 gap-4">
-            {/* Filter fields */}
+
             <label>
               <span className="text-gray-700">Follower Range</span>
               <div className="flex space-x-2">

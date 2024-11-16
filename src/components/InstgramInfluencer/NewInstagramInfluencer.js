@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useContext, } from "react";
 import axios from "axios";
 import NewInstagramInfluencerTable from "./NewInstagramInfluencerTable.js";
 import { toast } from "react-toastify";
-import { useTheme } from "../../context/ThemeProvider.js";
+
 import { UserContext } from "../../context/userContext.js";
 import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 
 const NewInstagramInfluencer = () => {
-  const { isDarkTheme } = useTheme();
+  // const { isDarkTheme } = useTheme();
   const { userData, localhosturl } = useContext(UserContext);
-  const userId = userData?._id;
+
   const [formData, setFormData] = useState({
     username: "",
     fullName: "",
@@ -23,22 +23,22 @@ const NewInstagramInfluencer = () => {
     averageLikes: 0,
     averageComments: 0,
     category: "",
-    //location: "",
-     location: {
-    country: "",
-    state: "",
-    city: ""
-  },
+
+    location: {
+      country: "",
+      state: "",
+      city: ""
+    },
     language: "",
     verifiedStatus: false,
     collaborationRates: { post: 0, story: 0, reel: 0 },
     pastCollaborations: [],
     mediaKit: "",
-    userId:userData?._id,
+    userId: userData?._id,
   });
 
-  const [locationQuery, setLocationQuery] = useState("");
-  const [locationResults, setLocationResults] = useState([]);
+  const [setLocationQuery] = useState("");
+
 
 
   const [profileUrlOption, setProfileUrlOption] = useState("manual");
@@ -72,35 +72,8 @@ const NewInstagramInfluencer = () => {
     }
   };
 
-  const handleLocationChange = async (e) => {
-    const query = e.target.value;
-    setLocationQuery(query);
 
-    if (query.length > 2) {
-      try {
-        const response = await axios.get(`https://us1.locationiq.com/v1/search.php`, {
-          params: {
-            key: 'pk.9a061732949f134d1a74e2f7220fad7a',
-            q: query,
-            format: 'json'
-          }
-        });
-        setLocationResults(response.data);
-      } catch (error) {
-        console.error("Error fetching location data", error);
-      }
-    } else {
-      setLocationResults([]);
-    }
-  };
-  const handleLocationSelect1 = (location) => {
-    setFormData((prev) => ({
-      ...prev,
-      location: location.display_name,
-    }));
-    setLocationQuery(location.display_name);
-    setLocationResults([]);
-  };
+
 
   const createDescriptionElements = (formData, users) => {
     const elements = [
@@ -185,7 +158,7 @@ const NewInstagramInfluencer = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("formdata: ", formData);
-    
+
     const formDataToSend = new FormData();
     formDataToSend.append("username", formData.username);
     formDataToSend.append("fullName", formData.fullName);
@@ -200,43 +173,43 @@ const NewInstagramInfluencer = () => {
     formDataToSend.append("location", JSON.stringify(formData.location));
     formDataToSend.append("language", formData.language);
     formDataToSend.append("verifiedStatus", formData.verifiedStatus);
-    
-    // Send collaborationRates as a JSON string
+
+
     if (formData?.collaborationRates) {
-        formDataToSend.append("collaborationRates", JSON.stringify(formData.collaborationRates));
+      formDataToSend.append("collaborationRates", JSON.stringify(formData.collaborationRates));
     } else {
-        console.error("collaborationRates is undefined");
+      console.error("collaborationRates is undefined");
     }
 
     formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
 
     if (profileUrlOption === "system" && formData.profilePicture) {
-        formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
+      formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
     } else {
-        formDataToSend.append("profilePicture", formData.profilePicture);
+      formDataToSend.append("profilePicture", formData.profilePicture);
     }
 
     if (mediaKitOption === "system" && formData.mediaKit) {
-        formDataToSend.append("mediaKit", document.querySelector('input[name="mediaKit"]').files[0]);
+      formDataToSend.append("mediaKit", document.querySelector('input[name="mediaKit"]').files[0]);
     } else {
-        formDataToSend.append("mediaKit", formData.mediaKit);
+      formDataToSend.append("mediaKit", formData.mediaKit);
     }
 
     try {
-        const response = await axios.post(`${localhosturl}/instagraminfluencers/addInstagraminfluencer`, formDataToSend, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
-        setAddInfluencer((prev) => [...prev, response.data.instagramInfluencer]);
-        toast.success("Influencer added Successfully");
-        pastactivitiesAdd(formDataToSend);
-        handleReset();
+      const response = await axios.post(`${localhosturl}/instagraminfluencers/addInstagraminfluencer`, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setAddInfluencer((prev) => [...prev, response.data.instagramInfluencer]);
+      toast.success("Influencer added Successfully");
+      pastactivitiesAdd(formDataToSend);
+      handleReset();
     } catch (error) {
-        toast.error(`Error adding influencer ${error}`);
-        console.error("Error adding influencer", error);
+      toast.error(`Error adding influencer ${error}`);
+      console.error("Error adding influencer", error);
     }
-};
+  };
 
 
   const handleSubmit1 = async (e) => {
@@ -254,24 +227,21 @@ const NewInstagramInfluencer = () => {
     formDataToSend.append("averageLikes", formData.averageLikes);
     formDataToSend.append("averageComments", formData.averageComments);
     formDataToSend.append("category", formData.category);
-    //formDataToSend.append("location", formData.location);
+
     formDataToSend.append("language", formData.language);
     formDataToSend.append("verifiedStatus", formData.verifiedStatus);
 
-    //formDataToSend.append("collaborationRates[post]", formData.collaborationRates.post);
-    //formDataToSend.append("collaborationRates[story]", formData.collaborationRates.story);
-   // formDataToSend.append("collaborationRates[reel]", formData.collaborationRates.reel);
-    // formDataToSend.append("collaborationRates", JSON.stringify(formData.collaborationRates));
+
 
     formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
     if (formData?.collaborationRates) {
       formDataToSend.append("collaborationRates[post]", formData?.collaborationRates?.post);
       formDataToSend.append("collaborationRates[story]", formData?.collaborationRates?.story);
       formDataToSend.append("collaborationRates[reel]", formData?.collaborationRates?.reel);
-  } else {
+    } else {
       console.error("collaborationRates is undefined");
-  }
-  
+    }
+
 
     if (profileUrlOption === "system" && formData.profilePicture) {
       formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
@@ -288,13 +258,12 @@ const NewInstagramInfluencer = () => {
     try {
 
 
-      const response = await axios.post(`${localhosturl}/instagraminfluencers/addInstagraminfluencer`, {...formDataToSend,userId:userData?._id,}, {
+      const response = await axios.post(`${localhosturl}/instagraminfluencers/addInstagraminfluencer`, { ...formDataToSend, userId: userData?._id, }, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      // setInfluencers((prev) => [...prev, response.data.instagramInfluencer]);
-      // ((prevInfluencers) => [...prevInfluencers, newInfluencer]);
+
       setAddInfluencer((prev) => [...prev, response.data.instagramInfluencer]);
       console.log(formDataToSend)
       toast.success("Influencer added Successfully");
@@ -305,32 +274,6 @@ const NewInstagramInfluencer = () => {
       console.error("Error adding influencer", error);
     }
   };
-
-
-  /*const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const form = new FormData();
-      for (const key in formData) {
-        if (formData[key] instanceof File) {
-          form.append(key, formData[key]);
-        } else {
-          form.append(key, formData[key]);
-        }
-      }
-  
-      const response = await axios.post("http://localhost:5000/instagraminfluencers/addInstagraminfluencer", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      setInfluencers((prev) => [...prev, response.data.instagramInfluencer]);
-      handleReset();
-    } catch (error) {
-      console.error("Error adding influencer", error);
-    }
-  };*/
-
 
 
   const handleReset = () => {
@@ -346,12 +289,12 @@ const NewInstagramInfluencer = () => {
       averageLikes: 0,
       averageComments: 0,
       category: "",
-     // location: "",
-     location: {
-      country: "",
-      state: "",
-      city: ""
-    },
+
+      location: {
+        country: "",
+        state: "",
+        city: ""
+      },
       language: "",
       verifiedStatus: false,
       collaborationRates: { post: 0, story: 0, reel: 0 },
@@ -361,9 +304,7 @@ const NewInstagramInfluencer = () => {
     setLocationQuery("")
   }
 
-  /*const handleLocationSelect = useCallback((location) => {
-    setFormData((prev) => ({ ...prev, location }));
-  }, []);*/
+
 
   const handleLocationSelect = (location) => {
     setFormData((prev) => ({ ...prev, location }));
@@ -371,7 +312,7 @@ const NewInstagramInfluencer = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h3 className="text-xl font-bold mb-3 p-3"//"text-2xl font-bold mb-4 text-blue-600 text-white bg-blue-700 "
+      <h3 className="text-xl font-bold mb-3 p-3"
       >Instagram Influencers</h3>
       <form onSubmit={handleSubmit} className="mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -549,43 +490,9 @@ const NewInstagramInfluencer = () => {
               <option value="App Development">App Development</option>
             </select>
           </div>
-          {/* <label className="block">
-            <span className="text-gray-700">Location</span>
-            <input
-              type="text"
-              name="location"
-              placeholder="Location"
-              value={formData.location}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
-          </label>*/}
-             <LocationSelector onSelectLocation={handleLocationSelect} />
-       {/* <div className="block">
-            <label className="text-gray-700">Location</label>
-            <input
-              type="text"
-              name="location"
-              placeholder="Search Location"
-              value={locationQuery}
-              onChange={handleLocationChange}
-              className="p-2 border border-gray-300 rounded w-full"
-              required
-            />
-            {locationResults.length > 0 && (
-              <ul className="mt-2 border border-gray-300 rounded w-full bg-white max-h-40 overflow-auto">
-                {locationResults.map((location) => (
-                  <li
-                    key={location.place_id}
-                    className="p-2 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleLocationSelect(location)}
-                  >
-                    {location.display_name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>*/}
+
+          <LocationSelector onSelectLocation={handleLocationSelect} />
+
           <div className="block">
             <label className="text-gray-700">Language</label>
             <select
@@ -723,24 +630,24 @@ const NewInstagramInfluencer = () => {
             Reset
           </button>
           <button
-           disabled={!userData.permissions.instagram.add} 
-                    title={!userData.permissions.instagram.add
-                       ? "You are not allowed to access this feature"
-                     :undefined  // : ""
-                    }
+            disabled={!userData.permissions.instagram.add}
+            title={!userData.permissions.instagram.add
+              ? "You are not allowed to access this feature"
+              : undefined
+            }
             type="submit"
             className="py-2 px-4 bg-blue-900 text-white rounded transition duration-300 ease-in-out transform hover:scale-105 hover:animate-submitColorChange"
           >
-           Add Influencer
+            Add Influencer
           </button>
         </div>
 
       </form>
-      <h2 className="text-xl   p-2 my-2"// text-white bg-blue-700 
+      <h2 className="text-xl   p-2 my-2"
       >
         Instagram Influencer List
       </h2>
-    <NewInstagramInfluencerTable key={refreshKey} addInfluencer={addInfluencer}/>
+      <NewInstagramInfluencerTable key={refreshKey} addInfluencer={addInfluencer} />
     </div>
   );
 };

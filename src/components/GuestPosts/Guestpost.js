@@ -1,21 +1,21 @@
-/* eslint-disable react/prop-types */
+
 
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import GuestpostTable from "./GuestpostTable.js";
 import { toast } from "react-toastify";
 import { UserContext } from "../../context/userContext.js";
-import { useTheme } from "../../context/ThemeProvider.js";
+
 import SaveSearch from "../OtherComponents/SaveSearch.js";
 import { useLocation } from "react-router-dom";
 
 
 const Guestpost = () => {
 
-  const { isDarkTheme } = useTheme();
+
   const { userData, localhosturl } = useContext(UserContext);
   const userId = userData?._id;
-  // console.log(userData,userId)
+
 
   const initialFormData = {
     userId: userData?._id || "",
@@ -49,7 +49,7 @@ const Guestpost = () => {
       const formData = location.state.formData;
 
       const flattenedFormData = formData["0"] || formData;
-      //  console.log("Flattened FormData", flattenedFormData);
+
 
       setFormData(prevState => ({
         ...initialFormData,
@@ -66,7 +66,7 @@ const Guestpost = () => {
         `${localhosturl}/form/getFilteredData`
 
         , formData);
-      //  console.log("Fetched data:", response.data);
+
       setUsers(response.data);
 
 
@@ -74,7 +74,7 @@ const Guestpost = () => {
         toast.success("Saved Data Fetch Successfully");
         setToastShown(true);
       }
-      // toast.success("Saved Data Fetch Successfully");
+
     } catch (error) {
       console.log("Error fetching data:", error);
       toast.error(error.message);
@@ -120,7 +120,7 @@ const Guestpost = () => {
     try {
       const activityData = {
         userId: userData?._id,
-        action: "Performed a search for guest posts",//"Searched for guest posts",
+        action: "Performed a search for guest posts",
         section: "Guest Post",
         role: userData?.role,
         timestamp: new Date(),
@@ -145,22 +145,6 @@ const Guestpost = () => {
   axios.defaults.withCredentials = true;
 
 
-  /*const handleSubmit = async(e) => {
-  e.preventDefault();
- const response =  await axios
-    .post("http://localhost:5000/form/getFilteredData", formData)
-  //.post("https://guest-posting-marketplace-web-backend.onrender.com/form/getFilteredData", formData)
-    .then((response) => {
-      console.log(response.data);
-      setUsers(response.data);
-       pastactivitiesAdd(response.data)
-      toast.success("Data Fetch Successfully");
-    })
-    .catch((error) => {
-      console.log(error);
-      toast.error(error.message);
-    });
-};*/
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -169,10 +153,10 @@ const Guestpost = () => {
         `${localhosturl}/form/getFilteredData`
 
         , formData);
-      //console.log("Fetched data:", response.data);
+
       setUsers(response.data);
 
-      // Call pastactivitiesAdd without await since handleSubmit is already async
+
       pastactivitiesAdd(response.data);
 
       toast.success("Data Fetch Successfully");
@@ -182,16 +166,10 @@ const Guestpost = () => {
     }
   };
 
-  const handleSaveSearch = () => {
-    // Save the form data to local storage or send it to the server
-    //localStorage.setItem("savedSearch", JSON.stringify(formData));
-    toast.success("Search saved successfully!");
-  };
-  // console.log("Checking FormData ",formData)
 
   return (
     <div className="p-4">
-      <h2 className="text-2xl  p-2 my-2"//text-white bg-blue-700
+      <h2 className="text-2xl  p-2 my-2"
       >FAQ</h2>
 
       <form
@@ -330,7 +308,7 @@ const Guestpost = () => {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="publisherURL" //className="font-medium"
+            <label htmlFor="publisherURL"
             >
               Publisher URL
             </label>
@@ -347,7 +325,7 @@ const Guestpost = () => {
             />
           </div>
           <div className="flex flex-col">
-            <label htmlFor="publisherName" //className="font-medium"
+            <label htmlFor="publisherName"
             >
               Publisher Name
             </label>
@@ -474,13 +452,7 @@ const Guestpost = () => {
 
 
         <div className="flex items-center justify-end space-x-2">
-          {/* <button
-            type="button"
-            onClick={handleSaveSearch}
-            className="py-2 px-4 bg-green-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-green-500 hover:scale-105"
-          >
-            Save Search
-          </button>*/}
+
           <SaveSearch section="Guestpost" formDataList={formData} />
           <button
 
@@ -495,7 +467,7 @@ const Guestpost = () => {
 
             title={!userData?.permissions?.guestPost?.filter
               ? "You are not allowed to access this feature" : undefined
-              // : ""
+
             }
             type="submit"
             className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
@@ -505,9 +477,9 @@ const Guestpost = () => {
         </div>
       </form>
 
-      {/* Display User Fetched Data */}
+
       <div className="mt-4">
-        <h2 className="text-xl   p-2 my-2"// text-white bg-blue-700 
+        <h2 className="text-xl   p-2 my-2"
         >
           Guestpost List
         </h2>

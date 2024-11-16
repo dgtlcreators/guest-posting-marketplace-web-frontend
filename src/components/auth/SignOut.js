@@ -9,8 +9,8 @@ const SignOut = () => {
   const handleSignOut = () => {
     setUserData(null);
     localStorage.removeItem("user");
-    localStorage.removeItem("token"); // If you have a token stored
-    navigate("/login"); // Redirect to login page
+    localStorage.removeItem("token"); 
+    navigate("/login");
   };
 
   return (

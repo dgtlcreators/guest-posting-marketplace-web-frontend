@@ -1,4 +1,3 @@
-// src/components/BrandUserDashboard.js
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -14,7 +13,6 @@ const BrandUserDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Replace with actual endpoints
         const searches = await axios.get('http://localhost:5000/dashboard/savedSearches');
         const influencers = await axios.get('http://localhost:5000/dashboard/bookmarkedInfluencers');
         const activities = await axios.get('http://localhost:5000/dashboard/recentActivities');
@@ -32,7 +30,7 @@ const BrandUserDashboard = () => {
     <div className="p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
       <div className="space-y-6">
-        {/* Saved Searches */}
+  
         <div>
           <h3 className="text-xl font-semibold">Saved Searches</h3>
           <ul>
@@ -41,7 +39,7 @@ const BrandUserDashboard = () => {
             ))}
           </ul>
         </div>
-        {/* Bookmarked Influencers */}
+       
         <div>
           <h3 className="text-xl font-semibold">Bookmarked Influencers</h3>
           <ul>
@@ -50,7 +48,7 @@ const BrandUserDashboard = () => {
             ))}
           </ul>
         </div>
-        {/* Recent Activities */}
+
         <div>
           <h3 className="text-xl font-semibold">Recent Activities</h3>
           <ul>

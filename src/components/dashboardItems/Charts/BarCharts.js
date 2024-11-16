@@ -38,7 +38,7 @@ const BarCharts = ({data}) => {
         text: 'Followers and Following count',
         align: 'left',
         style: {
-          //fontSize: '24px',
+         
           color: isDarkTheme ? '#FFFFFF' : '#000000', 
         },
     },

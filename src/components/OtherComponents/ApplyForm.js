@@ -233,60 +233,7 @@ const text2 = `New application submitted by ${userData.name}, with the name ${fo
         </button>
       ) : (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          {/**<form 
-          onSubmit={handleSubmit}
-          className={`fixed inset-0 flex items-center justify-center  bg-opacity-50 ${isDarkTheme?" backdrop-blur-md" : "backdrop-blur-md"}`}
-          //"fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"//" bg-opacity-10 backdrop-filter backdrop-blur-lg p-8 rounded-lg shadow-lg max-w-md w-full"
-        >
-           <div className=" p-8 rounded shadow-lg">
-          <h2 className="text-2xl font-bold text-center mb-6 ">Application Form</h2>
-          <div className="mb-4">
-            <label className=" ">Name:</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 bg-opacity-30 text-white"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className=" ">Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 bg-opacity-30 text-white"
-              required
-            />
-          </div>
-          <div className="mb-6">
-            <label className=" ">Phone:</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 bg-opacity-30 text-white"
-              required
-            />
-          </div>
-          <button 
-            type="submit"
-            className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
-          >
-            Submit Application
-          </button>
-          <button 
-            onClick={() => setIsFormVisible(false)}
-            className="mt-4 w-full bg-red-600 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-red-700 transition duration-300"
-          >
-            Cancel
-          </button>
-          </div>
-        </form> */}
+        
           <div className=" ">
 
             <form onSubmit={handleSubmit} className='p-8 rounded shadow-lg'>

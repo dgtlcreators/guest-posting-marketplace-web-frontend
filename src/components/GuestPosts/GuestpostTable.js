@@ -1,126 +1,15 @@
 
-
-/*import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { loadStripe } from '@stripe/stripe-js';
-
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
-
-const FormTable = () => {
-  const users = ['user1', 'user2', 'user3']; 
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [transactions, setTransactions] = useState([]);
-
-  useEffect(() => {
-    fetchItems();
-    fetchAllTransactions();
-  }, []);
-
-  const fetchItems = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/form/getData');
-      setItems(response.data.data);
-    } catch (error) {
-      console.error('Error fetching items:', error);
-    }
-  };
-
-  const fetchAllTransactions = async () => {
-    try {
-      const transactions = await Promise.all(
-        users.map(async (userId) => {
-          const response = await axios.get(`http://localhost:5000/transactions/${userId}`);
-          return response.data;
-        })
-      );
-      setTransactions(transactions.flat());
-    } catch (error) {
-      console.error('Error fetching transactions:', error);
-    }
-  };
-
-  const handleBuy = async (item, userId) => {
-    const stripe = await stripePromise;
-
-    try {
-      setLoading(true);
-      const response = await axios.post('http://localhost:5000/create-payment-intent', { 
-        amount: item.price * 100, // assuming price is in dollars
-        itemId: item._id,
-        userId
-      });
-
-      const { sessionId } = response.data;
-      const result = await stripe.redirectToCheckout({ sessionId });
-
-      if (result.error) {
-        console.error(result.error.message);
-      } else {
-        await axios.post('http://localhost:5000/update-transaction', { sessionId, status: 'completed' });
-        fetchAllTransactions();
-      }
-    } catch (error) {
-      console.error('Error handling payment:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="form-table">
-      {items.map((item) => (
-        <div className="card" key={item._id}>
-          <h3>{item.categories}</h3>
-          <p>DA: {item.mozDA}</p>
-          <p>Price: ${item.price}</p>
-          {users.map((userId) => (
-            <button key={userId} onClick={() => handleBuy(item, userId)} disabled={loading}>
-              Buy as User {userId}
-            </button>
-          ))}
-        </div>
-      ))}
-      <h2>Invoices</h2>
-      {transactions.map((transaction) => (
-        <div className="invoice" key={transaction._id}>
-          <h3>{transaction.itemId.categories}</h3>
-          <p>Amount: ${transaction.amount / 100}</p>
-          <p>Status: {transaction.status}</p>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-export default FormTable;
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSort, FaSortUp, FaSortDown, FaBookmark } from "react-icons/fa";
-
-import { useTheme } from "../../context/ThemeProvider.js";
 import { UserContext } from "../../context/userContext.js";
 
 import { saveAs } from "file-saver";
-import { CSVLink } from "react-csv";
+
 import Papa from "papaparse";
 import ApplyForm from "../OtherComponents/ApplyForm.js";
-import Bookmark from "../OtherComponents/Bookmark.js";
+
 import Pagination from "../OtherComponents/Pagination.js";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -128,9 +17,9 @@ import { toast } from "react-toastify";
 
 
 const GuestpostTable = ({ users, setUsers }) => {
-  const { isDarkTheme } = useTheme();
+
   const navigate = useNavigate();
-  const [originalUsers, setOriginalUsers] = useState(users);
+  // const [originalUsers, setOriginalUsers] = useState(users);
   const [sortedField, setSortedField] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const { userData, localhosturl } = useContext(UserContext);
@@ -150,8 +39,7 @@ const GuestpostTable = ({ users, setUsers }) => {
   const [stripePromise, setStripePromise] = useState(null);
 
 
-  const [guestPosts, setGuestPosts] = useState(users)//([]);
-  const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
+
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   if (!stripePromise) {
@@ -231,7 +119,7 @@ const GuestpostTable = ({ users, setUsers }) => {
       );
     }
 
- 
+
     if (sortedField) {
       sortedData.sort((a, b) => {
         if (a[sortedField] < b[sortedField]) {
@@ -360,24 +248,7 @@ const GuestpostTable = ({ users, setUsers }) => {
   return (
     <div className="p-2">
       <div className="flex items-center mb-4">
-        {/* <div className="relative">
-          <input
-            type="text"
-            placeholder="Search by Categories"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="border border-gray-300 rounded-md py-2 px-4 w-64"
-          />
-         {/* <div className="absolute right-3 top-2">
-            <FaSearch className="text-gray-400" />
-          </div>}
-          <button
-          onClick={handleClearFilter}
-          className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
-        >
-          Clear Filter
-        </button>
-        </div>*/}
+
       </div>
       <div className="table-container">
         <div className="flex flex-col items-center md:flex-row md:items-center justify-between space-y-2 md:space-y-0 md:space-x-2">
@@ -418,75 +289,7 @@ const GuestpostTable = ({ users, setUsers }) => {
         <div className='overflow-x-auto  p-2 rounded-lg shadow-md'>
           <table className="min-w-full  border border-gray-300">
             <thead>
-              {/*<tr>
-            <th className="py-2 px-4 border-b border-gray-200">Ahrefs DR
-                <select
-                value={sortConfig.key === "ahrefsDR" ? sortConfig.direction : ""}
-                  onChange={(e) => handleSortChange("ahrefsDR", e.target.value)}
-                  className="ml-2"
-                >
-                  <option value="">Sort</option>
-                  <option value="asc">Low to High</option>
-                  <option value="desc">High to Low</option>
-                </select>
-              </th>
-              <th className="py-2 px-4 border-b border-gray-200">
-                Moz DA 
-                <select
-                 value={sortConfig.key === "mozDA" ? sortConfig.direction : ""}
-                  onChange={(e) => handleSortChange("mozDA", e.target.value)}
-                  className="ml-2"
-                >
-                  <option value="">Sort</option>
-                  <option value="asc">Low to High</option>
-                  <option value="desc">High to Low</option>
-                </select>
-              </th>
-              
-              
-              <th className="py-2 px-4 border-b border-gray-200">
-                Price
-                <select
-                value={sortConfig.key === "price" ? sortConfig.direction : ""}
-                  onChange={(e) => handleSortChange("price", e.target.value)}
-                  className="ml-2"
-                >
-                  <option value="">Sort</option>
-                  <option value="asc">Low to High</option>
-                  <option value="desc">High to Low</option>
-                </select>
-              </th>
-              <th className="py-2 px-4 border-b border-gray-200">
-                Moz Spam Score
-                <select
-                 value={sortConfig.key === "mozSpamScore" ? sortConfig.direction : ""}
-                  onChange={(e) =>
-                    handleSortChange("mozSpamScore", e.target.value)
-                  }
-                  className="ml-2 bg-gray-200 p-1 rounded"
-                >
-                  <option value="">Sort</option>
-                  <option value="asc">Low to High</option>
-                  <option value="desc">High to Low</option>
-                </select>
-              </th>
-              <th className="py-2 px-4 border-b border-gray-200">
-                Monthly Traffic
-                <select
-                value={sortConfig.key === "monthlyTraffic" ? sortConfig.direction : ""}
-                  onChange={(e) =>
-                    handleSortChange("monthlyTraffic", e.target.value)
-                  }
-                  className="ml-2"
-                >
-                  <option value="">Sort</option>
-                  <option value="asc">Low to High</option>
-                  <option value="desc">High to Low</option>
-                </select>
-              </th>
-              
-              <th className="py-2 px-4 border-b border-gray-200">Actions</th>
-            </tr>*/}
+
               <tr className="bg-200  uppercase text-sm leading-normal border">
                 <th className="border py-3 px-2 md:px-6 text-left">S.No.</th>
                 <th className="border py-3 px-2 md:px-6 text-left" onClick={() => handleSort("mozDA")}>mozDA {renderSortIcon("mozDA")}</th>
@@ -505,7 +308,7 @@ const GuestpostTable = ({ users, setUsers }) => {
                 <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>
                 <th className="border py-3 px-2 md:px-6 text-left uppercase ">Bookmark</th>
                 <th className="border py-3 px-2 md:px-6 text-left uppercase ">Profile</th>
-                {/*<th className="border py-3 px-2 md:px-6 text-left uppercase ">Actions</th>*/}
+
               </tr>
             </thead>
             <tbody className=" text-sm font-light">
@@ -551,7 +354,7 @@ const GuestpostTable = ({ users, setUsers }) => {
                       {user.publisherName}
                     </td>
                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                  ₹ {user.price}
+                      ₹ {user.price}
                     </td>
                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                       {user.monthlyTraffic}
@@ -564,10 +367,7 @@ const GuestpostTable = ({ users, setUsers }) => {
                       <ApplyForm section="Guestpost" publisher={user} />
                     </td>
                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                      {/*<button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"//hover:text-blue-500
-                >
-                  <Bookmark section="Guestpost" publisher={user}/>
-                </button>*/}
+
                       <button
                         disabled={!userData.permissions.guestPost.bookmark}
                         title={!userData.permissions.guestPost.bookmark
@@ -579,7 +379,7 @@ const GuestpostTable = ({ users, setUsers }) => {
                           }`}
                       >
                         <FaBookmark />
-                        {/*user.isBookmarked ? ' Bookmarked' : ' Bookmark'*/}
+
                       </button>
                     </td>
                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
@@ -587,7 +387,7 @@ const GuestpostTable = ({ users, setUsers }) => {
                         disabled={!userData.permissions.guestPost.profile}
                         title={!userData.permissions.guestPost.profile
                           ? "You are not allowed to access this feature" : undefined
-                          // : ""
+
                         }
                         to={`/guestpostProfile/${user._id}`}
                         className="btn-dis  border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1 hover:animate-submitColorChange"
@@ -598,13 +398,7 @@ const GuestpostTable = ({ users, setUsers }) => {
 
                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
 
-                      {/*<button
-                      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-                      onClick={() => handleBuyNow(user._id, user.price)}
-                      disabled={user.isBuyed}
-                    >
-                      {user.isBuyed ? "Buyed" : "Buy Now"}
-                    </button>*/}
+
                     </td>
                   </tr>
                 ))

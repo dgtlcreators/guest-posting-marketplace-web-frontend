@@ -8,183 +8,181 @@ import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 
 const EditInstagramInfluencer = () => {
-  const { isDarkTheme} = useTheme();
-    const { userData,localhosturl } = useContext(UserContext);
-    const { id } = useParams();
-    const navigate = useNavigate()
-    const [profileUrlOption, setProfileUrlOption] = useState("manual");
-    const [mediaKitOption, setMediaKitOption] = useState("manual");
-    const [formData, setFormData] = useState({
-      userId:userData?._id,
-        username: "",
-        fullName: "",
-        profilePicture: "",
-        bio: "",
-        followersCount: 0,
-        followingCount: 0,
-        postsCount: 0,
-        engagementRate: 0,
-        averageLikes: 0,
-        averageComments: 0,
-        category: "",
-       // location: "",
-       location: {
-        country: "",
-        state: "",
-        city: ""
-      },
-        language: "",
-        verifiedStatus: false,
-        collaborationRates: { post: 0, story: 0, reel: 0 },
-        pastCollaborations: [],
-        mediaKit: "",
-      });
+  const { isDarkTheme } = useTheme();
+  const { userData, localhosturl } = useContext(UserContext);
+  const { id } = useParams();
+  const navigate = useNavigate()
+  const [profileUrlOption, setProfileUrlOption] = useState("manual");
+  const [mediaKitOption, setMediaKitOption] = useState("manual");
+  const [formData, setFormData] = useState({
+    userId: userData?._id,
+    username: "",
+    fullName: "",
+    profilePicture: "",
+    bio: "",
+    followersCount: 0,
+    followingCount: 0,
+    postsCount: 0,
+    engagementRate: 0,
+    averageLikes: 0,
+    averageComments: 0,
+    category: "",
 
-      const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        if (name.startsWith('collaborationRates')) {
-          const key = name.split('.')[1]; 
-          setFormData((prev) => ({
-            ...prev,
-            collaborationRates: {
-              ...prev.collaborationRates,
-              [key]: type === 'number' ? parseFloat(value) : value,
-            },
-          }));
-        } else if (name === 'pastCollaborations') {
-          setFormData((prev) => ({
-            ...prev,
-            pastCollaborations: value.split(',').map((item) => item.trim()),
-          }));
-        } else {
-          setFormData((prev) => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : type === 'number' ? parseFloat(value) : value,
-          }));
-        }
-      };
-      
-    
-      const handleFileChange = (e) => {
-        const { name, files } = e.target;
-        //console.log(files,files[0])
-        setFormData((prev) => ({
-          ...prev,
-          [name]: files[0].name,
-        }));
-      };
-    
-    useEffect(() => {
-        
-        fetchInfluencers();
-      }, []);
-    
-      const fetchInfluencers = async () => {
-        try {
-          
-          const response = await axios.get(`${localhosturl}/instagraminfluencers/getInstagraminfluencerById/${id}`);
-        
-          setFormData(response.data.instagramInfluencer);
-         // setOriginalUsers(response.data.instagramInfluencer);
-        } catch (error) {
-          console.error("Error fetching influencers", error);
-        }
-      };
+    location: {
+      country: "",
+      state: "",
+      city: ""
+    },
+    language: "",
+    verifiedStatus: false,
+    collaborationRates: { post: 0, story: 0, reel: 0 },
+    pastCollaborations: [],
+    mediaKit: "",
+  });
 
-      const createDescriptionElements = (formData, users) => {
-        const elements = [
-          { key: 'Username', value: formData.username },
-          { key: 'Full Name', value: formData.fullName },
-          { key: 'Profile Picture', value: formData.profilePicture },
-          { key: 'Bio', value: formData.bio },
-          { key: 'Followers Count', value: formData.followersCount },
-          { key: 'Following Count', value: formData.followingCount },
-          { key: 'Posts Count', value: formData.postsCount },
-          { key: 'Engagement Rate', value: `${formData.engagementRate}%` },
-          { key: 'Average Likes', value: formData.averageLikes },
-          { key: 'Average Comments', value: formData.averageComments },
-          { key: 'Category', value: formData.category },
-          { key: 'Location', value: formData.location },
-          { key: 'Language', value: formData.language },
-          { key: 'Verified Status', value: formData.verifiedStatus ? 'Verified' : 'Not Verified' },
-          { key: 'Collaboration Rates (Post)', value: formData.collaborationRates.post },
-          { key: 'Collaboration Rates (Story)', value: formData.collaborationRates.story },
-          { key: 'Collaboration Rates (Reel)', value: formData.collaborationRates.reel },
-          { key: 'Past Collaborations', value: formData.pastCollaborations.join(', ') },
-          { key: 'Media Kit', value: formData.mediaKit },
-          { key: 'Total results', value: users?.length }
-      ];
-      
-    
-      const formattedElements = elements
-            .filter(element => element.value)
-            .map(element => `${element.key}: ${element.value}`)
-            .join(', ');
-      return `${formattedElements}`;
-    };
-    const generateShortDescription = (formData, users) => {
-      const elements = createDescriptionElements(formData, users).split(', ');
-      
-     
-      const shortElements = elements.slice(0, 2);
-    
-      return `You updated a Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
-    };
-    
-      const pastactivitiesAdd=async(users)=>{
-        const description = createDescriptionElements(formData, users);
-        const shortDescription = generateShortDescription(formData, users);
-      
-       try {
-        const activityData={
-          userId:userData?._id,
-          action:"Updated a new Instagram Influencer",
-          section:"Instagram Influencer",
-          role:userData?.role,
-          timestamp:new Date(),
-          details:{
-            type:"updated",
-            filter:{formData,total:users.length},
-            description,
-            shortDescription
-            
-    
-          }
-        }
-        
-       
-        axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
-       } catch (error) {
-        console.log(error);
-        
-       }
-      }
-      const handleSubmit=async(e)=>{
-        e.preventDefault()
-        try {
-           // console.log(formData)
-            
-             await axios.put(`${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${id}`, {...formData,userId:userData?._id,});
-     
-     
-          toast.success("Instagram Influencer updated Successfully");
-          pastactivitiesAdd(formData);
-          navigate("/addInstagramInfluencer");
-        } catch (error) {
-          toast.error(`Error updating Instagram Influencer ${error.response.data.error}`);
-          console.error("Error updating Instagram Influencer:", error);
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    if (name.startsWith('collaborationRates')) {
+      const key = name.split('.')[1];
+      setFormData((prev) => ({
+        ...prev,
+        collaborationRates: {
+          ...prev.collaborationRates,
+          [key]: type === 'number' ? parseFloat(value) : value,
+        },
+      }));
+    } else if (name === 'pastCollaborations') {
+      setFormData((prev) => ({
+        ...prev,
+        pastCollaborations: value.split(',').map((item) => item.trim()),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : type === 'number' ? parseFloat(value) : value,
+      }));
+    }
+  };
+
+
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files[0].name,
+    }));
+  };
+
+  useEffect(() => {
+
+    fetchInfluencers();
+  }, []);
+
+  const fetchInfluencers = async () => {
+    try {
+
+      const response = await axios.get(`${localhosturl}/instagraminfluencers/getInstagraminfluencerById/${id}`);
+
+      setFormData(response.data.instagramInfluencer);
+      // setOriginalUsers(response.data.instagramInfluencer);
+    } catch (error) {
+      console.error("Error fetching influencers", error);
+    }
+  };
+
+  const createDescriptionElements = (formData, users) => {
+    const elements = [
+      { key: 'Username', value: formData.username },
+      { key: 'Full Name', value: formData.fullName },
+      { key: 'Profile Picture', value: formData.profilePicture },
+      { key: 'Bio', value: formData.bio },
+      { key: 'Followers Count', value: formData.followersCount },
+      { key: 'Following Count', value: formData.followingCount },
+      { key: 'Posts Count', value: formData.postsCount },
+      { key: 'Engagement Rate', value: `${formData.engagementRate}%` },
+      { key: 'Average Likes', value: formData.averageLikes },
+      { key: 'Average Comments', value: formData.averageComments },
+      { key: 'Category', value: formData.category },
+      { key: 'Location', value: formData.location },
+      { key: 'Language', value: formData.language },
+      { key: 'Verified Status', value: formData.verifiedStatus ? 'Verified' : 'Not Verified' },
+      { key: 'Collaboration Rates (Post)', value: formData.collaborationRates.post },
+      { key: 'Collaboration Rates (Story)', value: formData.collaborationRates.story },
+      { key: 'Collaboration Rates (Reel)', value: formData.collaborationRates.reel },
+      { key: 'Past Collaborations', value: formData.pastCollaborations.join(', ') },
+      { key: 'Media Kit', value: formData.mediaKit },
+      { key: 'Total results', value: users?.length }
+    ];
+
+
+    const formattedElements = elements
+      .filter(element => element.value)
+      .map(element => `${element.key}: ${element.value}`)
+      .join(', ');
+    return `${formattedElements}`;
+  };
+  const generateShortDescription = (formData, users) => {
+    const elements = createDescriptionElements(formData, users).split(', ');
+
+
+    const shortElements = elements.slice(0, 2);
+
+    return `You updated a Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
+  };
+
+  const pastactivitiesAdd = async (users) => {
+    const description = createDescriptionElements(formData, users);
+    const shortDescription = generateShortDescription(formData, users);
+
+    try {
+      const activityData = {
+        userId: userData?._id,
+        action: "Updated a new Instagram Influencer",
+        section: "Instagram Influencer",
+        role: userData?.role,
+        timestamp: new Date(),
+        details: {
+          type: "updated",
+          filter: { formData, total: users.length },
+          description,
+          shortDescription
+
+
         }
       }
 
-      //if (!userData || userData.role !== "Admin" ) {
-      //  return <Navigate to="/login" />;
-     // }
 
-     const handleLocationSelect = (location) => {
-      setFormData((prev) => ({ ...prev, location }));
-    };
-    
-    
+      axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+
+
+      await axios.put(`${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${id}`, { ...formData, userId: userData?._id, });
+
+
+      toast.success("Instagram Influencer updated Successfully");
+      pastactivitiesAdd(formData);
+      navigate("/addInstagramInfluencer");
+    } catch (error) {
+      toast.error(`Error updating Instagram Influencer ${error.response.data.error}`);
+      console.error("Error updating Instagram Influencer:", error);
+    }
+  }
+
+
+
+  const handleLocationSelect = (location) => {
+    setFormData((prev) => ({ ...prev, location }));
+  };
+
+
   return (
     <div className="container mx-auto p-4">
       <h3 className="text-2xl font-bold mb-4 text-blue-600">Edit Instagram Influencers</h3>
@@ -245,12 +243,12 @@ const EditInstagramInfluencer = () => {
                 type="text"
                 name="profilePicture"
                 placeholder="Profile Picture URL"
-                value={formData?.profilePicture===undefined?"https://cdn.pixabay.com/photo/2024/02/02/04/20/ai-generated-8547237_1280.png":formData?.profilePicture}
+                value={formData?.profilePicture === undefined ? "https://cdn.pixabay.com/photo/2024/02/02/04/20/ai-generated-8547237_1280.png" : formData?.profilePicture}
                 onChange={handleChange}
                 className="p-2 border border-gray-300 rounded w-full"
               />
             ) : (
-                <input
+              <input
                 type="file"
                 name="profilePicture"
                 onChange={handleFileChange}
@@ -365,18 +363,7 @@ const EditInstagramInfluencer = () => {
             </select>
           </label>
           <LocationSelector onSelectLocation={handleLocationSelect} />
-         { /*<label className="block">
-            <span className="text-gray-700">Location</span>
-            <input
-              type="text"
-              name="location"
-              placeholder="Location"
-              value={formData.location}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-              required
-            />
-          </label>*/}
+
           <label className="block">
             <span className="text-gray-700">Language</span>
             <select
@@ -398,7 +385,7 @@ const EditInstagramInfluencer = () => {
               <option value="Kannada">Kannada</option>
             </select>
           </label>
-         
+
           <label className="flex items-center">
             <input
               type="checkbox"
@@ -457,7 +444,7 @@ const EditInstagramInfluencer = () => {
               className="p-2 border border-gray-300 rounded w-full"
             />
           </label>
-         
+
           <label className="block">
             <span className="text-gray-700">Media Kit</span>
             <div className="flex items-center space-x-2">
@@ -495,27 +482,27 @@ const EditInstagramInfluencer = () => {
               />
             ) : (
               <input
-              type="file"
-              name="mediaKit"
-              
-              onChange={handleFileChange}
-              className="p-2 border border-gray-300 rounded w-full"
-            />
+                type="file"
+                name="mediaKit"
+
+                onChange={handleFileChange}
+                className="p-2 border border-gray-300 rounded w-full"
+              />
             )}
           </label>
         </div>
         <div className="mt-4 flex justify-center md:justify-end space-x-4 mt-8">
-        
+
           <button
             type="submit"
             className="p-2 bg-blue-600 text-white rounded hover:bg-blue-900 transition-all duration-300"
           >
             Edit Influencer
           </button>
-         
+
         </div>
       </form>
-     
+
     </div>
   )
 }

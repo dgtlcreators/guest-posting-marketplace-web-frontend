@@ -5,8 +5,8 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { FiFilter } from 'react-icons/fi'; 
 import { UserContext } from '../context/userContext.js';
-import ApplyTable from './ApplyTable.js';
-import ReportTable from './ReportTable.js'; 
+
+
 import ReportAndApplicationsTable from "./ReportAndApplicationsTable.js"
 
 const ReportAndApplications = () => {

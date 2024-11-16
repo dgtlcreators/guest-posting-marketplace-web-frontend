@@ -97,7 +97,7 @@ function Signup() {
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
-               // type="password"
+            
                 autoComplete="new-password"
                 required
                 className={`appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 ${isDarkTheme ? "border-gray-600 text-gray-100" : "border-gray-300 text-gray-900"} text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500  sm:text-sm`}
@@ -124,7 +124,7 @@ function Signup() {
                id="confirm-password"
                 name="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
-               // type="password"
+ 
                 autoComplete="new-password"
                 required
                 className={`appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 ${isDarkTheme ? "border-gray-600 text-gray-100" : "border-gray-300 text-gray-900"} text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500  sm:text-sm`}

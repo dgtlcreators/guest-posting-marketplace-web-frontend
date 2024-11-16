@@ -1,15 +1,12 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { FaSort, FaSortUp, FaSortDown, FaBookmark } from "react-icons/fa";
-import { useTheme } from "../../context/ThemeProvider.js";
 import { UserContext } from "../../context/userContext.js";
 
 import { saveAs } from "file-saver";
-import { CSVLink } from "react-csv";
+
 import Papa from "papaparse";
-import ApplyForm from "../OtherComponents/ApplyForm.js";
-import ShowApplyForm from "../OtherComponents/ShowApplyForm.js";
-import Bookmark from "../OtherComponents/Bookmark.js";
+
 import Pagination from "../OtherComponents/Pagination.js";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,14 +14,14 @@ import { toast } from "react-toastify";
 
 
 const NewGuestpostTable = () => {
-    const { isDarkTheme } = useTheme();
+ 
     const [users, setUsers] = useState([]);
     const [originalUsers, setOriginalUsers] = useState([]);
     const [sortedField, setSortedField] = useState(null);
     const [sortDirection, setSortDirection] = useState("asc");
     const { userData, localhosturl } = useContext(UserContext);
     const navigate=useNavigate()
-    //console.log("userData.permissions.guestPost.bookmark ",userData.permissions.guestPost.bookmark)
+   
 
 
     useEffect(() => {
@@ -70,9 +67,9 @@ const NewGuestpostTable = () => {
     };
 
     const handleClearFilter = () => {
-        setUsers(originalUsers); // Reset users to original data
-        setSortedField(null); // Reset sorting state
-        setSortDirection("asc"); // Reset sorting direction
+        setUsers(originalUsers); 
+        setSortedField(null);
+        setSortDirection("asc"); 
     };
 
     const createDescriptionElements = (formData, users) => {
@@ -136,7 +133,7 @@ const NewGuestpostTable = () => {
 
     const deleteUser = async (userId) => {
         try {
-            const response = await axios.delete(
+             await axios.delete(
 
                 `${localhosturl}/superAdmin/deleteOneAdminData/${userId}`
 
@@ -152,18 +149,7 @@ const NewGuestpostTable = () => {
             console.error("Error deleting user:", error);
         }
     };
-    /* const [filteredUsers, setFilteredUsers] = useState([]);
    
-     useEffect(() => {
-       const filterUsers = () => {
-         const filtered = users.filter((user) => {
-           return true; 
-         });
-         setFilteredUsers(filtered);
-       };
-   
-       filterUsers();
-     }, [users]); */
 
     const filteredUsers = users
 
@@ -200,9 +186,7 @@ const NewGuestpostTable = () => {
         return filteredUsers.slice(startIndex, startIndex + pageSize);
     }, [filteredUsers, currentPage, pageSize]);
 
-    const handlePageChange = (newPage) => {
-        setCurrentPage(newPage);
-    };
+    
 
     const handlePageSizeChange = (e) => {
         setPageSize(Number(e.target.value));
@@ -273,10 +257,10 @@ const handleClickEditLink=(id)=>{
 
             <div className="overflow-x-auto">
                 
-                <table className="min-w-full border"// bg-white border border-gray-200
+                <table className="min-w-full border"
                 >
                     <thead>
-                        <tr className="border border-b"// bg-gray-100 
+                        <tr className="border border-b"
                         >
                             <th className="border px-4 py-2">S.No.</th>
                             <th
@@ -353,7 +337,7 @@ const handleClickEditLink=(id)=>{
                                 Moz Spam Score {renderSortIcon("mozSpamScore")}
                             </th>
                             <th className="border py-3 px-2 md:px-6 text-left uppercase ">Actions</th>
-                           {/* <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>*/}
+                          
                             <th className="border py-3 px-2 md:px-6 text-left uppercase ">Bookmark</th>
                             <th className="border py-3 px-2 md:px-6 text-left uppercase ">Profile</th>
                         </tr>
@@ -363,14 +347,14 @@ const handleClickEditLink=(id)=>{
                             <tr>
                                 <td
                                     colSpan="10"
-                                    className=""//py-3 px-6 text-center text-lg font-semibold
+                                    className=""
                                 >
                                     No Data Found
                                 </td>
                             </tr>
                         ) : (
                             paginatedUsers.map((user, index) => (
-                                <tr key={user._id} className="border-b "// hover:bg-gray-50
+                                <tr key={user._id} className="border-b "
                                 >
                                     <td className="border px-4 py-2">{index + 1}</td>
                                     <td className="border px-4 py-2">{user.publisherName}</td>
@@ -389,28 +373,19 @@ const handleClickEditLink=(id)=>{
                                     <button disabled={!userData.permissions.guestPost.edit}
                                             title={!userData.permissions.guestPost.edit
                                                 ? "You are not allowed to access this feature"
-                                                : undefined  // : ""
+                                                : undefined  
                                             }
                                             onClick={()=>handleClickEditLink(user._id)}
-                                           // to={`/editguestpostdata/${user._id}`}
+                                       
                                             className="btn-dis border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
                                         >
                                             EDIT
                                         </button>
-                                       {/* <Link disabled={!userData.permissions.guestPost.edit}
-                                            title={!userData.permissions.guestPost.edit
-                                                ? "You are not allowed to access this feature"
-                                                : undefined  // : ""
-                                            }
-                                            to={`/editguestpostdata/${user._id}`}
-                                            className="btn-dis border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
-                                        >
-                                            EDIT
-                                        </Link>*/}
+                                     
                                         <button disabled={!userData.permissions.guestPost.delete}
                                             title={!userData.permissions.guestPost.delete
                                                 ? "You are not allowed to access this feature"
-                                                : undefined   // : ""
+                                                : undefined  
                                             }
                                             onClick={() => deleteUser(user._id)}
                                             className="border bg-red-500 hover:bg-red-700 text-white py-1 px-4 rounded my-2 transition-transform transform hover:-translate-y-1"
@@ -420,27 +395,21 @@ const handleClickEditLink=(id)=>{
 
 
                                     </td>
-                                   { /*<td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                                        <ApplyForm section="Guestpost" publisher={user} />
-                                        <ShowApplyForm section="Guestpost" publisher={user} />
-                                    </td>*/}
+                               
                                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                                         <button disabled={!userData.permissions.guestPost.bookmark}
                                             title={!userData.permissions.guestPost.bookmark
                                                 ? "You are not allowed to access this feature" : undefined
-                                                // : ""
+                                            
                                             }
                                             onClick={() => handleToggleBookmark(user)}
                                             className={`btn-dis  text-gray-600 focus:outline-none transition-transform transform hover:-translate-y-1 ${user.isBookmarked ? 'text-yellow-500' : 'text-gray-400'
                                                 } ${!userData.permissions.guestPost.bookmark && 'btn-enabled'}`}
                                         >
                                             <FaBookmark />
-                                            {/*user.isBookmarked ? ' Bookmarked' : ' Bookmark'*/}
+                                        
                                         </button>
-                                        { /*<button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"//hover:text-blue-500
-                                        >
-                                            <Bookmark section="Guestpost" publisher={user} />
-                                        </button>*/}
+                                       
                                     </td>
                                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                                         {userData.permissions.guestPost.profile ? (
@@ -459,16 +428,7 @@ const handleClickEditLink=(id)=>{
                                             </span>
                                         )}
 
-                                        { /*<Link  disabled={!userData.permissions.guestPost.profile} 
-                                            title={userData.permissions.guestPost.profile
-                                               ? "You are not allowed to access this feature":undefined
-                                               // : ""
-                                            }
-                                            to={`/guestpostProfile/${user._id}`}
-                                            className="btn-dis  border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
-                                        >
-                                            View Profile
-                                        </Link>*/}
+                                       
                                     </td>
 
                                 </tr>

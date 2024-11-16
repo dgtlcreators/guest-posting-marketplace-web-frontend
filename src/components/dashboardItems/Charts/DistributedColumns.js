@@ -1,10 +1,10 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useTheme } from '../../../context/ThemeProvider.js';
 
 const DistributedColumns = ({ data }) => {
-  const { isDarkTheme, toggleTheme } = useTheme();
+  const { isDarkTheme } = useTheme();
   const [selectedTraffic, setSelectedTraffic] = useState('allMonthlyTraffic');
 
   const handleChange = (event) => {
@@ -53,7 +53,7 @@ const DistributedColumns = ({ data }) => {
         text: 'Monthly Traffic',
         align: 'left',
         style: {
-          //fontSize: '24px',
+         
           color: isDarkTheme ? '#FFFFFF' : '#000000', 
         },
       },
@@ -74,20 +74,20 @@ const DistributedColumns = ({ data }) => {
     },
     tooltip: {
       enabled: true,
-      theme: isDarkTheme ? 'dark' : 'light', // Set tooltip theme based on the current theme
+      theme: isDarkTheme ? 'dark' : 'light', 
       style: {
         fontSize: '12px',
         fontFamily: 'Arial, sans-serif',
       },
-      // Customize tooltip content
+    
       y: {
         formatter: function (value) {
           return `Count: ${value}`;
         }
       },
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-        const label = w.globals.labels[dataPointIndex]; // Traffic range (e.g., >= 10000)
-        const value = series[seriesIndex][dataPointIndex]; // The count value
+        const label = w.globals.labels[dataPointIndex]; 
+        const value = series[seriesIndex][dataPointIndex]; 
         return `
           <div style="padding: 8px 12px; background-color: ${isDarkTheme ? '#333' : '#fff'}; color: ${isDarkTheme ? '#fff' : '#333'}; border-radius: 4px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
             <strong>${label}</strong><br>

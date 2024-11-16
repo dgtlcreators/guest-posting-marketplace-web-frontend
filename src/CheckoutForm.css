@@ -8,7 +8,7 @@
     border-radius: 4px;
     display: flex;
     width: 50vw;
-    height: 50vh; /* Adjust the height as needed */
+    height: 50vh;
     display: flex;
     align-items: center;
   }
@@ -143,7 +143,7 @@
     cursor: not-allowed;
   }
 
-  /* CheckoutForm.css */
+ 
 
 .form-group {
   margin-bottom: 1rem;

@@ -4,12 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faEnvelope, faPhone, faDollarSign, faClipboard, faStickyNote, faHandshake, faUser } from '@fortawesome/free-solid-svg-icons';
 import 'tailwindcss/tailwind.css';
 import ApplicationsList from "./ApplicationsList.js"
-import { useTheme } from '../../context/ThemeProvider.js';
 import { UserContext } from '../../context/userContext.js';
 
 
 const ApplicationForm = () => {
-  const { isDarkTheme} = useTheme();
+
   const [formData, setFormData] = useState({
     brandName: '',
     emailId: '',
@@ -19,7 +18,7 @@ const ApplicationForm = () => {
     budget: '',
     additionalNotes: '',
   });
-  const { userData ,localhosturl} = useContext(UserContext);
+  const { localhosturl } = useContext(UserContext);
 
   const handleChange = (e) => {
     setFormData({
@@ -31,7 +30,7 @@ const ApplicationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-     
+
       const response = await axios.post(`${localhosturl}/userbrand/addapplications`, formData);
       alert(response.data.message);
       setFormData({
@@ -184,9 +183,9 @@ const ApplicationForm = () => {
             Submit
           </button>
         </form>
-        <ApplicationsList/>
+        <ApplicationsList />
       </div>
-     
+
     </div>
   );
 };

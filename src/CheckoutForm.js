@@ -8,7 +8,7 @@ const CheckoutForm = () => {
   const elements = useElements();
   const navigate = useNavigate();
   const location = useLocation();
-  const { userId, price } = location.state; // Assume price is in dollars
+  const { userId, price } = location.state; 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [processing, setProcessing] = useState(false);

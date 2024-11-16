@@ -11,10 +11,10 @@ import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 const ContentWriter = () => {
   const { isDarkTheme } = useTheme();
-  const { userData,localhosturl } = useContext(UserContext);
+  const { userData, localhosturl } = useContext(UserContext);
   const userId = userData?._id;
-  const initialFormData={
-    userId:userData?._id,
+  const initialFormData = {
+    userId: userData?._id,
     name: '',
     bio: '',
     experienceFrom: '',
@@ -22,12 +22,12 @@ const ContentWriter = () => {
     email: '',
     expertise: [{ type: '', other: '' }],
     languages: [{ name: '', other: '', proficiency: '' }],
-   // location: "",
-   location: {
-    country: "",
-    state: "",
-    city: ""
-  },
+
+    location: {
+      country: "",
+      state: "",
+      city: ""
+    },
     collaborationRates: {
       postFrom: '',
       postTo: '',
@@ -38,17 +38,16 @@ const ContentWriter = () => {
     },
     languageProficiency: '',
     industry: [{ type: '', other: '', subCategories: [{ type: '', other: '' }] }],
-    //industry: [{ type: '', other: '' }],
-    //subCategories: [{ type: '', other: '' }]
+
   }
   const [formData, setFormData] = useState(initialFormData);
-  
+
 
 
   const [writers, setWriters] = useState([]);
 
   const handleChange = (e) => {
-    const { name, value, type,checked } = e.target;
+    const { name, value, type, checked } = e.target;
 
     if (name.startsWith('collaborationRates')) {
       const key = name.split('.')[1];
@@ -89,54 +88,54 @@ const ContentWriter = () => {
     else if (name.startsWith('industry')) {
       const [outerIndex, key] = name.split('.').slice(1);
       setFormData((prev) => {
-          const updatedIndustry = [...prev.industry];
-          //console.log("key: ",key)
-          if (key === 'type') {
-              updatedIndustry[outerIndex] = {
-                  ...updatedIndustry[outerIndex],
-                  [key]: value,
-                  subCategories: updatedIndustry[outerIndex].subCategories || [],
-              };
-          } else if (key === 'other') {
-              updatedIndustry[outerIndex] = {
-                  ...updatedIndustry[outerIndex],
-                  [key]: value,
-              };
-          } else if (key === 'subCategories') {
-            const parts = name.split('.').slice(1);
-    const index = parseInt(parts[0], 10);
-    const subIndex = parseInt(parts[2], 10);
-    const fieldKey = parts[3]; 
-    updatedIndustry[index].subCategories = updatedIndustry[index].subCategories || [];
+        const updatedIndustry = [...prev.industry];
 
-    const updatedSubCategories = [...updatedIndustry[index].subCategories];
+        if (key === 'type') {
+          updatedIndustry[outerIndex] = {
+            ...updatedIndustry[outerIndex],
+            [key]: value,
+            subCategories: updatedIndustry[outerIndex].subCategories || [],
+          };
+        } else if (key === 'other') {
+          updatedIndustry[outerIndex] = {
+            ...updatedIndustry[outerIndex],
+            [key]: value,
+          };
+        } else if (key === 'subCategories') {
+          const parts = name.split('.').slice(1);
+          const index = parseInt(parts[0], 10);
+          const subIndex = parseInt(parts[2], 10);
+          const fieldKey = parts[3];
+          updatedIndustry[index].subCategories = updatedIndustry[index].subCategories || [];
 
-    if (checked) {
-       
-        if (!updatedSubCategories[subIndex]) {
-            updatedSubCategories[subIndex] = { type: value };
-        } else {
-            updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: value };
-        }
-    } else {
+          const updatedSubCategories = [...updatedIndustry[index].subCategories];
 
-        updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: '' };
-    }
-    const uniqueSubCategories = Array.from(
-      new Map(
-        updatedSubCategories
-          .filter(sub => sub && sub.type && sub.type.trim() !== '')  
-          .map(sub => [sub.type, sub])
-      ).values()
-    );
-  
-    updatedIndustry[index].subCategories = uniqueSubCategories;  
+          if (checked) {
 
-    //updatedIndustry[index].subCategories = updatedSubCategories;
+            if (!updatedSubCategories[subIndex]) {
+              updatedSubCategories[subIndex] = { type: value };
+            } else {
+              updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: value };
+            }
+          } else {
+
+            updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: '' };
           }
-          return { ...prev, industry: updatedIndustry };
+          const uniqueSubCategories = Array.from(
+            new Map(
+              updatedSubCategories
+                .filter(sub => sub && sub.type && sub.type.trim() !== '')
+                .map(sub => [sub.type, sub])
+            ).values()
+          );
+
+          updatedIndustry[index].subCategories = uniqueSubCategories;
+
+
+        }
+        return { ...prev, industry: updatedIndustry };
       });
-  }
+    }
     else {
       setFormData((prev) => ({
         ...prev,
@@ -173,83 +172,76 @@ const ContentWriter = () => {
     });
   };
 
-  const pastactivitiesAdd=async(users)=>{
+  const pastactivitiesAdd = async (users) => {
     const description = [
       formData.name ? `Name: ${formData.name}` : '',
-    formData.bio ? `Bio: ${formData.bio}` : '',
-    formData.experienceFrom || formData.experienceTo ? `Experience: ${formData.experienceFrom || 'N/A'} to ${formData.experienceTo || 'N/A'}` : '',
-    formData.email ? `Email: ${formData.email}` : '',
-    formData.expertise && formData.expertise.length ? `Expertise: ${formData.expertise.map(exp => `${exp.type}${exp.other ? ` (${exp.other})` : ''}`).join(', ')}` : '',
-    formData.languages && formData.languages.length ? `Languages: ${formData.languages.map(lang => `${lang.name}${lang.other ? ` (${lang.other})` : ''} (${lang.proficiency})`).join(', ')}` : '',
-    formData.location ? `Location: ${formData.location}` : '',
-    formData.collaborationRates.postFrom || formData.collaborationRates.postTo ? `Post Collaboration Rates: ${formData.collaborationRates.postFrom || 'N/A'} to ${formData.collaborationRates.postTo || 'N/A'}` : '',
-    formData.collaborationRates.storyFrom || formData.collaborationRates.storyTo ? `Story Collaboration Rates: ${formData.collaborationRates.storyFrom || 'N/A'} to ${formData.collaborationRates.storyTo || 'N/A'}` : '',
-    formData.collaborationRates.reelFrom || formData.collaborationRates.reelTo ? `Reel Collaboration Rates: ${formData.collaborationRates.reelFrom || 'N/A'} to ${formData.collaborationRates.reelTo || 'N/A'}` : '',
-    formData.languageProficiency ? `Language Proficiency: ${formData.languageProficiency}` : '',
-    formData.industry && formData.industry.length ? `Industry: ${formData.industry.map(ind => `${ind.type}${ind.other ? ` (${ind.other})` : ''}${ind.subCategories && ind.subCategories.length ? ` - Subcategories: ${ind.subCategories.map(sub => `${sub.type}${sub.other ? ` (${sub.other})` : ''}`).join(', ')}` : ''}`).join(', ')}` : '',
-    `Total results: ${users.length}`
+      formData.bio ? `Bio: ${formData.bio}` : '',
+      formData.experienceFrom || formData.experienceTo ? `Experience: ${formData.experienceFrom || 'N/A'} to ${formData.experienceTo || 'N/A'}` : '',
+      formData.email ? `Email: ${formData.email}` : '',
+      formData.expertise && formData.expertise.length ? `Expertise: ${formData.expertise.map(exp => `${exp.type}${exp.other ? ` (${exp.other})` : ''}`).join(', ')}` : '',
+      formData.languages && formData.languages.length ? `Languages: ${formData.languages.map(lang => `${lang.name}${lang.other ? ` (${lang.other})` : ''} (${lang.proficiency})`).join(', ')}` : '',
+      formData.location ? `Location: ${formData.location}` : '',
+      formData.collaborationRates.postFrom || formData.collaborationRates.postTo ? `Post Collaboration Rates: ${formData.collaborationRates.postFrom || 'N/A'} to ${formData.collaborationRates.postTo || 'N/A'}` : '',
+      formData.collaborationRates.storyFrom || formData.collaborationRates.storyTo ? `Story Collaboration Rates: ${formData.collaborationRates.storyFrom || 'N/A'} to ${formData.collaborationRates.storyTo || 'N/A'}` : '',
+      formData.collaborationRates.reelFrom || formData.collaborationRates.reelTo ? `Reel Collaboration Rates: ${formData.collaborationRates.reelFrom || 'N/A'} to ${formData.collaborationRates.reelTo || 'N/A'}` : '',
+      formData.languageProficiency ? `Language Proficiency: ${formData.languageProficiency}` : '',
+      formData.industry && formData.industry.length ? `Industry: ${formData.industry.map(ind => `${ind.type}${ind.other ? ` (${ind.other})` : ''}${ind.subCategories && ind.subCategories.length ? ` - Subcategories: ${ind.subCategories.map(sub => `${sub.type}${sub.other ? ` (${sub.other})` : ''}`).join(', ')}` : ''}`).join(', ')}` : '',
+      `Total results: ${users.length}`
     ]
-    .filter(Boolean)
-    .join(', ');
-  
-    // Short description focusing on key fields
+      .filter(Boolean)
+      .join(', ');
+
+
     const shortDescription = `You searched Experience from ${formData.experienceFrom || 'N/A'} to ${formData.experienceTo || 'N/A'}, Location: ${formData.location || 'N/A'}, and got ${users.length} results`;
     try {
-    const activityData={
-      userId:userData?._id,
-      action:"Performed a search for Content Writer",//"Searched for Instagram Influencers",
-      section:"Content Writer",
-      role:userData?.role,
-      timestamp:new Date(),
-      details:{
-        type:"filter",
-        filter:{formData,total:users.length},
-        description,
-        shortDescription
-        
+      const activityData = {
+        userId: userData?._id,
+        action: "Performed a search for Content Writer",
+        section: "Content Writer",
+        role: userData?.role,
+        timestamp: new Date(),
+        details: {
+          type: "filter",
+          filter: { formData, total: users.length },
+          description,
+          shortDescription
 
+
+        }
       }
+      axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
+
+    } catch (error) {
+      console.log(error);
+
     }
-    axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
-    
-   } catch (error) {
-    console.log(error);
-    
-   }
   }
 
   const handleSubmit = async (e) => {
-   // console.log(formData)
-    /*const transformedData = {
-      ...formData,
-      expertise: formData.expertise.map(exp => exp.type === 'Other' ? exp.other : exp.type).filter(Boolean),
-      languages: formData.languages.map(lang => lang.name === 'Other' ? lang.other : lang.name).filter(Boolean)
-    };*/
-   
+
+
     const transformedData = {
       ...formData,
-      //expertise: formData.expertise
-       // .map(exp => exp.type === 'Other' ? exp.other : exp.type)
-       // .filter(Boolean),
+
       languages: formData.languages
-        .filter(lang => lang.name) 
+        .filter(lang => lang.name)
         .map(lang => ({
           name: lang.name === 'Other' ? lang.other : lang.name,
           proficiency: lang.proficiency
         })),
       languageProficiency: formData.languages
         .map(lang => lang.proficiency)
-        .find(proficiency => proficiency) || '' ,
-        
+        .find(proficiency => proficiency) || '',
+
     };
 
-    
+
     e.preventDefault();
     try {
-      const response = await axios.post(`${localhosturl}/contentwriters/contentWritersFilter`,{... transformedData,userId:userData?._id,});
-      
+      const response = await axios.post(`${localhosturl}/contentwriters/contentWritersFilter`, { ...transformedData, userId: userData?._id, });
+
       setWriters(response.data.data);
-      console.log(response.data,response.data.data)
+      console.log(response.data, response.data.data)
       pastactivitiesAdd(response.data.data);
       toast.success("Writer fetching successfully");
     } catch (error) {
@@ -263,7 +255,7 @@ const ContentWriter = () => {
   };
 
 
-  
+
 
   const [subCategoryOptions, setSubCategoryOptions] = useState([]);
 
@@ -281,7 +273,7 @@ const ContentWriter = () => {
 
 
 
- 
+
   const handleAddIndustry = () => {
     setFormData((prev) => ({
       ...prev,
@@ -317,48 +309,48 @@ const ContentWriter = () => {
   useEffect(() => {
     if (location?.state?.formData) {
       const formData = location.state.formData;
-     
-      const flattenedFormData = formData["0"] || formData; 
+
+      const flattenedFormData = formData["0"] || formData;
       console.log("Flattened FormData", flattenedFormData);
-  
+
       setFormData(prevState => ({
         ...initialFormData,
         ...flattenedFormData
       }));
       fetchUsers(formData)
-      location.state.formData = null; 
+      location.state.formData = null;
     }
   }, [location?.state?.formData]);
-  
-const fetchUsers=async(formData)=>{
-  try {
-    const response = await axios.post(
-      `${localhosturl}/contentwriters/contentWritersFilter`
-     
-      , formData);
-    console.log("Fetched data:", response.data.data);
-    setWriters(response.data.data);
 
-   
-    if (!toastShown) {
-      toast.success("Saved Data Fetch Successfully");
-      setToastShown(true); 
+  const fetchUsers = async (formData) => {
+    try {
+      const response = await axios.post(
+        `${localhosturl}/contentwriters/contentWritersFilter`
+
+        , formData);
+      console.log("Fetched data:", response.data.data);
+      setWriters(response.data.data);
+
+
+      if (!toastShown) {
+        toast.success("Saved Data Fetch Successfully");
+        setToastShown(true);
+      }
+
+    } catch (error) {
+      console.log("Error fetching data:", error);
+      toast.error(error.message);
     }
-   // toast.success("Saved Data Fetch Successfully");
-  } catch (error) {
-    console.log("Error fetching data:", error);
-    toast.error(error.message);
   }
-}
 
-const handleLocationSelect = (location) => {
-  setFormData((prev) => ({ ...prev, location }));
-};
+  const handleLocationSelect = (location) => {
+    setFormData((prev) => ({ ...prev, location }));
+  };
 
 
   return (
     <div className="container mx-auto p-4">
-      {/*<h1 className="text-2xl font-bold mb-6 text-blue-600">Filter Content Writers</h1>*/}
+
       <h2 className="text-2xl   p-2 my-2">FAQ</h2>
       <form onSubmit={handleSubmit} className="bg-gray-100 p-6 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -372,17 +364,8 @@ const handleLocationSelect = (location) => {
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
-          {/*<div className="block">
-            <label className="text-gray-700">Bio</label>
-            <input
-              type="text"
-              name="bio"
-              value={formData.bio}
-              onChange={handleChange}
-              className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>*/}
-        
+
+
           <div className="block">
             <label className="text-gray-700">Experience From (years)</label>
             <input
@@ -414,94 +397,67 @@ const handleLocationSelect = (location) => {
             />
           </div>
           <LocationSelector onSelectLocation={handleLocationSelect} />
-         {/* <div className="block">
-            <label className="text-gray-700">Location</label>
-            <input
-              type="text"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>*/}
+
           <div className="block">
-          <label //className="text-xl font-bold text-blue-600"
-          >Industry</label>
-          {formData.industry.map((item, outerIndex) => (
-            <div key={outerIndex} className="border p-4 mb-4 rounded">
-              <div className="flex items-center space-x-2 mb-2">
-                <select
-                  name={`industry.${outerIndex}.type`}
-                  value={item.type}
-                  onChange={handleChange}
-                  className="p-2 border border-gray-300 rounded w-full"
-                >
-                  <option value="">Select Industry</option>
-                  {Object.keys(industrySubCategories).map((industry) => (
-                    <option key={industry} value={industry}>{industry}</option>
-                  ))}
-                  <option value="Other">Other</option>
-                </select>
-                {item.type === "Other" && (
-                  <input
-                    type="text"
-                    name={`industry.${outerIndex}.other`}
-                    value={item.other}
+            <label
+            >Industry</label>
+            {formData.industry.map((item, outerIndex) => (
+              <div key={outerIndex} className="border p-4 mb-4 rounded">
+                <div className="flex items-center space-x-2 mb-2">
+                  <select
+                    name={`industry.${outerIndex}.type`}
+                    value={item.type}
                     onChange={handleChange}
-                    placeholder="Other Industry"
-                    className="p-2 border border-gray-300 rounded w-2/3"
-                  />
-                )}
-                {/*<button
-                  type="button"
-                  onClick={() => handleRemoveIndustry(outerIndex)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  Remove Industry
-                </button>*/}
-              </div>
-              {item.type && industrySubCategories[item.type] && (
-                <div className="mb-4">
-                  <label className="block mb-2 text-gray-700">Sub Categories</label>
-                  {industrySubCategories[item.type].map((subCategory, innerIndex) => {
-            const isChecked = item?.subCategories.some(sub => sub?.type === subCategory?true:false);
-            return (
-                <div key={innerIndex} className="flex items-center space-x-2 mb-2">
-                    <input
-                        type="checkbox"
-                        name={`industry.${outerIndex}.subCategories.${innerIndex}.type`}
-                        value={subCategory}
-                        checked={isChecked}
-                        onChange={(e) => handleChange(e, outerIndex, innerIndex)}
-                        className="mr-2"
-                    />
-                    <label className="text-gray-700">{subCategory}</label>
-                </div>
-            );
-        })}
-                 {/* <button
-                    type="button"
-                    onClick={() => handleAddSubCategory(outerIndex)}
-                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                    className="p-2 border border-gray-300 rounded w-full"
                   >
-                    Add Sub Category
-                  </button>*/}
+                    <option value="">Select Industry</option>
+                    {Object.keys(industrySubCategories).map((industry) => (
+                      <option key={industry} value={industry}>{industry}</option>
+                    ))}
+                    <option value="Other">Other</option>
+                  </select>
+                  {item.type === "Other" && (
+                    <input
+                      type="text"
+                      name={`industry.${outerIndex}.other`}
+                      value={item.other}
+                      onChange={handleChange}
+                      placeholder="Other Industry"
+                      className="p-2 border border-gray-300 rounded w-2/3"
+                    />
+                  )}
+
                 </div>
-              )}
-            </div>
-          ))}
-          {/*<button
-            type="button"
-            onClick={handleAddIndustry}
-            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          >
-            Add Industry
-          </button>*/}
-        
-      
-          
-        </div>
-        <div className="block">
+                {item.type && industrySubCategories[item.type] && (
+                  <div className="mb-4">
+                    <label className="block mb-2 text-gray-700">Sub Categories</label>
+                    {industrySubCategories[item.type].map((subCategory, innerIndex) => {
+                      const isChecked = item?.subCategories.some(sub => sub?.type === subCategory ? true : false);
+                      return (
+                        <div key={innerIndex} className="flex items-center space-x-2 mb-2">
+                          <input
+                            type="checkbox"
+                            name={`industry.${outerIndex}.subCategories.${innerIndex}.type`}
+                            value={subCategory}
+                            checked={isChecked}
+                            onChange={(e) => handleChange(e, outerIndex, innerIndex)}
+                            className="mr-2"
+                          />
+                          <label className="text-gray-700">{subCategory}</label>
+                        </div>
+                      );
+                    })}
+
+                  </div>
+                )}
+              </div>
+            ))}
+
+
+
+
+          </div>
+          <div className="block">
             <label className="text-gray-700">Expertise</label>
             {formData.expertise.map((exp, idx) => (
               <div key={idx} className="flex items-center mb-2">
@@ -527,25 +483,13 @@ const handleLocationSelect = (location) => {
                     className="p-2 border border-gray-300 rounded w-full"
                   />
                 )}
-               {/* <button
-                  type="button"
-                  onClick={() => handleRemoveExpertise(idx)}
-                  className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
-                >
-                  Remove
-                </button>*/}
-                
+
+
               </div>
             ))}
-           {/* <button
-              type="button"
-              onClick={handleAddExpertise}
-              className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
-            >
-              Add Expertise
-            </button>*/}
+
           </div>
-        <div className="block">
+          <div className="block">
             <label className="text-gray-700">Languages</label>
             {formData.languages.map((lang, idx) => (
               <div key={idx} className="flex items-center mb-2">
@@ -587,146 +531,18 @@ const handleLocationSelect = (location) => {
                   <option value="Fluent">Fluent</option>
                   <option value="Native">Native</option>
                 </select>
-               { /*<button
-                  type="button"
-                  onClick={() => handleRemoveLanguage(idx)}
-                  className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
-                >
-                  Remove
-                </button>*/}
+
               </div>
             ))}
-           { /*<button
-              type="button"
-              onClick={handleAddLanguage}
-              className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
-            >
-              Add Language
-            </button>*/}
+
           </div>
 
-        {/*<div className="mt-4">
-          <h2 className="text-lg font-semibold mb-2">Collaboration Rates</h2>*/}
-         
-            {/*<div className="block">
-              <label className="text-gray-700">Collaboration Rates Post (From)</label>
-              <input
-                type="number"
-                name="collaborationRates.postFrom"
-                value={formData.collaborationRates.postFrom}
-                onChange={handleChange}
-                className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="block">
-              <label className="text-gray-700">Collaboration Rates Post (To)</label>
-              <input
-                type="number"
-                name="collaborationRates.postTo"
-                value={formData.collaborationRates.postTo}
-                onChange={handleChange}
-                className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="block">
-              <label className="text-gray-700">Collaboration Rates Story (From)</label>
-              <input
-                type="number"
-                name="collaborationRates.storyFrom"
-                value={formData.collaborationRates.storyFrom}
-                onChange={handleChange}
-                className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="block">
-              <label className="text-gray-700">Collaboration Rates Story (To)</label>
-              <input
-                type="number"
-                name="collaborationRates.storyTo"
-                value={formData.collaborationRates.storyTo}
-                onChange={handleChange}
-                className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="block">
-              <label className="text-gray-700">Collaboration Rates Reel (From)</label>
-              <input
-                type="number"
-                name="collaborationRates.reelFrom"
-                value={formData.collaborationRates.reelFrom}
-                onChange={handleChange}
-                className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="block">
-              <label className="text-gray-700">Collaboration Rates Reel (To)</label>
-              <input
-                type="number"
-                name="collaborationRates.reelTo"
-                value={formData.collaborationRates.reelTo}
-                onChange={handleChange}
-                className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>*/}
-            
-      {/*</div>*/}
-       
-        </div>
-         { /*<label className='block'>
-          <span className="text-gray-700">Industry</span>
-          {formData.industry.map((ids,idx)=>(
-            <div key={idx} className='flex items-center mb-2'>
-              <select
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          value={selectedIndustry}
-          onChange={handleIndustryChange}
-        >
-          <option value="">Select Industry</option>
-          {Object.keys(industrySubCategories).map((industry) => (
-            <option key={industry} value={industry}>
-              {industry}
-            </option>
-          ))}
-        </select>
-              {ids.type==="Other" && (
-                  <input
-                    type="text"
-                    name={`industry.${idx}.other`}
-                    value={ids.other}
-                    onChange={handleChange}
-                    placeholder="Enter Industry manually"
-                    className="p-2 border border-gray-300 rounded w-full"
-                  />
-                )}
-            </div>
-          ))}
-                {subCategories.length > 0 && (
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Sub-categories</label>
-          <div className="mt-1">
-            {formData.subCategories.map((subCategory) => (
-              <div key={subCategory} className="flex items-center">
-                <input
-                  type="checkbox"
-                  id={subCategory}
-                  value={subCategory}
-                  onChange={handleSubCategoryChange}
-                  className="mr-2"
-                />
-                <label htmlFor={subCategory} className="text-sm text-gray-700">
-                  {subCategory}
-                </label>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
-          </label>*/}
-         
+        </div>
 
-      <div className="flex items-center justify-end space-x-2 mt-3">       
-           <SaveSearch  section="ContenWriters" formDataList={formData}/>
+
+        <div className="flex items-center justify-end space-x-2 mt-3">
+          <SaveSearch section="ContenWriters" formDataList={formData} />
           <button
             type="reset"
             onClick={handleReset}
@@ -735,11 +551,11 @@ const handleLocationSelect = (location) => {
             Reset
           </button>
           <button
-           disabled={!userData.permissions.contentWriter.filter}
-           title={!userData.permissions.contentWriter.filter
-             ? "You are not allowed to access this feature"
-             : undefined  // : ""
-           }
+            disabled={!userData.permissions.contentWriter.filter}
+            title={!userData.permissions.contentWriter.filter
+              ? "You are not allowed to access this feature"
+              : undefined
+            }
             type="submit"
             className="py-2 px-4 bg-blue-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105"
           >
@@ -748,13 +564,13 @@ const handleLocationSelect = (location) => {
         </div>
       </form>
       <div className="mt-4">
-          <h2 className="text-xl   p-2 my-2"// text-white bg-blue-700 
+        <h2 className="text-xl   p-2 my-2"
         >
           Content Writer List
-          </h2>
-  
-     <ContentWriterTable contentWriters={writers} setContentWriters={setWriters}/>
-     </div>
+        </h2>
+
+        <ContentWriterTable contentWriters={writers} setContentWriters={setWriters} />
+      </div>
     </div>
   );
 };

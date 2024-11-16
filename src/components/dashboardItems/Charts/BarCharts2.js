@@ -31,7 +31,7 @@ const BarCharts = ({data}) => {
         text: 'Followers and videos count',
         align: 'left',
         style: {
-          //fontSize: '24px',
+         
           color: isDarkTheme ? '#FFFFFF' : '#000000', 
         },
     },
@@ -69,7 +69,7 @@ const BarCharts = ({data}) => {
           text: '$ (thousands)',
           align: 'left',
           style: {
-            //fontSize: '24px',
+          
             color: isDarkTheme ? '#FFFFFF' : '#000000', 
           },
         

@@ -1,25 +1,25 @@
 
 
 import axios from 'axios';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { FaSort, FaSortUp, FaSortDown, FaBookmark } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ContactForm from '../ContactForm.js';
-import { useTheme } from '../../context/ThemeProvider.js';
+//import { useTheme } from '../../context/ThemeProvider.js';
 
 import { UserContext } from '../../context/userContext.js';
 
 import { saveAs } from "file-saver";
-import { CSVLink } from "react-csv";
+
 import Papa from "papaparse";
 import ApplyForm from "../OtherComponents/ApplyForm.js";
-import Bookmark from "../OtherComponents/Bookmark.js";
+//import Bookmark from "../OtherComponents/Bookmark.js";
 import Pagination from "../OtherComponents/Pagination.js";
 
 
 const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
-  const { isDarkTheme } = useTheme();
+  //const { isDarkTheme } = useTheme();
   // const [contentWriters, setContentWriters] = useState([]);
   const [originalWriters, setOriginalWriters] = useState(contentWriters);
   const [sortedField, setSortedField] = useState(null);
@@ -117,7 +117,7 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
       Name: user.name,
       Email: user.email,
       Experience: user.experience,
-      
+
       Location: JSON.stringify(user.location),
       Industry: user.industry,
       Expertise: user.expertise,
@@ -146,22 +146,22 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
   const handleToggleBookmark = async (influencer) => {
     const updatedBookmarkStatus = !influencer.isBookmarked;
     try {
-        await axios.put(`${localhosturl}/contentwriters/updatecontentwriter/${influencer._id}`, {
-            isBookmarked: updatedBookmarkStatus,
-        });
-        if (updatedBookmarkStatus) {
-          toast.success("Added to Bookmarks!");
-        } else {
-          toast.success("Removed from Bookmarks!");
-        }
+      await axios.put(`${localhosturl}/contentwriters/updatecontentwriter/${influencer._id}`, {
+        isBookmarked: updatedBookmarkStatus,
+      });
+      if (updatedBookmarkStatus) {
+        toast.success("Added to Bookmarks!");
+      } else {
+        toast.success("Removed from Bookmarks!");
+      }
 
-        setContentWriters(prev =>
-            prev.map(i => i._id === influencer._id ? { ...i, isBookmarked: updatedBookmarkStatus } : i)
-        );
+      setContentWriters(prev =>
+        prev.map(i => i._id === influencer._id ? { ...i, isBookmarked: updatedBookmarkStatus } : i)
+      );
     } catch (error) {
-        console.error('Error updating bookmark status', error);
+      console.error('Error updating bookmark status', error);
     }
-};
+  };
 
   return (
     <div className="table-container">
@@ -201,15 +201,15 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
       </div>
 
       <div className="overflow-x-auto  p-4 rounded-lg shadow-md">
-        <table className="min-w-full  text-sm"//bg-white
+        <table className="min-w-full  text-sm"
         >
           <thead>
-            <tr className=" text-base"//bg-gradient-to-r from-purple-500 to-pink-500 text-white
+            <tr className=" text-base"
             >
               <th className="border px-4 py-2">S.No</th>
               <th className="border px-4 py-2" onClick={() => handleSort("name")}>Name {renderSortIcon("name")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("experience")}>Experience {renderSortIcon("experience")}</th>
-              {/*<th className="border px-4 py-2" onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>*/}
+
               <th className="border px-4 py-2" onClick={() => handleSort("email")}>Email {renderSortIcon("email")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("location")}>Location {renderSortIcon("location")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("industry")}>Industries {renderSortIcon("industry")}</th>
@@ -221,7 +221,7 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Bookmark</th>
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Profile</th>
-              {/*<th className="py-3 px-4 uppercase font-semibold text-sm uppercase">Actions</th>*/}
+
             </tr>
           </thead>
           <tbody>
@@ -236,13 +236,13 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
               </tr>
             ) : (
               paginatedUsers.map((writer, index) => (
-                <tr key={writer._id} className="transition-colors"//hover:bg-gray-100 
+                <tr key={writer._id} className="transition-colors"
                 >
                   <td className="border px-4 py-2">{index + 1}</td>
                   <td className="border px-4 py-2">{writer.name}</td>
                   <td className="border px-4 py-2">{writer.experience}</td>
                   <td className="border px-4 py-2">{writer.email}</td>
-                  {/* <td className="border px-4 py-2">{writer.bio}</td>*/}
+
                   <td className="border px-4 py-2">{JSON.stringify(writer.location)}</td>
                   <td className="border px-4 py-2">
                     <ul className="list-disc pl-5">
@@ -273,7 +273,7 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
                       {writer.languages.map((lang, idx) => (
                         <li key={idx} className="mb-2">
                           <span key={idx} className="">
-                            {/*`${lang.name==="Other"?`Other: ${lang.other}`:lang.name} (${lang.proficiency})`*/}
+
                             {`${lang.name} (${lang.proficiency})`}
                           </span></li>
                       ))}
@@ -300,21 +300,20 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
                   </td>
                   <td className="border px-4 py-2 text-center"><ApplyForm section="ContenWriters" publisher={writer} /></td>
                   <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                  {/*  <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
-                    ><Bookmark section="ContenWriters" publisher={writer} /></button>*/}
+
                     <button
-                    disabled={!userData.permissions.contentWriter.bookmark}
-                    title={!userData.permissions.contentWriter.bookmark
-                      ? "You are not allowed to access this feature"
-                      : undefined  // : ""
-                    }
-                        onClick={() => handleToggleBookmark(writer)}
-                        className={`text-gray-600 focus:outline-none transition-transform transform hover:-translate-y-1 ${writer.isBookmarked ? 'text-yellow-500' : 'text-gray-400'
-                          }`}
-                      >
-                        <FaBookmark />
-                        {/*writer.isBookmarked ? ' Bookmarked' : ' Bookmark'*/}
-                      </button>
+                      disabled={!userData.permissions.contentWriter.bookmark}
+                      title={!userData.permissions.contentWriter.bookmark
+                        ? "You are not allowed to access this feature"
+                        : undefined
+                      }
+                      onClick={() => handleToggleBookmark(writer)}
+                      className={`text-gray-600 focus:outline-none transition-transform transform hover:-translate-y-1 ${writer.isBookmarked ? 'text-yellow-500' : 'text-gray-400'
+                        }`}
+                    >
+                      <FaBookmark />
+
+                    </button>
                   </td>
                   <td className="border px-4 py-2 text-center">
                     <Link
@@ -329,23 +328,6 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
                       View Profile
                     </Link>
                   </td>
-
-
-                  {/* <td className="border py-3 px-4">
-                <button
-                    onClick={() => handleBuyClick(writer)}
-                    className="bg-green-500 hover:bg-green-700 text-white py-1 px-3 rounded"
-                  >
-                    Buy Contact
-                  </button>
-                  <button
-                  onClick={() => handleShowContactDetails(writer._id)}
-                  className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded"
-                >
-                  Show Contact
-                </button>
-                 
-                </td>*/}
                 </tr>
               )))}
           </tbody>

@@ -17,14 +17,14 @@ const ContentWriterProfile = () => {
   const { isDarkTheme } = useTheme();
   const navigate = useNavigate();
   const { id } = useParams();
-  const [contentWriter,setContentWriter]=useState("")
-  const { userData,localhosturl } = useContext(UserContext);
+  const [contentWriter, setContentWriter] = useState("")
+  const { userData, localhosturl } = useContext(UserContext);
   const [toastShown, setToastShown] = useState(false);
-  
-  
+
+
   useEffect(() => {
-    let isMounted = true; 
-  
+    let isMounted = true;
+
     const fetchContentWriter = async () => {
       try {
         const response = await axios.get(`${localhosturl}/contentwriters/getcontentwriter/${id}`);
@@ -39,64 +39,63 @@ const ContentWriterProfile = () => {
         console.error('Error fetching Content Writer data:', error);
       }
     };
-  
+
     fetchContentWriter();
-  
- 
+
+
     return () => {
       isMounted = false;
     };
   }, [id, localhosturl, toastShown]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-const [selectedReportType, setSelectedReportType] = useState('');
-const [reason, setReason] = useState('');
-const [details, setDetails] = useState('');
+  const [selectedReportType, setSelectedReportType] = useState('');
+  const [reason, setReason] = useState('');
+  const [details, setDetails] = useState('');
 
-const handleReport = async () => {
-  console.log("Report Data:", {
+  const handleReport = async () => {
+    console.log("Report Data:", {
       userId: userData._id,
       publisherId: contentWriter._id,
       section: "Profile",
       reportType: selectedReportType,
       reason: reason,
       details: details,
-  });
+    });
 
-  const reportData = {
+    const reportData = {
       userId: userData._id,
       publisherId: contentWriter._id,
       section: "Profile",
       reportType: selectedReportType,
       reason: reason,
       details: details,
-  };
+    };
 
-  try {
+    try {
       const response = await axios.post(`${localhosturl}/reportroute/createreport`, reportData);
       if (response.data.success) {
-          toast.success("Report submitted successfully!");
-          setSelectedReportType('');
-          setReason('');
-          setDetails('');
-          setIsModalOpen(false); 
+        toast.success("Report submitted successfully!");
+        setSelectedReportType('');
+        setReason('');
+        setDetails('');
+        setIsModalOpen(false);
       }
-  } catch (error) {
+    } catch (error) {
       console.error('Error submitting report:', error);
       toast.error("Error submitting report. Please try again later.");
-  }
-};
+    }
+  };
 
 
 
 
   return (
-    <div className=""//"min-h-screen  flex flex-column items-center justify-center p-8 max-w-2xl"
+    <div className=""
     >
-        <button
-         className="mb-4 px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded hover:bg-blue-600 transition-all"
-       // style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-        //onClick={() => history.goBack()}
+      <button
+        className="mb-4 px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded hover:bg-blue-600 transition-all"
+
         onClick={() => navigate(-1)}
       >
         <FontAwesomeIcon icon={faArrowLeft} style={{ marginRight: '10px' }} />
@@ -109,7 +108,7 @@ const handleReport = async () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          {/* Profile Header */}
+
           <div className="flex items-center space-x-6 mb-8">
             <motion.div
               className="flex-shrink-0"
@@ -117,7 +116,7 @@ const handleReport = async () => {
               transition={{ duration: 0.4 }}
             >
               <img
-                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"//"https://via.placeholder.com/150"
+                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                 alt="Profile"
                 className="rounded-full w-32 h-32 object-cover border-4 border-gray-400"
               />
@@ -128,7 +127,7 @@ const handleReport = async () => {
             </div>
           </div>
 
-          {/* Experience Section */}
+
           <div className="mb-6 p-4  rounded-lg shadow-md transform transition-transform hover:scale-105 duration-300 ease-in-out">
             <h3 className="text-xl font-semibold text-800 flex items-center p-2">
               <FaBook className="text-600 mr-2" /> Experience
@@ -136,7 +135,7 @@ const handleReport = async () => {
             <p className="text-lg text-600 mt-2">{contentWriter.experience} years</p>
           </div>
 
-          {/* Expertise Section */}
+
           <div className="mb-6 p-4  rounded-lg shadow-md transform transition-transform hover:scale-105 duration-300 ease-in-out">
             <h3 className="text-xl font-semibold text-800 flex items-center p-2">
               <FaUser className="text-600 mr-2" /> Expertise
@@ -148,7 +147,7 @@ const handleReport = async () => {
             </ul>
           </div>
 
-          {/* Languages Section */}
+
           <div className="mb-6 p-4  rounded-lg shadow-md transform transition-transform hover:scale-105 duration-300 ease-in-out">
             <h3 className="text-xl font-semibold text-800 flex items-center p-2">
               <FaLanguage className="text-600 mr-2" /> Languages
@@ -160,7 +159,7 @@ const handleReport = async () => {
             </ul>
           </div>
 
-          {/* Collaboration Rates Section */}
+
           <div className="mb-6 p-4  rounded-lg shadow-md transform transition-transform hover:scale-105 duration-300 ease-in-out">
             <h3 className="text-xl font-semibold text-800 flex items-center p-2">
               <FaDollarSign className="text-600 mr-2" /> Collaboration Rates
@@ -170,87 +169,15 @@ const handleReport = async () => {
             <p className="text-lg text-600">Reel: ${contentWriter?.collaborationRates?.reel}</p>
           </div>
 
-          {/* Contact Section 
-          <div className="mb-6 p-4  rounded-lg shadow-md transform transition-transform hover:scale-105 duration-300 ease-in-out">
-            <h3 className="text-xl font-semibold text-800 flex items-center p-2">
-              <FaEnvelope className="text-600 mr-2" /> Contact
-            </h3>
-            <p className="text-lg text-600 mt-2">{contentWriter.email}</p>
-          </div>*/}
-         
-
-         {/* <button 
-            onClick={() => setIsModalOpen(true)} 
-            className="bg-red-500 text-white px-4 py-2 rounded-lg mb-4"
-          >
-            Report
-          </button>
-          {isModalOpen && (
-            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-              <div className="bg-white rounded-lg p-6 w-80">
-                <h3 className="text-lg font-semibold mb-4">Submit a Report</h3>
-
-              
-                <select 
-    value={selectedReportType} 
-    onChange={(e) => setSelectedReportType(e.target.value)}
-    className="mb-2 p-2 border rounded w-full"
->
-    <option value="">Select Report Type</option>
-    <option value="Spam">Spam</option>
-    <option value="Harassment">Harassment</option>
-    <option value="Inappropriate Content">Inappropriate Content</option>
-    <option value="Other">Other</option>
-</select>
-
-
-                
-                <input 
-                  type="text" 
-                  placeholder="Reason" 
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  className="mb-2 p-2 border rounded w-full"
-                  required
-                />
-
-                
-                <textarea 
-                  placeholder="Additional details" 
-                  value={details}
-                  onChange={(e) => setDetails(e.target.value)}
-                  className="mb-2 p-2 border rounded w-full"
-                ></textarea>
-
-              
-                <div className="flex justify-between">
-                  <button 
-                    onClick={() => setIsModalOpen(false)} 
-                    className="bg-gray-300 text-black px-4 py-2 rounded"
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    onClick={handleReport} 
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}*/}
-
         </motion.div>
       </div>
       <ReportModal
-          section="ContenWriters" 
-           // isOpen={isModalOpen}
-           // onClose={() => setIsModalOpen(false)}
-            userId={userData._id}
-            publisherId={id}
-            localhosturl={localhosturl} 
-          />
+        section="ContenWriters"
+
+        userId={userData._id}
+        publisherId={id}
+        localhosturl={localhosturl}
+      />
     </div>
   );
 };

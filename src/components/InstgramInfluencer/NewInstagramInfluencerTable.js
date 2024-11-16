@@ -18,7 +18,7 @@ import Pagination from "../OtherComponents/Pagination.js";
 
 
 
-const NewInstagramInfluencerTable = ({addInfluencer}) => {
+const NewInstagramInfluencerTable = ({ addInfluencer }) => {
   const { isDarkTheme } = useTheme();
   const { userData, localhosturl } = useContext(UserContext);
   const userId = userData?._id;
@@ -35,7 +35,7 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
 
         setInfluencers(response.data.instagramInfluencer);
         setOriginalUsers(response.data.instagramInfluencer);
-        //setInfluencers(addInfluencer)
+
       } catch (error) {
         console.error("Error fetching influencers", error);
       }
@@ -45,7 +45,7 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
   }, []);
 
 
-  // console.log(originalUsers, influencers);
+
   const [sortedField, setSortedField] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
 
@@ -112,9 +112,9 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
       .filter(element => element.value)
       .map(element => `${element.key}: ${element.value}`)
       .join(', ');
-      
+
     return `${formattedElements}`;
-};
+  };
 
   const generateShortDescription = (formData, users) => {
     const elements = createDescriptionElements(formData, users).split(', ');
@@ -155,29 +155,29 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
   }
   const deleteInstagramInfluencer = async (id) => {
     try {
-  console.log("Id ",id)
-        await axios.delete(`${localhosturl}/instagraminfluencers/deleteInstagraminfluencer/${id}`);
+      console.log("Id ", id)
+      await axios.delete(`${localhosturl}/instagraminfluencers/deleteInstagraminfluencer/${id}`);
 
-  
-        const user = influencers.find((influencer) => influencer._id === id);
-        console.log("User ",user)
-       
-        if (user) {
-          console.log("Before past ")
-            await pastactivitiesAdd(user);
-            console.log("After past ")
-            toast.success("Instagram Influencer Deleted Successfully");
-            console.log("Before Toast ")
-            setInfluencers(influencers.filter((influencer) => influencer._id !== id));
-            console.log("After past ")
-        } else {
-            toast.error("Instagram Influencer not found in the local state");
-        }
+
+      const user = influencers.find((influencer) => influencer._id === id);
+      console.log("User ", user)
+
+      if (user) {
+        console.log("Before past ")
+        await pastactivitiesAdd(user);
+        console.log("After past ")
+        toast.success("Instagram Influencer Deleted Successfully");
+        console.log("Before Toast ")
+        setInfluencers(influencers.filter((influencer) => influencer._id !== id));
+        console.log("After past ")
+      } else {
+        toast.error("Instagram Influencer not found in the local state");
+      }
     } catch (error) {
-        toast.error("Error deleting Instagram Influencer");
-        console.error("Error deleting Instagram Influencer:", error);
+      toast.error("Error deleting Instagram Influencer");
+      console.error("Error deleting Instagram Influencer:", error);
     }
-};
+  };
 
   const deleteInstagramInfluencer1 = async (id) => {
     try {
@@ -249,7 +249,7 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
   };
 
   const handleToggleBookmark = async (influencer) => {
-    // Call an API or directly update the state to toggle isBookmarked
+
     const updatedBookmarkStatus = !influencer.isBookmarked;
 
     try {
@@ -312,7 +312,7 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
       <div className="overflow-x-auto  p-4 rounded-lg shadow-md">
         <table className="min-w-full  text-sm">
           <thead>
-            <tr className="text-base"//bg-gradient-to-r from-purple-500 to-pink-500 text-white 
+            <tr className="text-base"
             >
               <th className="border px-4 py-2" >S.No </th>
               <th className="border px-4 py-2" onClick={() => handleSort("username")}>Name {renderSortIcon("username")}</th>
@@ -333,7 +333,7 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
               <th className="border px-4 py-2" onClick={() => handleSort("pastCollaborations")}>Past Collaborations {renderSortIcon("pastCollaborations")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("mediaKit")}>Media Kit {renderSortIcon("mediaKit")}</th>
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Actions</th>
-             {/* <th className="border py-3 px-2 md:px-6 text-left uppercase ">Apply</th>*/}
+
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Bookmark</th>
               <th className="border py-3 px-2 md:px-6 text-left uppercase ">Profile</th>
             </tr>
@@ -409,7 +409,7 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
                       disabled={!userData.permissions.instagram.edit}
                       title={!userData.permissions.instagram.edit
                         ? "You are not allowed to access this feature"
-                        : undefined  // : ""
+                        : undefined
                       }
                       to={`/editInstagramInfluencer/${influencer._id}`}
                       className=" btn-dis border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"
@@ -419,7 +419,7 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
                     <button disabled={!userData.permissions.instagram.delete}
                       title={!userData.permissions.instagram.delete
                         ? "You are not allowed to access this feature"
-                        : undefined  // : ""
+                        : undefined
                       }
                       onClick={() => deleteInstagramInfluencer(influencer._id)}
                       className="border bg-red-500 hover:bg-red-700 text-white py-1 px-4 rounded my-2 transition-transform transform hover:-translate-y-1"
@@ -429,33 +429,26 @@ const NewInstagramInfluencerTable = ({addInfluencer}) => {
 
 
                   </td>
-                 {/* <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                    <ApplyForm section="InstagramInfluencer" publisher={influencer} />
-                    <ShowApplyForm section="InstagramInfluencer" publisher={influencer} />
-                  </td>*/}
-                  {/*<td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                    <button className="text-gray-600  focus:outline-none transition-transform transform hover:-translate-y-1"
-                    ><Bookmark section="InstagramInfluencer" publisher={influencer} /></button>
-                  </td>*/}
+
                   <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
                     <button disabled={!userData.permissions.instagram.bookmark}
                       title={!userData.permissions.instagram.bookmark
                         ? "You are not allowed to access this feature"
-                        : undefined  // : ""
+                        : undefined
                       }
                       onClick={() => handleToggleBookmark(influencer)}
                       className={`text-gray-600 focus:outline-none transition-transform transform hover:-translate-y-1 ${influencer.isBookmarked ? 'text-yellow-500' : 'text-gray-400'
                         }`}
                     >
                       <FaBookmark />
-                      {/*influencer.isBookmarked ? ' Bookmarked' : ' Bookmark'*/}
+
                     </button>
                   </td>
                   <td className="border py-2 px-4">
                     <button disabled={!userData.permissions.instagram.profile}
                       title={!userData.permissions.instagram.profile
                         ? "You are not allowed to access this feature"
-                        : undefined  // : ""
+                        : undefined
                       }
                       onClick={() => handleViewProfile(influencer)}
                       className="border bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md text-decoration-none inline-block shadow-lg transition-transform transform hover:-translate-y-1"

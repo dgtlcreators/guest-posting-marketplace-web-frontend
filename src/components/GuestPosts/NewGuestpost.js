@@ -2,25 +2,9 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import NewGuestpostTable from "./NewGuestpostTable.js";
 import { toast } from "react-toastify";
-//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { UserContext } from "../../context/userContext.js";
 import { useTheme } from "../../context/ThemeProvider.js";
 
-/*import { Bar, Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { FaChartBar } from "react-icons/fa";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
-*/
 
 const NewGuestpost = () => {
     const { isDarkTheme } = useTheme();
@@ -40,9 +24,8 @@ const NewGuestpost = () => {
         price: "1",
         monthlyTraffic: "Monthly Traffic >= 1000",
         mozSpamScore: "Spam Score <= 01",
-        userId:userData?._id,
-        // siteWorkedWith: "",
-        // publisherRole: "",
+        userId: userData?._id,
+
     };
 
     const [formDatas, setFormData] = useState(initialFormData);
@@ -73,76 +56,14 @@ const NewGuestpost = () => {
         }
     };
 
-    /* const barData = {
-       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-       datasets: [
-         {
-           label: 'Monthly Users',
-           data: [65, 59, 80, 81, 56, 55, 40],
-           backgroundColor: 'rgba(75, 192, 192, 0.6)',
-         },
-       ],
-     };
-   
-     const lineData = {
-       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-       datasets: [
-         {
-           label: 'Monthly Revenue',
-           data: [300, 500, 400, 600, 700, 500, 600],
-           fill: false,
-           borderColor: 'rgba(75, 192, 192, 1)',
-         },
-       ],
-     };
-   
-     const barOptions = {
-       responsive: true,
-       plugins: {
-         legend: {
-           position: 'top',
-         },
-         title: {
-           display: true,
-           text: 'Monthly Users',
-         },
-       },
-     };
-   
-     const lineOptions = {
-       responsive: true,
-       plugins: {
-         legend: {
-           position: 'top',
-         },
-         title: {
-           display: true,
-           text: 'Monthly Revenue',
-         },
-       },
-     };*/
 
     return (
         <div className="p-4">
-            <h2 className="text-xl  mb-3  p-3"//text-white bg-blue-700 font-bold
+            <h2 className="text-xl  mb-3  p-3"
             >
                 Guestpost Page
             </h2>
-            {/*<section className="mb-6">
-        <h2 className="text-xl font-bold mb-3 flex items-center">
-          <FontAwesomeIcon icon={FaChartBar} className="mr-2" />
-          Overview
-        </h2>
-        <div className="bg-gray-200 p-4 shadow-xl">
-          <p>Summary statistics and analytics of platform usage.</p>
-          <div className="my-4">
-            <Bar data={barData} options={barOptions} />
-          </div>
-          <div className="my-4">
-            <Line data={lineData} options={lineOptions} />
-          </div>
-        </div>
-      </section>*/}
+
             <form
                 onSubmit={handleSubmit}
                 className="space-y-6 md:space-y-8 bg-gray-200 shadow-xl p-4"
@@ -194,7 +115,7 @@ const NewGuestpost = () => {
                     </div>
                 </div>
 
-                {/* 1st Row */}
+
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div className="flex flex-col">
                         <label htmlFor="publisherURL" className="font-medium">
@@ -242,7 +163,7 @@ const NewGuestpost = () => {
                             onChange={handleChange}
                             className="form-input border rounded p-2"
                         >
-                            {/* Options */}
+
                             <option value="Agriculture">Agriculture</option>
                             <option value="Animals and Pets">Animals and Pets</option>
                             <option value="Art">Art</option>
@@ -280,7 +201,7 @@ const NewGuestpost = () => {
                             onChange={handleChange}
                             className="form-input border rounded p-2"
                         >
-                            {/* Options */}
+
                             <option value="English">English</option>
                             <option value="Hindi">Hindi</option>
                             <option value="Punjabi">Punjabi</option>
@@ -297,7 +218,7 @@ const NewGuestpost = () => {
 
                 </div>
 
-                {/* 2nd Row */}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex flex-col">
                         <label htmlFor="ahrefsDR" className="font-medium">
@@ -334,26 +255,26 @@ const NewGuestpost = () => {
                     </div>
                 </div>
 
-                {/* 3rd Row */}
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="flex flex-col">
                         <label htmlFor="price" className="font-medium">
                             Price
                         </label>
                         <div className="flex items-center border border-gray-300 rounded-md">
-                        <span className="p-2 text-xl">₹</span>
-                        <input
-                            type="number"
-                            id="price"
-                            name="price"
-                            min="1"
-                            max="100000"
-                            required
-                            placeholder="1"
-                            value={formDatas.price}
-                            onChange={handleChange}
-                            className="form-input border rounded p-2"
-                        />
+                            <span className="p-2 text-xl">₹</span>
+                            <input
+                                type="number"
+                                id="price"
+                                name="price"
+                                min="1"
+                                max="100000"
+                                required
+                                placeholder="1"
+                                value={formDatas.price}
+                                onChange={handleChange}
+                                className="form-input border rounded p-2"
+                            />
                         </div>
                     </div>
                     <div className="flex flex-col">
@@ -368,7 +289,7 @@ const NewGuestpost = () => {
                             onChange={handleChange}
                             className="form-input border rounded p-2"
                         >
-                            {/* Options */}
+
                             <option value="Monthly Traffic >= 1000">
                                 Monthly Traffic {">="} 1000
                             </option>
@@ -425,7 +346,7 @@ const NewGuestpost = () => {
                             onChange={handleChange}
                             className="form-input border rounded p-2"
                         >
-                            {/* Options */}
+
                             <option value="Spam Score <= 01">Spam Score {"<="} 01</option>
                             <option value="Spam Score <= 02">Spam Score {"<="} 02</option>
                             <option value="Spam Score <= 05">Spam Score {"<="} 05</option>
@@ -436,57 +357,8 @@ const NewGuestpost = () => {
                     </div>
                 </div>
 
-                {/* 4th Row */}
-                {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex flex-col">
-            <label htmlFor="siteWorkedWith" className="font-medium">
-              Sites {"I've (haven't)"} Worked With
-            </label>
-            <select
-              id="siteWorkedWith"
-              name="siteWorkedWith"
-              value={formDatas.siteWorkedWith}
-              onChange={handleChange}
-              className="form-input border rounded p-2"
-            >
-              <option value="allWebsitesWorkedWith">All Websites</option>
-              <option value="excludeSitesWorkedWith">
-                Exclude Sites {"I've"} Worked With
-              </option>
-              <option value="onlySitesWorkedWith">
-                Only Sites {"I've"} Worked With
-              </option>
-            </select>
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="publisherRole" className="font-medium">
-              Publisher Role
-            </label>
-            <select
-              id="publisherRole"
-              name="publisherRole"
-              value={formDatas.publisherRole}
-              onChange={handleChange}
-              className="form-input border rounded p-2"
-            >
-              <option value="allWebsitesRole">All Websites</option>
-              <option value="websitesByOwner">Websites added by Owner</option>
-              <option value="websitesByContributors">
-                Websites added by Contributors
-              </option>
-            </select>
-          </div>
-        </div> */}
-
-
                 <div className="flex items-center justify-end space-x-2">
-                    {/* <button
-            type="button"
-            onClick={handleSaveSearch}
-            className="py-2 px-4 bg-green-600 text-white rounded transition duration-300 ease-in-out transform hover:bg-green-500 hover:scale-105"
-          >
-            Save Search
-          </button>*/}
+
 
                     <button
                         type="reset"
@@ -496,11 +368,11 @@ const NewGuestpost = () => {
                         Reset
                     </button>
                     <button
-                    disabled={!userData.permissions.guestPost.add} 
-                    title={!userData.permissions.guestPost.add
-                       ? "You are not allowed to access this feature"
-                     :undefined  // : ""
-                    }
+                        disabled={!userData.permissions.guestPost.add}
+                        title={!userData.permissions.guestPost.add
+                            ? "You are not allowed to access this feature"
+                            : undefined
+                        }
                         type="submit"
                         className="py-2 px-4 bg-blue-900 text-white rounded transition duration-300 ease-in-out transform hover:scale-105 hover:animate-submitColorChange"
                     >
@@ -510,7 +382,7 @@ const NewGuestpost = () => {
 
 
             </form>
-            <h2 className="text-xl   p-2 my-2"// text-white bg-blue-700 
+            <h2 className="text-xl   p-2 my-2"
             >
                 Guestpost List
             </h2>
