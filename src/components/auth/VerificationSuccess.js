@@ -8,8 +8,8 @@ const VerificationSuccess = () => {
       setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
     setTimeout(() => {
-        navigate('http://localhost:3000/login');
-    //  navigate('https://connect.creatorsxchange.com/login');
+       //// navigate('http://localhost:3000/login');
+      navigate('https://connect.creatorsxchange.com/login');
     }, 5000);
     return () => clearInterval(timer);
   }, [navigate]);
