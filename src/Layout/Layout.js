@@ -25,8 +25,11 @@ const Layout = ({ children, isRegisterPage }) => {
                 <p className="pt-3">
                   <span className='p-2'>{isRegisterPage ? 'Have an account?' : "Don't have an account?"}</span>
 
-                  <a className="p-2 m-3 bg-white text-blue-600 rounded-md hover:bg-gray-200 transition duration-200" href={isRegisterPage ? '/login' : '/Signup101010'} role="button">
-                    {isRegisterPage ? 'Log In' : 'Sign Up'}
+                  <a className="p-2 m-3 bg-white text-blue-600 rounded-md hover:bg-gray-200 transition duration-200" href={isRegisterPage ? '/login' :"/contactus" //'/Signup101010'
+
+                  } role="button">
+                    {isRegisterPage ? 'Log In' :"Contact Us" //'Sign Up'
+                    }
                   </a>
                 </p>
               </div>

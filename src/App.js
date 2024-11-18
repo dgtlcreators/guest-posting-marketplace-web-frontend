@@ -14,6 +14,7 @@ import { UserProvider } from './context/userContext.js';
 // Components
 import Navbar from "./components/Navbar.js";
 import Sidebar from "./components/Sidebar.js";
+
 import ProtectedRoute from './components/ProtectedRoute.js';
 
 const Verification = lazy(() => import('./components/auth/VerificationSuccess.js'));
@@ -21,6 +22,7 @@ const Verification = lazy(() => import('./components/auth/VerificationSuccess.js
 // Lazy-loaded Components
 const Login = lazy(() => import('./components/auth/Login.js'));
 const Signup = lazy(() => import('./components/auth/Signup.js'));
+const Home = lazy(() => import('./components/Home.js'));
 const Dashboard = lazy(() => import('./components/dashboardItems/Dashboard.js'));
 const Guestpost = lazy(() => import('./components/GuestPosts/Guestpost.js'));
 const EditGuestpostData = lazy(() => import('./components/GuestPosts/EditAdminData.js'));
@@ -60,7 +62,7 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const useShowNavbarAndSidebar = () => {
   const location = useLocation();
-  return !(location.pathname === "/login" || location.pathname === "/Signup101010" || location.pathname === "/notfound" || location.pathname === "/verification-success")
+  return !(location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/notfound" || location.pathname === "/verification-success")
 
 };
 
@@ -90,7 +92,8 @@ function AppContent() {
             <Routes>
               {/* Authentication */}
               <Route path="/login" element={<Login />} />
-              <Route path="/Signup101010" element={<Signup />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
 
               {/* Dashboard */}
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

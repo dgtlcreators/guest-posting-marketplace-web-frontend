@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #4a90e2, #cfe0ff); /* Blue gradient */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden; /* Prevent scroll */
+}
+
+/* Container Styling */
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Form Card */
+.signup-box {
+  background: rgba(255, 255, 255, 0.9); /* Slightly more opaque */
+  padding: 60px 50px; /* Increased padding for larger form */
+  border-radius: 25px; /* More rounded corners */
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+  text-align: center;
+  max-width: 450px; /* Increased width */
+  width: 100%;
+  animation: slideUp 1s ease-in-out;
+  backdrop-filter: blur(10px); /* Subtle blur effect */
+}
+
+/* Title */
+.signup-box h1 {
+  font-size: 2.5rem; /* Larger title */
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #1a73e8;
+}
+
+/* Subtitle */
+.signup-box p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Access Code Input */
+.signup-box input {
+  width: 90%;
+  padding: 15px 20px; /* Larger input padding */
+  margin: 15px 0; /* Increased margin for spacing */
+  border: 1px solid #ddd;
+  border-radius: 15px; /* More rounded corners */
+  font-size: 1.1rem; /* Slightly larger font */
+  transition: all 0.3s ease;
+  animation: slideUp 1.2s ease-in-out;
+}
+
+.signup-box input:focus {
+  border-color: #1a73e8;
+  outline: none;
+  transform: scale(1.02);
+}
+
+/* Button */
+.signup-box button {
+  width: 100%;
+  padding: 15px 20px; /* Larger button padding */
+  margin-top: 20px;
+  background: linear-gradient(135deg, #1a73e8, #4a90e2);
+  border: none;
+  color: white;
+  font-size: 1.1rem; /* Larger font size */
+  font-weight: 600;
+  border-radius: 15px; /* More rounded corners */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: slideUp 1.4s ease-in-out;
+}
+
+.signup-box button:hover {
+  background: linear-gradient(135deg, #1669c9, #4285f4);
+  transform: scale(1.05);
+}
+
+/* Access Code Link */
+.access-code-link {
+  margin-top: 10px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.access-code-link a {
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.access-code-link a:hover {
+  text-decoration: underline;
+}
+
+/* Keyframes for Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+

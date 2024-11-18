@@ -3,7 +3,7 @@ import { UserContext } from '../../context/userContext.js';
 import { useTheme } from '@emotion/react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import Background from 'three/src/renderers/common/Background.js';
+//import Background from 'three/src/renderers/common/Background.js';
 
 const ShowApplyForm = ({ section, publisher }) => {
   const { userData, localhosturl } = useContext(UserContext);
