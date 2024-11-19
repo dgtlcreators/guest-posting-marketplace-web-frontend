@@ -8,6 +8,9 @@ import { Elements } from '@stripe/react-stripe-js';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
+
+import TawkTo from './TawkTo.js';
+
 // Context and Providers
 import { UserProvider } from './context/userContext.js';
 
@@ -146,6 +149,7 @@ function AppContent() {
               <Route path="/notfound" element={<PathNotFound />} />
             </Routes>
           </Suspense>
+          <TawkTo /> 
         </main>
       </div>
     </div>
