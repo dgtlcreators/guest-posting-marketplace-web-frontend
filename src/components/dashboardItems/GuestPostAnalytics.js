@@ -47,19 +47,19 @@ const GuestPostAnalytics = () => {
     <div className="mt-1 p-4  shadow-md rounded-lg">
     <h3 className="text-xl font-bold mb-4 p-2">Guest Post Analytics</h3>
     <div className="chart-container flex flex-wrap gap-4">
-      <div className="chart-item flex-1 min-w-[300px]">
+      <div className="chart-item flex-1 min-w-[400px]">
         <PieChart data={data} />
       </div>
-      <div className="chart-item flex-1 min-w-[300px]">
+      <div className="chart-item flex-1 min-w-[350px] ">
         <FunnelCharts data={data} />
       </div>
-      <div className="chart-item flex-1 min-w-[300px]">
+      <div className="chart-item flex-1 min-w-[350px]">
         <DistributedColumns data={data} />
       </div>
-      <div className="chart-item flex-1 min-w-[300px]">
+      <div className="chart-item flex-1 min-w-[350px]">
         <RadarChart data={data} />
       </div>
-      <div className="chart-item flex-1 min-w-[300px]">
+      <div className="chart-item flex-1 min-w-[350px]">
         <MixedChart data={data} />
       </div>
     </div>
