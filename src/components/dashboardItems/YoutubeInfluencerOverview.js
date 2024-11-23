@@ -28,8 +28,8 @@ const YoutubeInfluencerOverview = () => {
        
         const response = await axios.get(`${localhosturl}/youtubeinfluencers/getAllYoutubeInfluencer`);
         const fetchedData = response.data.data;
-
         setData(fetchedData);
+
         setInfluencerCount(fetchedData.length);
 
       
@@ -54,8 +54,10 @@ const YoutubeInfluencerOverview = () => {
     fetchData();
   }, []);
 
+
+
   useEffect(() => {
-    if (data.length) {
+    if (data.length>0) {
       initializeCharts(data, totalFollowers, averageEngagementRate);
     }
   }, [isDarkTheme, data, totalFollowers, averageEngagementRate]);
@@ -63,7 +65,7 @@ const YoutubeInfluencerOverview = () => {
   const initializeCharts = (fetchedData, followersTotal, avgEngagementRate) => {
     const textColor = isDarkTheme ? '#FFFFFF' : '#000000';
     const sparklineData = fetchedData.map(item => item.engagementRate || 0);
-
+    console.log("Fetch data ",fetchedData)
     if (chartSpark1Ref.current) {
       chartSpark1Ref.current.innerHTML = '';
     }
@@ -73,7 +75,8 @@ const YoutubeInfluencerOverview = () => {
     if (chartSpark3Ref.current) {
       chartSpark3Ref.current.innerHTML = '';
     }
-
+    fetchedData.map(item => console.log(item.engagementRate))
+console.log("sparklineData ",sparklineData)
 
     var optionsSpark1 = {
       series: [{
@@ -160,7 +163,7 @@ const YoutubeInfluencerOverview = () => {
     if (chartSpark2Ref.current) {
       new ApexCharts(chartSpark2Ref.current, optionsSpark2).render();
     }
-    console.log()
+ 
 
     var optionsSpark3 = {
       series: [{
@@ -213,6 +216,9 @@ const YoutubeInfluencerOverview = () => {
   if (error) {
     //return <div>Error: {error.message}</div>;
   }
+
+
+  
 
   return (
      <div className="p-4 shadow-md rounded-lg">

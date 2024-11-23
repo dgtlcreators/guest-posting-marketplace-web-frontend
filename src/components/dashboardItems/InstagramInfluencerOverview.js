@@ -164,7 +164,7 @@ const InstagramInfluencerOverview = () => {
     if (chartSpark2Ref.current) {
       new ApexCharts(chartSpark2Ref.current, optionsSpark2).render();
     }
-    console.log()
+   
 
     var optionsSpark3 = {
       series: [{

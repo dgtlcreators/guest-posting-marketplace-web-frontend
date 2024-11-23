@@ -13,7 +13,8 @@ const LocationSelector = ({ onSelectLocation }) => {
     city: "",
     countryCode: "",
     stateCode: "",
-    cityCode: ""
+    cityCode: "",
+    stateIsocode: "" 
   });
 
   useEffect(() => {
@@ -47,14 +48,18 @@ const LocationSelector = ({ onSelectLocation }) => {
       });
       const data = await response.json();
       if (data.states) {
-        setStates(data.states.map(state => ({ code: state.adminCode1, name: state.name })));
+   
+        setStates(data.states.map(state => ({ code: state.adminCode1, name: state.name , isocode: state.adminCodes1.ISO3166_2})));
+  
+       
         setCities([]); // Clear cities when changing state
         setSelectedLocation(prev => ({
           ...prev,
           state: "",
           city: "",
           stateCode: "",
-          cityCode: ""
+          cityCode: "",
+          stateIsocode: "",
         }));
       } else {
         console.error("Error fetching states:", data);
@@ -65,17 +70,20 @@ const LocationSelector = ({ onSelectLocation }) => {
   };
 
   // Fetch cities based on selected state
-  const fetchCities = async (countryCode, stateCode) => {
+  const fetchCities = async (countryCode, stateCode, stateIsocode) => {
     try {
       const response = await fetch(`${localhosturl}/locationroute/city`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ countryCode, stateCode })
+        body: JSON.stringify({ countryCode, stateCode,stateIsocode })
       });
       const data = await response.json();
       if (data.cities) {
+        console.log(data.cities)
+       // const filteredCities = data.cities.filter((city) => city.adminCode1 !== stateCode);
+       // setCities(filteredCities.map(city => ({ code: city.geonameId.toString(), name: city.name })));
         setCities(data.cities.map(city => ({ code: city.geonameId.toString(), name: city.name })));
       } else {
         console.warn("No cities found for this state");
@@ -99,7 +107,8 @@ const LocationSelector = ({ onSelectLocation }) => {
       state: "",
       city: "",
       stateCode: "",
-      cityCode: ""
+      cityCode: "",
+        stateIsocode: ""
     }));
 
     fetchStates(selectedCountryCode);
@@ -109,31 +118,38 @@ const LocationSelector = ({ onSelectLocation }) => {
       state: "",
       stateCode: "",
       city: "",
-      cityCode: ""
+      cityCode: "",
+         stateIsocode: ""
     });
   };
 
   // Handle state selection
   const handleStateChange = (e) => {
     const selectedStateCode = e.target.value;
-    const selectedState = states.find(state => state.code === selectedStateCode);
+    console.log(selectedStateCode)
+    // const selectedState = states.find(state => state.code === selectedStateCode);
+    const selectedState = states.find(state => state.name === selectedStateCode);
     const stateName = selectedState?.name || "";
-
+    const stateIsocode = selectedState?.isocode || "";
+console.log( selectedState)
     setSelectedLocation(prev => ({
       ...prev,
       state: stateName,
       stateCode: selectedStateCode,
       city: "",
-      cityCode: ""
+      cityCode: "",
+      stateIsocode: stateIsocode,
     }));
+    console.log(stateIsocode)
 
-    fetchCities(selectedLocation.countryCode, selectedStateCode);
+    fetchCities(selectedLocation.countryCode, selectedStateCode, stateIsocode);
     onSelectLocation(prev => ({
       ...prev,
       state: stateName,
       stateCode: selectedStateCode,
       city: "",
-      cityCode: ""
+      cityCode: "",
+      stateIsocode: stateIsocode,
     }));
   };
 
@@ -158,6 +174,7 @@ const LocationSelector = ({ onSelectLocation }) => {
 
   // Log selected location for debugging
   useEffect(() => {
+
     console.log("Selected Location has been updated:", selectedLocation);
   }, [selectedLocation]);
 
@@ -191,7 +208,8 @@ const LocationSelector = ({ onSelectLocation }) => {
         >
           <option value="">Select State</option>
           {states.map((state) => (
-            <option key={`state-${state.code}`} value={state.code}>
+            <option key={`state-${state.code}`} value={state.name}//value={state.code}
+            >
               {state.name}
             </option>
           ))}
@@ -208,7 +226,9 @@ const LocationSelector = ({ onSelectLocation }) => {
           disabled={!selectedLocation.stateCode}
         >
           <option value="">Select City</option>
-          {cities.map((city) => (
+          {cities
+           .filter(city => city.name!== selectedLocation.stateCode)
+          .map((city) => (
             <option key={`city-${city.code}`} value={city.code}>
               {city.name}
             </option>
