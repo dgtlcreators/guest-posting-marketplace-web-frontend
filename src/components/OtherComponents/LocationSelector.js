@@ -14,8 +14,11 @@ const LocationSelector = ({ onSelectLocation }) => {
     countryCode: "",
     stateCode: "",
     cityCode: "",
-    stateIsocode: "" 
+    stateIsocode: "" ,
+    newCity: "",
   });
+
+  const [isAddingCity, setIsAddingCity] = useState(false);
 
   useEffect(() => {
     fetchCountries();
@@ -52,7 +55,7 @@ const LocationSelector = ({ onSelectLocation }) => {
         setStates(data.states.map(state => ({ code: state.adminCode1, name: state.name , isocode: state.adminCodes1.ISO3166_2})));
   
        
-        setCities([]); // Clear cities when changing state
+        setCities([]); 
         setSelectedLocation(prev => ({
           ...prev,
           state: "",
@@ -69,7 +72,7 @@ const LocationSelector = ({ onSelectLocation }) => {
     }
   };
 
-  // Fetch cities based on selected state
+
   const fetchCities = async (countryCode, stateCode, stateIsocode) => {
     try {
       const response = await fetch(`${localhosturl}/locationroute/city`, {
@@ -94,7 +97,7 @@ const LocationSelector = ({ onSelectLocation }) => {
     }
   };
 
-  // Handle country selection
+
   const handleCountryChange = (e) => {
     const selectedCountryCode = e.target.value;
     const selectedCountry = countries.find(country => country.code === selectedCountryCode);
@@ -123,7 +126,6 @@ const LocationSelector = ({ onSelectLocation }) => {
     });
   };
 
-  // Handle state selection
   const handleStateChange = (e) => {
     const selectedStateCode = e.target.value;
     console.log(selectedStateCode)
@@ -153,7 +155,6 @@ console.log( selectedState)
     }));
   };
 
-  // Handle city selection
   const handleCityChange = (e) => {
     const selectedCityCode = e.target.value;
     const selectedCity = cities.find(city => city.code === selectedCityCode);
@@ -172,10 +173,34 @@ console.log( selectedState)
     });
   };
 
-  // Log selected location for debugging
+  const handleAddCityChange = (e) => {
+    setSelectedLocation(prev => ({
+      ...prev,
+      newCity: e.target.value
+    }));
+  };
+
+  const handleAddCitySubmit = () => {
+    if (selectedLocation.newCity) {
+      setSelectedLocation(prev => ({
+        ...prev,
+        city: selectedLocation.newCity,
+        cityCode: selectedLocation.newCity // You may want to generate a unique code for the city
+      }));
+      onSelectLocation({
+        ...selectedLocation,
+        city: selectedLocation.newCity,
+        cityCode: selectedLocation.newCity 
+      });
+      setIsAddingCity(false); 
+    }
+  };
+
+
+
   useEffect(() => {
 
-    console.log("Selected Location has been updated:", selectedLocation);
+  //  console.log("Selected Location has been updated:", selectedLocation);
   }, [selectedLocation]);
 
   return (
@@ -233,7 +258,37 @@ console.log( selectedState)
               {city.name}
             </option>
           ))}
+          <option value="add-city">Add City</option>
         </select>
+
+        {selectedLocation.cityCode === "add-city" && !isAddingCity && (
+          <button
+            type="button"
+            onClick={() => setIsAddingCity(true)}
+            className="mt-2 p-2 bg-blue-500 text-white"
+          >
+            Add New City
+          </button>
+        )}
+
+        {isAddingCity && (
+          <div className="flex flex-col mt-2">
+            <input
+              type="text"
+              value={selectedLocation.newCity}
+              onChange={handleAddCityChange}
+              placeholder="Enter new city name"
+              className="p-2 border"
+            />
+            <button
+              type="button"
+              onClick={handleAddCitySubmit}
+              className="mt-2 p-2 bg-green-500 text-white"
+            >
+              Add City
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
