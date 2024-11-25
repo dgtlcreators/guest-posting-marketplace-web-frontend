@@ -14,6 +14,7 @@ const FullChart = ({ data }) => {
       categoryCounts[item.category] = (categoryCounts[item.category] || 0) + 1;
     }
   });
+  
 
   const categories = Object.keys(categoryCounts);
   const series = Object.values(categoryCounts);

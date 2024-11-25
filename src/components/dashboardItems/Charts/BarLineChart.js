@@ -19,6 +19,8 @@ const BarLineChart = ({ data }) => {
     data: Object.values(languageCounts),
   }];
 
+
+
   const languageOptions = {
     series: languageSeries,
     chart: {

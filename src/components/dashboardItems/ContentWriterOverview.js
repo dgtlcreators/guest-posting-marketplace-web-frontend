@@ -113,7 +113,7 @@ const ContentWriterOverview = () => {
 
   const initializeCharts = (fetchedData, totalExperience, languageProficiencyPercentage) => {
     const textColor = isDarkTheme ? '#FFFFFF' : '#000000'; 
-    const sparklineData = fetchedData.map(item => item.engagementRate || 0);
+    const sparklineData = fetchedData.map(item => item.experience || 0); //engagementRate
 
     if (chartSpark1Ref.current) {
       chartSpark1Ref.current.innerHTML = '';

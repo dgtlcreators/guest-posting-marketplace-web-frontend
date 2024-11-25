@@ -466,6 +466,7 @@ const EditYoutubeInfluencer = () => {
           <label className='block'>
             <span className='text-gray-700'>Language</span>
             <select name='language' value={formData.language} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full'>
+            <option value="" disabled>Select Language</option>
               <option value="English">English</option>
               <option value="Hindi">Hindi</option>
               <option value="Punjabi">Punjabi</option>

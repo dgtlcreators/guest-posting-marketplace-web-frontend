@@ -24,7 +24,6 @@ const ContentWriterAnalytics = () => {
          const response = await axios.get(`${localhosturl}/contentwriters/getallcontentwriters`);
         setData(response.data.data);
 
-        console.log("Content writer analytics ",response.data.data)
         setLoading(false);
       } catch (err) {
         setError(err);

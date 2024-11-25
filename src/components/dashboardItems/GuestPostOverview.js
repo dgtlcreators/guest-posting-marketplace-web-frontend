@@ -43,7 +43,7 @@ const GuestPostOverview = () => {
 
         setLoading(false);
         initializeCharts(fetchedData, trafficTotal, categories.size, fetchedData.length);
-        console.log("GuestPostOverview fetchedData, totalMonthlyTraffic, categoriesCount, publisherCount ",fetchedData.length, totalMonthlyTraffic, categories.size, publisherCount)
+
       } catch (err) {
         setError(err);
         setLoading(false);
@@ -63,8 +63,7 @@ const GuestPostOverview = () => {
 
   const initializeCharts = (fetchedData, totalMonthlyTraffic, categoriesCount, publisherCount) => {
     const textColor = isDarkTheme ? '#FFFFFF' : '#000000'; 
-    console.log("Text color ",textColor)
-    console.log("GuestPostOverview fetchedData, totalMonthlyTraffic, categoriesCount, publisherCount ",fetchedData.length, totalMonthlyTraffic, categoriesCount, publisherCount)
+   
     const sparklineData = fetchedData.map(item => {
       const match = item.monthlyTraffic.match(/\d+/);
       return match ? parseInt(match[0], 10) : 0;

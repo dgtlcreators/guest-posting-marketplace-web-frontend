@@ -57,9 +57,9 @@ const InstagramInfluencerAnalytics = () => {
       <div className="chart-item flex-1 min-w-[300px]">
         <RadialBarCharts data={data} />
       </div>
-      <div className="chart-item flex-1 min-w-[300px]">
+     {/* <div className="chart-item flex-1 min-w-[300px]">
         <FullChart data={data} />
-      </div>
+      </div>*/}
       <div className="chart-item flex-1 min-w-[300px]">
         <BarLineChart data={data} />
       </div>

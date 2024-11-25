@@ -65,7 +65,7 @@ const YoutubeInfluencerOverview = () => {
   const initializeCharts = (fetchedData, followersTotal, avgEngagementRate) => {
     const textColor = isDarkTheme ? '#FFFFFF' : '#000000';
     const sparklineData = fetchedData.map(item => item.engagementRate || 0);
-    console.log("Fetch data ",fetchedData)
+  
     if (chartSpark1Ref.current) {
       chartSpark1Ref.current.innerHTML = '';
     }
@@ -75,8 +75,7 @@ const YoutubeInfluencerOverview = () => {
     if (chartSpark3Ref.current) {
       chartSpark3Ref.current.innerHTML = '';
     }
-    fetchedData.map(item => console.log(item.engagementRate))
-console.log("sparklineData ",sparklineData)
+   
 
     var optionsSpark1 = {
       series: [{

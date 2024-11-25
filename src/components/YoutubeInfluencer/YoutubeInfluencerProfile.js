@@ -7,7 +7,7 @@ import { FaArrowLeft, FaUser, FaLocationArrow, FaLanguage, FaChartBar } from 're
 import { IoMdStats } from 'react-icons/io';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faMapMarkerAlt, faLanguage, faTags, faUsers, faVideo, faChartLine, faEye, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import Lottie from 'react-lottie';
+//import Lottie from 'react-lottie';
 import ReportModal from '../OtherComponents/ReportForm.js';
 //import animationData from '../animations/profileAnimation.json';
 //const animationData="https://cdnl.iconscout.com/lottie/premium/preview-watermark/user-profile-girl-animated-icon-download-in-lottie-json-gif-static-svg-file-formats--pretty-logo-beautiful-avatar-pack-people-icons-6633090.mp4"

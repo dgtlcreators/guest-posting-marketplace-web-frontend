@@ -26,7 +26,7 @@ const YoutubeInfluencerAnalytics = () => {
 
         const response = await axios.get(`${localhosturl}/youtubeinfluencers/getAllYoutubeInfluencer`);
         setData(response.data.data);
-        console.log("Youtube anlytics ", response.data.data)
+     
         setLoading(false);
       } catch (err) {
         setError(err);

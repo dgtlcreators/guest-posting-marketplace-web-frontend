@@ -6,7 +6,7 @@ import { useTheme } from '../../../context/ThemeProvider.js';
 const GaugeChart = ({ data }) => {
   const { isDarkTheme } = useTheme();
   const chartRef = useRef(null);
- // console.log("isDarkTheme ",isDarkTheme)
+
 
  
   const engagementRates = data.map(item => item.engagementRate);
