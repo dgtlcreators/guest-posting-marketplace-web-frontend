@@ -118,7 +118,8 @@ const EditAdminForm = () => {
       console.log("data get ", adminData, response)
       toast.success("Admin data updated successfully");
       await pastactivitiesAdd(adminData);
-      navigate("/superadmin");
+     // navigate("/superadmn");
+     navigate(-1)
     } catch (error) {
       toast.error("Error updating admin data");
       console.error("Error updating admin data:", error);

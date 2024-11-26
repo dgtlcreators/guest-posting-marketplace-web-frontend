@@ -419,7 +419,7 @@ const EditContentWriter = () => {
               required
             />
           </label>
-          <label className="block">
+         {/* <label className="block">
             <span className="text-gray-700">Location</span>
             <input
               type="text"
@@ -429,7 +429,7 @@ const EditContentWriter = () => {
               className="p-2 border border-gray-300 rounded w-full"
               required
             />
-          </label>
+          </label>*/}
           <label className="block">
             <span className="text-gray-700">Experience</span>
             <input

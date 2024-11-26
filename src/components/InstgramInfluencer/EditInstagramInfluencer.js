@@ -341,6 +341,7 @@ const EditInstagramInfluencer = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             >
+               <option value="" disabled>Select Category</option>
               <option value="Agriculture">Agriculture</option>
               <option value="Animals and Pets">Animals and Pets</option>
               <option value="Art">Art</option>
@@ -372,6 +373,7 @@ const EditInstagramInfluencer = () => {
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             >
+                <option value="" disabled>Select Language</option>
               <option value="English">English</option>
               <option value="Hindi">Hindi</option>
               <option value="Punjabi">Punjabi</option>

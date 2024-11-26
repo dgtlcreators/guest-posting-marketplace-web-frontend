@@ -87,14 +87,7 @@ const EditYoutubeInfluencer = () => {
       setLocationResults([]);
     }
   };
-  const handleLocationSelect1 = (location) => {
-    setFormData((prev) => ({
-      ...prev,
-      location: location.display_name,
-    }));
-    setLocationQuery(location.display_name);
-    setLocationResults([]);
-  };
+
   const handleFileChange = (e) => {
     const { name, files } = e.target
     setFormData(prev => ({
@@ -114,7 +107,12 @@ const EditYoutubeInfluencer = () => {
       engagementRate: 0,
       averageViews: 0,
       category: "",
-      location: "",
+     // location: "",
+     location: {
+      country: "",
+      state: "",
+      city: ""
+    },
       language: "",
       collaborationRates: {
         sponsoredVideos: 0,
@@ -129,7 +127,7 @@ const EditYoutubeInfluencer = () => {
       },
       mediaKit: "",
     })
-    setLocationQuery("")
+  //  setLocationQuery("")
   }
 
   const createDescriptionElements = (formData, users) => {
@@ -419,6 +417,7 @@ const EditYoutubeInfluencer = () => {
           <label className='block'>
             <span className='text-gray-700'>Category</span>
             <select name='category' value={formData.category} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full'>
+            <option value="" disabled>Select Language</option>
               <option value="Technology">Technology</option>
               <option value="Beauty and Fashion">Beauty and Fashion</option>
               <option value="Gaming">Gaming</option>
@@ -443,26 +442,7 @@ const EditYoutubeInfluencer = () => {
               <option value="History and Culture">History and Culture</option>
             </select>
           </label>
-          <LocationSelector onSelectLocation={handleLocationSelect} />
-          {/* <label className='block'>
-            <span className='text-gray-700'>Location</span>
-            <input type='text' name='location' placeholder='Search Location'  value={locationQuery}
-              onChange={handleLocationChange} 
-            className='p-2 border border-gray-300 rounded w-full' required/>
-            {locationResults.length > 0 && (
-              <ul className="mt-2 border border-gray-300 rounded w-full bg-white max-h-40 overflow-auto">
-                {locationResults.map((location) => (
-                  <li
-                    key={location.place_id}
-                    className="p-2 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleLocationSelect(location)}
-                  >
-                    {location.display_name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </label>*/}
+      
           <label className='block'>
             <span className='text-gray-700'>Language</span>
             <select name='language' value={formData.language} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full'>

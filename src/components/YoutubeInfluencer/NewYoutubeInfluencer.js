@@ -456,6 +456,7 @@ const NewYoutubeInfluencer = () => {
           <div className='block'>
             <label className='text-gray-700'>Category</label>
             <select name='category' value={formData.category} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full'>
+            <option value="" disabled>Select Category</option>
               <option value="Technology">Technology</option>
               <option value="Beauty and Fashion">Beauty and Fashion</option>
               <option value="Gaming">Gaming</option>
