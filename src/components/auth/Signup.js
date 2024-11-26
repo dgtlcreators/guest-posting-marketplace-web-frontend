@@ -1,6 +1,6 @@
 
 
-
+/* 
 import { useContext, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -170,10 +170,9 @@ function Signup() {
 }
 
 export default Signup;
+*/
 
 
-/**
- * 
 import React, { useContext, useState } from 'react';
 import './signup.css';
 import axios from "axios";
@@ -232,6 +231,7 @@ const name=username
   };
 
   return (
+  <div className="signup-page">
     <div className="signup-container">
       <div className="signup-box">
         <h1>Sign Up</h1>
@@ -288,10 +288,9 @@ const name=username
         </div>
       </div>
     </div>
+    </div>
   );
 
 };
 
 export default Signup;
- * 
- */
