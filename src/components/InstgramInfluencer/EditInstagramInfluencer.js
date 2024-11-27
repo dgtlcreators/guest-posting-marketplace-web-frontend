@@ -64,8 +64,17 @@ const EditInstagramInfluencer = () => {
     }
   };
 
-
   const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (files.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: files[0],  
+      }));
+    }
+  };
+  
+  const handleFileChange1 = (e) => {
     const { name, files } = e.target;
 
     setFormData((prev) => ({
@@ -83,7 +92,7 @@ const EditInstagramInfluencer = () => {
     try {
 
       const response = await axios.get(`${localhosturl}/instagraminfluencers/getInstagraminfluencerById/${id}`);
-
+console.log("In Edit get Data ",response.data.instagramInfluencer)
       setFormData(response.data.instagramInfluencer);
       // setOriginalUsers(response.data.instagramInfluencer);
     } catch (error) {
@@ -159,11 +168,124 @@ const EditInstagramInfluencer = () => {
 
     }
   }
+
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("formdata: ", formData);
+  
+    const formDataToSend = new FormData();
+  
+    // Append individual form fields
+    formDataToSend.append("username", formData.username);
+    formDataToSend.append("fullName", formData.fullName);
+    formDataToSend.append("bio", formData.bio);
+    formDataToSend.append("followersCount", formData.followersCount);
+    formDataToSend.append("followingCount", formData.followingCount);
+    formDataToSend.append("postsCount", formData.postsCount);
+    formDataToSend.append("engagementRate", formData.engagementRate);
+    formDataToSend.append("averageLikes", formData.averageLikes);
+    formDataToSend.append("averageComments", formData.averageComments);
+    formDataToSend.append("category", formData.category);
+    formDataToSend.append("language", formData.language);
+    formDataToSend.append("verifiedStatus", formData.verifiedStatus);
+  
+    // Convert location object to JSON string and append
+    if (formData.location) {
+      formDataToSend.append("location", JSON.stringify(formData.location));
+    }
+  
+    // Convert collaborationRates to JSON string and append
+    if (formData?.collaborationRates) {
+      formDataToSend.append("collaborationRates", JSON.stringify(formData.collaborationRates));
+    }
+  
+    // Convert pastCollaborations to JSON string and append
+    formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
+  
+    // Handle profile picture upload
+    if (profileUrlOption === "system" && formData.profilePicture) {
+      formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
+    } else if (formData.profilePicture) {
+      formDataToSend.append("profilePicture", formData.profilePicture);
+    }
+  
+    // Handle media kit upload
+    if (mediaKitOption === "system" && formData.mediaKit) {
+      formDataToSend.append("mediaKit", document.querySelector('input[name="mediaKit"]').files[0]);
+    } else if (formData.mediaKit) {
+      formDataToSend.append("mediaKit", formData.mediaKit);
+    }
+  
+    try {
+      // Make the PUT request to update the influencer data
+      const response = await axios.put(
+        `${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${id}`, 
+        formDataToSend, {
+          headers: {
+            "Content-Type": "multipart/form-data",  // Ensure content type is multipart
+          },
+        }
+      );
+  
+    
+  
+      toast.success("Influencer updated successfully!");
+      pastactivitiesAdd(formDataToSend);
+      navigate("/addInstagramInfluencer");
+    
+    } catch (error) {
+      toast.error(`Error updating influencer: ${error.message}`);
+      console.error("Error updating influencer", error);
+    }
+  };
+  
+  
+
+  const handleSubmit2Actual = async (e) => {
+    e.preventDefault();
+  
+
+    const uploadData = new FormData();
+    console.log(formData.location)
+
+    
+
+    for (const [key, value] of Object.entries(formData)) {
+      if (value && key !== "profilePicture" && key !== "mediaKit") {
+        uploadData.append(key, value);
+      }
+    }
+  
+    if (formData.profilePicture) {
+      uploadData.append("profilePicture", formData.profilePicture);
+    }
+  
+    if (formData.mediaKit) {
+      uploadData.append("mediaKit", formData.mediaKit);
+    }
+  
+    try {
+      await axios.put(`${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${id}`, uploadData, {
+        headers: {
+          "Content-Type": "multipart/form-data",  
+        },
+      });
+  
+      toast.success("Instagram Influencer updated successfully!");
+      pastactivitiesAdd(formData);
+      navigate("/addInstagramInfluencer");
+    } catch (error) {
+      toast.error(`Error updating Instagram Influencer: ${error.response.data.error}`);
+      console.error("Error updating Instagram Influencer:", error);
+    }
+  };
+  
+
+  const handleSubmit1 = async (e) => {
     e.preventDefault()
     try {
 
-
+console.log("Before adding edit ",formData)
       await axios.put(`${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${id}`, { ...formData, userId: userData?._id, });
 
 
@@ -179,6 +301,7 @@ const EditInstagramInfluencer = () => {
 
 
   const handleLocationSelect = (location) => {
+    console.log(location)
     setFormData((prev) => ({ ...prev, location }));
   };
 

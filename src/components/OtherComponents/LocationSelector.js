@@ -89,7 +89,7 @@ const LocationSelector = ({ onSelectLocation }) => {
        // setCities(filteredCities.map(city => ({ code: city.geonameId.toString(), name: city.name })));
         setCities(data.cities.map(city => ({ code: city.geonameId.toString(), name: city.name })));
       } else {
-        console.warn("No cities found for this state");
+        console.log("No cities found for this state");
         setCities([]);
       }
     } catch (error) {
@@ -128,6 +128,47 @@ const LocationSelector = ({ onSelectLocation }) => {
 
   const handleStateChange = (e) => {
     const selectedStateCode = e.target.value;
+  
+    
+    console.log("Selected State Code:", selectedStateCode);
+  
+  
+    const selectedState = states.find(
+      (state) => state.code === selectedStateCode || state.name === selectedStateCode
+    );
+  
+   
+    if (!selectedState) {
+      console.error("State not found for the selected state code:", selectedStateCode);
+      return;
+    }
+  
+    const stateName = selectedState.name;
+    const stateIsocode = selectedState.isocode;
+  
+    console.log("Selected State Object:", selectedState);
+  
+    const updatedLocation = {
+      ...selectedLocation,
+      state: stateName,
+      stateCode: selectedStateCode,
+      city: "",
+      cityCode: "",
+      stateIsocode,
+    };
+  
+    setSelectedLocation(updatedLocation);
+  
+    
+    fetchCities(updatedLocation.countryCode, updatedLocation.stateCode, updatedLocation.stateIsocode);
+  
+
+    onSelectLocation(updatedLocation);
+  };
+  
+
+ /* const handleStateChange1 = (e) => {
+    const selectedStateCode = e.target.value;
     console.log(selectedStateCode)
     // const selectedState = states.find(state => state.code === selectedStateCode);
     const selectedState = states.find(state => state.name === selectedStateCode);
@@ -154,6 +195,7 @@ console.log( selectedState)
       stateIsocode: stateIsocode,
     }));
   };
+  */
 
   const handleCityChange = (e) => {
     const selectedCityCode = e.target.value;

@@ -155,21 +155,21 @@ const NewInstagramInfluencerTable = ({ addInfluencer }) => {
   }
   const deleteInstagramInfluencer = async (id) => {
     try {
-      console.log("Id ", id)
+
       await axios.delete(`${localhosturl}/instagraminfluencers/deleteInstagraminfluencer/${id}`);
 
 
       const user = influencers.find((influencer) => influencer._id === id);
-      console.log("User ", user)
+
 
       if (user) {
-        console.log("Before past ")
+        
         await pastactivitiesAdd(user);
-        console.log("After past ")
+ 
         toast.success("Instagram Influencer Deleted Successfully");
-        console.log("Before Toast ")
+  
         setInfluencers(influencers.filter((influencer) => influencer._id !== id));
-        console.log("After past ")
+
       } else {
         toast.error("Instagram Influencer not found in the local state");
       }
@@ -179,23 +179,7 @@ const NewInstagramInfluencerTable = ({ addInfluencer }) => {
     }
   };
 
-  const deleteInstagramInfluencer1 = async (id) => {
-    try {
-      await axios.delete(
-
-        `${localhosturl}/instagraminfluencers/deleteInstagraminfluencer/${id}`
-
-      );
-      const user = influencers.find((user) => user._id === id);
-
-      await pastactivitiesAdd(user);
-      toast.success("Instagram Influencer Deleted Successfully");
-      setInfluencers(influencers.filter((influencer) => influencer._id !== id));
-    } catch (error) {
-      toast.error("Error deleting Instagram Influencer");
-      console.error("Error deleting Instagram Influencer:", error);
-    }
-  }
+ 
 
   const handleViewProfile = (influencer) => {
     navigate(`/influencerprofile/${influencer._id}`);
@@ -355,6 +339,7 @@ const NewInstagramInfluencerTable = ({ addInfluencer }) => {
                   <td className="border px-4 py-2">{influencer.username}</td>
                   <td className="border px-4 py-2">{influencer.fullName}</td>
                   <td className="border px-4 py-2">
+                  
                     <img
                       src={
                         influencer?.profilePicture?.startsWith('https')

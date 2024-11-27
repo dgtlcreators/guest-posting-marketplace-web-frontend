@@ -60,9 +60,9 @@ const VerificationSuccess = () => {
             fontSize: '14px', 
             color: '#999' 
           }}>
-            If the page does not redirect automatically, <a //href="http://localhost.3000"
+            If the page does not redirect automatically, <a href="http://localhost:3000"
            // href="https://connect.creatorsxchange.com" 
-            href="http://connect.creatorsxchange.com" 
+           // href="http://connect.creatorsxchange.com" 
             style={{ 
               color: '#4a90e2', 
               textDecoration: 'underline' 
