@@ -245,7 +245,7 @@ const InstagramInfluencerTable = ({ influencers, setInfluencers }) => {
                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold"><ApplyForm section="InstagramInfluencer" publisher={influencer} /></td>
                   
                     <td className="border py-3 px-2 md:px-6 text-center text-md font-semibold">
-                      <button disabled={userData.permissions.instagram.bookmark}
+                      <button disabled={!userData.permissions.instagram.bookmark}
                       title={userData.permissions.instagram.bookmark
                         ? "You are not allowed to access this feature"
                         : undefined 
