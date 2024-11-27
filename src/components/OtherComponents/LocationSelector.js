@@ -84,7 +84,7 @@ const LocationSelector = ({ onSelectLocation }) => {
       });
       const data = await response.json();
       if (data.cities) {
-        console.log(data.cities)
+        
        // const filteredCities = data.cities.filter((city) => city.adminCode1 !== stateCode);
        // setCities(filteredCities.map(city => ({ code: city.geonameId.toString(), name: city.name })));
         setCities(data.cities.map(city => ({ code: city.geonameId.toString(), name: city.name })));
@@ -130,7 +130,11 @@ const LocationSelector = ({ onSelectLocation }) => {
     const selectedStateCode = e.target.value;
   
     
+<<<<<<< Updated upstream
     console.log("Selected State Code:", selectedStateCode);
+=======
+    // console.log("Selected State Code:", selectedStateCode);
+>>>>>>> Stashed changes
   
   
     const selectedState = states.find(
@@ -146,7 +150,11 @@ const LocationSelector = ({ onSelectLocation }) => {
     const stateName = selectedState.name;
     const stateIsocode = selectedState.isocode;
   
+<<<<<<< Updated upstream
     console.log("Selected State Object:", selectedState);
+=======
+    // console.log("Selected State Object:", selectedState);
+>>>>>>> Stashed changes
   
     const updatedLocation = {
       ...selectedLocation,
@@ -194,8 +202,12 @@ console.log( selectedState)
       cityCode: "",
       stateIsocode: stateIsocode,
     }));
+<<<<<<< Updated upstream
   };
   */
+=======
+  };*/
+>>>>>>> Stashed changes
 
   const handleCityChange = (e) => {
     const selectedCityCode = e.target.value;

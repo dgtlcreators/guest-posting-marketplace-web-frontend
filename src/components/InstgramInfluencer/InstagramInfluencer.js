@@ -3,8 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import InstagramInfluencerTable from "./InstagramInfluencerTable.js";
 import { toast } from "react-toastify";
 import { UserContext } from "../../context/userContext.js";
-import { useLocation } from "react-router-dom";
-import { useTheme } from "../../context/ThemeProvider.js";
+// import { useLocation } from "react-router-dom";
 import SaveSearch from "../OtherComponents/SaveSearch.js";
 import LocationSelector from '../OtherComponents/LocationSelector.js';
 
@@ -99,24 +98,24 @@ const InstagramInfluencer = () => {
       setLocationResults([]);
     }
   };
-  const handleLocationSelect1 = (location) => {
-    setFormData((prev) => ({
-      ...prev,
-      location: location.display_name,
-    }));
-    setLocationQuery(location.display_name);
-    setLocationResults([]);
-  };
+  // const handleLocationSelect1 = (location) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     location: location.display_name,
+  //   }));
+  //   setLocationQuery(location.display_name);
+  //   setLocationResults([]);
+  // };
 
 
 
-  useEffect(() => {
+  // useEffect(() => {
 
     //fetchInfluencers();
     //fetchSavedSearches();
     // fetchBookmarkedInfluencers();
     // fetchRecentActivities();
-  }, []);
+  // }, []);
 
 
 
@@ -125,6 +124,7 @@ const InstagramInfluencer = () => {
    // setFormData((prev) => ({ ...prev, location }));
   //};
   const handleLocationSelect = (location) => {
+<<<<<<< Updated upstream
     console.log(location)
     setFormData((prev) => ({
       ...prev,
@@ -136,6 +136,98 @@ const InstagramInfluencer = () => {
   };
   
  
+=======
+    setFormData((prev) => ({
+      ...prev,
+      location: {
+        country: location.country || prev.location.country || "",
+        state: location.state || prev.location.state || "",
+        city: location.city || prev.location.city || "",
+      },
+    }));
+  };
+  
+
+  // const fetchInfluencers = async () => {
+  //   try {
+
+  //     const response = await axios.get(`${localhosturl}/instagraminfluencers/getAllInstagraminfluencer`);
+
+
+  //     setInfluencers(response.data.instagramInfluencer);
+  //     // setOriginalUsers(response.data.instagramInfluencer);
+  //   } catch (error) {
+  //     console.error("Error fetching influencers", error);
+  //   }
+  // };
+  // const fetchSavedSearches = async () => {
+  //   try {
+
+  //     const response = await axios.get(`${localhosturl}/user/${userId}/savedSearches`);
+  //     setSavedSearches(response.data.savedSearches);
+  //   } catch (error) {
+  //     console.error("Error fetching saved searches", error);
+  //   }
+  // };
+
+  // const fetchBookmarkedInfluencers = async () => {
+  //   try {
+
+  //     const response = await axios.get(`${localhosturl}/user/${userId}/bookmarkedInfluencers`);
+  //     setBookmarkedInfluencers(response.data.bookmarkedInfluencers);
+  //   } catch (error) {
+  //     console.error("Error fetching bookmarked influencers", error);
+  //   }
+  // };
+
+  // const fetchRecentActivities = async () => {
+  //   try {
+
+  //     const response = await axios.get(`${localhosturl}/user/${userId}/recentActivities`);
+  //     setRecentActivities(response.data.recentActivities);
+  //   } catch (error) {
+  //     console.error("Error fetching recent activities", error);
+  //   }
+  // };
+  // const saveSearchQuery = async () => {
+  //   try {
+
+  //     await axios.post(`${localhosturl}/savedSearches`, {
+  //       userId: userId,
+  //       searchQuery: formData,
+  //     });
+  //     toast.success("Search query saved");
+  //   } catch (error) {
+  //     toast.error("Failed to save search query");
+  //   }
+  // };
+  // const bookmarkInfluencer = async (influencerId) => {
+  //   try {
+
+  //     await axios.post(`${localhosturl}/bookmarkedInfluencers`, {
+  //       userId: userId,
+  //       influencerId: influencerId,
+  //     });
+  //     toast.success("Influencer bookmarked");
+  //   } catch (error) {
+  //     toast.error("Failed to bookmark influencer");
+  //   }
+  // };
+
+
+  // const recordRecentActivity = async (activity) => {
+  //   try {
+
+  //     await axios.post(`${localhosturl}/recentActivities`, {
+  //       userId: userId,
+  //       activity: activity,
+  //     });
+  //     toast.success("Activity recorded");
+  //   } catch (error) {
+  //     toast.error("Failed to record activity");
+  //   }
+  // };
+>>>>>>> Stashed changes
 
 
 
@@ -196,12 +288,14 @@ console.log("formData ",formData)
         ...formData, userId: userData?._id,
         verifiedStatus: formData.verifiedStatus === "" ? "" : formData.verifiedStatus === 'verified',
       };
+<<<<<<< Updated upstream
 console.log("formDataToSend ",formDataToSend)
       const response = await axios
+=======
 
-        .post(`${localhosturl}/userbrand/filter`, formDataToSend)
+      const response = await axios.post(`${localhosturl}/userbrand/filter`, formDataToSend)
+>>>>>>> Stashed changes
 
-      console.log(response.data);
       setInfluencers(response.data);
       pastactivitiesAdd(response.data);
       toast.success("Data Fetch Successfully")
@@ -212,52 +306,54 @@ console.log("formDataToSend ",formDataToSend)
     }
   }
 
+  // const [toastShown, setToastShown] = useState(false);
 
 
-  const location = useLocation();
-  const [toastShown, setToastShown] = useState(false);
-  useEffect(() => {
-    if (location?.state?.formData) {
-      const formData = location.state.formData;
+  // const location = useLocation();
+  // useEffect(() => {
+  //   if (location?.state?.formData) {
+  //     const formData = location.state.formData;
 
-      const flattenedFormData = formData["0"] || formData;
-      console.log("Flattened FormData", flattenedFormData);
+  //     const flattenedFormData = formData["0"] || formData;
+  //     console.log("Flattened FormData", flattenedFormData);
+  //     console.log('useeffect works')
 
-      setFormData(prevState => ({
-        ...initialFormData,
-        ...flattenedFormData
-      }));
-      fetchUsers(formData)
+  //     setFormData(prevState => ({
+  //       ...initialFormData,
+  //       ...flattenedFormData
+  //     }));
+  //     fetchUsers(formData)
 
-      location.state.formData = null;
-      if (location && location.state) {
-        //  location.state = null;
-      }
-    }
-  }, [location?.state?.formData]);
+  //     location.state.formData = null;
+  //     if (location && location.state) {
+  //       //  location.state = null;
+  //     }
+  //   }
+  // }, [location?.state?.formData]);
 
-  const fetchUsers = async (formData) => {
-    try {
-      const formDataToSend = {
-        ...formData,
-        verifiedStatus: formData.verifiedStatus === "" ? "" : formData.verifiedStatus === 'verified',
-      };
-      //console.log("formData  checling in fetchUser ",formData)
-      const response = await axios.post(`${localhosturl}/userbrand/filter`, formData);
-      // console.log("Fetched data saved:", response.data);
-      setInfluencers(response.data);
-      //console.log("Influencers after ",influencers)
+  // const fetchUsers = async (formData) => {
+  //   console.log("FormData before sending:", formData);
+  //   console.log('it working');
+  //   try {
+    
 
-      if (!toastShown) {
-        toast.success("Saved Data Fetch Successfully");
-        setToastShown(true);
-      }
-      // toast.success("Saved Data Fetch Successfully");
-    } catch (error) {
-      console.log("Error fetching data:", error);
-      toast.error(error.message);
-    }
-  }
+  //     const response = await axios.post(`${localhosturl}/userbrand/filter`, formData);
+  //     // console.log("Fetched data saved:", response.data);
+  //     setInfluencers(response.data);
+  //     //console.log("Influencers after ",influencers)
+
+  //     if (!toastShown) {
+  //       toast.success("Saved Data Fetch Successfully");
+  //       setToastShown(true);
+  //     }
+  //     // toast.success("Saved Data Fetch Successfully");
+      
+  //   } catch (error) {
+  //     console.log("Error fetching data:", error);
+  //     toast.error(error.message);
+  //   }
+  // }
+
 
   return (
     <>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useTheme } from '../../context/ThemeProvider.js';
+import { useCallback} from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { UserContext } from '../../context/userContext.js';
@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 const EditYoutubeInfluencer = () => {
-  const { isDarkTheme } = useTheme();
+
   const { userData, localhosturl } = useContext(UserContext);
   const { id } = useParams();
   const navigate = useNavigate()
@@ -43,21 +43,19 @@ const EditYoutubeInfluencer = () => {
     userId: userData?._id,
   })
 
-  useEffect(() => {
-
-    fetchInfluencers();
-  }, []);
-
-  const fetchInfluencers = async () => {
-
-    const response = await axios.get(`${localhosturl}/youtubeinfluencers/getYoutubeInfluencer/${id}`);
+  const fetchInfluencers = useCallback(async () => {
     try {
+      const response = await axios.get(`${localhosturl}/youtubeinfluencers/getYoutubeInfluencer/${id}`);
       setFormData(response.data.data);
     } catch (error) {
       console.error("Error fetching influencers", error);
     }
-  }
-
+  }, [id]);  // Dependencies are listed here
+  
+  useEffect(() => {
+    fetchInfluencers();
+  }, [fetchInfluencers]);
+ 
   const [profileUrlOption, setProfileUrlOption] = useState("manual");
   const [mediaKitOption, setMediaKitOption] = useState("manual");
   const [addYotubeInfluencer, setAddYotubeInfluencer] = useState([]);
@@ -237,83 +235,83 @@ const EditYoutubeInfluencer = () => {
   };
   
 
-  const handleSubmit1 = async (e) => {
-    e.preventDefault()
-    const formDataToSend = new FormData()
-    console.log("Form data before submission: ", formData);
+  // const handleSubmit1 = async (e) => {
+  //   e.preventDefault()
+  //   const formDataToSend = new FormData()
+  //   console.log("Form data before submission: ", formData);
 
-    const generalFields = [
-      "username", "fullName", "bio", "followersCount", "videosCount",
-      "engagementRate", "averageViews", "category"//, "location"
-      , "language"
-    ];
+  //   const generalFields = [
+  //     "username", "fullName", "bio", "followersCount", "videosCount",
+  //     "engagementRate", "averageViews", "category"//, "location"
+  //     , "language"
+  //   ];
 
-    generalFields.forEach(field => {
-      if (formData[field] !== undefined) {
-        formDataToSend.append(field, formData[field]);
-      }
-    });
-   // formDataToSend.append('location', formData.location);
+  //   generalFields.forEach(field => {
+  //     if (formData[field] !== undefined) {
+  //       formDataToSend.append(field, formData[field]);
+  //     }
+  //   });
+  //  // formDataToSend.append('location', formData.location);
 
-   formDataToSend.append('location', JSON.stringify(formData.location));
+  //  formDataToSend.append('location', JSON.stringify(formData.location));
 
-    if (formData.collaborationRates) {
-      Object.keys(formData.collaborationRates).forEach(type => {
-        if (formData.collaborationRates[type] !== undefined) {
-          formDataToSend.append(`collaborationRates[${type}]`, formData.collaborationRates[type]);
-        }
-      });
-    }
+  //   if (formData.collaborationRates) {
+  //     Object.keys(formData.collaborationRates).forEach(type => {
+  //       if (formData.collaborationRates[type] !== undefined) {
+  //         formDataToSend.append(`collaborationRates[${type}]`, formData.collaborationRates[type]);
+  //       }
+  //     });
+  //   }
 
-    // Audience Demographics mapping
-    if (formData.audienceDemographics) {
-      Object.keys(formData.audienceDemographics).forEach(type => {
-        if (formData.audienceDemographics[type] !== undefined) {
-          formDataToSend.append(`audienceDemographics[${type}]`, JSON.stringify(formData.audienceDemographics[type]));
-        }
-      });
-    }
+  //   // Audience Demographics mapping
+  //   if (formData.audienceDemographics) {
+  //     Object.keys(formData.audienceDemographics).forEach(type => {
+  //       if (formData.audienceDemographics[type] !== undefined) {
+  //         formDataToSend.append(`audienceDemographics[${type}]`, JSON.stringify(formData.audienceDemographics[type]));
+  //       }
+  //     });
+  //   }
 
-    // Past Collaborations
-    if (formData.pastCollaborations && formData.pastCollaborations.length > 0) {
-      formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
-    }
+  //   // Past Collaborations
+  //   if (formData.pastCollaborations && formData.pastCollaborations.length > 0) {
+  //     formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
+  //   }
 
-    // Profile picture and media kit files
-    if (profileUrlOption === "system" && formData.profilePicture) {
-      formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
-    } else if (formData.profilePicture) {
-      formDataToSend.append("profilePicture", formData.profilePicture);
-    }
+  //   // Profile picture and media kit files
+  //   if (profileUrlOption === "system" && formData.profilePicture) {
+  //     formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
+  //   } else if (formData.profilePicture) {
+  //     formDataToSend.append("profilePicture", formData.profilePicture);
+  //   }
 
-    if (mediaKitOption === "system" && formData.mediaKit) {
-      formDataToSend.append("mediaKit", document.querySelector('input[name="mediaKit"]').files[0]);
-    } else if (formData.mediaKit) {
-      formDataToSend.append("mediaKit", formData.mediaKit);
-    }
-    console.log("formDataToSend ",formDataToSend)
-    try {
-      const response = await axios.put(`${localhosturl}/youtubeinfluencers/updateYoutubeInfluencer/${id}`,
+  //   if (mediaKitOption === "system" && formData.mediaKit) {
+  //     formDataToSend.append("mediaKit", document.querySelector('input[name="mediaKit"]').files[0]);
+  //   } else if (formData.mediaKit) {
+  //     formDataToSend.append("mediaKit", formData.mediaKit);
+  //   }
+  //   console.log("formDataToSend ",formDataToSend)
+  //   try {
+  //     const response = await axios.put(`${localhosturl}/youtubeinfluencers/updateYoutubeInfluencer/${id}`,
 
-        { ...formDataToSend, userId: userData?._id, },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setAddYotubeInfluencer((prev) => [...prev, response.data.data]);
-      // console.log(formDataToSend)
-      pastactivitiesAdd(formDataToSend);
-      navigate("/addYoutubeInfluencer");
-      toast.success("Influencer updated Successfully");
-    } catch (error) {
-      console.log("Error adding influencer", error);
-      toast.error(`Error adding influencer ${error}`);
-      console.error("Error adding influencer", error);
+  //       { ...formDataToSend, userId: userData?._id, },
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
+  //     setAddYotubeInfluencer((prev) => [...prev, response.data.data]);
+  //     // console.log(formDataToSend)
+  //     pastactivitiesAdd(formDataToSend);
+  //     navigate("/addYoutubeInfluencer");
+  //     toast.success("Influencer updated Successfully");
+  //   } catch (error) {
+  //     console.log("Error adding influencer", error);
+  //     toast.error(`Error adding influencer ${error}`);
+  //     console.error("Error adding influencer", error);
 
-    }
-  }
+  //   }
+  // }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -481,6 +479,7 @@ const EditYoutubeInfluencer = () => {
               </label>
             </div>
           </label>
+          <LocationSelector  onSelectLocation={handleLocationSelect}/>
           <label className='block'>
             <span className='text-gray-700'>Past Collaborations</span>
             <textarea name='pastCollaborations' placeholder='Past Collaborations' value={formData.pastCollaborations} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' />
@@ -548,7 +547,7 @@ const EditYoutubeInfluencer = () => {
             )}
           </label>
         </div>
-        <div className='mt-4 flex justify-center md:justify-end space-x-4 mt-8'>
+        <div className='mt-4 flex justify-center md:justify-end space-x-4 '>
 
           <button type='submit' className='p-2 bg-blue-600 text-white rounded hover:bg-blue-900 transition-all duration-300'>
             Update Influencer

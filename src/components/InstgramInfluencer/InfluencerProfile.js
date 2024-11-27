@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+<<<<<<< Updated upstream
 import { FaUser, FaUsers, FaHeart, FaLocationArrow, FaLanguage, FaCheckCircle, FaDollarSign, FaTag, FaComment, FaFilePdf, FaRupeeSign } from 'react-icons/fa';
+=======
+import { FaUser, FaUsers, FaHeart, FaLocationArrow, FaLanguage, FaCheckCircle, FaTag, FaComment} from 'react-icons/fa';
+>>>>>>> Stashed changes
 
 
 import { UserContext } from '../../context/userContext.js';
@@ -9,7 +13,7 @@ import ReportModal from '../OtherComponents/ReportForm.js';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { motion } from 'framer-motion';
 
-
+import { useCallback } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
@@ -26,26 +30,8 @@ const InfluencerProfile = () => {
   const navigate = useNavigate();
   const [influencer, setInfluencer] = useState(null);
 
-
-
-  useEffect(() => {
-    const fetchInfluencer = async () => {
-      try {
-
-        const response = await axios.get(`${localhosturl}/instagraminfluencers/getInstagraminfluencerById/${id}`);
-        setInfluencer(response.data);
-        pastactivitiesAdd(response.data.instagramInfluencer);
-      } catch (error) {
-        console.error('Error fetching influencer data:', error);
-      }
-    };
-
-    fetchInfluencer();
-  }, [id]);
-
-
-  const createDescriptionElements = (formData, users) => {
-
+  
+  const createDescriptionElements = useCallback((formData, users) => {
     const elements = [
       { key: 'Username', value: users?.username },
       { key: 'Full Name', value: users?.fullName },
@@ -68,54 +54,88 @@ const InfluencerProfile = () => {
       { key: 'Media Kit', value: users?.mediaKit },
       { key: 'Total results', value: users?.length }
     ];
-
-
+  
     const formattedElements = elements
       .filter(element => element.value)
       .map(element => `${element.key}: ${element.value}`)
       .join(', ');
-    return `${formattedElements}`;
-  };
-  const generateShortDescription = (formData, users) => {
+  
+    return formattedElements;
+  }, []);
 
+
+
+  const generateShortDescription = useCallback((formData, users) => {
     const elements = createDescriptionElements(formData, users).split(', ');
-
-
+  
     const shortElements = elements.slice(0, 2);
+  
+    return `You viewed an Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
+  }, [createDescriptionElements]); // Memoize based on `createDescriptionElements`
 
-    return `You viewed a Instagram Influencer with ${shortElements.join(' and ')} successfully.`;
-  };
-
-  const pastactivitiesAdd = async (users) => {
-    const formData = {}
-
-    const description = createDescriptionElements(formData, users);
-    const shortDescription = generateShortDescription(formData, users);
-
-    try {
-      const activityData = {
-        userId: userData?._id,
-        action: "Viewed a Instagram Influencer",
-        section: "Instagram Influencer",
-        role: userData?.role,
-        timestamp: new Date(),
-        details: {
-          type: "view",
-          filter: { formData, total: users.length },
-          description,
-          shortDescription
-
-
-        }
-      }
-
-
-      axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
-    } catch (error) {
-      console.log(error);
-
-    }
+const pastactivitiesAdd = useCallback(async (users) => {
+  if (!Array.isArray(users) || users.length === 0) {
+    console.error("Invalid 'users' parameter: It should be a non-empty array.");
+    return;
   }
+
+  const formData = {}; // Initialize as needed
+  const description = createDescriptionElements(formData, users);
+  const shortDescription = generateShortDescription(formData, users);
+
+  if (!userData || !userData._id || !userData.role) {
+    console.error("Invalid 'userData': Ensure the user data is properly set.");
+    return;
+  }
+
+  try {
+    const activityData = {
+      userId: userData._id,
+      action: "Viewed an Instagram Influencer",
+      section: "Instagram Influencer",
+      role: userData.role,
+      timestamp: new Date().toISOString(),
+      details: {
+        type: "view",
+        filter: { formData, total: users.length },
+        description,
+        shortDescription,
+      },
+    };
+
+    const response = await axios.post(
+      `${localhosturl}/pastactivities/createPastActivities`,
+      activityData
+    );
+
+    console.log("Activity logged successfully:", response.data);
+  } catch (error) {
+    console.error("Error logging past activity:", error.message || error);
+  }
+}, [userData, localhosturl ,createDescriptionElements , generateShortDescription]); // Dependencies are userData and localhosturl
+
+  
+
+  useEffect(() => {
+    const fetchInfluencer = async () => {
+      try {
+
+        const response = await axios.get(`${localhosturl}/instagraminfluencers/getInstagraminfluencerById/${id}`);
+        setInfluencer(response.data);
+        pastactivitiesAdd(response.data.instagramInfluencer);
+      } catch (error) {
+        console.error('Error fetching influencer data:', error);
+      }
+    };
+
+    fetchInfluencer();
+  }, [id,localhosturl,pastactivitiesAdd ]);
+
+
+
+
+
+  
 
 
 
@@ -225,7 +245,7 @@ const InfluencerProfile = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            <div className="mt-8 bg-100 p-6 rounded-lg shadow-lg  p-6 rounded-lg"//bg-gradient-to-r from-yellow-300 via-pink-300 to-red-300
+            <div className="mt-8 bg-100 p-6 rounded-lg shadow-lg "//bg-gradient-to-r from-yellow-300 via-pink-300 to-red-300
             >
               <h2 className="text-2xl font-semibold mb-4 p-2">Bio</h2>
               <p className="text-800">{bio}</p>
@@ -244,6 +264,7 @@ const InfluencerProfile = () => {
               <h2 className="text-2xl font-semibold mb-4 p-2">Collaboration Details</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-700">
                 <div className="flex items-center bg-200 p-4 rounded-lg shadow-md">
+<<<<<<< Updated upstream
                   <FaRupeeSign className="mr-2 text-indigo-600 text-xl" />
                   <span><strong>Post:</strong> ₹{collaborationRates.post}</span>
                 </div>
@@ -254,6 +275,18 @@ const InfluencerProfile = () => {
                 <div className="flex items-center bg-200 p-4 rounded-lg shadow-md">
                   <FaRupeeSign className="mr-2 text-indigo-600 text-xl" />
                   <span><strong>Reel:</strong> ₹{collaborationRates.reel}</span>
+=======
+                
+                  <span><strong>Post:</strong><span className="text-indigo-600 font-bold">₹{collaborationRates.post}</span></span>
+                </div>
+                <div className="flex items-center bg-200 p-4 rounded-lg shadow-md">
+                
+                  <span><strong>Story:</strong> <span className="text-indigo-600 font-bold">₹{collaborationRates.story}</span></span>
+                </div>
+                <div className="flex items-center bg-200 p-4 rounded-lg shadow-md">
+                
+                  <span><strong>Reel:</strong><span className="text-indigo-600 font-bold"> ₹{collaborationRates.reel}</span></span>
+>>>>>>> Stashed changes
                 </div>
               </div>
             </div>
@@ -266,7 +299,7 @@ const InfluencerProfile = () => {
             transition={{ duration: 1 }}
           >
 
-            <div className="mt-8 bg-100 p-6 rounded-lg shadow-lg  p-6 rounded-lg">
+            <div className="mt-8 bg-100  shadow-lg  p-6 rounded-lg">
               <h2 className="text-2xl font-semibold mb-4 p-2">Additional Metrics</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-700">
                 <div className="flex items-center bg-200 p-4 rounded-lg shadow-md">

@@ -192,7 +192,7 @@ const YoutubeInfluencer = () => {
         //.post("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/youtubeInfluencesFilter", formData)
         .post(`${localhosturl}/youtubeinfluencers/youtubeInfluencesFilter`, formData)
       // console.log(response.data.data);
-      console.log(response.data.data)
+
       setInfluencers(response.data.data);
       pastactivitiesAdd(response.data.data);
       toast.success("Data Fetch Successfully");
@@ -227,7 +227,6 @@ const YoutubeInfluencer = () => {
       const formData = location.state.formData;
 
       const flattenedFormData = formData["0"] || formData;
-      console.log("Flattened FormData", flattenedFormData);
 
       setFormData(prevState => ({
         ...initialFormData,
@@ -236,7 +235,7 @@ const YoutubeInfluencer = () => {
       fetchUsers(formData)
       location.state.formData = null;
     }
-  }, [location?.state?.formData]);
+  }, [location?.state?.formData,]);
 
   const fetchUsers = async (formData) => {
     try {
