@@ -1,7 +1,7 @@
 /* Import Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
-body {
+.login-page  {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(135deg, #4a90e2, #cfe0ff); /* Blue gradient */

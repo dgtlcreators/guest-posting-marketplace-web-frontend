@@ -90,6 +90,7 @@ const EditYoutubeInfluencer = () => {
 
   const handleFileChange = (e) => {
     const { name, files } = e.target
+   
     setFormData(prev => ({
       ...prev,
       [name]: files[0].name
@@ -390,7 +391,8 @@ const EditYoutubeInfluencer = () => {
               <input type='text' name='profilePicture' placeholder='Profile Picture URL' value={formData.profilePicture} onChange={handleChange}
                 className='p-2 border border-gray-300 rounded w-full' />
             ) : (
-              <input type='file' name='profilePicture' placeholder='Profile Picture URL' value={formData.profilePicture} onChange={handleFileChange}
+              <input type='file' name='profilePicture' placeholder='Profile Picture URL'// value={formData.profilePicture} 
+              onChange={handleFileChange}
                 className='p-2 border border-gray-300 rounded w-full' />
             )}
           </label>
@@ -442,6 +444,7 @@ const EditYoutubeInfluencer = () => {
               <option value="History and Culture">History and Culture</option>
             </select>
           </label>
+            <LocationSelector onSelectLocation={handleLocationSelect} />
       
           <label className='block'>
             <span className='text-gray-700'>Language</span>

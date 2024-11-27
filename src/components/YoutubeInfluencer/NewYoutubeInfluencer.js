@@ -79,13 +79,24 @@ const NewYoutubeInfluencer = () => {
     setLocationQuery(location.display_name);
     setLocationResults([]);
   };
-  const handleFileChange = (e) => {
+  const handleFileChange1 = (e) => {
     const { name, files } = e.target
+    console.log(e.target)
     setFormData(prev => ({
       ...prev,
       [name]: files[0].name
     }))
   }
+
+  const handleFileChange = (e) => {
+    const { name, files } = e.target
+   
+    setFormData(prev => ({
+      ...prev,
+      [name]: files[0].name
+    }))
+  }
+  
 
   const handleReset = () => {
     setFormData({
@@ -185,6 +196,45 @@ const NewYoutubeInfluencer = () => {
     }
   }
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formDataToSend = new FormData();
+  
+    // Append fields
+    Object.keys(formData).forEach(field => {
+      if (typeof formData[field] === 'object') {
+        formDataToSend.append(field, JSON.stringify(formData[field]));
+      } else {
+        formDataToSend.append(field, formData[field]);
+      }
+    });
+  
+    // Handle file uploads
+    if (profileUrlOption === "system" && formData.profilePicture) {
+      formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
+    }
+  
+    if (mediaKitOption === "system" && formData.mediaKit) {
+      formDataToSend.append("mediaKit", document.querySelector('input[name="mediaKit"]').files[0]);
+    }
+  
+    try {
+      const response = await axios.post(`${localhosturl}/youtubeinfluencers/addYoutubeInfluencer`, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success("Influencer updated Successfully");
+     // navigate("/addYoutubeInfluencer");
+    } catch (error) {
+      console.error("Error updating influencer", error);
+      toast.error(`Error updating influencer: ${error.message}`);
+    }
+  };
+  
+  
+  
+
+  const handleSubmit2 = async (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
     console.log("Form data before submission: ", formData);

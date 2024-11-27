@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { FaUser, FaUsers, FaHeart, FaLocationArrow, FaLanguage, FaCheckCircle, FaDollarSign, FaTag, FaComment, FaFilePdf } from 'react-icons/fa';
+import { FaUser, FaUsers, FaHeart, FaLocationArrow, FaLanguage, FaCheckCircle, FaDollarSign, FaTag, FaComment, FaFilePdf, FaRupeeSign } from 'react-icons/fa';
 
 
 import { UserContext } from '../../context/userContext.js';
@@ -244,16 +244,16 @@ const InfluencerProfile = () => {
               <h2 className="text-2xl font-semibold mb-4 p-2">Collaboration Details</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-700">
                 <div className="flex items-center bg-200 p-4 rounded-lg shadow-md">
-                  <FaDollarSign className="mr-2 text-indigo-600 text-xl" />
-                  <span><strong>Post:</strong> ${collaborationRates.post}</span>
+                  <FaRupeeSign className="mr-2 text-indigo-600 text-xl" />
+                  <span><strong>Post:</strong> ₹{collaborationRates.post}</span>
                 </div>
                 <div className="flex items-center bg-200 p-4 rounded-lg shadow-md">
-                  <FaDollarSign className="mr-2 text-indigo-600 text-xl" />
-                  <span><strong>Story:</strong> ${collaborationRates.story}</span>
+                  <FaRupeeSign className="mr-2 text-indigo-600 text-xl" />
+                  <span><strong>Story:</strong> ₹{collaborationRates.story}</span>
                 </div>
                 <div className="flex items-center bg-200 p-4 rounded-lg shadow-md">
-                  <FaDollarSign className="mr-2 text-indigo-600 text-xl" />
-                  <span><strong>Reel:</strong> ${collaborationRates.reel}</span>
+                  <FaRupeeSign className="mr-2 text-indigo-600 text-xl" />
+                  <span><strong>Reel:</strong> ₹{collaborationRates.reel}</span>
                 </div>
               </div>
             </div>

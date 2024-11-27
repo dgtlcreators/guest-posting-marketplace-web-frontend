@@ -148,7 +148,7 @@ const NewInstagramInfluencer = () => {
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    console.log(files, files[0])
+    //console.log(files, files[0])
     setFormData((prev) => ({
       ...prev,
       [name]: files[0].name,

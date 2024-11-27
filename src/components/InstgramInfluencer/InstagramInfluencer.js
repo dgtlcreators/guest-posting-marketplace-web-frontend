@@ -120,89 +120,22 @@ const InstagramInfluencer = () => {
 
 
 
+  //const handleLocationSelect = (location) => {
+   // console.log(location)
+   // setFormData((prev) => ({ ...prev, location }));
+  //};
   const handleLocationSelect = (location) => {
-    setFormData((prev) => ({ ...prev, location }));
+    console.log(location)
+    setFormData((prev) => ({
+      ...prev,
+      location: {
+        ...prev.location, // Keep existing data for other fields
+        ...location // Overwrite with new data
+      }
+    }));
   };
-
-  const fetchInfluencers = async () => {
-    try {
-
-      const response = await axios.get(`${localhosturl}/instagraminfluencers/getAllInstagraminfluencer`);
-
-
-      setInfluencers(response.data.instagramInfluencer);
-      // setOriginalUsers(response.data.instagramInfluencer);
-    } catch (error) {
-      console.error("Error fetching influencers", error);
-    }
-  };
-  const fetchSavedSearches = async () => {
-    try {
-
-      const response = await axios.get(`${localhosturl}/user/${userId}/savedSearches`);
-      setSavedSearches(response.data.savedSearches);
-    } catch (error) {
-      console.error("Error fetching saved searches", error);
-    }
-  };
-
-  const fetchBookmarkedInfluencers = async () => {
-    try {
-
-      const response = await axios.get(`${localhosturl}/user/${userId}/bookmarkedInfluencers`);
-      setBookmarkedInfluencers(response.data.bookmarkedInfluencers);
-    } catch (error) {
-      console.error("Error fetching bookmarked influencers", error);
-    }
-  };
-
-  const fetchRecentActivities = async () => {
-    try {
-
-      const response = await axios.get(`${localhosturl}/user/${userId}/recentActivities`);
-      setRecentActivities(response.data.recentActivities);
-    } catch (error) {
-      console.error("Error fetching recent activities", error);
-    }
-  };
-  const saveSearchQuery = async () => {
-    try {
-
-      await axios.post(`${localhosturl}/savedSearches`, {
-        userId: userId,
-        searchQuery: formData,
-      });
-      toast.success("Search query saved");
-    } catch (error) {
-      toast.error("Failed to save search query");
-    }
-  };
-  const bookmarkInfluencer = async (influencerId) => {
-    try {
-
-      await axios.post(`${localhosturl}/bookmarkedInfluencers`, {
-        userId: userId,
-        influencerId: influencerId,
-      });
-      toast.success("Influencer bookmarked");
-    } catch (error) {
-      toast.error("Failed to bookmark influencer");
-    }
-  };
-
-
-  const recordRecentActivity = async (activity) => {
-    try {
-
-      await axios.post(`${localhosturl}/recentActivities`, {
-        userId: userId,
-        activity: activity,
-      });
-      toast.success("Activity recorded");
-    } catch (error) {
-      toast.error("Failed to record activity");
-    }
-  };
+  
+ 
 
 
 
@@ -248,8 +181,6 @@ const InstagramInfluencer = () => {
 
         }
       }
-
-
       axios.post(`${localhosturl}/pastactivities/createPastActivities`, activityData)
     } catch (error) {
       console.log(error);
@@ -260,12 +191,12 @@ const InstagramInfluencer = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-
+console.log("formData ",formData)
       const formDataToSend = {
         ...formData, userId: userData?._id,
         verifiedStatus: formData.verifiedStatus === "" ? "" : formData.verifiedStatus === 'verified',
       };
-
+console.log("formDataToSend ",formDataToSend)
       const response = await axios
 
         .post(`${localhosturl}/userbrand/filter`, formDataToSend)
