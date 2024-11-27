@@ -4,6 +4,7 @@ import axios from "axios";
 import { createContext, useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 
+
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
@@ -23,16 +24,12 @@ const UserProvider = ({ children }) => {
     return null; 
   });
  
-<<<<<<< Updated upstream
-//const localhosturl="http://localhost:5000"
-=======
 
-const localhosturl="http://localhost:5000"
->>>>>>> Stashed changes
+//const localhosturl="http://localhost:5000"
 //const localhosturl="https://guest-posting-marketplace-web-backend.onrender.com"
 //const localhosturl="https://guest-posting-marketplace-web-backend-1.onrender.com"
 //const localhosturl="https://guest-posting-marketplace-web-backend-2.onrender.com"
-// const localhosturl="https://guest-posting-marketplace-web-backend-mu57.onrender.com"
+const localhosturl="https://guest-posting-marketplace-web-backend-mu57.onrender.com"
 
 
 
@@ -80,7 +77,7 @@ const localhosturl="http://localhost:5000"
   const [notifications, setNotifications] = useState([]);
 
 
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async () => {
     try {
       const response = await axios.get(`${localhosturl}/notificationroute/getAllNotifications`); 
 
@@ -89,7 +86,7 @@ const localhosturl="http://localhost:5000"
     } catch (error) {
       console.error('Failed to fetch notifications:', error);
     }
-  };
+  },[])
 
   const addNotification = (notification) => {
     setNotifications((prev) => [...prev, notification]);

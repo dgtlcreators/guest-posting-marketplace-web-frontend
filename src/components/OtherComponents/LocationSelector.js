@@ -130,11 +130,6 @@ const LocationSelector = ({ onSelectLocation }) => {
     const selectedStateCode = e.target.value;
   
     
-<<<<<<< Updated upstream
-    console.log("Selected State Code:", selectedStateCode);
-=======
-    // console.log("Selected State Code:", selectedStateCode);
->>>>>>> Stashed changes
   
   
     const selectedState = states.find(
@@ -150,12 +145,7 @@ const LocationSelector = ({ onSelectLocation }) => {
     const stateName = selectedState.name;
     const stateIsocode = selectedState.isocode;
   
-<<<<<<< Updated upstream
-    console.log("Selected State Object:", selectedState);
-=======
-    // console.log("Selected State Object:", selectedState);
->>>>>>> Stashed changes
-  
+
     const updatedLocation = {
       ...selectedLocation,
       state: stateName,
@@ -173,9 +163,9 @@ const LocationSelector = ({ onSelectLocation }) => {
 
     onSelectLocation(updatedLocation);
   };
-  
 
- /* const handleStateChange1 = (e) => {
+
+/* const handleStateChange1 = (e) => {
     const selectedStateCode = e.target.value;
     console.log(selectedStateCode)
     // const selectedState = states.find(state => state.code === selectedStateCode);
@@ -202,13 +192,7 @@ console.log( selectedState)
       cityCode: "",
       stateIsocode: stateIsocode,
     }));
-<<<<<<< Updated upstream
-  };
-  */
-=======
-  };*/
->>>>>>> Stashed changes
-
+*/
   const handleCityChange = (e) => {
     const selectedCityCode = e.target.value;
     const selectedCity = cities.find(city => city.code === selectedCityCode);
