@@ -210,11 +210,16 @@ const YoutubeInfluencerProfile = () => {
         <p>@{formData.username}</p>
       </div>
     </div>
-
+    <br/>
+      <h3>Bio</h3>
+      <div style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', animation: 'fadeInUp 1s ease-in-out' }}>
     <p style={{ marginTop: '20px', animation: 'fadeIn 1s ease-in-out' }}>{formData.bio}</p>
+    </div>
 
+    <br/>
+    <h3>Information</h3>
     <div style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', animation: 'fadeInUp 1s ease-in-out' }}>
-      <div><FontAwesomeIcon icon={faMapMarkerAlt} /> Location: {formData.location.country===""?"":","} {formData.location.state===""?"":","}, {formData.location.city}</div>
+      <div><FontAwesomeIcon icon={faMapMarkerAlt} /> Location: {formData.location.country}, {formData.location.state}, {formData.location.city}</div>
       <div><FontAwesomeIcon icon={faLanguage} /> Language: {formData.language}</div>
       <div><FontAwesomeIcon icon={faTags} /> Category: {formData.category}</div>
       <div><FontAwesomeIcon icon={faUsers} /> Followers: {formData.followersCount}</div>
