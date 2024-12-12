@@ -33,6 +33,7 @@ const InfluencerProfile = () => {
     const elements = [
       { key: 'Username', value: users?.username },
       { key: 'Full Name', value: users?.fullName },
+      {key: 'Verified',value: users?.verifiedStatus},
       { key: 'Profile Picture', value: users?.profilePicture },
       { key: 'Bio', value: users?.bio },
       { key: 'Followers Count', value: users?.followersCount },
@@ -144,6 +145,7 @@ const pastactivitiesAdd = useCallback(async (users) => {
     profilePicture,
     username,
     fullName,
+    verifiedStatus,
     bio,
     followersCount,
     followingCount,
@@ -213,6 +215,18 @@ const pastactivitiesAdd = useCallback(async (users) => {
                   />
                 </motion.div>
                 <h4 className="mt-4 text-3xl lg:text-4xl font-bold text-900 p-2">{fullName || username}</h4>
+                <td className="border px-4 py-2">
+  <span
+    className={`px-2 py-1 text-white rounded-md text-sm font-semibold`}
+    style={{
+      backgroundColor: verifiedStatus ? 'green' : 'red',
+      display: 'inline-block',
+      width: 'fit-content',
+    }}
+  >
+    {verifiedStatus ? 'Verified' : 'Unverified'}
+  </span>
+</td>
               </div>
             </motion.div>
 

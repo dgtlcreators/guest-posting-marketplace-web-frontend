@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import { useTheme } from '../../context/ThemeProvider.js';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import NewYoutubeInfluencerTable from './NewYoutubeInfluencerTable.js';
@@ -7,7 +6,7 @@ import { UserContext } from '../../context/userContext.js';
 import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 const NewYoutubeInfluencer = () => {
-  const { isDarkTheme } = useTheme();
+
   const { userData, localhosturl } = useContext(UserContext);
   const [refreshKey, setRefreshKey] = useState(0);
   const [formData, setFormData] = useState({
@@ -44,49 +43,11 @@ const NewYoutubeInfluencer = () => {
 
   const [profileUrlOption, setProfileUrlOption] = useState("manual");
   const [mediaKitOption, setMediaKitOption] = useState("manual");
-  const [addYoutubeInfluencer, setAddYoutubeInfluencer] = useState([]);
-
-  const [locationQuery, setLocationQuery] = useState("");
-  const [locationResults, setLocationResults] = useState([]);
 
 
-  const handleLocationChange = async (e) => {
-    const query = e.target.value;
-    setLocationQuery(query);
 
-    if (query.length > 2) {
-      try {
-        const response = await axios.get(`https://us1.locationiq.com/v1/search.php`, {
-          params: {
-            key: 'pk.9a061732949f134d1a74e2f7220fad7a',
-            q: query,
-            format: 'json'
-          }
-        });
-        setLocationResults(response.data);
-      } catch (error) {
-        console.error("Error fetching location data", error);
-      }
-    } else {
-      setLocationResults([]);
-    }
-  };
-  const handleLocationSelect1 = (location) => {
-    setFormData((prev) => ({
-      ...prev,
-      location: location.display_name,
-    }));
-    setLocationQuery(location.display_name);
-    setLocationResults([]);
-  };
-  const handleFileChange1 = (e) => {
-    const { name, files } = e.target
-    console.log(e.target)
-    setFormData(prev => ({
-      ...prev,
-      [name]: files[0].name
-    }))
-  }
+ 
+ 
 
   const handleFileChange = (e) => {
     const { name, files } = e.target
@@ -102,6 +63,7 @@ const NewYoutubeInfluencer = () => {
     setFormData({
       username: "",
       fullname: "",
+      verifiedStatus: false,
       profilePicture: "",
       bio: "",
       followersCount: 0,
@@ -124,7 +86,6 @@ const NewYoutubeInfluencer = () => {
       },
       mediaKit: "",
     })
-    setLocationQuery("")
   }
 
   const createDescriptionElements = (formData, users) => {
@@ -142,7 +103,7 @@ const NewYoutubeInfluencer = () => {
       { key: 'Category', value: formData.category },
       { key: 'Location', value: formData.location },
       { key: 'Language', value: formData.language },
-      { key: 'Verified Status', value: formData.verifiedStatus ? 'Verified' : 'Not Verified' },
+      { key: 'Verified Status', value: formData.verifiedStatus ? 'Verified' : 'Unverified' },
       { key: 'Collaboration Rates (Post)', value: formData.collaborationRates.post },
       { key: 'Collaboration Rates (Story)', value: formData.collaborationRates.story },
       { key: 'Collaboration Rates (Reel)', value: formData.collaborationRates.reel },
@@ -218,7 +179,7 @@ const NewYoutubeInfluencer = () => {
     }
   
     try {
-      const response = await axios.post(`${localhosturl}/youtubeinfluencers/addYoutubeInfluencer`, formDataToSend, {
+      await axios.post(`${localhosturl}/youtubeinfluencers/addYoutubeInfluencer`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -232,172 +193,8 @@ const NewYoutubeInfluencer = () => {
   };
   
   
-  
-
-  const handleSubmit2 = async (e) => {
-    e.preventDefault();
-    const formDataToSend = new FormData();
-    console.log("Form data before submission: ", formData);
 
 
-    if (!formData.username) {
-      console.error("Username is required");
-      return;
-    }
-
-
-    const generalFields = [
-      "username", "fullname", "bio", "followersCount", "videosCount",
-      "engagementRate", "averageViews", "category"//, "location"
-      , "language"
-    ];
-
-    generalFields.forEach(field => {
-      if (formData[field] !== undefined) {
-        formDataToSend.append(field, formData[field]); // Make sure to match 'fullname'
-      }
-    });
-
-    if (formData.collaborationRates) {
-      Object.keys(formData.collaborationRates).forEach(type => {
-        if (formData.collaborationRates[type] !== undefined) {
-          formDataToSend.append(`collaborationRates[${type}]`, formData.collaborationRates[type]);
-        }
-      });
-    }
-
-
-    if (formData.audienceDemographics) {
-      Object.keys(formData.audienceDemographics).forEach(type => {
-        if (formData.audienceDemographics[type] !== undefined) {
-          formDataToSend.append(`audienceDemographics[${type}]`, JSON.stringify(formData.audienceDemographics[type]));
-        }
-      });
-    }
-
-
-    if (formData.pastCollaborations && formData.pastCollaborations.length > 0) {
-      formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
-    }
-
-
-    if (profileUrlOption === "system" && formData.profilePicture) {
-      formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
-    } else if (formData.profilePicture) {
-      formDataToSend.append("profilePicture", formData.profilePicture);
-    }
-
-    if (mediaKitOption === "system" && formData.mediaKit) {
-      formDataToSend.append("mediaKit", document.querySelector('input[name="mediaKit"]').files[0]);
-    } else if (formData.mediaKit) {
-      formDataToSend.append("mediaKit", formData.mediaKit);
-    }
-
-    formDataToSend.append('location', JSON.stringify(formData.location)); 
-
-   // formDataToSend.append('location', formData?.location);
-    //formDataToSend.append('location.city', formData?.location?.city);
-    //formDataToSend.append('location.state', formData?.location?.state);
-    //formDataToSend.append('location.country', formData?.location?.country);
-
-    console.log("formDataToSend ", formDataToSend)
-    try {
-      const response = await axios.post(
-        `${localhosturl}/youtubeinfluencers/addYoutubeInfluencer`,
-        formDataToSend,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setAddYoutubeInfluencer((prev) => [...prev, response.data.data]);
-      pastactivitiesAdd(formDataToSend);
-      toast.success("Influencer added Successfully");
-
-    } catch (error) {
-      console.log("Error adding influencer", error);
-      toast.error(`Error adding influencer ${error}`);
-    }
-  };
-
-  const handleSubmit1 = async (e) => {
-    e.preventDefault()
-    const formDataToSend = new FormData()
-    if (!formData.username) {
-      console.error("Username is required");
-      return; // Early return if username is missing
-    }
-
-    const generalFields = [
-      "username", "fullName", "bio", "followersCount", "videosCount",
-      "engagementRate", "averageViews", "category", "location", "language"
-    ];
-
-    generalFields.forEach(field => {
-      if (formData[field] !== undefined) {
-        formDataToSend.append(field, formData[field]);
-      }
-    });
-
-
-    if (formData.collaborationRates) {
-      Object.keys(formData.collaborationRates).forEach(type => {
-        if (formData.collaborationRates[type] !== undefined) {
-          formDataToSend.append(`collaborationRates[${type}]`, formData.collaborationRates[type]);
-        }
-      });
-    }
-
-    // Audience Demographics mapping
-    if (formData.audienceDemographics) {
-      Object.keys(formData.audienceDemographics).forEach(type => {
-        if (formData.audienceDemographics[type] !== undefined) {
-          formDataToSend.append(`audienceDemographics[${type}]`, JSON.stringify(formData.audienceDemographics[type]));
-        }
-      });
-    }
-
-    // Past Collaborations
-    if (formData.pastCollaborations && formData.pastCollaborations.length > 0) {
-      formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
-    }
-
-    // Profile picture and media kit files
-    if (profileUrlOption === "system" && formData.profilePicture) {
-      formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
-    } else if (formData.profilePicture) {
-      formDataToSend.append("profilePicture", formData.profilePicture);
-    }
-
-    if (mediaKitOption === "system" && formData.mediaKit) {
-      formDataToSend.append("mediaKit", document.querySelector('input[name="mediaKit"]').files[0]);
-    } else if (formData.mediaKit) {
-      formDataToSend.append("mediaKit", formData.mediaKit);
-    }
-    try {
-      const response = await axios.post(
-        `${localhosturl}/youtubeinfluencers/addYoutubeInfluencer`,
-
-        { ...formDataToSend, userId: userData?._id, },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setAddYoutubeInfluencer((prev) => [...prev, response.data.data]);
-      console.log(formDataToSend)
-      pastactivitiesAdd(formDataToSend);
-      toast.success("Influencer added Successfully");
-
-    } catch (error) {
-      console.log("Error adding influencer", error);
-      toast.error(`Error adding influencer ${error}`);
-      console.error("Error adding influencer", error);
-
-    }
-  }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -430,7 +227,8 @@ const NewYoutubeInfluencer = () => {
     else {
       setFormData(prev => ({
         ...prev,
-        [name]: type === "checkbox" ? checked : type === "number" ? parseFloat(value) : value,
+        [name === "verified" ? "verifiedStatus" : name]: 
+        type === "checkbox" ? checked : type === "number" ? parseFloat(value) : value,
       }))
     }
   }
@@ -446,17 +244,18 @@ const NewYoutubeInfluencer = () => {
       <form onSubmit={handleSubmit} className='mb-4 p-4 bg-gray-100 rounded-lg shadow-md'>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
           <div className='block'>
-            <label className='text-gray-700'>Name</label>
+            <label className='text-gray-700'>FUll Name</label>
             <input type='text' name='username' placeholder='Name'
               value={formData.username} onChange={handleChange}
               className='p-2 border border-gray-300 rounded w-full' required />
           </div>
           <div className='block'>
-            <label className='text-gray-700'>Last Name</label>
+            <label className='text-gray-700'>User Name</label>
             <input type='text' name='fullname' placeholder='Last Name'
               value={formData.fullname} onChange={handleChange}
               className='p-2 border border-gray-300 rounded w-full' required />
           </div>
+          
           <div className='block'>
             <label className='text-gray-700'>profile Picture Url</label>
             <div className='flex items-center space-x-2'>
@@ -483,6 +282,16 @@ const NewYoutubeInfluencer = () => {
 
             )}
           </div>
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              name="verified"
+              checked={formData.verifiedStatus}
+              onChange={handleChange}
+              className="mr-2"
+            />
+            Verified
+          </label>
           <div className='block'>
             <label className='text-gray-700'>Bio</label>
             <textarea name='bio' placeholder='Bio' value={formData.bio} onChange={handleChange} className='p-2 border border-gray-300 rounded w-full' required />

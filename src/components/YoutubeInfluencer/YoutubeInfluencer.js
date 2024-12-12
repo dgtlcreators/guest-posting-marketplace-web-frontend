@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useTheme } from '../../context/ThemeProvider.js';
 import { UserContext } from '../../context/userContext.js';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -9,7 +8,7 @@ import { useLocation } from 'react-router-dom';
 import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 const YoutubeInfluencer = () => {
-  const { isDarkTheme } = useTheme();
+
   const { userData, localhosturl } = useContext(UserContext);
   const userId = userData?._id;
   const initialFormData = {
@@ -45,13 +44,13 @@ const YoutubeInfluencer = () => {
       gender: "",
       geographicDistribution: ""
     },
+    verifiedStatus: false,
     userId: userId
   }
   const [formData, setFormData] = useState(initialFormData);
   const [influencers, setInfluencers] = useState([]);
 
-  const [locationQuery, setLocationQuery] = useState("");
-  const [locationResults, setLocationResults] = useState([]);
+
 
   useEffect(() => {
     fetchInfluencers();
@@ -60,7 +59,7 @@ const YoutubeInfluencer = () => {
   const fetchInfluencers = async () => {
     try {
 
-      const response = await axios.get(`${localhosturl}/youtubeinfluencers/getAllYoutubeInfluencer`);
+      await axios.get(`${localhosturl}/youtubeinfluencers/getAllYoutubeInfluencer`);
 
 
       //  setInfluencers(response.data.data);
@@ -69,36 +68,8 @@ const YoutubeInfluencer = () => {
     }
   }
 
-  const handleLocationChange = async (e) => {
-    const query = e.target.value;
-    setLocationQuery(query);
-
-    if (query.length > 2) {
-      try {
-        const response = await axios.get(`https://us1.locationiq.com/v1/search.php`, {
-          params: {
-            key: 'pk.9a061732949f134d1a74e2f7220fad7a',
-            q: query,
-            format: 'json'
-          }
-        });
-        setLocationResults(response.data);
-      } catch (error) {
-        console.error("Error fetching location data", error);
-      }
-    } else {
-      setLocationResults([]);
-    }
-  };
-  const handleLocationSelect1 = (location) => {
-    setFormData((prev) => ({
-      ...prev,
-      location: location.display_name,
-    }));
-    setLocationQuery(location.display_name);
-    setLocationResults([]);
-  };
-
+ 
+ 
   const handleReset = () => {
     setFormData(initialFormData);
   };
@@ -121,16 +92,7 @@ const YoutubeInfluencer = () => {
       });
     }
   }
-  const handleDemographicsChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      audienceDemographics: {
-        ...prevState.audienceDemographics,
-        [name]: value,
-      },
-    }));
-  };
+
 
 
   const pastactivitiesAdd = async (users) => {
@@ -186,14 +148,18 @@ const YoutubeInfluencer = () => {
   axios.defaults.withCredentials = true;
 
   const handleSubmit = async (e) => {
+    const formDataToSend = {
+      ...formData, userId: userData?._id,
+      verifiedStatus: formData.verifiedStatus === "" ? "" : formData.verifiedStatus === 'verified',
+    };
     e.preventDefault();
     try {
       const response = await axios
-        //.post("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/youtubeInfluencesFilter", formData)
-        .post(`${localhosturl}/youtubeinfluencers/youtubeInfluencesFilter`, formData)
-      // console.log(response.data.data);
+      
+        .post(`${localhosturl}/youtubeinfluencers/youtubeInfluencesFilter`, formDataToSend)
 
       setInfluencers(response.data.data);
+      
       pastactivitiesAdd(response.data.data);
       toast.success("Data Fetch Successfully");
     } catch (error) {
@@ -202,23 +168,7 @@ const YoutubeInfluencer = () => {
     }
   }
 
-  /*const handleSubmit = (e) => {
-    e.preventDefault()
-   // console.log(formData)
-    axios
-     // .post("https://guest-posting-marketplace-web-backend.onrender.com/youtubeinfluencers/youtubeInfluencesFilter", formData)
-       .post("http://localhost:5000/youtubeinfluencers/youtubeInfluencesFilter", formData)
-      .then((response) => {
-       // console.log(response.data.data);
-        setInfluencers(response.data.data);
-        toast.success("Data Fetch Successfully");
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error(error.message);
-      });
-  }
-  */
+
 
   const location = useLocation();
   const [toastShown, setToastShown] = useState(false);
@@ -380,6 +330,20 @@ const YoutubeInfluencer = () => {
             />
           </div>
           <div className="flex flex-col">
+              <label htmlFor="verifiedStatus">Verified Status</label>
+              <select
+                id="verifiedStatus"
+                name="verifiedStatus"
+                value={formData.verifiedStatus}
+                onChange={handleChange}
+                className="focus:outline focus:outline-blue-400 cursor-pointer p-2"
+              >
+                <option value="">All</option>
+                <option value="verified">Verified</option>
+                <option value="unverified">Unverified</option>
+              </select>
+            </div>
+          <div className="flex flex-col">
             <label htmlFor="category">Category</label>
             <select
               id="category"
@@ -528,50 +492,7 @@ const YoutubeInfluencer = () => {
               className="focus:outline focus:outline-blue-400 p-2"
             />
           </div>
-          {/*<div className="flex flex-col">
-          <label htmlFor="pastCollaborations">Past Collaborations</label>
-          <textarea
-            
-            id="pastCollaborations"
-            name="pastCollaborations"
-            value={formData.pastCollaborations}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="audienceDemographics.age">Audience Demographics - Age:</label>
-          <textarea
-           
-            id="audienceDemographics.age"
-            name="audienceDemographics.age"
-            value={formData.audienceDemographics.age}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="audienceDemographics.gender">Audience Demographics - Gender:</label>
-          <textarea
-           
-            id="audienceDemographics.gender"
-            name="audienceDemographics.gender"
-            value={formData.audienceDemographics.gender}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="audienceDemographics.geographicDistribution">Audience Demographics - Geographic Distribution:</label>
-          <textarea
-           
-            id="audienceDemographics.geographicDistribution"
-            name="audienceDemographics.geographicDistribution"
-            value={formData.audienceDemographics.geographicDistribution}
-            onChange={handleChange}
-            className="focus:outline focus:outline-blue-400 p-2"
-          />
-        </div>*/}
+        
         </div>
         <div className="flex items-center justify-end space-x-2 mt-3">
           <SaveSearch section="YoutubeInfluencer" formDataList={formData} />
