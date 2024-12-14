@@ -59,6 +59,7 @@ const GuestPostProfile = () => {
     price: "",
     monthlyTraffic: "",
     mozSpamScore: "",
+    verifiedStatus:false
 
   };
   const [formData, setFormData] = useState(initialFormData)
@@ -85,6 +86,7 @@ const GuestPostProfile = () => {
       { key: 'publisherEmail', value: formData.publisherEmail },
       { key: 'publisherPhoneNo', value: formData.publisherPhoneNo },
       { key: 'mozDA', value: formData.mozDA },
+      {key: 'verified', value: formData.verifiedStatus},
       { key: 'categories', value: formData.categories },
       { key: 'websiteLanguage', value: formData.websiteLanguage },
       { key: 'ahrefsDR', value: formData.ahrefsDR },
@@ -140,39 +142,61 @@ const GuestPostProfile = () => {
 
 
   return (
-    <div >
+    <div className="container mx-auto p-4">
       <button
         onClick={() => navigate(-1)}
         className="mb-4 px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded hover:bg-blue-600 transition-all"
       >
-        <FontAwesomeIcon icon={faArrowLeft} style={{ marginRight: '10px' }} /> Back
+        <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
+        Back
       </button>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="p-6  rounded-lg shadow-md"
+        className="p-6 rounded-lg shadow-lg bg-white"
       >
-        <h2 className="text-2xl font-bold mb-4 p-2">Guest Post Profile</h2>
+ <h2 className="text-2xl font-bold mb-6">Guest Post Profile</h2>
 
-        <div className="space-y-4">
-          {Object.entries(formData).map(([key, value]) => (
-            value && (
-              <motion.div
-                key={key}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3 }}
-                className="flex items-center p-4 border border-gray-300 rounded-lg"
-              >
-                <FontAwesomeIcon icon={iconMap[key] || faInfoCircle} className="text-blue-500 mr-3" />
-                <span className="font-semibold capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>: {value}
-              </motion.div>
+<div className="mb-6 mt-4 ml-4">
+  <span
+    className={`px-2 py-1 text-white rounded-md text-sm font-semibold`}
+    style={{
+      backgroundColor: formData.verifiedStatus ? 'green' : 'red',
+      display: 'inline-block',
+      width: 'fit-content',
+    }}
+  >
+    {formData.verifiedStatus ? 'Verified' : 'Unverified'}
+  </span>
+</div>
 
-            )
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {Object.entries(formData).map(
+            ([key, value]) =>
+              value && (
+                <motion.div
+                  key={key}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex items-center p-4 border border-gray-300 rounded-lg"
+                >
+                  <FontAwesomeIcon
+                    icon={iconMap[key] || faInfoCircle}
+                    className="text-blue-500 mr-3"
+                    title={key.replace(/([A-Z])/g, ' $1')}
+                  />
+                  <span className="font-semibold capitalize">
+                    {key.replace(/([A-Z])/g, ' $1')}:
+                  </span>{' '}
+                  <span className="ml-2">{value}</span>
+                </motion.div>
+              )
+          )}
         </div>
+
         <ReportModal
           section="Guestpost"
           userId={userData._id}
@@ -181,7 +205,7 @@ const GuestPostProfile = () => {
         />
       </motion.div>
     </div>
-  )
+  );
 }
 
 export default GuestPostProfile

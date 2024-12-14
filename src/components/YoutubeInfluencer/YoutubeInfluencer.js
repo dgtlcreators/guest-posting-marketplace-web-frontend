@@ -73,6 +73,7 @@ const YoutubeInfluencer = () => {
   const handleReset = () => {
     setFormData(initialFormData);
   };
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     const nameArray = name.split('.');
@@ -148,10 +149,12 @@ const YoutubeInfluencer = () => {
   axios.defaults.withCredentials = true;
 
   const handleSubmit = async (e) => {
+
     const formDataToSend = {
       ...formData, userId: userData?._id,
       verifiedStatus: formData.verifiedStatus === "" ? "" : formData.verifiedStatus === 'verified',
     };
+
     e.preventDefault();
     try {
       const response = await axios
@@ -329,6 +332,7 @@ const YoutubeInfluencer = () => {
               className="focus:outline focus:outline-blue-400 p-2"
             />
           </div>
+
           <div className="flex flex-col">
               <label htmlFor="verifiedStatus">Verified Status</label>
               <select
@@ -343,6 +347,7 @@ const YoutubeInfluencer = () => {
                 <option value="unverified">Unverified</option>
               </select>
             </div>
+
           <div className="flex flex-col">
             <label htmlFor="category">Category</label>
             <select
@@ -350,8 +355,7 @@ const YoutubeInfluencer = () => {
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="focus:outline focus:outline-blue-400 cursor-pointer p-2"
-            >
+              className="focus:outline focus:outline-blue-400 cursor-pointer p-2">
               <option value="All">All</option>
               <option value="Technology">Technology</option>
               <option value="Beauty and Fashion">Beauty and Fashion</option>
@@ -409,8 +413,7 @@ const YoutubeInfluencer = () => {
               name="language"
               value={formData.language}
               onChange={handleChange}
-              className="focus:outline focus:outline-blue-400 cursor-pointer p-2"
-            >
+              className="focus:outline focus:outline-blue-400 cursor-pointer p-2">
               <option value="All">All</option>
               <option value="English">English</option>
               <option value="Hindi">Hindi</option>
@@ -526,10 +529,7 @@ const YoutubeInfluencer = () => {
         <YoutubeInfluencerTable influencers={influencers} setInfluencers={setInfluencers} />
 
       </div>
-
-
     </div>
-
   )
 }
 

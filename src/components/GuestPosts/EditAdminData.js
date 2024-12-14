@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from "../../context/userContext.js";
@@ -19,6 +19,7 @@ const EditAdminForm = () => {
   const [adminData, setAdminData] = useState({
     userId: userData?._id,
     publisherName: "",
+    verifiedStatus:false,
     publisherEmail: "",
     publisherPhoneNo: "",
     publisherURL: "",
@@ -47,15 +48,20 @@ const EditAdminForm = () => {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setAdminData({ ...adminData, [name]: value });
+    const { name, value, type, checked } = e.target;
+    setAdminData({
+      ...adminData,
+      [name]: type === "checkbox" ? checked : value,
+    });
   };
+  
 
-  const createDescriptionElements = (formData, users) => {
+  const createDescriptionElements = ( users) => {
     const elements = [
       { key: 'Publisher URL', value: users.publisherURL },
       { key: 'Publisher Name', value: users.publisherName },
       { key: 'Publisher Email', value: users.publisherEmail },
+      {key: 'Verified',value: users.verifiedStatus},
       { key: 'Publisher Phone No', value: users.publisherPhoneNo },
       { key: 'Moz DA', value: users.mozDA },
       { key: 'Categories', value: users.categories },
@@ -128,34 +134,44 @@ const EditAdminForm = () => {
 
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Edit Guestpost</h2>
-      <form onSubmit={handleSubmit} className=" shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div className="mb-4">
-          <label className="block text-700 text-sm font-bold mb-2" htmlFor="publisherName">
-            Publisher Name
-          </label>
-          <input
-            type="text"
-            name="publisherName"
-            value={adminData.publisherName}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="categories" className="block text-700 text-sm font-bold mb-2">
-            Categories
-          </label>
-          <select
-            id="categories"
-            name="categories"
-            required
-            value={adminData.categories}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline "
-          >
+<div className="container mx-auto max-w-2xl p-5 bg-gray-50 shadow-lg rounded-lg">
+<h2 className="text-3xl font-extrabold text-center text-gray-800 mb-6">Edit Guestpost</h2>
+  <form onSubmit={handleSubmit} className="space-y-6">
+    {/* Publisher Name */}
+    <div>
+      <label
+        htmlFor="publisherName"
+        className="block text-sm font-semibold text-gray-700 mb-1"
+      >
+        Publisher Name
+      </label>
+      <input
+        type="text"
+        id="publisherName"
+        name="publisherName"
+        value={adminData.publisherName}
+        onChange={handleChange}
+        className="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-3"
+        required
+      />
+    </div>
+
+         {/* Categories */}
+    <div>
+      <label
+        htmlFor="categories"
+        className="block text-sm font-semibold text-gray-700 mb-1"
+      >
+        Categories
+      </label>
+      <select
+        id="categories"
+        name="categories"
+        value={adminData.categories}
+        onChange={handleChange}
+        className="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-3"
+        required
+      >
 
             <option value="Agriculture">Agriculture</option>
             <option value="Animals and Pets">Animals and Pets</option>
@@ -182,45 +198,64 @@ const EditAdminForm = () => {
             <option value="App Development">App Development</option>
           </select>
         </div>
+
+        {/* Publisher Email */}
+    <div>
+      <label
+        htmlFor="publisherEmail"
+        className="block text-sm font-semibold text-gray-700 mb-1"
+      >
+        Publisher Email
+      </label>
+      <input
+        type="email"
+        id="publisherEmail"
+        name="publisherEmail"
+        value={adminData.publisherEmail}
+        onChange={handleChange}
+        className="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-3"
+        required
+      />
+    </div>
+       
+          {/* Publisher Phone Number */}
+    <div>
+      <label
+        htmlFor="publisherPhoneNo"
+        className="block text-sm font-semibold text-gray-700 mb-1"
+      >
+        Publisher Phone No
+      </label>
+      <input
+        type="text"
+        id="publisherPhoneNo"
+        name="publisherPhoneNo"
+        value={adminData.publisherPhoneNo}
+        onChange={handleChange}
+        className="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-3"
+      />
+    </div>
+
+        {/* Publisher URL */}
+    <div>
+      <label
+        htmlFor="publisherURL"
+        className="block text-sm font-semibold text-gray-700 mb-1"
+      >
+        Publisher URL
+      </label>
+      <input
+        type="text"
+        id="publisherURL"
+        name="publisherURL"
+        value={adminData.publisherURL}
+        onChange={handleChange}
+        className="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-3"
+      />
+    </div>
+
         <div className="mb-4">
-          <label className="block text-700 text-sm font-bold mb-2" htmlFor="publisherEmail">
-            Publisher Email
-          </label>
-          <input
-            type="email"
-            name="publisherEmail"
-            value={adminData.publisherEmail}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-700 text-sm font-bold mb-2" htmlFor="publisherPhoneNo">
-            publisher Phone No
-          </label>
-          <input
-            type="text"
-            name="publisherPhoneNo"
-            value={adminData.publisherPhoneNo}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-700 text-sm font-bold mb-2" htmlFor="publisherURL">
-            Publisher URL
-          </label>
-          <input
-            type="text"
-            name="publisherURL"
-            value={adminData.publisherURL}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-700 text-sm font-bold mb-2" htmlFor="ahrefsDR">
+          <label className="block text-sm font-semibold text-gray-700 mb-1" htmlFor="ahrefsDR">
             Ahrefs DR
           </label>
           <input
@@ -228,11 +263,11 @@ const EditAdminForm = () => {
             name="ahrefsDR"
             value={adminData.ahrefsDR}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-3"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-700 text-sm font-bold mb-2" htmlFor="mozDA">
+          <label className="block text-sm font-semibold text-gray-700 mb-1" htmlFor="mozDA">
             Moz DA
           </label>
           <input
@@ -240,11 +275,11 @@ const EditAdminForm = () => {
             name="mozDA"
             value={adminData.mozDA}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-3"
           />
         </div>
         <div className="flex flex-col">
-          <label htmlFor="websiteLanguage" className="block text-700 text-sm font-bold mb-2">
+          <label htmlFor="websiteLanguage" className="block text-sm font-semibold text-gray-700 mb-1">
             Website Language
           </label>
           <select
@@ -253,7 +288,7 @@ const EditAdminForm = () => {
             required
             value={adminData.websiteLanguage}
             onChange={handleChange}
-            className=" shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
+            className=" w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-3"
           >
 
             <option value="English">English</option>
@@ -270,7 +305,7 @@ const EditAdminForm = () => {
           </select>
         </div>
         <div className="flex flex-col">
-          <label htmlFor="linkType" className="block text-700 text-sm font-bold mb-2">
+          <label htmlFor="linkType" className="block text-sm font-semibold text-gray-700 mb-1">
             Link Type
           </label>
           <select
@@ -279,14 +314,14 @@ const EditAdminForm = () => {
             required
             value={adminData.linkType}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-3"
           >
             <option value="Do Follow">Do Follow</option>
             <option value="No Follow">No Follow</option>
           </select>
         </div>
         <div className="mb-4">
-          <label className="block text-700 text-sm font-bold mb-2" htmlFor="price">
+          <label className="block text-sm font-semibold text-gray-700 mb-1" htmlFor="price">
             Price
           </label>
           <input
@@ -294,11 +329,11 @@ const EditAdminForm = () => {
             name="price"
             value={adminData.price}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-3"
           />
         </div>
         <div className="flex flex-col">
-          <label htmlFor="mozSpamScore" className="block text-700 text-sm font-bold mb-2">
+          <label htmlFor="mozSpamScore" className="block text-sm font-semibold text-gray-700 mb-1">
             Moz Spam Score
           </label>
           <select
@@ -307,7 +342,7 @@ const EditAdminForm = () => {
             required
             value={adminData.mozSpamScore}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-3"
           >
 
             <option value="Spam Score <= 01">Spam Score {"<="} 01</option>
@@ -319,7 +354,7 @@ const EditAdminForm = () => {
           </select>
         </div>
         <div className="flex flex-col">
-          <label htmlFor="monthlyTraffic" className="block text-700 text-sm font-bold mb-2">
+          <label htmlFor="monthlyTraffic" className="block text-sm font-semibold text-gray-700 mb-1">
             Monthly Traffic
           </label>
           <select
@@ -328,7 +363,7 @@ const EditAdminForm = () => {
             required
             value={adminData.monthlyTraffic}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-700 leading-tight focus:outline-none focus:shadow-outline "
+            className="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-3"
           >
 
             <option value="Monthly Traffic >= 1000">
@@ -375,9 +410,31 @@ const EditAdminForm = () => {
             </option>
           </select>
         </div>
-        <button type="submit" className="mt-3 bg-blue-500 hover:bg-blue-700 text-white p-2 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-          Update Admin
-        </button>
+
+
+           {/* Verified Checkbox */}
+    <div className="flex items-center space-x-3">
+      <input
+        type="checkbox"
+        id="verifiedStatus"
+        name="verifiedStatus"
+        checked={adminData.verifiedStatus}
+        onChange={handleChange}
+        className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+      />
+      <label htmlFor="verifiedStatus" className="text-sm font-medium text-gray-800">
+        Verified
+      </label>
+    </div>
+
+    <div className="flex justify-center">
+      <button
+        type="submit"
+        className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        Update Guestpost
+      </button>
+    </div>
       </form>
     </div>
   );

@@ -32,7 +32,8 @@ const Guestpost = () => {
     mozSpamScore: "",
     publisherURL: "",
     publisherName: "",
-    userId: userId
+    verifiedStatus:false
+    // userId: userId
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -62,10 +63,14 @@ const Guestpost = () => {
 
   const fetchUsers = async (formData) => {
     try {
-      const response = await axios.post(
-        `${localhosturl}/form/getFilteredData`
 
-        , formData);
+      const formDataToSend = {
+        ...formData, userId: userData?._id,
+        verifiedStatus: formData.verifiedStatus === "" ? "" : formData.verifiedStatus === 'verified',
+      };
+
+      const response = await axios.post(
+        `${localhosturl}/form/getFilteredData`, formDataToSend);
 
       setUsers(response.data);
 
@@ -109,6 +114,7 @@ const Guestpost = () => {
       formData.mozSpamScore ? `Moz Spam Score: ${formData.mozSpamScore}` : '',
       formData.publisherURL ? `Publisher URL: ${formData.publisherURL}` : '',
       formData.publisherName ? `Publisher Name: ${formData.publisherName}` : '',
+      formData.verifiedStatus ? `Verified: ${formData.verifiedStatus}` : '',
 
 
       `Total results: ${users.length}`
@@ -148,11 +154,23 @@ const Guestpost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const formDataToSend = {
+      ...formData,
+      userId: userData?._id,
+      verifiedStatus: formData.verifiedStatus === "" 
+        ? "" 
+        : formData.verifiedStatus === "verified"
+        ? true 
+        : formData.verifiedStatus === "unverified" 
+        ? false 
+        : "",
+    };
+
     try {
       const response = await axios.post(
         `${localhosturl}/form/getFilteredData`
 
-        , formData);
+        , formDataToSend);
 
       setUsers(response.data);
 
@@ -306,42 +324,20 @@ const Guestpost = () => {
               <option value="No Follow">No Follow</option>
             </select>
           </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="publisherURL"
-            >
-              Publisher URL
-            </label>
-            <input
-              type="url"
-              id="publisherURL"
-              name="publisherURL"
-              title="Please ensure to provide proper format of the url"
-              pattern="https?://.*"
-              placeholder="https://www.google.com"
-              value={formData.publisherURL}
-              onChange={handleChange}
-              className="focus:outline focus:outline-blue-400 p-2"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="publisherName"
-            >
-              Publisher Name
-            </label>
-            <input
-              type="text"
-              id="publisherName"
-              name="publisherName"
-              // title="Please ensure to provide proper format of the name"
-              //pattern="https?://.*"
-              placeholder="Publisher Name"
-              value={formData.publisherName}
-              onChange={handleChange}
-              className="focus:outline focus:outline-blue-400 p-2"
-            />
-          </div>
-        </div>
+  {/* Publisher Name */}
+  <div className="flex flex-col w-full sm:w-auto">
+    <label htmlFor="publisherName" className="mb-2">Publisher Name</label>
+    <input
+      type="text"
+      id="publisherName"
+      name="publisherName"
+      placeholder="Publisher Name"
+      value={formData.publisherName}
+      onChange={handleChange}
+      className="focus:outline-none focus:ring-2 focus:ring-blue-400 p-2 w-full sm:w-auto"
+    />
+  </div>
+  </div>
 
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-4">
@@ -449,6 +445,22 @@ const Guestpost = () => {
             </select>
           </div>
         </div>
+
+        {/* Verified Status */}
+  <div className="flex flex-col w-36 sm:w-48 md:w-64 mb-4">
+  <label htmlFor="verifiedStatus" className="mb-2">Verified Status</label>
+  <select
+    id="verifiedStatus"
+    name="verifiedStatus"
+    value={formData.verifiedStatus}
+    onChange={handleChange}
+    className="focus:outline-none focus:ring-2 focus:ring-blue-400 p-2 cursor-pointer w-full"
+  >
+    <option value="">All</option>
+    <option value="verified">Verified</option>
+    <option value="unverified">Unverified</option>
+  </select>
+</div>
 
 
         <div className="flex items-center justify-end space-x-2">

@@ -4,7 +4,6 @@ import { FaUser, FaLanguage, FaBook, FaDollarSign, FaEnvelope } from 'react-icon
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useTheme } from '../../context/ThemeProvider.js';
 import { UserContext } from '../../context/userContext.js';
 import ReportModal from '../OtherComponents/ReportForm.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,7 +13,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 
 const ContentWriterProfile = () => {
-  const { isDarkTheme } = useTheme();
+
   const navigate = useNavigate();
   const { id } = useParams();
   const [contentWriter, setContentWriter] = useState("")
@@ -123,6 +122,18 @@ const ContentWriterProfile = () => {
             </motion.div>
             <div>
               <h2 className="text-3xl font-bold text-800 p-2">{contentWriter.name}</h2>
+              <div>  
+  <span
+    className={`px-2 py-1 text-white rounded-md text-sm font-semibold`}
+    style={{
+      backgroundColor: contentWriter.verifiedStatus ? 'green' : 'red',
+      display: 'inline-block',
+      width: 'fit-content',
+    }}
+  >
+    {contentWriter.verifiedStatus ? 'Verified' : 'Unverified'}
+  </span>
+  </div> 
               <p className="text-lg  mt-2">{contentWriter.bio}</p>
             </div>
           </div>
@@ -159,15 +170,16 @@ const ContentWriterProfile = () => {
             </ul>
           </div>
 
-
           <div className="mb-6 p-4  rounded-lg shadow-md transform transition-transform hover:scale-105 duration-300 ease-in-out">
             <h3 className="text-xl font-semibold text-800 flex items-center p-2">
-              <FaDollarSign className="text-600 mr-2" /> Collaboration Rates
+              Collaboration Rates
             </h3>
-            <p className="text-lg text-600 mt-2">Post: ${contentWriter?.collaborationRates?.post}</p>
-            <p className="text-lg text-600">Story: ${contentWriter?.collaborationRates?.story}</p>
-            <p className="text-lg text-600">Reel: ${contentWriter?.collaborationRates?.reel}</p>
+            <p className="text-lg text-600 mt-2">Hourly Rate: ₹ {contentWriter?.collaboration?.hourlyRate}</p>
+            <p className="text-lg text-600">Per Word Rate: ₹ {contentWriter?.collaboration?.perWordRate}</p>
+            <p className="text-lg text-600">Project Rate: ₹ {contentWriter?.collaboration?.projectRate}</p>
           </div>
+
+
 
         </motion.div>
       </div>

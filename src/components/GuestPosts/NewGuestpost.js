@@ -3,11 +3,9 @@ import axios from "axios";
 import NewGuestpostTable from "./NewGuestpostTable.js";
 import { toast } from "react-toastify";
 import { UserContext } from "../../context/userContext.js";
-import { useTheme } from "../../context/ThemeProvider.js";
 
 
 const NewGuestpost = () => {
-    const { isDarkTheme } = useTheme();
     const { userData, localhosturl } = useContext(UserContext);
     const userId = userData?._id;
     console.log(userData, userId)
@@ -16,6 +14,7 @@ const NewGuestpost = () => {
         publisherName: "",
         publisherEmail: "",
         publisherPhoneNo: "",
+        verifiedStatus:false,
         mozDA: "1",
         categories: "Agriculture",
         websiteLanguage: "English",
@@ -32,12 +31,23 @@ const NewGuestpost = () => {
     const [refreshKey, setRefreshKey] = useState(0);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: value === "0" ? "" : value,
-        }));
+        const { name, value, type, checked } = e.target;
+    
+        // For checkbox, we use `checked` instead of `value`
+        if (type === 'checkbox') {
+            setFormData((prevState) => ({
+                ...prevState,
+                [name]: checked, // For checkbox, checked will be true or false
+            }));
+        } else {
+            // For other inputs, handle as usual
+            setFormData((prevState) => ({
+                ...prevState,
+                [name]: value === "0" ? "" : value, // Special handling for "0" value
+            }));
+        }
     };
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -218,6 +228,8 @@ const NewGuestpost = () => {
 
                 </div>
 
+             
+
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex flex-col">
@@ -356,6 +368,16 @@ const NewGuestpost = () => {
                         </select>
                     </div>
                 </div>
+                <label className="flex items-center">
+            <input
+            type="checkbox"
+            name="verifiedStatus"
+            checked={formDatas.verifiedStatus}
+            onChange={handleChange}
+            className="mr-2"
+            />
+            Verified
+            </label>
 
                 <div className="flex items-center justify-end space-x-2">
 

@@ -2,13 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useTheme } from '../../context/ThemeProvider.js';
 import { UserContext } from '../../context/userContext.js';
 import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 
 const EditContentWriter = () => {
-  const { isDarkTheme } = useTheme();
   const { userData, localhosturl } = useContext(UserContext);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -19,7 +17,7 @@ const EditContentWriter = () => {
     experience: 0,
     wordCount: '',
     gender: 'Prefer not to say',
-
+    verifiedStatus:false,
     location: {
       country: "",
       state: "",
@@ -27,9 +25,9 @@ const EditContentWriter = () => {
     },
     expertise: [{ type: "", other: "" }],
     languages: [{ name: "", other: "", proficiency: "" }],
-    collaborationRates: { post: 0, story: 0, reel: 0 },
     email: "",
     industry: [{ type: '', other: '', subCategories: [{ type: '', other: '' }] }],
+    collaboration: { hourlyRate: 0, perWordRate: 0, projectRate: 0 },
   });
 
   const industrySubCategories = {
@@ -60,12 +58,13 @@ const EditContentWriter = () => {
           gender: writer.gender || "Prefer not to say",
           wordCount: writer.wordCount || "",
           location: writer.location || "",
+          verifiedStatus: writer.verifiedStatus || false,
           expertise: writer.expertise && Array.isArray(writer.expertise) ? writer.expertise : [{ type: "", other: "" }],
           languages: writer.languages && Array.isArray(writer.languages) ? writer.languages : [{ name: "", other: "", proficiency: "" }],
-          collaborationRates: {
-            post: writer.collaborationRates?.post || 0,
-            story: writer.collaborationRates?.story || 0,
-            reel: writer.collaborationRates?.reel || 0,
+          collaboration: {
+            hourlyRate: writer.collaboration?.hourlyRate || 0,
+            perWordRate: writer.collaboration?.perWordRate || 0,
+            projectRate: writer.collaboration?.projectRate || 0,
           },
           industry: writer.industry && Array.isArray(writer.industry) ? writer.industry : [{ type: '', other: '', subCategories: [{ type: '', other: '' }] }],
 
@@ -76,7 +75,7 @@ const EditContentWriter = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, [id,localhosturl]);
 
   const handleAddIndustry = () => {
     setFormData((prev) => ({
@@ -92,21 +91,7 @@ const EditContentWriter = () => {
     }));
   };
 
-  const handleAddSubCategory = (index) => {
-    setFormData((prev) => {
-      const updatedIndustry = [...prev.industry];
-      updatedIndustry[index].subCategories = [...updatedIndustry[index].subCategories, { type: "", other: "" }];
-      return { ...prev, industry: updatedIndustry };
-    });
-  };
 
-  const handleRemoveSubCategory = (outerIdx, innerIdx) => {
-    setFormData((prev) => {
-      const updatedIndustry = [...prev.industry];
-      updatedIndustry[outerIdx].subCategories = updatedIndustry[outerIdx].subCategories.filter((_, i) => i !== innerIdx);
-      return { ...prev, industry: updatedIndustry };
-    });
-  };
 
 
   const handleAddLanguage = () => {
@@ -151,16 +136,7 @@ const EditContentWriter = () => {
     return true;
   };
 
-  const validateLanguages1 = (languages) => {
-    for (let i = 0; i < languages.length; i++) {
-      const { name, proficiency } = languages[i];
-      if ((name && !proficiency) || (!name && proficiency)) {
-        toast.error(`Both language name and proficiency must be filled for language at index ${i + 1}`);
-        return false;
-      }
-    }
-    return true;
-  };
+
 
   const validateExpertise = (expertise) => {
     for (let i = 0; i < expertise.length; i++) {
@@ -186,14 +162,9 @@ const EditContentWriter = () => {
     return true;
   };
 
-  const validateIndustry1 = (industry) => {
-    if (!Array.isArray(industry)) return false;
-    return industry.every(
-      ind => ind && ind.type && ind.type.trim() !== '' && ind._id
-    );
-  };
 
-  const createDescriptionElements = (formData, users) => {
+
+  const createDescriptionElements = ( users) => {
     const elements = [
       { key: 'Name', value: users?.name },
       { key: 'Bio', value: users?.bio },
@@ -201,9 +172,9 @@ const EditContentWriter = () => {
       { key: 'Expertise', value: users?.expertise.map(exp => `${exp.type} ${exp.other ? ' (Other: ' + exp.other + ')' : ''}`).join(', ') },
       { key: 'Location', value: users?.location },
       { key: 'Languages', value: users?.languages.map(lang => `${lang.name} ${lang.other ? ' (Other: ' + lang.other + ')' : ''} - Proficiency: ${lang.proficiency}`).join(', ') },
-      { key: 'Collaboration Rates (Post)', value: users?.collaborationRates.post },
-      { key: 'Collaboration Rates (Story)', value: users?.collaborationRates.story },
-      { key: 'Collaboration Rates (Reel)', value: users?.collaborationRates.reel },
+      { key: 'Collaboration Rates (Hourly Rate)', value: users?.collaborationRates.hourlyRate },
+      { key: 'Collaboration Rates (Per Word Rate)', value: users?.collaborationRates.perWordRate },
+      { key: 'Collaboration Rates (Project Rate)', value: users?.collaborationRates.projectRate },
       { key: 'Email', value: users?.email },
       { key: 'Industry', value: users?.industry.map(ind => `${ind.type} ${ind.other ? ' (Other: ' + ind.other + ')' : ''}${ind.subCategories.length ? ' - Subcategories: ' + ind.subCategories.map(sub => `${sub.type}${sub.other ? ' (Other: ' + sub.other + ')' : ''}`).join(', ') : ''}`).join(', ') }
     ];
@@ -274,16 +245,20 @@ const EditContentWriter = () => {
 
     try {
       const response = await axios.put(`${localhosturl}/contentwriters/updatecontentwriter/${id}`, {
-
         ...formData, userId: userData?._id,
         expertise: cleanedExpertise,
         languages: cleanedLanguages,
         industry: formData.industry.filter(item => item.type),
       });
-      toast.success("Writer updated successfully");
-      await pastactivitiesAdd(formData);
-      navigate("/addContentWriters");
-      console.log('Writer updated successfully:', response.data);
+    
+      if (response.status >= 200 && response.status < 300) {
+        toast.success("Writer updated successfully");
+        await pastactivitiesAdd(formData);
+        navigate("/addContentWriters");
+        console.log('Writer updated successfully:', response.data);
+      } else {
+        toast.error(`Error updating writer: ${response.data.message || 'Unexpected error'}`);
+      }
     } catch (error) {
       if (error.response) {
         console.error('Error response:', error.response.data);
@@ -296,12 +271,21 @@ const EditContentWriter = () => {
         toast.error(`Error updating writer: ${error.message}`);
       }
     }
+
+
   };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
-    if (name.startsWith('collaborationRates')) {
+    
+    if (name === 'verifiedStatus' && type === 'checkbox') {
+      // Here we ensure the checkbox's state updates correctly
+      setFormData((prev) => ({
+        ...prev,
+        verifiedStatus: checked,  // Ensure the checkbox state is correctly toggled
+      }));
+    }
+    else if (name.startsWith('collaborationRates')) {
       const key = name.split('.')[1];
       setFormData((prev) => ({
         ...prev,
@@ -312,14 +296,14 @@ const EditContentWriter = () => {
       }));
     } else if (name.startsWith('languages')) {
       const [index, key] = name.split('.').slice(1);
-      setFormData((prev) => {
+      setFormData(prev => {
         const updatedLanguages = [...prev.languages];
         updatedLanguages[index][key] = value;
         return { ...prev, languages: updatedLanguages };
       });
     } else if (name.startsWith('expertise')) {
       const [index, key] = name.split('.').slice(1);
-      setFormData((prev) => {
+      setFormData(prev => {
         const updatedExpertise = [...prev.expertise];
         updatedExpertise[index][key] = value;
         return { ...prev, expertise: updatedExpertise };
@@ -327,9 +311,8 @@ const EditContentWriter = () => {
     }
     else if (name.startsWith('industry')) {
       const [outerIndex, key] = name.split('.').slice(1);
-      setFormData((prev) => {
+      setFormData(prev => {
         const updatedIndustry = [...prev.industry];
-
         if (key === 'type') {
           updatedIndustry[outerIndex] = {
             ...updatedIndustry[outerIndex],
@@ -346,46 +329,38 @@ const EditContentWriter = () => {
           const index = parseInt(parts[0], 10);
           const subIndex = parseInt(parts[2], 10);
 
-          const fieldKey = parts[3];
+          // const fieldKey = parts[3];
           updatedIndustry[index].subCategories = updatedIndustry[index].subCategories || [];
-
 
           const updatedSubCategories = [...updatedIndustry[index].subCategories];
 
           if (checked) {
-
             if (!updatedSubCategories[subIndex]) {
               updatedSubCategories[subIndex] = { type: value };
             } else {
               updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: value };
             }
           } else {
-
             updatedSubCategories[subIndex] = { ...updatedSubCategories[subIndex], type: '' };
           }
 
           const uniqueSubCategories = Array.from(
-            new Map(
-              updatedSubCategories
-                .filter(sub => sub && sub.type && sub.type.trim() !== '')
-                .map(sub => [sub.type, sub])
-            ).values()
+            new Map(updatedSubCategories.filter(sub => sub && sub.type && sub.type.trim() !== '').map(sub => [sub.type, sub])).values()
           );
 
           updatedIndustry[index].subCategories = uniqueSubCategories;
-
         }
+
         return { ...prev, industry: updatedIndustry };
       });
-    }
-
-    else {
-      setFormData((prev) => ({
+    } else {
+      setFormData(prev => ({
         ...prev,
         [name]: type === 'number' ? parseFloat(value) : value,
       }));
     }
   };
+
 
   const handleLocationSelect = (location) => {
     setFormData((prev) => ({ ...prev, location }));
@@ -419,17 +394,7 @@ const EditContentWriter = () => {
               required
             />
           </label>
-         {/* <label className="block">
-            <span className="text-gray-700">Location</span>
-            <input
-              type="text"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
-              required
-            />
-          </label>*/}
+
           <label className="block">
             <span className="text-gray-700">Experience</span>
             <input
@@ -619,35 +584,47 @@ const EditContentWriter = () => {
               className="ml-2 bg-blue-500 text-white py-1 px-2 rounded">Add Language</button>
           </label>
           <label className="block">
-            <span className="text-gray-700">Collaboration Rates (Post)</span>
+            <span className="text-gray-700">Collaboration Hourly Rate</span>
             <input
               type="number"
               name="collaborationRates.post"
-              value={formData.collaborationRates.post}
+              value={formData.collaboration.hourlyRate}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
           </label>
           <label className="block">
-            <span className="text-gray-700">Collaboration Rates (Story)</span>
+            <span className="text-gray-700">Collaboration Per Word Rate</span>
             <input
               type="number"
               name="collaborationRates.story"
-              value={formData.collaborationRates.story}
+              value={formData.collaboration.perWordRate}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
           </label>
           <label className="block">
-            <span className="text-gray-700">Collaboration Rates (Reel)</span>
+            <span className="text-gray-700">Collaboration Project Rate</span>
             <input
               type="number"
               name="collaborationRates.reel"
-              value={formData.collaborationRates.reel}
+              value={formData.collaboration.projectRate}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded w-full"
             />
           </label>
+
+          <label className="block">
+  <input
+    type="checkbox"
+    name="verifiedStatus"
+    checked={formData.verifiedStatus} // This binds the checkbox to the state
+    onChange={handleChange}
+    className="p-2 border border-gray-300 rounded"
+  />
+  Verified Status
+</label>
+
         </div>
         <button type="submit" className="mt-4 p-2 bg-blue-500 text-white rounded">Update Writer</button>
       </form>

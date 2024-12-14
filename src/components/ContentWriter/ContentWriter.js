@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import ContentWriterTable from './ContentWriterTable.js';
 import { toast } from 'react-toastify';
-import { useTheme } from '../../context/ThemeProvider.js';
 import { UserContext } from '../../context/userContext.js';
 import SaveSearch from "../OtherComponents/SaveSearch.js";
 import { useLocation } from 'react-router-dom';
@@ -10,11 +9,10 @@ import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 
 const ContentWriter = () => {
-  const { isDarkTheme } = useTheme();
+
   const { userData, localhosturl } = useContext(UserContext);
-  const userId = userData?._id;
+  // const userId = userData?._id;
   const initialFormData = {
-    userId: userData?._id,
     name: '',
     bio: '',
     experienceFrom: '',
@@ -22,19 +20,19 @@ const ContentWriter = () => {
     email: '',
     expertise: [{ type: '', other: '' }],
     languages: [{ name: '', other: '', proficiency: '' }],
-
+    verifiedStatus:false,
     location: {
       country: "",
       state: "",
       city: ""
     },
     collaborationRates: {
-      postFrom: '',
-      postTo: '',
-      storyFrom: '',
-      storyTo: '',
-      reelFrom: '',
-      reelTo: ''
+      hourlyRateFrom: '',
+      hourlyRateTo: '',
+      perWordRateFrom: '',
+      perWordRateTo: '',
+      projectRateFrom: '',
+      projectRateTo: ''
     },
     languageProficiency: '',
     industry: [{ type: '', other: '', subCategories: [{ type: '', other: '' }] }],
@@ -105,7 +103,7 @@ const ContentWriter = () => {
           const parts = name.split('.').slice(1);
           const index = parseInt(parts[0], 10);
           const subIndex = parseInt(parts[2], 10);
-          const fieldKey = parts[3];
+          // const fieldKey = parts[3];
           updatedIndustry[index].subCategories = updatedIndustry[index].subCategories || [];
 
           const updatedSubCategories = [...updatedIndustry[index].subCategories];
@@ -144,33 +142,7 @@ const ContentWriter = () => {
     }
   };
 
-  const handleAddExpertise = () => {
-    setFormData({
-      ...formData,
-      expertise: [...formData.expertise, { type: '', other: '' }]
-    });
-  };
 
-  const handleRemoveExpertise = (index) => {
-    setFormData({
-      ...formData,
-      expertise: formData.expertise.filter((_, idx) => idx !== index)
-    });
-  };
-
-  const handleAddLanguage = () => {
-    setFormData({
-      ...formData,
-      languages: [...formData.languages, { name: '', other: '', proficiency: '' }]
-    });
-  };
-
-  const handleRemoveLanguage = (index) => {
-    setFormData({
-      ...formData,
-      languages: formData.languages.filter((_, idx) => idx !== index)
-    });
-  };
 
   const pastactivitiesAdd = async (users) => {
     const description = [
@@ -181,10 +153,11 @@ const ContentWriter = () => {
       formData.expertise && formData.expertise.length ? `Expertise: ${formData.expertise.map(exp => `${exp.type}${exp.other ? ` (${exp.other})` : ''}`).join(', ')}` : '',
       formData.languages && formData.languages.length ? `Languages: ${formData.languages.map(lang => `${lang.name}${lang.other ? ` (${lang.other})` : ''} (${lang.proficiency})`).join(', ')}` : '',
       formData.location ? `Location: ${formData.location}` : '',
-      formData.collaborationRates.postFrom || formData.collaborationRates.postTo ? `Post Collaboration Rates: ${formData.collaborationRates.postFrom || 'N/A'} to ${formData.collaborationRates.postTo || 'N/A'}` : '',
-      formData.collaborationRates.storyFrom || formData.collaborationRates.storyTo ? `Story Collaboration Rates: ${formData.collaborationRates.storyFrom || 'N/A'} to ${formData.collaborationRates.storyTo || 'N/A'}` : '',
-      formData.collaborationRates.reelFrom || formData.collaborationRates.reelTo ? `Reel Collaboration Rates: ${formData.collaborationRates.reelFrom || 'N/A'} to ${formData.collaborationRates.reelTo || 'N/A'}` : '',
+      formData.collaborationRates.hourlyRateFrom || formData.collaborationRates.hourlyRateTo ? `hourlyRate Collaboration Rates: ${formData.collaborationRates.hourlyRateFrom || 'N/A'} to ${formData.collaborationRates.hourlyRateTo || 'N/A'}` : '',
+      formData.collaborationRates.perWordRateFrom || formData.collaborationRates.perWordRateTo ? `perWordRate Collaboration Rates: ${formData.collaborationRates.perWordRateFrom || 'N/A'} to ${formData.collaborationRates.perWordRateTo || 'N/A'}` : '',
+      formData.collaborationRates.projectRateFrom || formData.collaborationRates.projectRateTo ? `projectRate Collaboration Rates: ${formData.collaborationRates.projectRateFrom || 'N/A'} to ${formData.collaborationRates.projectRateTo || 'N/A'}` : '',
       formData.languageProficiency ? `Language Proficiency: ${formData.languageProficiency}` : '',
+      formData.verifiedStatus? `Verified : ${formData.verifiedStatus}`: '',
       formData.industry && formData.industry.length ? `Industry: ${formData.industry.map(ind => `${ind.type}${ind.other ? ` (${ind.other})` : ''}${ind.subCategories && ind.subCategories.length ? ` - Subcategories: ${ind.subCategories.map(sub => `${sub.type}${sub.other ? ` (${sub.other})` : ''}`).join(', ')}` : ''}`).join(', ')}` : '',
       `Total results: ${users.length}`
     ]
@@ -232,8 +205,17 @@ const ContentWriter = () => {
       languageProficiency: formData.languages
         .map(lang => lang.proficiency)
         .find(proficiency => proficiency) || '',
+        verifiedStatus: formData.verifiedStatus === "" 
+        ? "" 
+        : formData.verifiedStatus === "verified"
+        ? true 
+        : formData.verifiedStatus === "unverified" 
+        ? false 
+        : "",
 
     };
+
+  
 
 
     e.preventDefault();
@@ -272,37 +254,6 @@ const ContentWriter = () => {
   };
 
 
-
-
-  const handleAddIndustry = () => {
-    setFormData((prev) => ({
-      ...prev,
-      industry: [...prev.industry, { type: "", other: "", subCategories: [] }]
-    }));
-  };
-
-  const handleRemoveIndustry = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      industry: prev.industry.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleAddSubCategory = (index) => {
-    setFormData((prev) => {
-      const updatedIndustry = [...prev.industry];
-      updatedIndustry[index].subCategories = [...updatedIndustry[index].subCategories, { type: "", other: "" }];
-      return { ...prev, industry: updatedIndustry };
-    });
-  };
-
-  const handleRemoveSubCategory = (outerIdx, innerIdx) => {
-    setFormData((prev) => {
-      const updatedIndustry = [...prev.industry];
-      updatedIndustry[outerIdx].subCategories = updatedIndustry[outerIdx].subCategories.filter((_, i) => i !== innerIdx);
-      return { ...prev, industry: updatedIndustry };
-    });
-  };
 
   const location = useLocation();
   const [toastShown, setToastShown] = useState(false);
@@ -536,9 +487,122 @@ const ContentWriter = () => {
             ))}
 
           </div>
+          <div className="flex flex-col">
+              <label htmlFor="verifiedStatus">Verified Status</label>
+              <select
+                id="verifiedStatus"
+                name="verifiedStatus"
+                value={formData.verifiedStatus}
+                onChange={handleChange}
+                className="focus:outline focus:outline-blue-400 cursor-pointer p-2"
+              >
+                <option value="">All</option>
+                <option value="verified">Verified</option>
+                <option value="unverified">Unverified</option>
+              </select>
+            </div>
 
 
         </div>
+
+        <div className="flex flex-col gap-4" style={{ marginTop: '10px' }}>
+
+  {/* Row 1: Hourly Rate From & To */}
+  <div className="flex flex-row gap-4">
+    <div className="flex flex-col">
+      <label htmlFor="collaborationRates.hourlyRateFrom">
+        Collaboration Hourly Rate (From)
+      </label>
+      <input
+        type="number"
+        id="collaborationRates.hourlyRateFrom"
+        name="collaborationRates.hourlyRateFrom"
+        min="0"
+        value={formData.collaborationRates.hourlyRateFrom}
+        onChange={handleChange}
+        className="focus:outline focus:outline-blue-400 p-2 w-64"
+      />
+    </div>
+    <div className="flex flex-col">
+      <label htmlFor="collaborationRates.hourlyRateTo">
+        Collaboration Hourly Rate (To)
+      </label>
+      <input
+        type="number"
+        id="collaborationRates.hourlyRateTo"
+        name="collaborationRates.hourlyRateTo"
+        min="0"
+        value={formData.collaborationRates.hourlyRateTo}
+        onChange={handleChange}
+        className="focus:outline focus:outline-blue-400 p-2 w-64"
+      />
+    </div>
+  </div>
+
+  {/* Row 2: Per Word Rate From & To */}
+  <div className="flex flex-row gap-4">
+    <div className="flex flex-col">
+      <label htmlFor="collaborationRates.perWordRateFrom">
+        Collaboration Per Word Rate (From)
+      </label>
+      <input
+        type="number"
+        id="collaborationRates.perWordRateFrom"
+        name="collaborationRates.perWordRateFrom"
+        min="0"
+        value={formData.collaborationRates.perWordRateFrom}
+        onChange={handleChange}
+        className="focus:outline focus:outline-blue-400 p-2 w-64"
+      />
+    </div>
+    <div className="flex flex-col">
+      <label htmlFor="collaborationRates.perWordRateTo">
+        Collaboration Per Word Rate (To)
+      </label>
+      <input
+        type="number"
+        id="collaborationRates.perWordRateTo"
+        name="collaborationRates.perWordRateTo"
+        min="0"
+        value={formData.collaborationRates.perWordRateTo}
+        onChange={handleChange}
+        className="focus:outline focus:outline-blue-400 p-2 w-64"
+      />
+    </div>
+  </div>
+
+  {/* Row 3: Project Rate From & To */}
+  <div className="flex flex-row gap-4">
+    <div className="flex flex-col">
+      <label htmlFor="collaborationRates.projectRateFrom">
+        Collaboration Project Rate (From)
+      </label>
+      <input
+        type="number"
+        id="collaborationRates.projectRateFrom"
+        name="collaborationRates.projectRateFrom"
+        min="0"
+        value={formData.collaborationRates.projectRateFrom}
+        onChange={handleChange}
+        className="focus:outline focus:outline-blue-400 p-2 w-64"
+      />
+    </div>
+    <div className="flex flex-col">
+      <label htmlFor="collaborationRates.projectRateTo">
+        Collaboration Project Rate (To)
+      </label>
+      <input
+        type="number"
+        id="collaborationRates.projectRateTo"
+        name="collaborationRates.projectRateTo"
+        min="0"
+        value={formData.collaborationRates.projectRateTo}
+        onChange={handleChange}
+        className="focus:outline focus:outline-blue-400 p-2 w-64"
+      />
+    </div>
+  </div>
+</div>
 
 
         <div className="flex items-center justify-end space-x-2 mt-3">
@@ -576,5 +640,3 @@ const ContentWriter = () => {
 };
 
 export default ContentWriter;
-
-
