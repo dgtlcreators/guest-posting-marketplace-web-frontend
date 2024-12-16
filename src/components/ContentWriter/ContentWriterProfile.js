@@ -8,6 +8,7 @@ import { UserContext } from '../../context/userContext.js';
 import ReportModal from '../OtherComponents/ReportForm.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import ApplicationForm from '../InstgramInfluencer/ApplicationForm.js';
 
 
 
@@ -85,6 +86,9 @@ const ContentWriterProfile = () => {
       toast.error("Error submitting report. Please try again later.");
     }
   };
+
+
+  const [showApplication, SetShowApplication] = useState(false);
 
 
 
@@ -182,6 +186,15 @@ const ContentWriterProfile = () => {
 
 
         </motion.div>
+
+        <div style={{ marginTop: '25px' }}>
+      <button onClick={() => SetShowApplication(true)} className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
+      Apply
+      </button>
+
+      {showApplication && <ApplicationForm SetShowApplication={SetShowApplication}/>}
+      </div>
+      
       </div>
       <ReportModal
         section="ContenWriters"

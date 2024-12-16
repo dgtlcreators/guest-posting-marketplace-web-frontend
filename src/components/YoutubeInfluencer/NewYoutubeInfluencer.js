@@ -256,8 +256,8 @@ const NewYoutubeInfluencer = () => {
               className='p-2 border border-gray-300 rounded w-full' required />
           </div>
           
-          <div className='block'>
-            <label className='text-gray-700'>profile Picture Url</label>
+           <div className='block'>
+           {/* <label className='text-gray-700'>profile Picture Url</label>
             <div className='flex items-center space-x-2'>
               <label className='flex items-center'>
                 <input type='radio' name='profileUrlOption' value="manual" checked={profileUrlOption === "manual"}
@@ -280,7 +280,27 @@ const NewYoutubeInfluencer = () => {
                 className="p-2 border border-gray-300 rounded w-full"
               />
 
-            )}
+            )} */}
+            <label className="text-gray-700">Profile Picture URL</label>
+<div className="mt-4">
+  <input
+    type="text"
+    name="profilePicture"
+    placeholder="Profile Picture URL"
+    value={formData.profilePicture}
+    onChange={handleChange}
+    className="p-2 border border-gray-300 rounded w-full"
+  />
+  {formData.profilePicture && (
+    <div className="mt-2">
+      <img
+        src={formData.profilePicture}
+        alt="Profile Preview"
+        className="w-20 h-20 object-cover border rounded"
+      />
+    </div>
+  )}
+</div>
           </div>
           <label className="flex items-center">
             <input

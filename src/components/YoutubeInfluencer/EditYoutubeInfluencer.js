@@ -298,7 +298,8 @@ const EditYoutubeInfluencer = () => {
               value={formData.fullname} onChange={handleChange}
               className='p-2 border border-gray-300 rounded w-full' required />
           </label>
-          <label className='block'>
+
+          {/* <label className='block'>
             <span className='text-gray-700'>profile Picture Url</span>
             <div className='flex items-center space-x-2'>
               <label className='flex items-center'>
@@ -318,7 +319,33 @@ const EditYoutubeInfluencer = () => {
               onChange={handleFileChange}
                 className='p-2 border border-gray-300 rounded w-full' />
             )}
-          </label>
+          </label> */}
+
+<label className="block">
+  <span className="text-gray-700">Profile Picture URL</span>
+  <div className="mt-4">
+    <input
+      type="text"
+      name="profilePicture"
+      placeholder="Profile Picture URL"
+      value={formData.profilePicture}
+      onChange={handleChange}
+      className="p-2 border border-gray-300 rounded w-full"
+    />
+    {formData.profilePicture && (
+      <div className="mt-2">
+        <img
+          src={formData.profilePicture}
+          alt="Profile Preview"
+          className="w-20 h-20 object-cover border rounded"
+        />
+      </div>
+    )}
+  </div>
+</label>
+
+
+
           <label className="flex items-center">
             <input
               type="checkbox"

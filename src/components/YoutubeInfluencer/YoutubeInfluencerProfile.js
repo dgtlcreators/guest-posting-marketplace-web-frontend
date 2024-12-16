@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useCallback } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { UserContext } from '../../context/userContext.js';
+import ApplicationForm from '../InstgramInfluencer/ApplicationForm.js';
 
 // import { IoMdStats } from 'react-icons/io';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -88,6 +89,8 @@ const YoutubeInfluencerProfile = () => {
     },
     [] // No dependencies, as it relies only on its arguments
   );
+
+  const [showApplication, SetShowApplication] = useState(false);
 
   const generateShortDescription = useCallback(
     (formData, users) => {
@@ -270,6 +273,15 @@ const YoutubeInfluencerProfile = () => {
     {/*<div style={{ marginTop: '20px', textAlign: 'center' }}>
         <Lottie options={defaultOptions} height={200} width={200} />
       </div>*/}
+
+<div style={{ marginTop: '25px' }}>
+      <button onClick={() => SetShowApplication(true)} className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
+      Apply
+      </button>
+
+      {showApplication && <ApplicationForm SetShowApplication={SetShowApplication}/>}
+      </div>
+
       <div style={{ marginTop: '20px', animation: 'fadeInUp 1s ease-in-out' }}>
       <ReportModal
      section="YoutubeInfluencer"

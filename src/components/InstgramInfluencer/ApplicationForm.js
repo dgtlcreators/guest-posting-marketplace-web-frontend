@@ -1,14 +1,12 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faEnvelope, faPhone, faDollarSign, faClipboard, faStickyNote, faHandshake, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faTimes,faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import 'tailwindcss/tailwind.css';
-import ApplicationsList from "./ApplicationsList.js"
+
 import { UserContext } from '../../context/userContext.js';
 
-
-const ApplicationForm = () => {
-
+const ApplicationForm = ({ SetShowApplication }) => {
   const [formData, setFormData] = useState({
     brandName: '',
     emailId: '',
@@ -18,6 +16,7 @@ const ApplicationForm = () => {
     budget: '',
     additionalNotes: '',
   });
+
   const { localhosturl } = useContext(UserContext);
 
   const handleChange = (e) => {
@@ -30,7 +29,6 @@ const ApplicationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-
       const response = await axios.post(`${localhosturl}/userbrand/addapplications`, formData);
       alert(response.data.message);
       setFormData({
@@ -42,150 +40,132 @@ const ApplicationForm = () => {
         budget: '',
         additionalNotes: '',
       });
+      SetShowApplication(false);  // Close the form after successful submission
     } catch (error) {
       alert(error.response.data.error);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl w-full space-y-8 bg-white p-10 rounded-lg shadow-md">
-        <h2 className="text-3xl font-extrabold text-gray-900 mb-4">Submit Application</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="flex flex-col lg:flex-row lg:space-x-4">
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700">brandName</label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FontAwesomeIcon icon={faUser} className="text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  name="brandName"
-                  value={formData.brandNamee}
-                  onChange={handleChange}
-                  className="h-7 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-                  required
-                />
-              </div>
-            </div>
-            <div className="flex-1 mt-4 lg:mt-0">
-              <label className="block text-sm font-medium text-gray-700">Email</label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FontAwesomeIcon icon={faEnvelope} className="text-gray-400" />
-                </div>
-                <input
-                  type="email"
-                  name="emailId"
-                  value={formData.emailId}
-                  onChange={handleChange}
-                  className="h-7 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-                  required
-                />
-              </div>
-            </div>
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl relative">
+        {/* Close Button */}
+        <button
+          onClick={() => SetShowApplication(false)}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          <FontAwesomeIcon icon={faTimes} className="text-xl" />
+        </button>
+        <h2 className="text-3xl font-semibold text-gray-900 mb-6">Submit Application</h2>
+        
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {/* Brand Name */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Brand Name</label>
+            <input
+              type="text"
+              name="brandName"
+              value={formData.brandName}
+              onChange={handleChange}
+              className="mt-2 p-3 block w-full border border-gray-300 rounded-md"
+              required
+            />
           </div>
-          <div className="flex flex-col lg:flex-row lg:space-x-4">
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700">Phone</label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FontAwesomeIcon icon={faPhone} className="text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  name="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
-                  className="h-7 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-                  required
-                />
-              </div>
-            </div>
-            <div className="flex-1 mt-4 lg:mt-0">
-              <label className="block text-sm font-medium text-gray-700">Campaign Details</label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FontAwesomeIcon icon={faClipboard} className="text-gray-400" />
-                </div>
-                <textarea
-                  name="campaignDetails"
-                  value={formData.campaignDetails}
-                  onChange={handleChange}
-                  className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-                  rows="3"
-                  required
-                ></textarea>
-              </div>
-            </div>
+
+          {/* Email */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <input
+              type="email"
+              name="emailId"
+              value={formData.emailId}
+              onChange={handleChange}
+              className="mt-2 p-3 block w-full border border-gray-300 rounded-md"
+              required
+            />
           </div>
-          <div className="flex flex-col lg:flex-row lg:space-x-4">
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700">Preferred Collaboration Type</label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FontAwesomeIcon icon={faHandshake} className="text-gray-400" />
-                </div>
-                <select
-                  name="preferredCollaborationType"
-                  value={formData.preferredCollaborationType}
-                  onChange={handleChange}
-                  className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-                  required
-                >
-                  <option value="">Select Type</option>
-                  <option value="post">Post</option>
-                  <option value="story">Story</option>
-                  <option value="reel">Reel</option>
-                </select>
-              </div>
-            </div>
-            <div className="flex-1 mt-4 lg:mt-0">
-              <label className="block text-sm font-medium text-gray-700">Budget</label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FontAwesomeIcon icon={faDollarSign} className="text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  name="budget"
-                  value={formData.budget}
-                  onChange={handleChange}
-                  className="h-7 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-                  required
-                />
-              </div>
-            </div>
+
+          {/* Phone */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Phone</label>
+            <input
+              type="text"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              className="mt-2 p-3 block w-full border border-gray-300 rounded-md"
+              required
+            />
           </div>
+
+          {/* Campaign Details */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Campaign Details</label>
+            <textarea
+              name="campaignDetails"
+              value={formData.campaignDetails}
+              onChange={handleChange}
+              className="mt-2 p-3 block w-full border border-gray-300 rounded-md"
+              rows="4"
+              required
+            ></textarea>
+          </div>
+
+          {/* Collaboration Type */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Collaboration Type</label>
+            <select
+              name="preferredCollaborationType"
+              value={formData.preferredCollaborationType}
+              onChange={handleChange}
+              className="mt-2 p-3 block w-full border border-gray-300 rounded-md"
+              required
+            >
+              <option value="">Select</option>
+              <option value="post">Post</option>
+              <option value="story">Story</option>
+              <option value="reel">Reel</option>
+            </select>
+          </div>
+
+          {/* Budget */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Budget</label>
+            <input
+              type="text"
+              name="budget"
+              value={formData.budget}
+              onChange={handleChange}
+              className="mt-2 p-3 block w-full border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+
+          {/* Additional Notes */}
           <div>
             <label className="block text-sm font-medium text-gray-700">Additional Notes</label>
-            <div className="mt-1 relative rounded-md shadow-sm">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FontAwesomeIcon icon={faStickyNote} className="text-gray-400" />
-              </div>
-              <textarea
-                name="additionalNotes"
-                value={formData.additionalNotes}
-                onChange={handleChange}
-                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-                rows="3"
-              ></textarea>
-            </div>
+            <textarea
+              name="additionalNotes"
+              value={formData.additionalNotes}
+              onChange={handleChange}
+              className="mt-2 p-3 block w-full border border-gray-300 rounded-md"
+              rows="4"
+            ></textarea>
           </div>
+        </form>
+
+        {/* Submit Button */}
+        <div className="mt-6">
           <button
             type="submit"
-            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out transform hover:scale-105"
+            onClick={handleSubmit}
+            className="w-full py-3 text-white bg-blue-600 hover:bg-blue-700 rounded-md"
           >
-            <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-              <FontAwesomeIcon icon={faPaperPlane} className="text-indigo-300 group-hover:text-indigo-400" />
-            </span>
-            Submit
+            Submit <FontAwesomeIcon icon={faPaperPlane} className="ml-2" />
           </button>
-        </form>
-        <ApplicationsList />
+        </div>
       </div>
-
     </div>
   );
 };

@@ -212,69 +212,6 @@ const NewInstagramInfluencer = () => {
   };
 
 
-  const handleSubmit1 = async (e) => {
-    e.preventDefault();
-    console.log("formdata: ", formData)
-    console.log("collaborationRates.post", formData.collaborationRates.post)
-    const formDataToSend = new FormData();
-    formDataToSend.append("username", formData.username);
-    formDataToSend.append("fullName", formData.fullName);
-    formDataToSend.append("bio", formData.bio);
-    formDataToSend.append("followersCount", formData.followersCount);
-    formDataToSend.append("followingCount", formData.followingCount);
-    formDataToSend.append("postsCount", formData.postsCount);
-    formDataToSend.append("engagementRate", formData.engagementRate);
-    formDataToSend.append("averageLikes", formData.averageLikes);
-    formDataToSend.append("averageComments", formData.averageComments);
-    formDataToSend.append("category", formData.category);
-
-    formDataToSend.append("language", formData.language);
-    formDataToSend.append("verifiedStatus", formData.verifiedStatus);
-
-
-
-    formDataToSend.append("pastCollaborations", JSON.stringify(formData.pastCollaborations));
-    if (formData?.collaborationRates) {
-      formDataToSend.append("collaborationRates[post]", formData?.collaborationRates?.post);
-      formDataToSend.append("collaborationRates[story]", formData?.collaborationRates?.story);
-      formDataToSend.append("collaborationRates[reel]", formData?.collaborationRates?.reel);
-    } else {
-      console.error("collaborationRates is undefined");
-    }
-
-
-    if (profileUrlOption === "system" && formData.profilePicture) {
-      formDataToSend.append("profilePicture", document.querySelector('input[name="profilePicture"]').files[0]);
-    } else {
-      formDataToSend.append("profilePicture", formData.profilePicture);
-    }
-
-    if (mediaKitOption === "system" && formData.mediaKit) {
-      formDataToSend.append("mediaKit", document.querySelector('input[name="mediaKit"]').files[0]);
-    } else {
-      formDataToSend.append("mediaKit", formData.mediaKit);
-    }
-
-    try {
-
-
-      const response = await axios.post(`${localhosturl}/instagraminfluencers/addInstagraminfluencer`, { ...formDataToSend, userId: userData?._id, }, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      setAddInfluencer((prev) => [...prev, response.data.instagramInfluencer]);
-      console.log(formDataToSend)
-      toast.success("Influencer added Successfully");
-      pastactivitiesAdd(formDataToSend);
-      handleReset();
-    } catch (error) {
-      toast.error(`Error adding influencer ${error}`);
-      console.error("Error adding influencer", error);
-    }
-  };
-
 
   const handleReset = () => {
     setFormData({
@@ -340,7 +277,7 @@ const NewInstagramInfluencer = () => {
               required
             />
           </div>
-          <div className="block">
+          {/* <div className="block">
             <label className="text-gray-700">Profile Picture URL</label>
             <div className="flex items-center space-x-2">
               <label className="flex items-center">
@@ -383,7 +320,33 @@ const NewInstagramInfluencer = () => {
                 className="p-2 border border-gray-300 rounded w-full"
               />
             )}
-          </div>
+          </div> */}
+          <div className="block">
+  <label htmlFor="profilePictureUrl" className="text-gray-700">
+    Profile Picture URL
+  </label>
+  <div className="mt-4">
+    <input
+      type="text"
+      id="profilePictureUrl"
+      name="profilePicture"
+      placeholder="Enter Profile Picture URL"
+      value={formData.profilePicture}
+      onChange={handleChange}
+      className="p-2 border border-gray-300 rounded w-full"
+    />
+    {formData.profilePicture && (
+      <div className="mt-2">
+        <img
+          src={formData.profilePicture}
+          alt="Profile Preview"
+          className="w-20 h-20 object-cover border rounded"
+        />
+      </div>
+    )}
+  </div>
+</div>
+
           <div className="block">
             <label className="text-gray-700">Bio</label>
             <textarea

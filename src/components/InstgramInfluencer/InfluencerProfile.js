@@ -13,6 +13,7 @@ import { motion } from 'framer-motion';
 
 import { useCallback } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ApplicationForm from './ApplicationForm.js';
 
 
 
@@ -27,6 +28,7 @@ const InfluencerProfile = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [influencer, setInfluencer] = useState(null);
+  
 
   
   const createDescriptionElements = useCallback((formData, users) => {
@@ -62,7 +64,7 @@ const InfluencerProfile = () => {
     return formattedElements;
   }, []);
 
-
+  const [showApplication, SetShowApplication] = useState(false);
 
   const generateShortDescription = useCallback((formData, users) => {
     const elements = createDescriptionElements(formData, users).split(', ');
@@ -204,12 +206,8 @@ const pastactivitiesAdd = useCallback(async (users) => {
                   transition={{ duration: 0.5 }}
                 >
                   <img
-                    src={
-                      profilePicture?.startsWith('https')
-                        ? profilePicture
-                        // : `https://guest-posting-marketplace-web-backend.onrender.com${profilePicture}`
-                        : `${localhosturl}${profilePicture}`
-                    }
+                    src={profilePicture}
+                    
                     alt={username}
                     className="w-48 h-48 lg:w-64 lg:h-64 object-cover rounded-full border-4 border-white shadow-lg transition-transform transform hover:scale-105"
                   />
@@ -375,162 +373,20 @@ const pastactivitiesAdd = useCallback(async (users) => {
             </div>
           </motion.div>
 
-
-
-
-          { /*<Fade bottom>
-            <div className="mt-8 bg-100 p-6 rounded-lg shadow-lg  p-6 rounded-lg"//bg-gradient-to-r from-yellow-300 via-pink-300 to-red-300
-            >
-              <h2 className="text-2xl font-semibold mb-4 p-2">Media Kit & Past Collaborations</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {mediaKit && (
-                  <a
-                    href={mediaKit}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center bg-200 p-4 rounded-lg shadow-md text-blue-600 hover:text-blue-800"
-                  >
-                    <FaFilePdf className="mr-2 text-2xl" />
-                    <span>Download Media Kit</span>
-                  </a>
-                )}
-                {pastCollaborations && (
-                  <div className="bg-200 p-4 rounded-lg shadow-md">
-                    <h3 className="text-xl font-semibold mb-2 p-2">Past Collaborations</h3>
-                    <p>{pastCollaborations}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </Fade>*/}
-
-          {/* Application Form
-          <Fade bottom>
-            <div className="mt-8  p-6 rounded-lg shadow-lg  p-6 rounded-lg">
-              <h2 className="text-2xl font-semibold mb-4 p-2">Apply for Collaboration</h2>
-              {formSubmitted ? (
-                <div className="text-green-600 text-lg font-semibold">Application submitted successfully!</div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-4" style={{backgroundColor:"transparent",boxShadow:"none"}}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={{backgroundColor:"transparent"}}>
-                    <div>
-                      <label className="block text-700">Brand Name</label>
-                      <input
-                        type="text"
-                        name="brandName"
-                        value={form.brandName}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-lg"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gray-700">Contact Person</label>
-                      <input
-                        type="text"
-                        name="contactPerson"
-                        value={form.contactPerson}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-lg"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-gray-700">Email</label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={form.email}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-lg"
-                        required
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div> 
-                      <label className="block text-gray-700">Phone</label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={form.phone}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-lg"
-                        required
-                      />
-                    </div>
-                  </div>
-                 
-                  
-                  <div>
-                    
-                    <label className="block text-gray-700">Collaboration Type</label>
-                    <select
-                 
-                  name="collaborationType"
-                  value={form.collaborationType}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border rounded-lg"
-                  required
-                >
-                  <option value="">Select Type</option>
-                  <option value="post">Post</option>
-                  <option value="story">Story</option>
-                  <option value="reel">Reel</option>
-                </select>
-                    
-                  </div>
-                  <div>
-                    <label className="block text--700">Budget</label>
-                    <input
-                      type="text"
-                      name="budget"
-                      value={form.budget}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border rounded-lg"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-700">Campaign Details</label>
-                    <textarea
-                      name="campaignDetails"
-                      value={form.campaignDetails}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border rounded-lg"
-                      rows="4"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-700">Additional Notes</label>
-                    <textarea
-                      name="notes"
-                      value={form.notes}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border rounded-lg"
-                      rows="4"
-                    />
-                  </div>
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
-                  >
-                    Submit Application
-                  </button>
-                </form>
-              )}
-            </div>
-          </Fade>
- */}
-
-
-
         </div>
       </div>
+
+
+      <div style={{ marginTop: '25px' }}>
+      <button onClick={() => SetShowApplication(true)} className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
+      Apply
+      </button>
+
+      {showApplication && <ApplicationForm SetShowApplication={SetShowApplication}/>}
+      </div>
+      
       <div>
+        
         <ReportModal
           section="InstagramInfluencer"
           // isOpen={isModalOpen}

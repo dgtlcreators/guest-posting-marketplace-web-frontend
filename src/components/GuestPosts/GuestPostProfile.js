@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-import { useTheme } from '../../context/ThemeProvider.js';
+import ApplicationForm from '../InstgramInfluencer/ApplicationForm.js';
 import { UserContext } from '../../context/userContext.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
@@ -38,6 +38,8 @@ const iconMap = {
   monthlyTraffic: faChartLine,
   mozSpamScore: faExclamationTriangle,
 };
+
+
 
 const GuestPostProfile = () => {
 
@@ -140,6 +142,7 @@ const GuestPostProfile = () => {
     }
   }
 
+  const [showApplication, SetShowApplication] = useState(false);
 
   return (
     <div className="container mx-auto p-4">
@@ -196,6 +199,14 @@ const GuestPostProfile = () => {
               )
           )}
         </div>
+
+        <div style={{ marginTop: '25px' }}>
+      <button onClick={() => SetShowApplication(true)} className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
+      Apply
+      </button>
+
+      {showApplication && <ApplicationForm SetShowApplication={SetShowApplication}/>}
+      </div>
 
         <ReportModal
           section="Guestpost"

@@ -1,10 +1,9 @@
-import { useTheme } from '@emotion/react';
 import React, { useContext } from 'react';
 import { UserContext } from '../context/userContext.js';
 
 const ApplyTable = ({ section, apply = [] ,reports=[]}) => {
   console.log("Reports ",reports)
-    const { isDarkTheme } = useTheme();
+
   const { userData,localhosturl } = useContext(UserContext);
   const userId = userData?._id;
 

@@ -1,14 +1,14 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useState, useCallback} from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { UserContext } from '../../context/userContext.js';
-import { useTheme } from '../../context/ThemeProvider.js';
+
 import LocationSelector from '../OtherComponents/LocationSelector.js';
 
 
 const EditInstagramInfluencer = () => {
-  const { isDarkTheme } = useTheme();
+
   const { userData, localhosturl } = useContext(UserContext);
   const { id } = useParams();
   const navigate = useNavigate()
@@ -56,6 +56,11 @@ const EditInstagramInfluencer = () => {
         ...prev,
         pastCollaborations: value.split(',').map((item) => item.trim()),
       }));
+    } else if(name === 'profilePicture'){
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -74,31 +79,37 @@ const EditInstagramInfluencer = () => {
     }
   };
   
-  const handleFileChange1 = (e) => {
-    const { name, files } = e.target;
+  // const handleFileChange1 = (e) => {
+  //   const { name, files } = e.target;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: files[0].name,
-    }));
-  };
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [name]: files[0].name,
+  //   }));
+  // };
 
-  useEffect(() => {
-
-    fetchInfluencers();
-  }, []);
-
-  const fetchInfluencers = async () => {
+  const fetchInfluencers = useCallback(async () => {
     try {
-
       const response = await axios.get(`${localhosturl}/instagraminfluencers/getInstagraminfluencerById/${id}`);
-console.log("In Edit get Data ",response.data.instagramInfluencer)
+      console.log("In Edit get Data", response.data.instagramInfluencer);
       setFormData(response.data.instagramInfluencer);
       // setOriginalUsers(response.data.instagramInfluencer);
     } catch (error) {
       console.error("Error fetching influencers", error);
     }
-  };
+  }, [id, localhosturl]);
+  
+  useEffect(() => {
+    fetchInfluencers();
+  }, [fetchInfluencers]); // Depend on the memoized fetchInfluencers
+  
+
+  useEffect(() => {
+
+    fetchInfluencers();
+  }, [fetchInfluencers]);
+
+
 
   const createDescriptionElements = (formData, users) => {
     const elements = [
@@ -218,7 +229,7 @@ console.log("In Edit get Data ",response.data.instagramInfluencer)
   
     try {
       // Make the PUT request to update the influencer data
-      const response = await axios.put(
+      await axios.put(
         `${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${id}`, 
         formDataToSend, {
           headers: {
@@ -241,62 +252,62 @@ console.log("In Edit get Data ",response.data.instagramInfluencer)
   
   
 
-  const handleSubmit2Actual = async (e) => {
-    e.preventDefault();
+  // const handleSubmit2Actual = async (e) => {
+  //   e.preventDefault();
   
 
-    const uploadData = new FormData();
-    console.log(formData.location)
+  //   const uploadData = new FormData();
+  //   console.log(formData.location)
 
     
 
-    for (const [key, value] of Object.entries(formData)) {
-      if (value && key !== "profilePicture" && key !== "mediaKit") {
-        uploadData.append(key, value);
-      }
-    }
+  //   for (const [key, value] of Object.entries(formData)) {
+  //     if (value && key !== "profilePicture" && key !== "mediaKit") {
+  //       uploadData.append(key, value);
+  //     }
+  //   }
   
-    if (formData.profilePicture) {
-      uploadData.append("profilePicture", formData.profilePicture);
-    }
+  //   if (formData.profilePicture) {
+  //     uploadData.append("profilePicture", formData.profilePicture);
+  //   }
   
-    if (formData.mediaKit) {
-      uploadData.append("mediaKit", formData.mediaKit);
-    }
+  //   if (formData.mediaKit) {
+  //     uploadData.append("mediaKit", formData.mediaKit);
+  //   }
   
-    try {
-      await axios.put(`${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${id}`, uploadData, {
-        headers: {
-          "Content-Type": "multipart/form-data",  
-        },
-      });
+  //   try {
+  //     await axios.put(`${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${id}`, uploadData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",  
+  //       },
+  //     });
   
-      toast.success("Instagram Influencer updated successfully!");
-      pastactivitiesAdd(formData);
-      navigate("/addInstagramInfluencer");
-    } catch (error) {
-      toast.error(`Error updating Instagram Influencer: ${error.response.data.error}`);
-      console.error("Error updating Instagram Influencer:", error);
-    }
-  };
+  //     toast.success("Instagram Influencer updated successfully!");
+  //     pastactivitiesAdd(formData);
+  //     navigate("/addInstagramInfluencer");
+  //   } catch (error) {
+  //     toast.error(`Error updating Instagram Influencer: ${error.response.data.error}`);
+  //     console.error("Error updating Instagram Influencer:", error);
+  //   }
+  // };
   
 
-  const handleSubmit1 = async (e) => {
-    e.preventDefault()
-    try {
+//   const handleSubmit1 = async (e) => {
+//     e.preventDefault()
+//     try {
 
-console.log("Before adding edit ",formData)
-      await axios.put(`${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${id}`, { ...formData, userId: userData?._id, });
+// console.log("Before adding edit ",formData)
+//       await axios.put(`${localhosturl}/instagraminfluencers/updateInstagraminfluencer/${id}`, { ...formData, userId: userData?._id, });
 
 
-      toast.success("Instagram Influencer updated Successfully");
-      pastactivitiesAdd(formData);
-      navigate("/addInstagramInfluencer");
-    } catch (error) {
-      toast.error(`Error updating Instagram Influencer ${error.response.data.error}`);
-      console.error("Error updating Instagram Influencer:", error);
-    }
-  }
+//       toast.success("Instagram Influencer updated Successfully");
+//       pastactivitiesAdd(formData);
+//       navigate("/addInstagramInfluencer");
+//     } catch (error) {
+//       toast.error(`Error updating Instagram Influencer ${error.response.data.error}`);
+//       console.error("Error updating Instagram Influencer:", error);
+//     }
+//   }
 
 
 
@@ -335,7 +346,35 @@ console.log("Before adding edit ",formData)
               required
             />
           </label>
+
           <label className="block">
+  <span className="text-gray-700">Profile Picture URL</span>
+  <div className="mt-4">
+    <input
+      type="text"
+      name="profilePicture"
+      placeholder="Profile Picture URL"
+      value={
+        formData?.profilePicture
+          ? formData.profilePicture
+          : "https://cdn.pixabay.com/photo/2024/02/02/04/20/ai-generated-8547237_1280.png"
+      }      
+      onChange={handleChange}
+      className="p-2 border border-gray-300 rounded w-full"
+    />
+    {formData?.profilePicture && (
+      <div className="mt-2">
+        <img
+          src={formData?.profilePicture || "https://cdn.pixabay.com/photo/2024/02/02/04/20/ai-generated-8547237_1280.png"}
+          alt="Profile Preview"
+          className="w-20 h-20 object-cover border rounded"
+        />
+      </div>
+    )}
+  </div>
+</label>
+
+          {/* <label className="block">
             <span className="text-gray-700">Profile Picture URL</span>
             <div className="flex items-center space-x-2">
               <label className="flex items-center">
@@ -378,7 +417,7 @@ console.log("Before adding edit ",formData)
                 className="p-2 border border-gray-300 rounded w-full"
               />
             )}
-          </label>
+          </label> */}
           <label className="block">
             <span className="text-gray-700">Bio</span>
             <textarea
