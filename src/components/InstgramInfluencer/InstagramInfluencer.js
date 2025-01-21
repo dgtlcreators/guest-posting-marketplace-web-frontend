@@ -78,35 +78,6 @@ const InstagramInfluencer = () => {
   };
 
 
-  const handleLocationChange = async (e) => {
-    const query = e.target.value;
-    setLocationQuery(query);
-
-    if (query.length > 2) {
-      try {
-        const response = await axios.get(`https://us1.locationiq.com/v1/search.php`, {
-          params: {
-            key: 'pk.9a061732949f134d1a74e2f7220fad7a',
-            q: query,
-            format: 'json'
-          }
-        });
-        setLocationResults(response.data);
-      } catch (error) {
-        console.error("Error fetching location data", error);
-      }
-    } else {
-      setLocationResults([]);
-    }
-  };
-  const handleLocationSelect1 = (location) => {
-    setFormData((prev) => ({
-      ...prev,
-      location: location.display_name,
-    }));
-    setLocationQuery(location.display_name);
-    setLocationResults([]);
-  };
 
 
 
@@ -273,6 +244,19 @@ const InstagramInfluencer = () => {
                 id="fullName"
                 name="fullName"
                 value={formData.fullName}
+                onChange={handleChange}
+                className="focus:outline focus:outline-blue-400 p-2"
+
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="fullName">UserName</label>
+              <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                value={formData.username}
                 onChange={handleChange}
                 className="focus:outline focus:outline-blue-400 p-2"
 

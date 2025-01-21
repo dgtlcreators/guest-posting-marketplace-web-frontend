@@ -244,14 +244,14 @@ const NewYoutubeInfluencer = () => {
       <form onSubmit={handleSubmit} className='mb-4 p-4 bg-gray-100 rounded-lg shadow-md'>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
           <div className='block'>
-            <label className='text-gray-700'>FUll Name</label>
-            <input type='text' name='username' placeholder='Name'
+            <label className='text-gray-700'>User Name</label>
+            <input type='text' name='username' placeholder='User Name'
               value={formData.username} onChange={handleChange}
               className='p-2 border border-gray-300 rounded w-full' required />
           </div>
           <div className='block'>
-            <label className='text-gray-700'>User Name</label>
-            <input type='text' name='fullname' placeholder='Last Name'
+            <label className='text-gray-700'>Full Name</label>
+            <input type='text' name='fullname' placeholder='Full Name'
               value={formData.fullname} onChange={handleChange}
               className='p-2 border border-gray-300 rounded w-full' required />
           </div>

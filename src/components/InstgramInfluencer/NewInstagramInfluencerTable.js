@@ -299,8 +299,8 @@ const NewInstagramInfluencerTable = ({ addInfluencer }) => {
             <tr className="text-base"
             >
               <th className="border px-4 py-2" >S.No </th>
-              <th className="border px-4 py-2" onClick={() => handleSort("username")}>Name {renderSortIcon("username")}</th>
-              <th className="border px-4 py-2" onClick={() => handleSort("fullName")}>Last Name {renderSortIcon("fullName")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("username")}>User Name {renderSortIcon("username")}</th>
+              <th className="border px-4 py-2" onClick={() => handleSort("fullName")}>Full Name {renderSortIcon("fullName")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("profilePicture")}>Profile Picture {renderSortIcon("profilePicture")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("bio")}>Bio {renderSortIcon("bio")}</th>
               <th className="border px-4 py-2" onClick={() => handleSort("followersCount")}>Followers {renderSortIcon("followersCount")}</th>
