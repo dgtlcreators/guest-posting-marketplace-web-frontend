@@ -251,11 +251,11 @@ const InstagramInfluencer = () => {
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="fullName">UserName</label>
+              <label htmlFor="username">UserName</label>
               <input
                 type="text"
-                id="fullName"
-                name="fullName"
+                id="username"
+                name="username"
                 value={formData.username}
                 onChange={handleChange}
                 className="focus:outline focus:outline-blue-400 p-2"
