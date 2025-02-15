@@ -9,8 +9,7 @@ const VerificationSuccess = () => {
     }, 1000);
     setTimeout(() => {
        // navigate('http://localhost:3000/login');
-      //navigate('https://connect.creatorsxchange.com/login');
-      navigate('http://connect.creatorsxchange.com/login');
+      navigate('https://connect.creatorsxchange.com/login');
     }, 5000);
     return () => clearInterval(timer);
   }, [navigate]);
@@ -60,9 +59,7 @@ const VerificationSuccess = () => {
             fontSize: '14px', 
             color: '#999' 
           }}>
-            If the page does not redirect automatically, <a href="http://localhost:3000"
-           // href="https://connect.creatorsxchange.com" 
-           // href="http://connect.creatorsxchange.com" 
+            If the page does not redirect automatically, <a href="https://connect.creatorsxchange.com/login"
             style={{ 
               color: '#4a90e2', 
               textDecoration: 'underline' 
