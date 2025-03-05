@@ -360,7 +360,10 @@ const NewInstagramInfluencerTable = ({ addInfluencer }) => {
                   <td className="border px-4 py-2">{influencer.averageLikes}</td>
                   <td className="border px-4 py-2">{influencer.averageComments}</td>
                   <td className="border px-4 py-2">{influencer.category}</td>
-                  <td className="border px-4 py-2">{JSON.stringify(influencer.location)}</td>
+                  <td className="border px-4 py-2">
+  {`${influencer.location.city}, ${influencer.location.state}, ${influencer.location.country}`}
+</td>
+
                   <td className="border px-4 py-2">{influencer.language}</td>
                   <td className="border px-4 py-2">{influencer.verifiedStatus ? 'Verified' : 'Not Verified'}</td>
 

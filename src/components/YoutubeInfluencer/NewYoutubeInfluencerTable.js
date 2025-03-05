@@ -425,7 +425,10 @@ const NewYoutubeInfluencerTable = ({ addYotubeInfluencer, setAddYotubeInfluencer
                 <td className='border px-4 py-2'>{influencer.engagementRate}</td>
                 <td className='border px-4 py-2'>{influencer.averageViews}</td>
                 <td className='border px-4 py-2'>{influencer.category}</td>
-                <td className='border px-4 py-2'>{JSON.stringify(influencer.location)}</td>
+                <td className="border px-4 py-2">
+  {`${influencer.location.city}, ${influencer.location.state}, ${influencer.location.country}`}
+</td>
+
                 <td className='border px-4 py-2'>{influencer.language}</td>
                 <td className='border px-4 py-2'>{influencer.collaborationRates ? (
                   <div>
