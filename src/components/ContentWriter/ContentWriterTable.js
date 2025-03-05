@@ -244,8 +244,26 @@ const ContentWriterTable = ({ contentWriters, setContentWriters }) => {
                   <td className="border px-4 py-2">{writer.email}</td>
 
                   <td className="border px-4 py-2">
-  {`${writer.location.city}, ${writer.location.state}, ${writer.location.country}`}
+  {(() => {
+    let location = writer.location;
+
+    // Parse if location is a string
+    if (typeof location === "string") {
+      try {
+        location = JSON.parse(location);
+      } catch (error) {
+        console.error("Invalid JSON in location:", location);
+        return "Invalid location data"; // Handle unexpected cases
+      }
+    }
+
+    // Ensure location is an object before accessing properties
+    return location && typeof location === "object"
+      ? `${location.city}, ${location.state}, ${location.country}`
+      : "Unknown location";
+  })()}
 </td>
+
 
                   <td className="border px-4 py-2">
                     <ul className="list-disc pl-5">

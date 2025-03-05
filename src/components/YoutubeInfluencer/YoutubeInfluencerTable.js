@@ -302,8 +302,26 @@ const handleToggleBookmark = async (influencer) => {
                 <td className='border px-4 py-2'>{influencer.averageViews}</td>
                 <td className='border px-4 py-2'>{influencer.category}</td>
                 <td className="border px-4 py-2">
-  {`${influencer.location.city}, ${influencer.location.state}, ${influencer.location.country}`}
+  {(() => {
+    let location = influencer.location;
+
+    // Parse if location is a string
+    if (typeof location === "string") {
+      try {
+        location = JSON.parse(location);
+      } catch (error) {
+        console.error("Invalid JSON in location:", location);
+        return "Invalid location data"; // Handle unexpected cases
+      }
+    }
+
+    // Ensure location is an object before accessing properties
+    return location && typeof location === "object"
+      ? `${location.city}, ${location.state}, ${location.country}`
+      : "Unknown location";
+  })()}
 </td>
+
 
                 <td className='border px-4 py-2'>{influencer.language}</td>
                 <td className='border px-4 py-2'>{influencer.collaborationRates?(
